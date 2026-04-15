@@ -1,0 +1,28 @@
+openai>=1.0.0
+huggingface_hub>=0.23.0
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+datasets>=2.18.0
+litellm>=1.40.0
+
+
+
+
+# pip install -r requirements.txt 
+
+# omnibrain/shell/                                                                                                                                                               
+#   ├── install.sh          — pip install -r requirements.txt                                                                                                                      
+#   ├── download_data.sh    — fetch JSON + images from HuggingFace
+#   ├── smoke_test.sh       — 5 cases on one model (quick sanity check)                                                                                                            
+#   ├── run_single.sh       — one model, any args                                                                                                                                  
+#   ├── run_all.sh          — all 12 models sequentially                                                                                                                           
+#   ├── run_proprietary.sh  — Gemini, GPT-5, Claude, DeepSeek only                                                                                                                 
+#   ├── run_medical.sh      — HuatuoGPT, Lingshu, LLaVA-Med, MedGemma only                                                                                                         
+#   └── run_opensource.sh   — Qwen3, InternVL3, Janus-Pro only                                                                                                                     
+                                                                                                                                                                                 
+#   Workflow order:                                                                                                                                                                
+#   bash shell/install.sh                                                                                                                                                          
+#   bash shell/download_data.sh        # ~734 MB, one-time                                                                                                                         
+#   bash shell/smoke_test.sh GPT-5     # verify pipeline works                                                                                                                   
+#   bash shell/run_proprietary.sh      # start with API models                                                                                                                     
+#   bash shell/run_opensource.sh       # then local models   

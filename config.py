@@ -41,4 +41,8 @@ ZIP_FILENAME    = "closed-ended-qa_6823.zip"
 IMAGES_SUBDIR   = "images"     # expected location after extraction
 
 # Image pre-processing
-MAX_IMAGE_DIM = 1024           # resize longest side to this before encoding
+MAX_IMAGE_DIM = 1280           # match OmniBrainBench preprocessing (was 1024)
+
+# API retry settings
+API_RETRY_ATTEMPTS = 3
+API_RETRY_DELAY    = 5         # seconds — doubles each attempt (exponential backoff)
