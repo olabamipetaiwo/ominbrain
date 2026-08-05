@@ -31,26 +31,4 @@ Want me to walk through the smoke test with you now if you've got an API key han
 <!-- ls -la /blue/so589980.ucf/$USER/
 cd /blue/so589980.ucf/$USER/
 pwd -->
-
-Generating public/private ed25519 key pair.
-Enter passphrase for "/home/ta117847.ucf/.ssh/github_ed25519" (empty for no passphrase): 
-Enter same passphrase again: 
-Your identification has been saved in /home/ta117847.ucf/.ssh/github_ed25519
-Your public key has been saved in /home/ta117847.ucf/.ssh/github_ed25519.pub
-The key fingerprint is:
-SHA256:9cBhbsDlUC+irpv9TE3J03tVHMVSeR8ASU1N8RQLUo4 ta117847-hipergator-github
-The key's randomart image is:
-+--[ED25519 256]--+
-|       .oo*+*=+BO|
-|        .B ++.o**|
-|        . OE.. oB|
-|       . = *    o|
-|      . S = o   .|
-|     .   o . . . |
-|      . . . . .  |
-|     + o     .   |
-|    +...o        |
-+----[SHA256]-----+
-
-
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKJ1DgtfJrXaAe8gEik50UcY+A7aeIi76AET4DsO/zSp ta117847-hipergator-github
+-m 
