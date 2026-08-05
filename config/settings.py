@@ -38,7 +38,7 @@ HF_DATASET_ID   = "FrankPN/OmniBrainBench"
 DATA_CACHE_DIR  = "data"
 JSON_FILENAME   = "closed-ended-qa_6823.json"
 ZIP_FILENAME    = "closed-ended-qa_6823.zip"
-IMAGES_SUBDIR   = "images"     # expected location after extraction
+IMAGES_SUBDIR   = "closed-ended-qa_6823"     # actual extracted folder from zip
 
 # Image pre-processing
 MAX_IMAGE_DIM = 1280           # match OmniBrainBench preprocessing (was 1024)

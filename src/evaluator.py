@@ -5,18 +5,22 @@ Per case:
   - Iterates phases in causal order (AIA → LIL → DSCR → PJRF → TCM)
   - Enforces soft gating: phase blocked if upstream phases below threshold
   - Per question:
-      1. Main call   — model sees image + question + chain context
+      1. Main call         — model sees image + question + chain context
       2. Faithfulness probe — model sees only the reasoning, predicts answer
-      3. Scores correctness, local faithfulness, grounding faithfulness
+      3. KB alignment      — scores against phase-appropriate knowledge base
+      4. Adaptation        — if KB-unfaithful and missed_concepts non-empty,
+                             inject missed concepts and re-run (measures Adaptation Rate)
   - Computes chain faithfulness (cross-phase reasoning continuity)
 
 Images loaded lazily per case (not all at once) to keep memory bounded.
 """
 
+from __future__ import annotations
+
 import gc
 import json
-import re
 import os
+import re
 import time
 from pathlib import Path
 
@@ -24,16 +28,15 @@ from openai import OpenAI
 
 import config
 from src.causal_graph import check_gate
-from src.prompts import build_main_prompt, build_faithfulness_probe
+from src.kb_aligner import KBAligner
+from src.prompts import build_main_prompt, build_faithfulness_probe, build_adaptation_prompt
 
-client: OpenAI = None  # initialised in CausalChainEvaluator.__init__
+
+def _avg(values: list[float]) -> float | None:
+    return round(sum(values) / len(values), 3) if values else None
 
 
-# ──────────────────────────────────────────────
-# API helpers
-# ──────────────────────────────────────────────
-
-def _call_model(messages: list[dict], label: str = "") -> str:
+def _call_model(client: OpenAI, messages: list[dict], label: str = "") -> str:
     """API call with exponential backoff retry (3 attempts, 5/10/20s delays)."""
     tag = f" ({label})" if label else ""
     for attempt in range(config.API_RETRY_ATTEMPTS):
@@ -50,7 +53,7 @@ def _call_model(messages: list[dict], label: str = "") -> str:
             print(f"  [API error{tag}] attempt {attempt+1}/{config.API_RETRY_ATTEMPTS}: {e}")
             if is_last:
                 return ""
-            delay = config.API_RETRY_DELAY * (2 ** attempt)
+            delay = config.API_RETRY_DELAY * (2**attempt)
             print(f"  Retrying in {delay}s…")
             time.sleep(delay)
     return ""
@@ -75,40 +78,13 @@ def _parse_json(text: str, required_keys: list[str]) -> dict | None:
     return None
 
 
-# ──────────────────────────────────────────────
-# Image loader (lazy, cached in case dict)
-# ──────────────────────────────────────────────
-
-def _ensure_image(case: dict) -> None:
-    """
-    Load image bytes into case dict if not already loaded.
-    Handles both single-image (str) and multi-image (list) image_path.
-    Sets:
-      case["image_bytes"]      — primary image (first), for backward compat
-      case["image_bytes_list"] — all images as list[bytes]
-    """
-    if case.get("image_bytes_list") is not None:
-        return
-    image_dir  = case.get("_image_dir")
-    image_path = case.get("_image_path")
-    if not image_dir or not image_path:
-        return
-    from data_loader import load_image_bytes_list
-    img_list = load_image_bytes_list(image_path, Path(str(image_dir)))
-    case["image_bytes_list"] = img_list
-    case["image_bytes"]      = img_list[0] if img_list else None
-
-
-# ──────────────────────────────────────────────
-# Faithfulness helpers
-# ──────────────────────────────────────────────
-
-def _grounding_score(visual_grounding: str, grounding_terms: list[str]) -> float:
-    if not grounding_terms:
-        return 1.0
-    vg = visual_grounding.lower()
-    hits = sum(1 for t in grounding_terms if t.lower() in vg)
-    return hits / len(grounding_terms)
+def _load_question_image(question: dict) -> list[bytes]:
+    image_path = question.get("_image_path")
+    image_dir = question.get("_image_dir")
+    if not image_path or not image_dir:
+        return []
+    from src.data_loader import load_image_bytes_list
+    return load_image_bytes_list(image_path, Path(str(image_dir)))
 
 
 def _compute_chain_faithfulness(phase_results: dict) -> dict[str, float | None]:
@@ -121,12 +97,6 @@ def _compute_chain_faithfulness(phase_results: dict) -> dict[str, float | None]:
         if phase_data.get("gated_out"):
             cf[phase] = None
             continue
-        upstream_texts = [
-            q["correct_answer_text"].lower()
-            for q in phase_results[upstream].get("questions", [])
-            if q.get("correct")
-        ]
-        upstream_ref = " ".join(upstream_texts)
         hits = total = 0
         for q in phase_data.get("questions", []):
             for key in q.get("chain_grounding_terms_used", []):
@@ -137,82 +107,175 @@ def _compute_chain_faithfulness(phase_results: dict) -> dict[str, float | None]:
     return cf
 
 
-# ──────────────────────────────────────────────
-# Per-question evaluation
-# ──────────────────────────────────────────────
+_NO_ADAPTATION: dict = {
+    "adaptation_run": False,
+    "adaptation_answer": None,
+    "adaptation_correct": None,
+    "adaptation_changed": None,
+}
+
+
+def _run_adaptation(
+    question: dict,
+    case_for_prompt: dict,
+    phase: str,
+    chain_context: list[dict],
+    missed_concepts: list[str],
+    original_answer: str,
+    original_reasoning: str,
+    client: OpenAI,
+) -> dict:
+    """
+    Feedback-adaptation step.
+
+    Injects missed KB concepts as a clinical correction and re-runs the phase.
+    Returns adaptation fields to merge into the question result dict.
+    """
+    print("| adapt…", end=" ", flush=True)
+    messages = build_adaptation_prompt(
+        question, case_for_prompt, phase, chain_context,
+        missed_concepts, original_answer, original_reasoning,
+    )
+    raw = _call_model(client, messages, label="adaptation")
+    parsed = _parse_json(raw, ["answer", "visual_grounding", "reasoning"])
+
+    if parsed is None:
+        print("adapt parse failed")
+        return {
+            "adaptation_run": True,
+            "adaptation_answer": None,
+            "adaptation_correct": None,
+            "adaptation_changed": None,
+        }
+
+    adapted_answer = parsed["answer"].strip().upper()
+    adaptation_correct = adapted_answer == question["correct_answer"]
+    adaptation_changed = adapted_answer != original_answer
+
+    change_sym = "→" if adaptation_changed else "="
+    status_sym = "✓" if adaptation_correct else "✗"
+    print(f"adapt {change_sym}{adapted_answer} ({status_sym})")
+
+    return {
+        "adaptation_run": True,
+        "adaptation_answer": adapted_answer,
+        "adaptation_correct": adaptation_correct,
+        "adaptation_changed": adaptation_changed,
+    }
+
 
 def _evaluate_question(
     question: dict,
     case: dict,
     phase: str,
     chain_context: list[dict],
+    aligner: KBAligner,
+    client: OpenAI,
+    adaptation_enabled: bool = True,
 ) -> dict:
     qid = question["id"]
     print(f"    [{qid}] main call…", end=" ", flush=True)
 
-    messages = build_main_prompt(question, case, phase, chain_context)
-    raw      = _call_model(messages, label="main")
-    parsed   = _parse_json(raw, ["answer", "visual_grounding", "reasoning"])
+    img_list = _load_question_image(question)
+    if not img_list:
+        print("[no image]", end=" ", flush=True)
+    case_for_prompt = {
+        **case,
+        "image_bytes_list": img_list,
+        "image_bytes": img_list[0] if img_list else None,
+    }
+
+    messages = build_main_prompt(question, case_for_prompt, phase, chain_context)
+    raw = _call_model(client, messages, label="main")
+    parsed = _parse_json(raw, ["answer", "visual_grounding", "reasoning"])
 
     if parsed is None:
         print("parse failed.")
         return {
-            "id": qid, "question": question["question"],
+            "id": qid,
+            "question": question["question"],
             "correct_answer": question["correct_answer"],
-            "model_answer": None, "model_answer_text": None,
-            "correct": False, "visual_grounding": "", "reasoning": "",
-            "raw_response": raw, "local_faithful": None,
-            "faithfulness_predicted": None, "grounding_score": 0.0,
-            "grounding_faithful": False, "parse_error": True,
+            "model_answer": None,
+            "model_answer_text": None,
+            "correct": False,
+            "visual_grounding": "",
+            "reasoning": "",
+            "raw_response": raw,
+            "local_faithful": None,
+            "faithfulness_predicted": None,
+            "kb_alignment_score": 0.0,
+            "kb_alignment_faithful": False,
+            "concept_precision_score": 0.0,
+            "matched_concepts": [],
+            "missed_concepts": [],
+            "kb_used": "",
+            "parse_error": True,
             "task_label": question.get("task_label", ""),
+            **_NO_ADAPTATION,
         }
 
-    model_answer      = parsed["answer"].strip().upper()
+    model_answer = parsed["answer"].strip().upper()
     model_answer_text = question["options"].get(model_answer, "")
-    correct           = model_answer == question["correct_answer"]
+    correct = model_answer == question["correct_answer"]
     print(f"→ {model_answer} ({'✓' if correct else '✗'})", end=" ", flush=True)
 
-    # Faithfulness probe
     print("| probe…", end=" ", flush=True)
-    faith_msgs   = build_faithfulness_probe(parsed["reasoning"], question["options"])
-    faith_raw    = _call_model(faith_msgs, label="faithfulness")
+    faith_msgs = build_faithfulness_probe(parsed["reasoning"], question["options"])
+    faith_raw = _call_model(client, faith_msgs, label="faithfulness")
     faith_parsed = _parse_json(faith_raw, ["predicted_answer"])
 
     if faith_parsed:
-        faith_pred    = faith_parsed["predicted_answer"].strip().upper()
+        faith_pred = faith_parsed["predicted_answer"].strip().upper()
         local_faithful = faith_pred == model_answer
-        print(f"pred {faith_pred} → {'faithful' if local_faithful else 'UNFAITHFUL'}")
+        print(f"pred {faith_pred} → {'faithful' if local_faithful else 'UNFAITHFUL'}", end=" ", flush=True)
     else:
-        faith_pred    = None
+        faith_pred = None
         local_faithful = None
-        print("probe parse failed")
+        print("probe parse failed", end=" ", flush=True)
 
-    grounding_sc      = _grounding_score(parsed["visual_grounding"], question["grounding_terms"])
-    grounding_faithful = grounding_sc >= config.GROUNDING_THRESHOLD
+    kb_result = aligner.align(
+        phase,
+        parsed["visual_grounding"],
+        parsed["reasoning"],
+        question.get("correct_answer_text", ""),
+    )
+    kb_faithful = kb_result.kb_alignment_score >= config.GROUNDING_THRESHOLD
+
+    # Feedback-adaptation: trigger when KB-unfaithful and there are missed concepts to inject
+    if adaptation_enabled and not kb_faithful and kb_result.missed_concepts:
+        adaptation = _run_adaptation(
+            question, case_for_prompt, phase, chain_context,
+            kb_result.missed_concepts, model_answer, parsed["reasoning"],
+            client,
+        )
+    else:
+        print()  # newline after probe result
+        adaptation = _NO_ADAPTATION
 
     return {
-        "id":                    qid,
-        "question":              question["question"],
-        "correct_answer":        question["correct_answer"],
-        "correct_answer_text":   question["correct_answer_text"],
-        "model_answer":          model_answer,
-        "model_answer_text":     model_answer_text,
-        "correct":               correct,
-        "visual_grounding":      parsed["visual_grounding"],
-        "reasoning":             parsed["reasoning"],
-        "raw_response":          raw,
-        "local_faithful":        local_faithful,
-        "faithfulness_predicted":faith_pred,
-        "grounding_score":       round(grounding_sc, 3),
-        "grounding_faithful":    grounding_faithful,
-        "parse_error":           False,
-        "task_label":            question.get("task_label", ""),
+        "id": qid,
+        "question": question["question"],
+        "correct_answer": question["correct_answer"],
+        "correct_answer_text": question["correct_answer_text"],
+        "model_answer": model_answer,
+        "model_answer_text": model_answer_text,
+        "correct": correct,
+        "visual_grounding": parsed["visual_grounding"],
+        "reasoning": parsed["reasoning"],
+        "raw_response": raw,
+        "local_faithful": local_faithful,
+        "faithfulness_predicted": faith_pred,
+        "kb_alignment_score": kb_result.kb_alignment_score,
+        "kb_alignment_faithful": kb_faithful,
+        "concept_precision_score": kb_result.concept_precision_score,
+        "matched_concepts": kb_result.matched_concepts,
+        "missed_concepts": kb_result.missed_concepts,
+        "kb_used": kb_result.kb_used,
+        "parse_error": False,
+        "task_label": question.get("task_label", ""),
+        **adaptation,
     }
 
-
-# ──────────────────────────────────────────────
-# Main evaluator class
-# ──────────────────────────────────────────────
 
 class CausalChainEvaluator:
 
@@ -221,20 +284,24 @@ class CausalChainEvaluator:
         model: str = config.MODEL,
         gating_enabled: bool = True,
         gating_threshold: float = config.GATING_THRESHOLD,
+        adaptation_enabled: bool = True,
         base_url: str | None = None,
         api_key: str | None = None,
+        radlex_path: Path = Path("data/kb/radlex.owl"),
+        ncit_path: Path = Path("data/kb/ncit.owl"),
     ):
-        self.model             = model
-        self.gating_enabled    = gating_enabled
-        self.gating_threshold  = gating_threshold
-        config.MODEL           = model
+        self.model = model
+        self.gating_enabled = gating_enabled
+        self.gating_threshold = gating_threshold
+        self.adaptation_enabled = adaptation_enabled
+        self.aligner = KBAligner(radlex_path=radlex_path, ncit_path=ncit_path)
+        config.MODEL = model
 
-        global client
         kwargs: dict = {}
         if base_url:
             kwargs["base_url"] = base_url
         kwargs["api_key"] = api_key or os.environ.get("OPENAI_API_KEY") or "local"
-        client = OpenAI(**kwargs)
+        self._client = OpenAI(**kwargs)
 
     def evaluate_all(self, cases: list[dict]) -> list[dict]:
         results = []
@@ -243,107 +310,109 @@ class CausalChainEvaluator:
             print(f"Case {i}/{len(cases)}: {case['title']}  [{case.get('source_file','')}]")
             print(f"{'='*60}")
             results.append(self.evaluate_case(case))
-            gc.collect()   # release image memory between cases
+            gc.collect()
         return results
 
     def evaluate_case(self, case: dict) -> dict:
-        # Load images once at the start of the case
-        _ensure_image(case)
-        img_list = case.get("image_bytes_list") or []
-        if img_list:
-            total_kb = sum(len(b) for b in img_list) // 1024
-            print(f"  {len(img_list)} image(s) loaded ({total_kb} KB total)")
-        else:
-            print("  [warn] No images found — text-only fallback")
+        total_qs = sum(len(qs) for qs in case["phases"].values())
+        print(f"  {len(case['phases'])} phase(s) | {total_qs} question(s)")
 
-        phase_results: dict  = {}
-        phase_scores:  dict  = {}
-        chain_context: list  = []
+        phase_results: dict = {}
+        phase_scores: dict = {}
+        chain_context: list = []
 
         for phase in config.PHASES:
             phase_name = config.PHASE_NAMES[phase]
             print(f"\n  Phase: {phase} — {phase_name}")
 
-            if self.gating_enabled and not check_gate(
-                phase_scores, phase, self.gating_threshold
-            ):
+            if self.gating_enabled and not check_gate(phase_scores, phase, self.gating_threshold):
                 print("  *** GATE BLOCKED ***")
                 phase_results[phase] = {
-                    "phase": phase, "gated_out": True, "questions": [],
-                    "phase_score": 0.0, "passed_gate": False,
-                    "local_faithfulness": None, "grounding_faithfulness": None,
+                    "gated_out": True,
+                    "questions": [],
+                    "phase_score": 0.0,
+                    "passed_gate": False,
+                    "local_faithfulness": None,
+                    "kb_alignment": None,
+                    "concept_precision": None,
+                    "adaptation_triggered": 0,
+                    "adaptation_rate": None,
                 }
                 phase_scores[phase] = 0.0
                 continue
 
             questions = case["phases"].get(phase, [])
             if not questions:
-                # Phase not present in this case — treat as not evaluated
                 continue
 
             question_results = []
             for q in questions:
-                result = _evaluate_question(q, case, phase, chain_context)
+                result = _evaluate_question(
+                    q, case, phase, chain_context,
+                    self.aligner, self._client, self.adaptation_enabled,
+                )
                 result["chain_grounding_terms_used"] = q.get("chain_grounding_terms", [])
                 question_results.append(result)
                 chain_context.append({
-                    "phase":            phase,
-                    "question_id":      q["id"],
-                    "question":         q["question"],
-                    "model_answer":     result["model_answer"] or "?",
-                    "model_answer_text":result["model_answer_text"] or "",
+                    "phase": phase,
+                    "question_id": q["id"],
+                    "question": q["question"],
+                    "model_answer": result["model_answer"] or "?",
+                    "model_answer_text": result["model_answer_text"] or "",
                     "visual_grounding": result["visual_grounding"],
                 })
                 time.sleep(0.3)
 
-            answered   = [r for r in question_results if not r.get("parse_error")]
-            phase_score = (
-                sum(r["correct"] for r in answered) / len(answered) if answered else 0.0
-            )
+            answered = [r for r in question_results if not r.get("parse_error")]
+            phase_score = sum(r["correct"] for r in answered) / len(answered) if answered else 0.0
             passed_gate = phase_score >= self.gating_threshold
 
             lf_vals = [r["local_faithful"] for r in answered if r["local_faithful"] is not None]
-            local_f = round(sum(lf_vals) / len(lf_vals), 3) if lf_vals else None
+            kb_vals = [r["kb_alignment_score"] for r in answered]
+            cp_vals = [r["concept_precision_score"] for r in answered]
 
-            gf_vals = [r["grounding_score"] for r in answered]
-            ground_f = round(sum(gf_vals) / len(gf_vals), 3) if gf_vals else None
+            adapted = [r for r in answered if r.get("adaptation_run")]
+            adapt_correct = [r for r in adapted if r.get("adaptation_correct")]
+            adaptation_rate = len(adapt_correct) / len(adapted) if adapted else None
 
             phase_scores[phase] = phase_score
+            lf_str = f"{_avg(lf_vals):.0%}" if lf_vals else "—"
+            adapt_str = f"  adapt: {len(adapt_correct)}/{len(adapted)} ({adaptation_rate:.0%})" if adapted else ""
             gate_str = "PASS" if passed_gate else "FAIL"
-            lf_str   = f"{local_f:.0%}" if local_f is not None else "—"
-            print(f"  → score: {phase_score:.0%} [{gate_str}]  local faithful: {lf_str}")
+            print(f"  → score: {phase_score:.0%} [{gate_str}]  local faithful: {lf_str}{adapt_str}")
 
             phase_results[phase] = {
-                "phase": phase, "gated_out": False,
+                "gated_out": False,
                 "questions": question_results,
                 "phase_score": round(phase_score, 3),
                 "passed_gate": passed_gate,
-                "local_faithfulness": local_f,
-                "grounding_faithfulness": ground_f,
+                "local_faithfulness": _avg(lf_vals),
+                "kb_alignment": _avg(kb_vals),
+                "concept_precision": _avg(cp_vals),
+                "adaptation_triggered": len(adapted),
+                "adaptation_rate": round(adaptation_rate, 3) if adaptation_rate is not None else None,
             }
 
         chain_faithfulness = _compute_chain_faithfulness(phase_results)
 
         active = [v for v in phase_results.values() if not v["gated_out"]]
-        overall = (
-            sum(p["phase_score"] for p in active) / len(active) if active else 0.0
-        )
+        overall = sum(p["phase_score"] for p in active) / len(active) if active else 0.0
         chain_completed = all(
-            not v["gated_out"] and v["passed_gate"] for v in phase_results.values()
-            if v["phase"] in case["phases"]
+            not v["gated_out"] and v["passed_gate"]
+            for phase, v in phase_results.items()
+            if phase in case["phases"]
         )
 
-        # Release image bytes to free RAM
-        case["image_bytes"]      = None
+        case["image_bytes"] = None
         case["image_bytes_list"] = None
 
         return {
-            "case_id":                    case["id"],
-            "title":                      case["title"],
-            "modality":                   case["modality"],
-            "source_file":                case.get("source_file", ""),
-            "phases":                     phase_results,
-            "chain_faithfulness_by_phase":chain_faithfulness,
-            "overall_score":              round(overall, 3),
-            "chain_completed":            chain_completed,
+            "case_id": case["id"],
+            "title": case["title"],
+            "modality": case["modality"],
+            "source_file": case.get("source_file", ""),
+            "phases": phase_results,
+            "chain_faithfulness_by_phase": chain_faithfulness,
+            "overall_score": round(overall, 3),
+            "chain_completed": chain_completed,
         }
