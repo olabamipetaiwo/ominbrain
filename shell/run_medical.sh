@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-# Run medical-domain models via Ollama.
+# Run medical-domain models. MedGemma-4B is served via Ollama; HuatuoGPT-V-34B,
+# Lingshu-32B, and Llava-Med-7B need vLLM servers running first (see
+# config/models.py for the `vllm serve` commands and ports).
 #
-# Pull models first (one-time):
-#   ollama pull huatuogpt-vision:34b
-#   ollama pull lingshu:32b
-#   ollama pull llava-med:7b
 #   ollama pull medgemma:4b
 set -e
 cd "$(dirname "$0")/.."

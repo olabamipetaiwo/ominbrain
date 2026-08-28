@@ -5,6 +5,13 @@ python-dotenv>=1.0.0
 datasets>=2.18.0
 litellm>=1.40.0
 
+# LUMIERE chain-dataset build (config/lumiere.py, src/lumiere_*.py)
+fsspec>=2024.0.0
+requests>=2.31.0
+pandas>=2.0.0
+nibabel>=5.0.0
+streamlit>=1.35.0
+
 
 
 # python3 -m venv .venv                                                                                  

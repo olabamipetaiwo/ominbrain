@@ -18,6 +18,7 @@ build/
 *.whl
 venv/
 .venv/
+.venv*/
 env/
 *.egg-link
 
@@ -29,6 +30,12 @@ htmlcov/
 # Data & results (local artifacts)
 data/
 results/
+.scratch/
+tmp/
+
+
+# Claude Code local settings (per-machine)
+.claude/settings.local.json
 
 # OS
 .DS_Store

@@ -11,7 +11,6 @@
 #   OPENAI_API_KEY       — GPT-5
 #   ANTHROPIC_API_KEY    — Claude-4.5-Sonnet  (via LiteLLM proxy on :8001)
 #   GOOGLE_API_KEY       — Gemini-2.5-Pro     (via LiteLLM proxy on :8002)
-#   DEEPSEEK_API_KEY     — Deepseek-V3.1      (via LiteLLM proxy on :8003)
 set -e
 cd "$(dirname "$0")/.."
 
