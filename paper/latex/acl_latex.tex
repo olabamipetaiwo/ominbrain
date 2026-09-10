@@ -1,0 +1,195 @@
+\documentclass[11pt]{article}
+
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+\usepackage[review]{acl}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+
+% This is also not strictly necessary, and may be commented out.
+% However, it will improve the aesthetics of text in
+% the typewriter font.
+\usepackage{inconsolata}
+
+%Including images in your LaTeX document requires adding
+%additional package(s)
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+% If the title and author information does not fit in the area allocated, uncomment the following
+%
+%\setlength\titlebox{<dim>}
+%
+% and set <dim> to something 5cm or larger.
+
+\title{Knowledge Alignment Benchmarking: Evaluating Causal Clinical Reasoning in Multimodal LLMs on Brain MRI}
+
+% Author information can be set in various styles:
+% For several authors from the same institution:
+% \author{Author 1 \and ... \and Author n \\
+%         Address line \\ ... \\ Address line}
+% if the names do not fit well on one line use
+%         Author 1 \\ {\bf Author 2} \\ ... \\ {\bf Author n} \\
+% For authors from different institutions:
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \And  ... \And
+%         Author n \\ Address line \\ ... \\ Address line}
+% To start a separate ``row'' of authors use \AND, as in
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \AND
+%         Author 2 \\ Address line \\ ... \\ Address line \And
+%         Author 3 \\ Address line \\ ... \\ Address line}
+
+\author{First Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  \texttt{email@domain} \\\And
+  Song Wang \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  \texttt{email@domain} \\}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Multimodal large language models (MLLMs) are increasingly evaluated on medical imaging tasks, but almost every existing benchmark scores only final-answer accuracy. Accuracy alone cannot distinguish a model that reasoned correctly from one that pattern-matched the question text or produced reasoning that contradicts its own answer -- a distinction that matters in clinical settings, where an unfaithful but accidentally correct answer will not generalize to a novel case. We introduce \textbf{Knowledge Alignment Benchmarking (KAB)}, a framework for evaluating multimodal clinical reasoning as a causal chain of five phases mirroring how a radiologist works through a brain MRI case: anatomical assessment, lesion localization, diagnostic synthesis, prognostic judgment, and treatment planning. KAB scores models along three axes beyond accuracy: \emph{faithfulness}, measured by grounding a model's stated reasoning against two authoritative medical ontologies (RadLex and the NCI Thesaurus) and by probing whether a model's reasoning text alone predicts its own answer; \emph{feedback-adaptation}, measured by injecting a model's missed clinical concepts and re-querying to see whether it self-corrects; and \emph{soft gating}, which blocks a phase from being scored as valid reasoning if the phases it causally depends on were not themselves answered correctly. In building this framework on the existing OmniBrainBench dataset, we found that its phase groupings do not reflect genuine same-patient continuity -- only 2 of 6,823 questions in the dataset form a real same-patient multi-phase pair -- which undermines any claim about reasoning degrading across a single patient's causal chain. We describe the construction of a genuine same-patient longitudinal chain dataset built on LUMIERE, a real 91-patient glioblastoma cohort, using a hybrid pipeline that drafts multiple-choice items from patient facts with an LLM and validates every item with a domain-expert clinical review. This paper presents the KAB framework, the construct-validity problem it surfaces in existing benchmarks, and the dataset construction method used to address it; full evaluation results across the model suite are reported in a companion release.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Multimodal large language models (MLLMs) are being applied to medical imaging tasks -- reading a brain MRI, describing a lesion, suggesting a diagnosis -- at a pace that has outrun the tools available to evaluate them safely. The dominant evaluation paradigm treats a medical visual question answering (VQA) task exactly like any other multiple-choice benchmark: a model is scored on whether it selects the correct option, and nothing else is measured. This is a critical gap for clinical applications, because final-answer accuracy cannot distinguish between three behaviors that look identical at the level of a selected letter but are clinically very different:
+
+\begin{enumerate}
+    \item The model correctly perceived the imaging findings and reasoned validly to a diagnosis or plan.
+    \item The model pattern-matched superficial cues in the question text or answer options, arriving at the right answer without engaging with the image at all.
+    \item The model guessed, or produced a chain of reasoning that is internally inconsistent with the answer it ultimately gave.
+\end{enumerate}
+
+Behaviors (2) and (3) are well documented outside the medical domain: crowd-sourced natural language inference datasets contain annotation artifacts that let models reach high accuracy from the hypothesis sentence alone \citep{gururangan2018annotation}, and models trained on such data adopt syntactic heuristics that collapse under adversarial evaluation \citep{mccoy2019right}. Chain-of-thought reasoning inherits the same failure mode: a model's stated reasoning frequently does not reflect the computation that actually produced its answer \citep{lanham2023measuring}, this occurs on naturally worded prompts without any adversarial construction \citep{arcuschin2025chainofthought}, and intermediate reasoning structures behave as influential context rather than as stable causal mediators of the final decision \citep{somov2026breaking}. In the medical multimodal setting specifically, cascading errors from early-stage reasoning failures have been identified as a leading cause of incorrect predictions \citep{jung2026breaking}, and models have been shown to rely on textual or visual shortcuts rather than the pathological regions a question actually asks about \citep{nguyen2025localizing}. In a clinical setting, an accurate-but-unfaithful answer is not merely a benchmark artifact -- it is a model that cannot be trusted on the next case that differs even slightly from the ones it was evaluated on.
+
+We argue that a medical MLLM benchmark should evaluate reasoning the way a clinician's diagnostic process is actually structured: as a sequential, error-compounding chain, where later judgments are only valid if earlier ones were correct \citep{croskerry2009clinical}. We introduce \textbf{Knowledge Alignment Benchmarking (KAB)}, a framework that decomposes a brain MRI case into five clinical phases -- \textbf{A}natomical and \textbf{I}maging \textbf{A}ssessment (AIA), \textbf{L}esion \textbf{I}dentification and \textbf{L}ocalization (LIL), \textbf{D}iagnostic \textbf{S}ynthesis and \textbf{C}ausal \textbf{R}easoning (DSCR), \textbf{P}rognostic \textbf{J}udgment and \textbf{R}isk \textbf{F}orecasting (PJRF), and \textbf{T}herapeutic \textbf{C}ycle \textbf{M}anagement (TCM) -- and scores a model on three dimensions beyond accuracy: whether its reasoning is grounded in real clinical vocabulary and is self-consistent (\textbf{faithfulness}), whether it can incorporate a targeted clinical correction when it fails (\textbf{feedback-adaptation}), and whether its chain of answers is causally coherent rather than a set of independently-guessed phases (\textbf{soft gating}).
+
+In the course of building KAB on top of the existing OmniBrainBench dataset \citep{peng2026omnibrainbench}, we discovered a construct-validity problem that we believe generalizes beyond our own project: OmniBrainBench's phase-to-case grouping does not track same-patient identity. Of 6,823 questions spanning 15 source sub-corpora, only 2 form a genuine same-patient pair across two different clinical phases, and zero span three or more phases. A "chain" evaluated under the current grouping is stitched together from different real patients' questions within the same origin sub-corpus, so a model being "gated out" of a later phase after failing an earlier one is an artifact of this aggregation, not evidence of causal reasoning failure for one patient. We report this problem in detail (Section~\ref{sec:chain-validity}) and describe our resolution: a genuine same-patient longitudinal chain dataset built on LUMIERE \citep{suter2022lumiere}, a 91-patient real-world glioblastoma cohort with longitudinal imaging, expert-assigned RANO treatment-response ratings, survival data, and Stupp-protocol treatment records, using a hybrid LLM-draft-plus-expert-review construction pipeline (Section~\ref{sec:lumiere}).
+
+This paper makes four contributions. First, we identify and quantify a construct-validity problem in an existing brain-MRI MLLM benchmark that is likely to recur in any dataset assembled from single-task source corpora. Second, we present a reusable hybrid construction method -- automatic fact extraction and LLM item drafting followed by targeted domain-expert review -- for turning a raw longitudinal clinical imaging dataset into a validated multi-phase reasoning benchmark. Third, we present the KAB framework itself: ontology-grounded faithfulness scoring against RadLex and the NCI Thesaurus, a feedback-adaptation loop that distinguishes a knowledge gap from an activation failure, and soft gating that operationalizes the causal dependency between clinical phases. Fourth, once chains are genuine, KAB's degradation and adaptation measurements become answers to a well-posed question -- whether a model's reasoning at a later phase actually follows from what it established earlier for the same patient -- rather than an artifact of how a dataset happens to be grouped. Full evaluation results across our model suite are reported separately as data collection is ongoing at the time of writing (Section~\ref{sec:limitations}).
+
+\section{Related Work}
+\label{sec:related-work}
+
+\paragraph{Shortcut learning and reasoning artifacts.} The observation that a model can reach a correct label without engaging with the intended reasoning task predates large language models. \citet{gururangan2018annotation} showed that natural language inference hypotheses alone -- without the premise -- carry enough annotation artifacts to substantially outperform chance. \citet{mccoy2019right} showed that models trained on such data adopt syntactic heuristics (lexical overlap, subsequence, constituent) that fail systematically on their HANS diagnostic set. KAB's local faithfulness probe and correct-but-unfaithful flag are a direct descendant of this line of work, applied to a setting where the "hypothesis" is a model's own free-text reasoning rather than a dataset artifact.
+
+\paragraph{Chain-of-thought faithfulness.} \citet{lanham2023measuring} introduced systematic tests for whether a model's chain-of-thought causally affects its final answer, finding that stated reasoning frequently does not reflect what actually drove the answer. \citet{arcuschin2025chainofthought} extended this to naturally-worded, non-adversarial prompts, reporting unfaithfulness rates up to 13\% in production models. \citet{somov2026breaking} evaluated schema-guided pipelines under causal intervention on intermediate structures and found models fail to update their final decision after the intervention in up to 60\% of cases, concluding that intermediate reasoning functions as influential context rather than a stable causal mediator. KAB's local faithfulness probe is methodologically closest to this line: rather than intervening on the reasoning text, we withhold everything except the reasoning text and ask whether it alone reproduces the original answer.
+
+\paragraph{Cascading failure in medical multimodal reasoning.} Two recent works are close enough to KAB's gating mechanism to warrant explicit comparison. \citet{jung2026breaking} propose Medical Reasoning-aware Policy Optimization (MRPO), a reinforcement-learning method that assigns exponentially larger penalties to earlier invalid reasoning steps during training, directly targeting the same cascading-failure phenomenon that motivates KAB's soft gating. \citet{nguyen2025localizing} introduce perturbation tests that detect textual and visual shortcut learning in medical VQA models. Both works target the same underlying phenomenon -- early-stage reasoning failure propagating into later errors -- but neither addresses \emph{dataset construct validity}: whether the multi-step cases used for training or evaluation actually represent one patient's causal trajectory in the first place. MRPO is a training-time intervention that presupposes its step-labeled data is a genuine causal chain; our contribution is upstream of that assumption. KAB additionally couples cascading-failure detection to ontology-grounded faithfulness scoring and a feedback-adaptation loop, neither of which is part of either prior work.
+
+\paragraph{Clinical cognition as motivation for phase structure.} The five-phase decomposition in KAB is not an arbitrary engineering choice. \citet{croskerry2009clinical} describes clinical diagnostic reasoning under a dual-process model in which sequential, error-compounding cognitive steps -- rather than a single holistic judgment -- characterize real diagnostic error. This gives a clinical-science grounding for treating AIA~$\rightarrow$~LIL~$\rightarrow$~DSCR~$\rightarrow$~PJRF~$\rightarrow$~TCM as a genuine dependency chain rather than a convenient dataset partition.
+
+\paragraph{Brain MRI benchmarks and same-patient continuity.} OmniBrainBench \citep{peng2026omnibrainbench} is, to our knowledge, the largest closed-ended brain-MRI MLLM benchmark organized around a multi-phase clinical workflow, and is the dataset on which we build the KAB framework. NeuroQA \citep{abbasi2026neuroqa} is substantially larger (56,953 QA pairs, 12,977 subjects) and includes a "Longitudinal" question category, but this category compares two timepoints rather than a full causal chain, and its authors explicitly state the benchmark is not intended to support claims about treatment planning. UCSF-PDGM-VQA \citep{ghosh2026ucsfpdgmvqa} provides 2,387 QA pairs over 473 glioma studies but at a single timepoint per patient, with no prognostic or treatment layer. LUMIERE \citep{suter2022lumiere} and MU-Glioma-Post \citep{muglioma2025post} both provide genuine longitudinal, real-patient continuity with treatment and outcome data, but neither ships a question-answering layer. We are not aware of a published dataset that combines genuine same-patient continuity across imaging, diagnosis, prognosis, and treatment with a ready-made multiple-choice question layer; Section~\ref{sec:lumiere} describes our construction of one on top of LUMIERE.
+
+\section{The KAB Framework}
+\label{sec:kab}
+
+KAB evaluates a model on a per-case basis, where a case is one patient's progression through some subset of the five clinical phases. For each question in a case, a model receives the relevant image(s), the question, the answer options, and a structured summary of its own answers from upstream phases in the same case (the \emph{chain context}). It must return a structured response containing an answer, a description of what it observed in the image (\texttt{visual\_grounding}), and free-text reasoning connecting the observation to the answer. On top of this base interaction, KAB computes three families of metrics.
+
+\subsection{Faithfulness}
+\label{sec:faithfulness}
+
+\paragraph{Local faithfulness.} After a model answers, we issue a second call -- the faithfulness probe -- containing \emph{only} the model's own reasoning text (no image, no question, no answer options) and ask which answer that reasoning supports. If the probe's predicted answer matches the model's original answer, the response is \emph{locally faithful}: the stated reasoning is sufficient, on its own, to recover the conclusion. A mismatch means the model's justification is disconnected from the answer it actually gave. We separately flag \emph{correct-but-unfaithful} responses -- a right answer paired with reasoning that does not support it -- as the most clinically dangerous category, since such a response offers no evidence it will generalize to a case that differs even slightly from the one it was scored on.
+
+\paragraph{KB alignment score.} This is KAB's central grounding metric. Every diagnostic phase has an authoritative source of real clinical vocabulary: RadLex \citep{rsna_radlex} for radiology anatomy, imaging modalities, and lesion descriptors (routed to the AIA and LIL phases), and the NCI Thesaurus (NCIt) for tumor classification, WHO grading, molecular markers, staging, and treatment (routed to DSCR, PJRF, and TCM). NCIt was chosen over UMLS because OmniBrainBench and LUMIERE are both predominantly glioma/glioblastoma datasets, for which NCIt has the deepest freely-available coverage, and because it requires no account or API key, removing a reproducibility barrier. We concatenate a model's \texttt{visual\_grounding} and \texttt{reasoning} fields, tokenize the text (preserving hyphenated compounds such as \emph{ring-enhancing} as single tokens), and run a greedy longest-match scan against the union of both knowledge bases, trying 4-grams down to 1-grams with no reuse of consumed token positions. This yields \texttt{extracted\_concepts} -- every KB term the model used regardless of phase. We then take \texttt{matched\_concepts} as the subset of \texttt{extracted\_concepts} present in the phase-appropriate KB, and compute
+\begin{equation}
+  \label{eq:kb-align}
+  \text{KBAlign} = \frac{|\text{matched\_concepts}|}{|\text{extracted\_concepts}|}.
+\end{equation}
+A low score indicates the model is not using vocabulary appropriate to the current diagnostic phase -- for example, still describing anatomy at the diagnosis phase rather than committing to tumor-classification language.
+
+\paragraph{Concept precision score.} KB alignment measures whether a model used \emph{real} clinical terms; concept precision measures whether it used the \emph{right} ones for the specific case. Of the matched phase-KB concepts, we compute the fraction that also appear in the correct answer text:
+\begin{equation}
+  \label{eq:concept-precision}
+  \text{ConceptPrecision} = \frac{|\text{on-target matches}|}{|\text{matched\_concepts}|}.
+\end{equation}
+A model can score high on KB alignment while scoring low on concept precision -- using plausible-sounding real clinical language that is nonetheless wrong for the case at hand.
+
+\paragraph{Chain faithfulness.} For each phase after AIA, we check what fraction of the key terms from the correct answers of \emph{upstream} phases are referenced in the current phase's reasoning text. A model that identified a lesion in the right temporal lobe during LIL but never references that location during DSCR is answering each phase in isolation rather than reasoning through a coherent patient-level chain.
+
+\subsection{Feedback-Based Adaptation}
+\label{sec:adaptation}
+
+Faithfulness metrics establish whether a model reasoned correctly; the adaptation loop asks a different question -- whether a model that failed can be corrected. The loop triggers when a response is KB-unfaithful (KBAlign below a threshold $\tau_g$, default $0.3$) \emph{and} has a non-empty set of missed concepts, defined as phase-KB terms present in the correct answer but absent from the model's output. When triggered, we re-issue the original prompt augmented with the model's prior answer and reasoning and an explicit \texttt{CLINICAL KNOWLEDGE CORRECTION} block listing the missed concepts, and ask the model to re-examine the image in light of this correction. We record whether the model changed its answer (\texttt{adaptation\_changed}) and whether the revised answer is correct (\texttt{adaptation\_correct}), and report the \emph{adaptation rate} -- the fraction of triggered questions that the model corrects to the right answer. This distinguishes two failure modes that look identical from accuracy alone: a genuine \emph{knowledge gap}, where the model cannot incorporate the correction even when handed it explicitly, versus an \emph{activation failure}, where the model possessed the relevant knowledge but did not surface it unprompted.
+
+\subsection{Soft Gating}
+\label{sec:gating}
+
+Because the five phases form a causal chain, scoring a diagnosis (DSCR) as valid reasoning after a model has already failed to identify the correct anatomy (AIA) produces a misleading result -- the diagnosis was not built on correct upstream perception. Soft gating enforces this directly: a phase is blocked (\texttt{gated\_out}, scored $0.0$) unless every phase it depends on scored at or above a gating threshold $\tau_c$ (default $0.5$). AIA has no upstream dependency and always runs; LIL requires AIA; DSCR requires AIA and LIL; PJRF requires AIA, LIL, and DSCR; TCM requires all four. \emph{Chain completion rate}, reported at the case level, is the fraction of cases in which every phase ran and cleared its gate -- a model with a high chain completion rate is demonstrating coherent end-to-end reasoning rather than isolated per-phase competence. Gating can be disabled for a flat accuracy baseline.
+
+\section{Chain Validity in OmniBrainBench}
+\label{sec:chain-validity}
+
+The KAB framework as described in Section~\ref{sec:kab} presupposes that a case's five phases represent one patient's actual clinical trajectory: a model that fails AIA for a given patient should be gated out of that same patient's DSCR question, not an unrelated patient's. We investigated whether OmniBrainBench \citep{peng2026omnibrainbench} supports this premise directly, by checking whether any image is shared across questions tagged with different clinical phases within a grouped case -- the only way genuine same-patient, multi-phase continuity could hold.
+
+Of 6,823 total questions drawn from 15 source sub-corpora (including PubMedVision, BraTS2021, RSNA, ISLES2022, and VQA\_RAD, among others), we found only \textbf{2} questions that genuinely share a same-patient image across two different phases, both from VQA\_RAD and both AIA-LIL pairs. We repeated the analysis with a second, independent method -- extracting real per-patient case identifiers by stripping known modality/view/slice suffixes from filenames on a per-corpus basis -- and obtained the same result: 2 genuine multi-phase same-patient cases in the entire dataset, zero spanning three or more phases, zero spanning all five. The root cause is structural: each of the 15 source sub-corpora was constructed for one specific clinical task (e.g., BraTS for tumor characterization, RSNA for hemorrhage classification, ISLES for stroke), so a given real patient within a sub-corpus is essentially only ever asked one phase-type of question. The grouping key currently used to construct multi-phase "cases" (\texttt{source\_file}) in practice groups together an entire origin sub-corpus, standing in for a single patient; a "chain" evaluated under this grouping is stitched from \emph{different real patients'} questions, not one patient's actual diagnostic journey. A model gated out of a later phase after failing an earlier one under this grouping demonstrates nothing about causal reasoning degradation for any single patient.
+
+We searched for a replacement or supplementary dataset with genuine same-patient, multi-phase continuity and a ready-made question layer (Section~\ref{sec:related-work}); none exists. This motivates the construction described next.
+
+\section{Constructing a Genuine Causal-Chain Dataset from LUMIERE}
+\label{sec:lumiere}
+
+We build a genuine same-patient longitudinal chain dataset on LUMIERE \citep{suter2022lumiere}, a single-center dataset of 91 real glioblastoma patients with 638 study dates, automated multi-sequence tumor segmentation, and clinician-assigned RANO treatment-response ratings with documented rationale.
+
+\paragraph{Fact extraction.} For each patient, we extract per-phase facts directly from LUMIERE's shipped data with full provenance, requiring no additional annotation for the perception-oriented phases: LUMIERE's tumor segmentation masks are already registered to a standard MNI152 atlas space (the same space used by standard neuroanatomical atlases), so lesion-location facts reduce to a voxel-index lookup rather than a registration step, and per-timepoint tumor volumes ship precomputed. DSCR facts use LUMIERE's existing expert-assigned RANO ratings directly rather than requiring new diagnostic annotation. PJRF and TCM facts draw on the dataset's structured survival and Stupp-protocol treatment records.
+
+\paragraph{Timepoint sampling.} We initially selected each patient's most recent RANO-rated timepoint, but found this made nearly every DSCR answer "progressive disease," since glioblastoma patients overwhelmingly trend toward progression by their final scan -- a sampling choice that would have made the DSCR phase trivially guessable regardless of a model's actual reasoning. We instead sample a random eligible response-rated timepoint per patient (fixed seed), which yields a substantially more balanced label distribution (progressive disease, stable disease, partial response, and complete response all represented; exact counts reported with the completed dataset). We additionally found and fixed a related bug in which a randomly sampled RANO-rated timepoint could lack matching complete imaging, silently falling back to imaging from a \emph{different} date than the one the RANO rating and DSCR facts describe; we now constrain sampling to timepoints with both a rating and complete imaging, and verified zero such mismatches across the full extracted cohort.
+
+\paragraph{Hybrid drafting and expert review.} A large language model (Claude 4.5 Sonnet, accessed via a local LiteLLM proxy) drafts multiple-choice items per phase from the extracted per-patient facts, including plausible distractors. Every drafted item is then reviewed by a domain-expert clinical collaborator before it is admitted to the dataset: the reviewer can approve an item as-is, edit the question text or any answer option (including which option is marked correct) before approving, or reject an item outright with a required justification. Items the drafting process itself flags as an ambiguous case or a low-confidence distractor are surfaced to the reviewer with a visual marker for closer attention. This two-stage construction is deliberate: the perception-adjacent phases (AIA, LIL) and the diagnosis phase (DSCR) are close to programmatically derivable from LUMIERE's shipped segmentation and RANO data, but constructing plausible-but-wrong distractors for the prognosis (PJRF) and treatment (TCM) phases requires judgment informed by the glioblastoma prognostic and treatment literature -- particularly around confounds such as pseudoprogression, which is a well-known source of misjudgment even for practicing radiologists -- that we do not consider safe to leave to an LLM alone.
+
+\paragraph{Review mechanism.} Because the domain-expert reviewer is a clinical collaborator without cluster or command-line access, the review interface is a single self-contained HTML file bundling every drafted item together with its supporting MRI slice images, requiring no server, account, or installed software -- the reviewer opens it directly in a browser, and their decisions are saved locally and returned as an updated copy of the same file.
+
+\paragraph{Contribution.} Once constructed, this is -- to our knowledge -- the first dataset combining genuine same-patient continuity with a full imaging-to-treatment question layer, closing a gap that persists across every existing candidate we are aware of (Section~\ref{sec:related-work}). Beyond the dataset itself, we position the hybrid drafting-plus-targeted-expert-review pipeline as a reusable construction method: it is a substantially cheaper way to turn a raw longitudinal clinical dataset into a validated multi-phase reasoning benchmark than a fully manual annotation effort, while still routing the judgment calls that matter clinically (prognosis and treatment distractors) through expert review rather than LLM drafting alone.
+
+\section{Experimental Setup}
+\label{sec:setup}
+
+\paragraph{Models.} We evaluate a suite of models spanning three categories: proprietary models accessed via API or a LiteLLM proxy (GPT-5, Claude 4.5 Sonnet, Gemini 2.5 Pro), medical-domain fine-tuned models (HuatuoGPT-V-34B, Lingshu-32B, Llava-Med-7B, MedGemma-4B), and general-purpose open-weight models (Qwen3-VL-30B, InternVL3-38B, Qwen2.5-VL-7B). Open-weight models are served through an OpenAI-compatible interface via vLLM, with the exception of Qwen2.5-VL-7B, served via Ollama; all models are accessed through the same interface so the evaluation pipeline is identical regardless of backend.
+
+\paragraph{Infrastructure.} All model serving and inference runs on GPU compute nodes (NVIDIA L4, 22.5\,GB) via a SLURM scheduler; larger open-weight models (30B-38B parameters) require multi-GPU tensor parallelism, and we note that even two L4 GPUs are likely insufficient in FP16 for the largest models in our suite without quantization -- a hardware constraint we discuss further in Section~\ref{sec:limitations}.
+
+\paragraph{Knowledge bases.} RadLex (RSNA, English-filtered OWL release) and the NCI Thesaurus (NIH NCI, OWL release) are used as-is, with no stub or fallback vocabulary: the KB aligner requires both files to be present and raises an error rather than silently degrading if either is missing.
+
+\section*{Limitations}
+\label{sec:limitations}
+
+This paper reports the KAB framework, the chain-validity problem it surfaces in an existing benchmark, and the dataset construction method used to address it. It does not yet report full evaluation results across the model suite described in Section~\ref{sec:setup}: at the time of writing, the LUMIERE-based chain dataset (Section~\ref{sec:lumiere}) is fully constructed and drafted but awaiting completion of its domain-expert review pass, which is a prerequisite for reporting any result on genuine causal chains rather than the construct-invalid chains described in Section~\ref{sec:chain-validity}. We view this as the responsible ordering of claims: we do not report a causal-degradation finding until the dataset it would be measured on actually supports a causal-chain claim.
+
+Several additional limitations apply to the framework and dataset construction as currently specified. First, KB alignment (Section~\ref{sec:faithfulness}) is a string- and n-gram-matching metric against a fixed vocabulary, not a semantic one; it will undercount a model that expresses a correct clinical concept in phrasing not present in either ontology, and we expect this to be a point of reviewer scrutiny. Second, PJRF and TCM are a small fraction of any brain-MRI MCQ dataset assembled from real clinical sources (well under 5\% of cases), so results on these two phases carry low statistical power and should be reported with confidence intervals rather than pooled with the larger phases, which would mask exactly the degradation signal the framework is designed to detect. Third, the tumor segmentations underlying LUMIERE's lesion-location and volume facts are produced by automated tools (DeepBraTumIA, HD-GLIO-AUTO) and are not manually verified per-timepoint, whereas the RANO treatment-response ratings are expert-assigned; we state this distinction explicitly rather than implying uniform annotation quality across fact types. Fourth, LUMIERE is a single-center cohort, and a benchmark built on it inherits whatever institution-specific imaging protocol and patient population characteristics that entails. Finally, evaluating the largest open-weight models in our suite (30B-38B parameters) is currently constrained by available GPU memory and remains an open infrastructure problem independent of the modeling questions this paper addresses.
+
+\section*{Ethics Statement}
+
+This work evaluates the diagnostic reasoning of general-purpose and medical-domain language models on real, de-identified patient imaging data; it does not deploy, recommend, or endorse any model for clinical use, and no results in this paper should be interpreted as a clinical validation of any evaluated system. LUMIERE is used under its published non-commercial research license, and all patient data is accessed in its already de-identified, publicly released form; no new identifiable patient information is collected. The domain-expert review step (Section~\ref{sec:lumiere}) is conducted by a qualified clinical collaborator under the direction of the senior author, and reviewer decisions are used only to validate or correct machine-drafted question content, not as a source of new clinical diagnoses.
+
+% Bibliography entries for the entire Anthology, followed by custom entries
+%\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
+
+% Custom bibliography entries only
+\bibliography{custom}
+
+\end{document}

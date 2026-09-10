@@ -41,6 +41,28 @@ _ANSWER_JSON_SCHEMA = (
     "}"
 )
 
+# Structured JSON Schemas for vLLM guided decoding (extra_body={"guided_json": ...}).
+# Kept separate from the human-readable _ANSWER_JSON_SCHEMA text above, which is
+# still shown in the prompt itself for models/backends that aren't guided-decoded.
+ANSWER_RESPONSE_SCHEMA: dict = {
+    "type": "object",
+    "properties": {
+        "answer": {"type": "string", "enum": ["A", "B", "C", "D", "E"]},
+        "visual_grounding": {"type": "string"},
+        "reasoning": {"type": "string"},
+    },
+    "required": ["answer", "visual_grounding", "reasoning"],
+}
+
+FAITHFULNESS_RESPONSE_SCHEMA: dict = {
+    "type": "object",
+    "properties": {
+        "predicted_answer": {"type": "string", "enum": ["A", "B", "C", "D", "E"]},
+        "explanation": {"type": "string"},
+    },
+    "required": ["predicted_answer", "explanation"],
+}
+
 
 def _encode_image(image_bytes: bytes) -> str:
     return base64.b64encode(image_bytes).decode("utf-8")

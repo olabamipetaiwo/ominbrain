@@ -29,16 +29,37 @@ from openai import OpenAI
 import config
 from src.causal_graph import check_gate
 from src.kb_aligner import KBAligner
-from src.prompts import build_main_prompt, build_faithfulness_probe, build_adaptation_prompt
+from src.prompts import (
+    build_main_prompt,
+    build_faithfulness_probe,
+    build_adaptation_prompt,
+    ANSWER_RESPONSE_SCHEMA,
+    FAITHFULNESS_RESPONSE_SCHEMA,
+)
 
 
 def _avg(values: list[float]) -> float | None:
     return round(sum(values) / len(values), 3) if values else None
 
 
-def _call_model(client: OpenAI, messages: list[dict], label: str = "") -> str:
-    """API call with exponential backoff retry (3 attempts, 5/10/20s delays)."""
+def _call_model(
+    client: OpenAI,
+    messages: list[dict],
+    label: str = "",
+    guided_json_schema: dict | None = None,
+) -> str:
+    """API call with exponential backoff retry (3 attempts, 5/10/20s delays).
+
+    guided_json_schema, when set, is passed as extra_body={"guided_json": ...} —
+    vLLM's structured-output decoding, which forces the response to conform to the
+    schema at the token level. Only meaningful against a vLLM-backed model; other
+    backends silently ignore unknown extra_body fields or error, so only pass this
+    for vllm-backed evaluator runs (--guided-json).
+    """
     tag = f" ({label})" if label else ""
+    kwargs: dict = {}
+    if guided_json_schema is not None:
+        kwargs["extra_body"] = {"guided_json": guided_json_schema}
     for attempt in range(config.API_RETRY_ATTEMPTS):
         try:
             response = client.chat.completions.create(
@@ -46,6 +67,7 @@ def _call_model(client: OpenAI, messages: list[dict], label: str = "") -> str:
                 messages=messages,
                 max_tokens=config.MAX_TOKENS,
                 temperature=config.TEMPERATURE,
+                **kwargs,
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
@@ -124,6 +146,7 @@ def _run_adaptation(
     original_answer: str,
     original_reasoning: str,
     client: OpenAI,
+    guided_json: bool = False,
 ) -> dict:
     """
     Feedback-adaptation step.
@@ -136,7 +159,8 @@ def _run_adaptation(
         question, case_for_prompt, phase, chain_context,
         missed_concepts, original_answer, original_reasoning,
     )
-    raw = _call_model(client, messages, label="adaptation")
+    schema = ANSWER_RESPONSE_SCHEMA if guided_json else None
+    raw = _call_model(client, messages, label="adaptation", guided_json_schema=schema)
     parsed = _parse_json(raw, ["answer", "visual_grounding", "reasoning"])
 
     if parsed is None:
@@ -172,6 +196,7 @@ def _evaluate_question(
     aligner: KBAligner,
     client: OpenAI,
     adaptation_enabled: bool = True,
+    guided_json: bool = False,
 ) -> dict:
     qid = question["id"]
     print(f"    [{qid}] main call…", end=" ", flush=True)
@@ -186,7 +211,8 @@ def _evaluate_question(
     }
 
     messages = build_main_prompt(question, case_for_prompt, phase, chain_context)
-    raw = _call_model(client, messages, label="main")
+    answer_schema = ANSWER_RESPONSE_SCHEMA if guided_json else None
+    raw = _call_model(client, messages, label="main", guided_json_schema=answer_schema)
     parsed = _parse_json(raw, ["answer", "visual_grounding", "reasoning"])
 
     if parsed is None:
@@ -221,7 +247,8 @@ def _evaluate_question(
 
     print("| probe…", end=" ", flush=True)
     faith_msgs = build_faithfulness_probe(parsed["reasoning"], question["options"])
-    faith_raw = _call_model(client, faith_msgs, label="faithfulness")
+    faith_schema = FAITHFULNESS_RESPONSE_SCHEMA if guided_json else None
+    faith_raw = _call_model(client, faith_msgs, label="faithfulness", guided_json_schema=faith_schema)
     faith_parsed = _parse_json(faith_raw, ["predicted_answer"])
 
     if faith_parsed:
@@ -246,7 +273,7 @@ def _evaluate_question(
         adaptation = _run_adaptation(
             question, case_for_prompt, phase, chain_context,
             kb_result.missed_concepts, model_answer, parsed["reasoning"],
-            client,
+            client, guided_json=guided_json,
         )
     else:
         print()  # newline after probe result
@@ -289,11 +316,13 @@ class CausalChainEvaluator:
         api_key: str | None = None,
         radlex_path: Path = Path("data/kb/radlex.owl"),
         ncit_path: Path = Path("data/kb/ncit.owl"),
+        guided_json: bool = False,
     ):
         self.model = model
         self.gating_enabled = gating_enabled
         self.gating_threshold = gating_threshold
         self.adaptation_enabled = adaptation_enabled
+        self.guided_json = guided_json
         self.aligner = KBAligner(radlex_path=radlex_path, ncit_path=ncit_path)
         config.MODEL = model
 
@@ -350,6 +379,7 @@ class CausalChainEvaluator:
                 result = _evaluate_question(
                     q, case, phase, chain_context,
                     self.aligner, self._client, self.adaptation_enabled,
+                    guided_json=self.guided_json,
                 )
                 result["chain_grounding_terms_used"] = q.get("chain_grounding_terms", [])
                 question_results.append(result)

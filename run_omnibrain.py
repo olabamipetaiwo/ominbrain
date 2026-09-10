@@ -49,10 +49,19 @@ def run_model(
     adaptation: bool,
     radlex_path: Path,
     ncit_path: Path,
+    guided_json: bool = False,
 ) -> None:
+    if guided_json and model_cfg.get("backend") != "vllm":
+        print(
+            f"WARNING: --guided-json requested but {model_cfg['name']} is backend="
+            f"{model_cfg.get('backend', 'openai')!r}, not 'vllm'. guided_json is a "
+            "vLLM-specific extra_body field — other backends will likely reject or "
+            "silently ignore it. Proceeding anyway."
+        )
+
     print(f"\n{'#'*60}")
     print(f"  Model: {model_cfg['name']}  ({model_cfg['category']})")
-    print(f"  Cases: {len(cases)}   Gating: {gating}   Adaptation: {adaptation}")
+    print(f"  Cases: {len(cases)}   Gating: {gating}   Adaptation: {adaptation}   Guided-JSON: {guided_json}")
     print(f"  Knowledge bases: {radlex_path.name}, {ncit_path.name}")
     print(f"{'#'*60}")
 
@@ -64,11 +73,13 @@ def run_model(
         api_key=model_cfg.get("api_key"),
         radlex_path=radlex_path,
         ncit_path=ncit_path,
+        guided_json=guided_json,
     )
 
     results = evaluator.evaluate_all(cases)
-    out_dir = _results_dir(model_cfg["name"])
-    save_results(results, model_cfg["name"], out_dir)
+    result_name = model_cfg["name"] + ("-guided-json" if guided_json else "")
+    out_dir = _results_dir(result_name)
+    save_results(results, result_name, out_dir)
 
 
 #
@@ -114,6 +125,17 @@ def parse_args():
         "--no-adaptation",
         action="store_true",
         help="Disable feedback-adaptation loop (skip KB correction re-runs)",
+    )
+    p.add_argument(
+        "--guided-json",
+        action="store_true",
+        help=(
+            "Force every call through vLLM's guided_json structured-output decoding "
+            "(extra_body={'guided_json': schema}), constraining output to the "
+            "response schema at the token level. Only meaningful for vllm-backed "
+            "models. Results are saved under '<model>-guided-json' to keep them "
+            "separate from unconstrained runs."
+        ),
     )
     p.add_argument(
         "--force-download",
@@ -202,13 +224,13 @@ def main():
 
     if args.all_models:
         for model_cfg in MODELS:
-            run_model(model_cfg, cases, gating, adaptation, radlex_path, ncit_path)
+            run_model(model_cfg, cases, gating, adaptation, radlex_path, ncit_path, args.guided_json)
     else:
         model_cfg = MODEL_MAP.get(args.model)
         if model_cfg is None:
             print(f"Unknown model '{args.model}'. Use --list-models.")
             sys.exit(1)
-        run_model(model_cfg, cases, gating, adaptation, radlex_path, ncit_path)
+        run_model(model_cfg, cases, gating, adaptation, radlex_path, ncit_path, args.guided_json)
 
 
 if __name__ == "__main__":

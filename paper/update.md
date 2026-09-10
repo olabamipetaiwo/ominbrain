@@ -1,5 +1,35 @@
 #Project Update
 
+## 2026-09-07 — Llava-Med-7B guided-JSON re-test: still degenerates, stronger finding now
+
+Ran the guided-JSON re-test flagged 2026-08-25 as required before reporting
+Llava-Med-7B's near-zero score as a finding. Added `--guided-json` to
+`run_omnibrain.py`/`src/evaluator.py` (passes `extra_body={"guided_json":
+schema}` to vLLM's OpenAI-compatible endpoint, forcing token-level structured
+output; new `ANSWER_RESPONSE_SCHEMA`/`FAITHFULNESS_RESPONSE_SCHEMA` in
+`src/prompts.py`). Ran on `hpg-turin` (SLURM job 41296339, ~3 min) against
+the same AIA-phase question set as the original 2026-08-21 run.
+
+**Result: 0/25 AIA questions answered — same as unconstrained decoding.**
+All 25 requests returned `200 OK` from the vLLM server (confirmed in
+`.scratch/vllm_serve_Llava-Med-7B.log` — no server-side errors, no rejected
+requests), but every response body was an empty string. This is a cleaner
+result than the original test: it's not a malformed-JSON parsing failure,
+it's the model producing zero content even when the server is enforcing
+valid JSON at the decoding level. Ruled out MAX_TOKENS (800, plenty) and
+temperature (0.0, greedy) as the cause.
+
+**This lands on the stronger of the two anticipated outcomes** (see
+2026-08-25 entry): "not fixable via output-format constraints — no coherent
+answer to extract even when forced into valid syntax." The near-zero score
+can now be reported as a genuine capability/robustness finding, not an
+artifact of prompt/parsing mismatch. Results saved to
+`results/Llava-Med-7B-guided-json_20260907_042950/`.
+
+**Not yet done:** re-frame the write-up as a deployment-readiness/robustness
+point (per the 2026-08-25 note) rather than a reasoning-quality point when
+this goes into the paper draft.
+
 ## Target venue: NAACL 2027 (https://2027.naacl.org/)
 Confirmed 2026-08-27. CFP details (deadline, page limits, formatting/anonymity
 rules) not yet looked up — check the site directly once planning the writing
