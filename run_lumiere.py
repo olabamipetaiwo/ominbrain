@@ -57,6 +57,8 @@ def parse_args():
     p.add_argument("--list-models", action="store_true")
     p.add_argument("--n-cases", type=int, default=30)
     p.add_argument("--min-phases", type=int, default=2)
+    p.add_argument("--include-unreviewed", action="store_true",
+                   help="Use LLM-drafted items still pending expert review (preliminary results only)")
     p.add_argument("--no-gating", action="store_true")
     p.add_argument("--no-adaptation", action="store_true")
     p.add_argument("--radlex-path", type=Path, default=Path("data/kb/radlex.owl"))
@@ -79,7 +81,8 @@ def main():
         print("Specify --model <name> or --all-models. Use --list-models to see options.")
         sys.exit(1)
 
-    cases = load_lumiere(n_cases=args.n_cases, min_phases=args.min_phases)
+    cases = load_lumiere(n_cases=args.n_cases, min_phases=args.min_phases,
+                         include_unreviewed=args.include_unreviewed)
     if not cases:
         print("No LUMIERE cases loaded. Run tools/lumiere_merge_reviewed.py first.")
         sys.exit(1)

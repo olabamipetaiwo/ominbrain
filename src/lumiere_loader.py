@@ -61,16 +61,19 @@ def _image_dir_for(question: dict) -> Path:
     return Path(lcfg.LUMIERE_DATA_DIR) / "slices" / question["patient_id"]
 
 
-def merge_reviewed(reviewed_dir: Path | None = None) -> list[dict]:
+def merge_reviewed(reviewed_dir: Path | None = None,
+                   include_unreviewed: bool = False) -> list[dict]:
     """Combine all data/lumiere/reviewed/<patient_id>_<phase>.json items,
-    keeping only approved/edited (dropping rejected)."""
+    keeping only approved/edited (dropping rejected). With include_unreviewed,
+    also keeps LLM-drafted items still pending expert review (preliminary runs)."""
     reviewed_dir = reviewed_dir or Path(lcfg.LUMIERE_DATA_DIR) / "reviewed"
+    keep = ("approved", "edited") + (("pending",) if include_unreviewed else ())
     items = []
     for fpath in sorted(reviewed_dir.glob("*.json")):
         data = json.loads(fpath.read_text())
         rows = data if isinstance(data, list) else [data]
         for row in rows:
-            if row.get("review_status") in ("approved", "edited"):
+            if row.get("review_status") in keep:
                 items.append(row)
     return items
 
@@ -142,6 +145,7 @@ def build_lumiere_cases(items: list[dict], n_cases: int | None = None,
     return cases
 
 
-def load_lumiere(n_cases: int | None = None, min_phases: int = 2, **kwargs) -> list[dict]:
-    items = merge_reviewed()
+def load_lumiere(n_cases: int | None = None, min_phases: int = 2,
+                 include_unreviewed: bool = False, **kwargs) -> list[dict]:
+    items = merge_reviewed(include_unreviewed=include_unreviewed)
     return build_lumiere_cases(items, n_cases=n_cases, min_phases=min_phases)
