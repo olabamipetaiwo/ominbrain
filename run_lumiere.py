@@ -38,7 +38,8 @@ def _results_dir(model_name: str, gating: bool = True, adaptation: bool = True) 
 
 def run_model(model_cfg: dict, cases: list[dict], gating: bool, adaptation: bool,
               radlex_path: Path, ncit_path: Path, text_only: bool = False,
-              item_set: str = lcfg.DEFAULT_ITEM_SET, counterfactual_images: bool = False) -> None:
+              item_set: str = lcfg.DEFAULT_ITEM_SET, counterfactual_images: bool = False,
+              run_tag: str = "") -> None:
     print(f"\n{'#'*60}")
     print(f"  Model: {model_cfg['name']}  ({model_cfg['category']})  [LUMIERE]")
     print(f"  Cases: {len(cases)}   Gating: {gating}   Adaptation: {adaptation}   "
@@ -52,6 +53,7 @@ def run_model(model_cfg: dict, cases: list[dict], gating: bool, adaptation: bool
     )
     results = evaluator.evaluate_all(cases)
     mode = (("_textonly" if text_only else "") + ("_cf" if counterfactual_images else "")
+            + (f"_{run_tag}" if run_tag else "")
             + ("" if item_set == lcfg.DEFAULT_ITEM_SET else f"_{item_set}"))
     save_results(results, model_cfg["name"], _results_dir(model_cfg["name"] + mode, gating, adaptation))
 
@@ -77,6 +79,9 @@ def parse_args():
                         "different real patient's own image (opposite LIL direction), text "
                         "unchanged. Requires tools/build_lumiere_counterfactual_pairs.py to "
                         "have been run for this --item-set.")
+    p.add_argument("--run-tag", default="",
+                   help="Label inserted into the results folder name (e.g. rep2 for a repeated identical-input "
+                        "control run) so it cannot be mistaken for, or picked up as, the primary run.")
     p.add_argument("--radlex-path", type=Path, default=Path("data/kb/radlex.owl"))
     p.add_argument("--ncit-path", type=Path, default=Path("data/kb/ncit.owl"))
     return p.parse_args()
@@ -113,14 +118,16 @@ def main():
     if args.all_models:
         for model_cfg in MODELS:
             run_model(model_cfg, cases, gating, adaptation, args.radlex_path, args.ncit_path, text_only=args.text_only,
-                      item_set=args.item_set, counterfactual_images=args.counterfactual_images)
+                      item_set=args.item_set, counterfactual_images=args.counterfactual_images,
+                      run_tag=args.run_tag)
     else:
         model_cfg = MODEL_MAP.get(args.model)
         if model_cfg is None:
             print(f"Unknown model '{args.model}'. Use --list-models.")
             sys.exit(1)
         run_model(model_cfg, cases, gating, adaptation, args.radlex_path, args.ncit_path, text_only=args.text_only,
-                      item_set=args.item_set, counterfactual_images=args.counterfactual_images)
+                      item_set=args.item_set, counterfactual_images=args.counterfactual_images,
+                      run_tag=args.run_tag)
 
 
 if __name__ == "__main__":

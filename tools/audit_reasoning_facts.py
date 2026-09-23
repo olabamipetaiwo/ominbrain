@@ -47,6 +47,11 @@ HEMI_RE = re.compile(r"\b(left|right)(?:-sided|\s+(?:cerebral|hemisphere|hemisph
 MEAS_RE = re.compile(r"(\d[\d,]*(?:\.\d+)?)\s*(%|mm³|mm3|mm\^3|cm³|cm3|cc|ml|mm|cm)(?![a-z])", re.I)
 NUM_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")
 RANO_THRESHOLDS = {20.0, 25.0, 40.0, 50.0}
+# 2-D claim view: was the claim's content available in text the model was shown (in_text / not_in_text) x how it
+# compares with the patient record (supported; contradicted = hemisphere opposite the segmentation; unverifiable =
+# hemisphere with no segmentation to compare; unmatched = a measurement matching no record value — not "contradicted",
+# because pattern matching cannot exclude a derived quantity).
+CELL_KEYS = [f"{a}|{b}" for a in ("in_text", "not_in_text") for b in ("supported", "contradicted", "unverifiable", "unmatched")]
 RANO_CONTEXT_RE = re.compile(r"rano|criteri|defin|threshold|≥|>=", re.I)
 
 
@@ -83,10 +88,14 @@ def check_item(q: dict, prior: list[dict], facts: dict, options: dict) -> dict:
     fact_nums = _fact_numbers(facts)
     truth = _truth_hemis(facts)
     c = defaultdict(int)
+    cells = defaultdict(int)   # 2-D view (reviewer round 2): availability in shown text x record status
 
     for m in HEMI_RE.finditer(evidence):
         h = m.group(1).lower()
-        if re.search(rf"\b{h}\b", shown):
+        avail = "in_text" if re.search(rf"\b{h}\b", shown) else "not_in_text"
+        status = "unverifiable" if not truth else ("supported" if h in truth else "contradicted")
+        cells[f"{avail}|{status}"] += 1
+        if avail == "in_text":
             c["copied"] += 1
         elif not truth:
             c["unverifiable"] += 1
@@ -100,9 +109,14 @@ def check_item(q: dict, prior: list[dict], facts: dict, options: dict) -> dict:
         if (m.group(2) == "%" and v in RANO_THRESHOLDS
                 and RANO_CONTEXT_RE.search(evidence[max(0, m.start() - 120):m.start()])):
             continue
-        if _in_shown(v, shown_nums):
+        avail = "in_text" if _in_shown(v, shown_nums) else "not_in_text"
+        # A measurement can be matched to a record value or not; a pattern match cannot show it is CONTRADICTED
+        # (it may be a derived quantity), so the non-matching status is 'unmatched', not 'contradicted'.
+        status = "supported" if any(abs(v - f) <= 0.02 * f for f in fact_nums) else "unmatched"
+        cells[f"{avail}|{status}"] += 1
+        if avail == "in_text":
             c["copied"] += 1
-        elif any(abs(v - f) <= 0.02 * f for f in fact_nums):
+        elif status == "supported":
             c["supported"] += 1
         else:
             c["fabricated"] += 1
@@ -118,7 +132,7 @@ def check_item(q: dict, prior: list[dict], facts: dict, options: dict) -> dict:
         label = "copied_only"
     else:
         label = "no_claims"
-    return {**c, "label": label}
+    return {**c, "label": label, "cells": dict(cells)}
 
 
 def _item_set_of(model: str) -> str:
@@ -142,7 +156,8 @@ def audit_run(run_dir: Path, model: str, options: dict) -> list[dict]:
                 r = check_item(q, prior, facts, options)
                 rows.append({"model": model, "patient": case["case_id"], "phase": phase,
                              "correct": bool(q["correct"]), **{k: r.get(k, 0) for k in
-                             ("copied", "supported", "contradicts", "fabricated", "unverifiable")}, "label": r["label"]})
+                             ("copied", "supported", "contradicts", "fabricated", "unverifiable")}, "label": r["label"],
+                             **{f"cell_{k}": r["cells"].get(k, 0) for k in CELL_KEYS}})
             prior += [{"question": q["question"], "model_answer_text": q.get("model_answer_text"),
                        "visual_grounding": q.get("visual_grounding")} for q in pdata["questions"]]
     return rows
@@ -184,6 +199,33 @@ def main():
         for ph in config.PHASES:
             lines.append(f"| {model} | {ph} | {cell(agg[(model, ph, True)])} | {cell(agg[(model, ph, False)])} |")
     md = "\n".join(lines) + "\n"
+
+    # ---- 2-D view with explicit denominators, all models pooled per phase, correct vs incorrect answers separate
+    lines2 = ["", "## Two-dimension view (claim available in shown text × claim vs patient record)", "",
+              "Unit = individual checkable claim (hemisphere statement or measurement with units). "
+              "Answers with no checkable claim are reported separately and are NOT in the claim denominators. "
+              "Rule-based; misses paraphrase. 'contradicted' = hemisphere opposite the segmentation "
+              "(display-convention caveat as above); 'unmatched' = measurement matching no record value.", "",
+              "| Model | Answers | of which no checkable claim | Claims | in text, supported | in text, contradicted/unmatched | "
+              "NOT in text, supported | NOT in text, contradicted/unmatched | unverifiable |", "|---|---|---|---|---|---|---|---|---|"]
+    tot = defaultdict(lambda: defaultdict(int))
+    for r in rows:
+        t = tot[r["model"]]
+        t["answers"] += 1
+        ncl = sum(r[f"cell_{k}"] for k in CELL_KEYS)
+        t["no_claim"] += ncl == 0
+        for k in CELL_KEYS:
+            t[k] += r[f"cell_{k}"]
+        t["claims"] += ncl
+    for model in sorted(tot):
+        t = tot[model]
+        d = t["claims"] or 1
+        f = lambda *ks: f"{sum(t[k] for k in ks)} ({sum(t[k] for k in ks) / d:.0%})"
+        lines2.append(f"| {model} | {t['answers']} | {t['no_claim']} ({t['no_claim'] / t['answers']:.0%}) | {t['claims']} | "
+                      f"{f('in_text|supported')} | {f('in_text|contradicted', 'in_text|unmatched')} | "
+                      f"{f('not_in_text|supported')} | {f('not_in_text|contradicted', 'not_in_text|unmatched')} | "
+                      f"{f('in_text|unverifiable', 'not_in_text|unverifiable')} |")
+    md += "\n".join(lines2) + "\n"
     print(md)
 
     args.out_prefix.parent.mkdir(parents=True, exist_ok=True)

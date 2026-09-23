@@ -1,0 +1,392 @@
+Session ready: ollama serving (pid 504976), venv active (ominbrain), models -> /blue, HF/pip caches -> /blue
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-72528209-aad6-396e-5340-75f18b6d6b06)
+NAME                   ID              SIZE      MODIFIED    
+llama4:scout           bf31604e25c2    67 GB     2 days ago     
+llama3.2-vision:11b    6f2f9757ae97    7.8 GB    2 days ago     
+gemma3:27b             a418f5838eaf    17 GB     2 days ago     
+gemma3:12b             f4031aab637d    8.1 GB    2 days ago     
+medgemma:4b            9fe4e9a6c9bd    3.3 GB    4 weeks ago    
+=== gating-causality: Gemma-3-27B ===
+Built 52 LUMIERE cases | phase coverage: AIA:52 | LIL:52 | DSCR:52 | PJRF:52 | TCM:52
+
+############################################################
+  Model: Gemma-3-27B  (general)  [gating-causality]
+  Cases: 52   Phases: LIL, DSCR, PJRF, TCM
+############################################################
+
+============================================================
+Case 1/52: LUMIERE GBM Case (Patient-002)
+============================================================
+    [Patient-002_LIL] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-002/LIL/correct] -> D (OK)
+    [Patient-002_LIL] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-002/LIL/incorrect] -> D (OK)
+    [Patient-002_LIL] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-002/LIL/absent] -> D (OK)
+    [Patient-002_DSCR] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-002/DSCR/correct] -> D (OK)
+    [Patient-002_DSCR] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-002/DSCR/incorrect] -> D (OK)
+    [Patient-002_DSCR] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-002/DSCR/absent] -> D (OK)
+    [Patient-002_PJRF] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-002/PJRF/correct] -> D (wrong)
+    [Patient-002_PJRF] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-002/PJRF/incorrect] -> A (OK)
+    [Patient-002_PJRF] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-002/PJRF/absent] -> A (OK)
+    [Patient-002_TCM] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-002/TCM/correct] -> C (OK)
+    [Patient-002_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-002/TCM/incorrect] -> A (wrong)
+    [Patient-002_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-002/TCM/absent] -> A (wrong)
+
+============================================================
+Case 2/52: LUMIERE GBM Case (Patient-003)
+============================================================
+    [Patient-003_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-003/LIL/correct] -> A (wrong)
+    [Patient-003_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-003/LIL/incorrect] -> A (wrong)
+    [Patient-003_LIL] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-003/LIL/absent] -> D (wrong)
+    [Patient-003_DSCR] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-003/DSCR/correct] -> B (OK)
+    [Patient-003_DSCR] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-003/DSCR/incorrect] -> B (OK)
+    [Patient-003_DSCR] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-003/DSCR/absent] -> B (OK)
+    [Patient-003_PJRF] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-003/PJRF/correct] -> B (OK)
+    [Patient-003_PJRF] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-003/PJRF/incorrect] -> B (OK)
+    [Patient-003_PJRF] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-003/PJRF/absent] -> B (OK)
+    [Patient-003_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-003/TCM/correct] -> A (wrong)
+    [Patient-003_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-003/TCM/incorrect] -> A (wrong)
+    [Patient-003_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-003/TCM/absent] -> A (wrong)
+
+============================================================
+Case 3/52: LUMIERE GBM Case (Patient-004)
+============================================================
+    [Patient-004_LIL] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-004/LIL/correct] -> D (wrong)
+    [Patient-004_LIL] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-004/LIL/incorrect] -> D (wrong)
+    [Patient-004_LIL] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-004/LIL/absent] -> D (wrong)
+    [Patient-004_DSCR] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-004/DSCR/correct] -> B (OK)
+    [Patient-004_DSCR] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-004/DSCR/incorrect] -> B (OK)
+    [Patient-004_DSCR] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-004/DSCR/absent] -> B (OK)
+    [Patient-004_PJRF] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-004/PJRF/correct] -> C (wrong)
+    [Patient-004_PJRF] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-004/PJRF/incorrect] -> C (wrong)
+    [Patient-004_PJRF] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-004/PJRF/absent] -> C (wrong)
+    [Patient-004_TCM] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-004/TCM/correct] -> A (OK)
+    [Patient-004_TCM] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-004/TCM/incorrect] -> A (OK)
+    [Patient-004_TCM] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-004/TCM/absent] -> D (wrong)
+
+============================================================
+Case 4/52: LUMIERE GBM Case (Patient-006)
+============================================================
+    [Patient-006_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-006/LIL/correct] -> A (wrong)
+    [Patient-006_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-006/LIL/incorrect] -> A (wrong)
+    [Patient-006_LIL] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-006/LIL/absent] -> D (wrong)
+    [Patient-006_DSCR] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-006/DSCR/correct] -> B (wrong)
+    [Patient-006_DSCR] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-006/DSCR/incorrect] -> B (wrong)
+    [Patient-006_DSCR] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-006/DSCR/absent] -> A (OK)
+    [Patient-006_PJRF] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-006/PJRF/correct] -> A (OK)
+    [Patient-006_PJRF] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-006/PJRF/incorrect] -> A (OK)
+    [Patient-006_PJRF] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-006/PJRF/absent] -> A (OK)
+    [Patient-006_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-006/TCM/correct] -> A (wrong)
+    [Patient-006_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-006/TCM/incorrect] -> A (wrong)
+    [Patient-006_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-006/TCM/absent] -> A (wrong)
+
+============================================================
+Case 5/52: LUMIERE GBM Case (Patient-007)
+============================================================
+    [Patient-007_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-007/LIL/correct] -> A (wrong)
+    [Patient-007_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-007/LIL/incorrect] -> A (wrong)
+    [Patient-007_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-007/LIL/absent] -> A (wrong)
+    [Patient-007_DSCR] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-007/DSCR/correct] -> D (wrong)
+    [Patient-007_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-007/DSCR/incorrect] -> C (OK)
+    [Patient-007_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-007/DSCR/absent] -> C (OK)
+    [Patient-007_PJRF] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-007/PJRF/correct] -> A (wrong)
+    [Patient-007_PJRF] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-007/PJRF/incorrect] -> A (wrong)
+    [Patient-007_PJRF] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-007/PJRF/absent] -> A (wrong)
+    [Patient-007_TCM] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-007/TCM/correct] -> D (OK)
+    [Patient-007_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-007/TCM/incorrect] -> A (wrong)
+    [Patient-007_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-007/TCM/absent] -> A (wrong)
+
+============================================================
+Case 6/52: LUMIERE GBM Case (Patient-008)
+============================================================
+    [Patient-008_LIL] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-008/LIL/correct] -> A (OK)
+    [Patient-008_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-008/LIL/incorrect] -> C (wrong)
+    [Patient-008_LIL] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-008/LIL/absent] -> A (OK)
+    [Patient-008_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-008/DSCR/correct] -> C (OK)
+    [Patient-008_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-008/DSCR/incorrect] -> C (OK)
+    [Patient-008_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-008/DSCR/absent] -> C (OK)
+    [Patient-008_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-008/PJRF/correct] -> B (wrong)
+    [Patient-008_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-008/PJRF/incorrect] -> B (wrong)
+    [Patient-008_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-008/PJRF/absent] -> B (wrong)
+    [Patient-008_TCM] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-008/TCM/correct] -> B (OK)
+    [Patient-008_TCM] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-008/TCM/incorrect] -> B (OK)
+    [Patient-008_TCM] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-008/TCM/absent] -> B (OK)
+
+============================================================
+Case 7/52: LUMIERE GBM Case (Patient-009)
+============================================================
+    [Patient-009_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-009/LIL/correct] -> C (OK)
+    [Patient-009_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-009/LIL/incorrect] -> C (OK)
+    [Patient-009_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-009/LIL/absent] -> C (OK)
+    [Patient-009_DSCR] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-009/DSCR/correct] -> A (wrong)
+    [Patient-009_DSCR] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-009/DSCR/incorrect] -> A (wrong)
+    [Patient-009_DSCR] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-009/DSCR/absent] -> C (wrong)
+    [Patient-009_PJRF] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-009/PJRF/correct] -> D (OK)
+    [Patient-009_PJRF] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-009/PJRF/incorrect] -> A (wrong)
+    [Patient-009_PJRF] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-009/PJRF/absent] -> C (wrong)
+    [Patient-009_TCM] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-009/TCM/correct] -> D (OK)
+    [Patient-009_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-009/TCM/incorrect] -> A (wrong)
+    [Patient-009_TCM] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-009/TCM/absent] -> B (wrong)
+
+============================================================
+Case 8/52: LUMIERE GBM Case (Patient-012)
+============================================================
+    [Patient-012_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-012/LIL/correct] -> C (wrong)
+    [Patient-012_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-012/LIL/incorrect] -> C (wrong)
+    [Patient-012_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-012/LIL/absent] -> C (wrong)
+    [Patient-012_DSCR] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-012/DSCR/correct] -> A (OK)
+    [Patient-012_DSCR] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-012/DSCR/incorrect] -> A (OK)
+    [Patient-012_DSCR] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-012/DSCR/absent] -> A (OK)
+    [Patient-012_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-012/PJRF/correct] -> B (wrong)
+    [Patient-012_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-012/PJRF/incorrect] -> B (wrong)
+    [Patient-012_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-012/PJRF/absent] -> B (wrong)
+    [Patient-012_TCM] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-012/TCM/correct] -> C (OK)
+    [Patient-012_TCM] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-012/TCM/incorrect] -> C (OK)
+    [Patient-012_TCM] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-012/TCM/absent] -> C (OK)
+
+============================================================
+Case 9/52: LUMIERE GBM Case (Patient-015)
+============================================================
+    [Patient-015_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-015/LIL/correct] -> A (wrong)
+    [Patient-015_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-015/LIL/incorrect] -> A (wrong)
+    [Patient-015_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-015/LIL/absent] -> A (wrong)
+    [Patient-015_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-015/DSCR/correct] -> C (OK)
+    [Patient-015_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-015/DSCR/incorrect] -> C (OK)
+    [Patient-015_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-015/DSCR/absent] -> C (OK)
+    [Patient-015_PJRF] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-015/PJRF/correct] -> A (wrong)
+    [Patient-015_PJRF] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-015/PJRF/incorrect] -> A (wrong)
+    [Patient-015_PJRF] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-015/PJRF/absent] -> A (wrong)
+    [Patient-015_TCM] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-015/TCM/correct] -> B (wrong)
+    [Patient-015_TCM] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-015/TCM/incorrect] -> B (wrong)
+    [Patient-015_TCM] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-015/TCM/absent] -> B (wrong)
+
+============================================================
+Case 10/52: LUMIERE GBM Case (Patient-018)
+============================================================
+    [Patient-018_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-018/LIL/correct] -> A (wrong)
+    [Patient-018_LIL] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-018/LIL/incorrect] -> A (wrong)
+    [Patient-018_LIL] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-018/LIL/absent] -> B (wrong)
+    [Patient-018_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-018/DSCR/correct] -> C (OK)
+    [Patient-018_DSCR] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-018/DSCR/incorrect] -> D (wrong)
+    [Patient-018_DSCR] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-018/DSCR/absent] -> C (OK)
+    [Patient-018_PJRF] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-018/PJRF/correct] -> C (OK)
+    [Patient-018_PJRF] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-018/PJRF/incorrect] -> C (OK)
+    [Patient-018_PJRF] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-018/PJRF/absent] -> C (OK)
+    [Patient-018_TCM] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-018/TCM/correct] -> D (OK)
+    [Patient-018_TCM] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-018/TCM/incorrect] -> C (wrong)
+    [Patient-018_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-018/TCM/absent] -> A (wrong)
+
+============================================================
+Case 11/52: LUMIERE GBM Case (Patient-019)
+============================================================
+    [Patient-019_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-019/LIL/correct] -> C (wrong)
+    [Patient-019_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-019/LIL/incorrect] -> C (wrong)
+    [Patient-019_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-019/LIL/absent] -> C (wrong)
+    [Patient-019_DSCR] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-019/DSCR/correct] -> C (wrong)
+    [Patient-019_DSCR] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-019/DSCR/incorrect] -> C (wrong)
+    [Patient-019_DSCR] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-019/DSCR/absent] -> C (wrong)
+    [Patient-019_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-019/PJRF/correct] -> B (wrong)
+    [Patient-019_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-019/PJRF/incorrect] -> B (wrong)
+    [Patient-019_PJRF] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-019/PJRF/absent] -> D (wrong)
+    [Patient-019_TCM] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-019/TCM/correct] -> D (OK)
+    [Patient-019_TCM] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-019/TCM/incorrect] -> B (wrong)
+    [Patient-019_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-019/TCM/absent] -> A (wrong)
+
+============================================================
+Case 12/52: LUMIERE GBM Case (Patient-022)
+============================================================
+    [Patient-022_LIL] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-022/LIL/correct] -> B (wrong)
+    [Patient-022_LIL] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-022/LIL/incorrect] -> B (wrong)
+    [Patient-022_LIL] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-022/LIL/absent] -> B (wrong)
+    [Patient-022_DSCR] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-022/DSCR/correct] -> D (OK)
+    [Patient-022_DSCR] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-022/DSCR/incorrect] -> D (OK)
+    [Patient-022_DSCR] main call… → D (✓) | probe… pred D → faithful 
+    [Patient-022/DSCR/absent] -> D (OK)
+    [Patient-022_PJRF] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-022/PJRF/correct] -> C (OK)
+    [Patient-022_PJRF] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-022/PJRF/incorrect] -> C (OK)
+    [Patient-022_PJRF] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-022/PJRF/absent] -> C (OK)
+    [Patient-022_TCM] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-022/TCM/correct] -> A (OK)
+    [Patient-022_TCM] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-022/TCM/incorrect] -> A (OK)
+    [Patient-022_TCM] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-022/TCM/absent] -> A (OK)
+
+============================================================
+Case 13/52: LUMIERE GBM Case (Patient-023)
+============================================================
+    [Patient-023_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-023/LIL/correct] -> C (OK)
+    [Patient-023_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-023/LIL/incorrect] -> C (OK)
+    [Patient-023_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-023/LIL/absent] -> C (OK)
+    [Patient-023_DSCR] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-023/DSCR/correct] -> A (OK)
+    [Patient-023_DSCR] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-023/DSCR/incorrect] -> A (OK)
+    [Patient-023_DSCR] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-023/DSCR/absent] -> A (OK)
+    [Patient-023_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-023/PJRF/correct] -> B (wrong)
+    [Patient-023_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-023/PJRF/incorrect] -> B (wrong)
+    [Patient-023_PJRF] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-023/PJRF/absent] -> B (wrong)
+    [Patient-023_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-023/TCM/correct] -> A (wrong)
+    [Patient-023_TCM] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-023/TCM/incorrect] -> C (OK)
+    [Patient-023_TCM] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-023/TCM/absent] -> B (wrong)
+
+============================================================
+Case 14/52: LUMIERE GBM Case (Patient-024)
+============================================================
+    [Patient-024_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-024/LIL/correct] -> C (OK)
+    [Patient-024_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-024/LIL/incorrect] -> C (OK)
+    [Patient-024_LIL] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-024/LIL/absent] -> C (OK)
+    [Patient-024_DSCR] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-024/DSCR/correct] -> A (OK)
+    [Patient-024_DSCR] main call… 

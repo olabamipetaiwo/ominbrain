@@ -68,7 +68,12 @@ def _context_entry(phase: str, question: dict, letter: str) -> dict:
     }
 
 
-def build_chain_context(case: dict, downstream_phase: str, condition: str) -> list[dict]:
+def build_chain_context(case: dict, downstream_phase: str, condition: str,
+                        include: list[str] | None = None,
+                        exclude: list[str] | None = None) -> list[dict]:
+    """`include` / `exclude` (ablation, added 2026-09-23 for the TCM-leakage check) restrict WHICH
+    upstream phases appear in the injected context; the default (both None) is the original
+    experiment. Ablation runs write to a separate results prefix so they never mix with it."""
     if condition == "absent":
         return []
     if condition not in ("correct", "incorrect"):
@@ -76,6 +81,10 @@ def build_chain_context(case: dict, downstream_phase: str, condition: str) -> li
 
     context = []
     for phase in _upstream_phases(downstream_phase):
+        if include is not None and phase not in include:
+            continue
+        if exclude is not None and phase in exclude:
+            continue
         upstream_qs = case["phases"].get(phase)
         if not upstream_qs:
             continue  # patient missing this upstream phase -- skip, don't fabricate one
@@ -86,7 +95,9 @@ def build_chain_context(case: dict, downstream_phase: str, condition: str) -> li
 
 
 def run_case(case: dict, aligner: KBAligner, client: OpenAI,
-             downstream_phases: list[str] = DOWNSTREAM_PHASES) -> dict:
+             downstream_phases: list[str] = DOWNSTREAM_PHASES,
+             conditions: tuple[str, ...] = CONDITIONS,
+             include: list[str] | None = None, exclude: list[str] | None = None) -> dict:
     """Evaluates every (downstream_phase, condition) pair for one patient.
 
     Returns {"case_id": ..., "phases": {phase: {condition: {model_answer, correct,
@@ -100,8 +111,8 @@ def run_case(case: dict, aligner: KBAligner, client: OpenAI,
             continue
         question = questions[0]
         phase_out = {}
-        for condition in CONDITIONS:
-            context = build_chain_context(case, phase, condition)
+        for condition in conditions:
+            context = build_chain_context(case, phase, condition, include, exclude)
             result = _evaluate_question(
                 question, case, phase, context, aligner, client,
                 adaptation_enabled=False,  # isolate the context-manipulation effect;
@@ -121,7 +132,9 @@ def run_case(case: dict, aligner: KBAligner, client: OpenAI,
 
 def run_all(cases: list[dict], model: str, base_url: str | None, api_key: str | None,
             radlex_path, ncit_path,
-            downstream_phases: list[str] = DOWNSTREAM_PHASES) -> list[dict]:
+            downstream_phases: list[str] = DOWNSTREAM_PHASES,
+            conditions: tuple[str, ...] = CONDITIONS,
+            include: list[str] | None = None, exclude: list[str] | None = None) -> list[dict]:
     aligner = KBAligner(radlex_path=radlex_path, ncit_path=ncit_path)
     config.MODEL = model
     kwargs: dict = {"api_key": api_key or "local"}
@@ -132,11 +145,12 @@ def run_all(cases: list[dict], model: str, base_url: str | None, api_key: str | 
     results = []
     for i, case in enumerate(cases, 1):
         print(f"\n{'='*60}\nCase {i}/{len(cases)}: {case['title']}\n{'='*60}")
-        results.append(run_case(case, aligner, client, downstream_phases))
+        results.append(run_case(case, aligner, client, downstream_phases, conditions, include, exclude))
     return results
 
 
-def summarize(results: list[dict], downstream_phases: list[str] = DOWNSTREAM_PHASES) -> dict:
+def summarize(results: list[dict], downstream_phases: list[str] = DOWNSTREAM_PHASES,
+              conditions: tuple[str, ...] = CONDITIONS) -> dict:
     """Per-phase accuracy under each condition, plus a Wilson CI (reusing
     src/analysis.py's implementation so it matches the rest of the paper's CIs)."""
     from src.analysis import _wilson_ci
@@ -144,7 +158,7 @@ def summarize(results: list[dict], downstream_phases: list[str] = DOWNSTREAM_PHA
     summary: dict = {}
     for phase in downstream_phases:
         summary[phase] = {}
-        for condition in CONDITIONS:
+        for condition in conditions:
             outcomes = [
                 r["phases"][phase][condition]["correct"]
                 for r in results if phase in r["phases"]

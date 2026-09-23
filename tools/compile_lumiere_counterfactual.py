@@ -58,13 +58,46 @@ def _own_answers(run_dir: str) -> dict:
     return out
 
 
+# 2026-09-23 fix: the old check was `"increase" in t` / `"decrease" in t`, which (a) missed the drafter's
+# most common phrasings ("volume increasing/decreasing", "stable", "reduction"), silently dropping those flipped
+# answers from the truth-tracking denominator (only 73 of 95 flipped LIL/DSCR items were "checkable"), and
+# (b) misread options that mention the opposite word about a sub-compartment. Now: read the clause about the
+# TOTAL volume, else any volume/burden clause, else the first direction word. Validated against the correct
+# option of every patient's LIL item (see tools/lumiere_reviewer_stats.py, which asserts it).
+_DIR_TOKEN_RE = re.compile(r"\b(increas\w*|expan\w*|grow\w*|enlarg\w*|decreas\w*|reduc\w*|shrink\w*|shrank|"
+                           r"declin\w*|stable|stabili\w*|unchang\w*)", re.I)
+_CLAUSE_SPLIT_RE = re.compile(r"[;,]|\b(?:while|whereas|despite|driven|due|with|reflecting)\b")
+
+
 def _direction_word(text: str) -> str | None:
-    t = text.lower()
-    if "increase" in t:
+    """Direction of the TOTAL lesion-volume change in an LIL option: 'increase' | 'decrease' | 'stable' | None."""
+    clauses = _CLAUSE_SPLIT_RE.split(text)
+
+    def first(cs):
+        for c in cs:
+            m = _DIR_TOKEN_RE.search(c)
+            if m:
+                return m.group(1).lower()
+        return None
+
+    cand = ([c for c in clauses if re.search(r"\b(total|overall)\b", c, re.I)]
+            or [c for c in clauses if re.search(r"volum|burden", c, re.I)])
+    w = first(cand) or first(clauses)
+    if not w:
+        return None
+    if w.startswith(("increas", "expan", "grow", "enlarg")):
         return "increase"
-    if "decrease" in t:
+    if w.startswith(("decreas", "reduc", "shrink", "shrank", "declin")):
         return "decrease"
-    return None
+    return "stable"
+
+
+def truth_label(patient_id: str, phase: str, item_set: str = "v3") -> str | None:
+    """The patient's own truth label as WORDED in their correct option (direction for LIL, RANO for DSCR).
+    Read from the reviewed item, not from pairs.json's sign of the % change: a +0.3% patient is worded 'stable'."""
+    items = json.load(open(Path(f"data/lumiere/{item_set}/reviewed/{patient_id}.json")))
+    text = next(q["correct_answer_text"] for q in items if q["id"] == f"{patient_id}_{phase}")
+    return _direction_word(text) if phase == "LIL" else _rano_word(text)
 
 
 def _rano_word(text: str) -> str | None:
@@ -94,15 +127,14 @@ def compile_model(model: str, pairs: dict) -> dict:
         per_phase[phase]["flipped"] += 1
 
         if phase == "LIL":
-            partner_dir = DIRECTION_WORDS.get(pairs.get(case_id, {}).get("partner_direction"))
+            partner_dir = truth_label(pairs[case_id]["partner"], "LIL")
             cf_dir = _direction_word(cf_q["model_answer_text"])
             if partner_dir and cf_dir:
                 truth_track["LIL"]["flipped_checkable"] += 1
                 if cf_dir == partner_dir:
                     truth_track["LIL"]["tracks_truth"] += 1
         elif phase == "DSCR":
-            partner_rano_code = pairs.get(case_id, {}).get("partner_rano")
-            partner_rano = RANO_WORDS.get(partner_rano_code)
+            partner_rano = truth_label(pairs[case_id]["partner"], "DSCR")
             cf_rano = _rano_word(cf_q["model_answer_text"])
             if partner_rano and cf_rano:
                 truth_track["DSCR"]["flipped_checkable"] += 1
