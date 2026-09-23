@@ -1,0 +1,122 @@
+\begin{thebibliography}{14}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Abbasi et~al.(2026)}]{abbasi2026neuroqa}
+Mohammad~H. Abbasi et~al. 2026.
+\newblock \href {https://arxiv.org/abs/2605.20525} {{NeuroQA}: A large-scale
+  image-grounded benchmark for {3D} brain {MRI} understanding}.
+\newblock \emph{arXiv preprint arXiv:2605.20525}.
+
+\bibitem[{Arcuschin et~al.(2025)Arcuschin, Janiak, Krzyzanowski, Rajamanoharan,
+  Nanda, and Conmy}]{arcuschin2025chainofthought}
+Iv{\'a}n Arcuschin, Jett Janiak, Robert Krzyzanowski, Senthooran Rajamanoharan,
+  Neel Nanda, and Arthur Conmy. 2025.
+\newblock \href {https://arxiv.org/abs/2503.08679} {Chain-of-thought reasoning
+  in the wild is not always faithful}.
+\newblock \emph{arXiv preprint arXiv:2503.08679}.
+
+\bibitem[{Croskerry(2009)}]{croskerry2009clinical}
+Pat Croskerry. 2009.
+\newblock \href {https://doi.org/10.1007/s10459-009-9182-2} {Clinical cognition
+  and diagnostic error: applications of a dual process model of reasoning}.
+\newblock \emph{Advances in Health Sciences Education}, 14(Suppl 1):27--35.
+
+\bibitem[{Ghosh et~al.(2026)Ghosh, Lateef, Liu, Yu, Rauschecker, and
+  Sushil}]{ghosh2026ucsfpdgmvqa}
+Shiv Ghosh, Junayd Lateef, Chih-Hua Liu, Yannan Yu, Andreas~M. Rauschecker, and
+  Madhumita Sushil. 2026.
+\newblock \href {https://arxiv.org/abs/2605.17140} {{UCSF-PDGM-VQA}: Visual
+  question answering dataset for brain tumor {MRI} interpretation}.
+\newblock \emph{arXiv preprint arXiv:2605.17140}.
+
+\bibitem[{Gururangan et~al.(2018)Gururangan, Swayamdipta, Levy, Schwartz,
+  Bowman, and Smith}]{gururangan2018annotation}
+Suchin Gururangan, Swabha Swayamdipta, Omer Levy, Roy Schwartz, Samuel~R.
+  Bowman, and Noah~A. Smith. 2018.
+\newblock \href {https://aclanthology.org/N18-2017/} {Annotation artifacts in
+  natural language inference data}.
+\newblock In \emph{Proceedings of the 2018 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies, Volume 2 (Short Papers)}, pages 107--112, New Orleans,
+  Louisiana. Association for Computational Linguistics.
+
+\bibitem[{Jung et~al.(2026)Jung, Jeong, Lim, Jung, Yun, Roh, Sung, and
+  Kang}]{jung2026breaking}
+Junha Jung, Minbyul Jeong, Suhyeon Lim, Sungwook Jung, Jaehoon Yun, Taeyun Roh,
+  Mujeen Sung, and Jaewoo Kang. 2026.
+\newblock \href {https://arxiv.org/abs/2606.31825} {Breaking failure cascades:
+  Step-aware reinforcement learning for medical multimodal reasoning}.
+\newblock \emph{arXiv preprint arXiv:2606.31825}.
+
+\bibitem[{Langlotz(2006)}]{rsna_radlex}
+Curtis~P. Langlotz. 2006.
+\newblock \href {https://doi.org/10.1148/rg.266065168} {{RadLex}: a new method
+  for indexing online educational materials}.
+\newblock \emph{RadioGraphics}, 26(6):1595--1597.
+
+\bibitem[{Lanham et~al.(2023)Lanham, Chen, Radhakrishnan, Steiner, Denison,
+  Hernandez, Li, Durmus, Hubinger, Kernion, Luko{\v{s}}i{\= u}t{\.e}, Nguyen,
+  Cheng, Joseph, Schiefer, Rausch, Larson, McCandlish, Kundu, Kadavath, Yang,
+  and Henighan}]{lanham2023measuring}
+Tamera Lanham, Anna Chen, Ansh Radhakrishnan, Benoit Steiner, Carson Denison,
+  Danny Hernandez, Dustin Li, Esin Durmus, Evan Hubinger, Jackson Kernion,
+  Kamil{\.e} Luko{\v{s}}i{\= u}t{\.e}, Karina Nguyen, Newton Cheng, Nicholas
+  Joseph, Nicholas Schiefer, Oliver Rausch, Robin Larson, Sam McCandlish,
+  Sandipan Kundu, and 3 others. 2023.
+\newblock \href {https://arxiv.org/abs/2307.13702} {Measuring faithfulness in
+  chain-of-thought reasoning}.
+\newblock \emph{arXiv preprint arXiv:2307.13702}.
+
+\bibitem[{McCoy et~al.(2019)McCoy, Pavlick, and Linzen}]{mccoy2019right}
+R.~Thomas McCoy, Ellie Pavlick, and Tal Linzen. 2019.
+\newblock \href {https://aclanthology.org/P19-1334/} {Right for the wrong
+  reasons: Diagnosing syntactic heuristics in natural language inference}.
+\newblock In \emph{Proceedings of the 57th Annual Meeting of the Association
+  for Computational Linguistics}, pages 3428--3448, Florence, Italy.
+  Association for Computational Linguistics.
+
+\bibitem[{Nguyen et~al.(2025)Nguyen, Ho, Ta, Nguyen, Chen, Rav, Dang,
+  Ramchandre, Phung, Liao, To, Verjans, Nguyen, and
+  Phan}]{nguyen2025localizing}
+Dung Nguyen, Minh~Khoi Ho, Huy Ta, Thanh~Tam Nguyen, Qi~Chen, Kumar Rav,
+  Quy~Duong Dang, Satwik Ramchandre, Son~Lam Phung, Zhibin Liao, Minh-Son To,
+  Johan Verjans, Phi~Le Nguyen, and Vu~Minh~Hieu Phan. 2025.
+\newblock \href {https://arxiv.org/abs/2505.00744} {Localizing before
+  answering: A hallucination evaluation benchmark for grounded medical
+  multimodal {LLM}s}.
+\newblock In \emph{Proceedings of the 34th International Joint Conference on
+  Artificial Intelligence (IJCAI)}.
+
+\bibitem[{Peng et~al.(2026)}]{peng2026omnibrainbench}
+Zhihao Peng et~al. 2026.
+\newblock \href {https://arxiv.org/abs/2511.00846} {{OmniBrainBench}: A
+  comprehensive multimodal benchmark for brain imaging analysis across
+  multi-stage clinical tasks}.
+\newblock \emph{arXiv preprint arXiv:2511.00846}.
+\newblock To appear in CVPR 2026.
+
+\bibitem[{Somov et~al.(2026)Somov, Chaichuk, Seleznyov, Panchenko, and
+  Tutubalina}]{somov2026breaking}
+Oleg Somov, Mikhail Chaichuk, Mikhail Seleznyov, Alexander Panchenko, and Elena
+  Tutubalina. 2026.
+\newblock \href {https://arxiv.org/abs/2603.16475} {Breaking the chain: A
+  causal analysis of {LLM} faithfulness to intermediate structures}.
+\newblock \emph{arXiv preprint arXiv:2603.16475}.
+
+\bibitem[{Suter et~al.(2022)Suter, Knecht, Valenzuela, Notter, Hewer, Schucht,
+  Wiest, and Reyes}]{suter2022lumiere}
+Yannick Suter, Urspeter Knecht, Waldo Valenzuela, Michelle Notter, Ekkehard
+  Hewer, Philippe Schucht, Roland Wiest, and Mauricio Reyes. 2022.
+\newblock \href {https://doi.org/10.1038/s41597-022-01881-7} {The {LUMIERE}
+  dataset: Longitudinal glioblastoma {MRI} with expert {RANO} evaluation}.
+\newblock \emph{Scientific Data}, 9:768.
+
+\bibitem[{{Washington University School of Medicine}
+  et~al.(2025)}]{muglioma2025post}
+{Washington University School of Medicine} et~al. 2025.
+\newblock \href {https://doi.org/10.1038/s41597-025-06011-7} {{MU-Glioma Post}:
+  A comprehensive dataset of automated {MR} multi-sequence segmentation and
+  clinical features}.
+\newblock \emph{Scientific Data}.
+
+\end{thebibliography}
