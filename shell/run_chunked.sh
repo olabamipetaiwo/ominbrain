@@ -3,8 +3,8 @@
 # Splits cases across N processes running simultaneously.
 #
 # Usage:
-#   bash shell/run_chunked.sh Qwen3-VL-30B 4     # 4 parallel chunks
-#   bash shell/run_chunked.sh InternVL3-38B 2
+#   bash shell/run_chunked.sh <ModelName> 4     # 4 parallel chunks
+#   bash shell/run_chunked.sh <ModelName> 2
 #
 # Each chunk writes results to results/<ModelName>_chunk<idx>_<timestamp>/
 set -e

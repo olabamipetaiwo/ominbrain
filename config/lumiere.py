@@ -102,6 +102,20 @@ MIN_RANO_TIMEPOINTS = 3  # minimum real response-rated follow-ups for a genuine 
 
 LUMIERE_DATA_DIR = "data/lumiere"
 
+# Item sets (run_lumiere.py --item-set). Each set has its own drafts/ + reviewed/ so older sets stay
+# runnable for comparison.
+#   v2: original drafts (later stems restate earlier answers — see tools/audit_stem_leakage.py).
+#   v3: leak-free rewrite (2026-09-22): no stem/option states an earlier phase's answer; DSCR sees both images;
+#       prompt states the image orientation convention; LIL baseline = post-op scan (RANO reference) instead of
+#       the earliest (usually pre-op) scan -> own facts_dir; 52 patients (2 have no imaged post-op scan).
+IMAGE_ORIENTATION_NOTE = ("Images are shown in radiological convention: the patient's right side is on the "
+                          "left of the image.")
+ITEM_SETS = {
+    "v2": {"dir": LUMIERE_DATA_DIR, "facts_dir": f"{LUMIERE_DATA_DIR}/facts", "orientation_note": False},
+    "v3": {"dir": f"{LUMIERE_DATA_DIR}/v3", "facts_dir": f"{LUMIERE_DATA_DIR}/v3/facts", "orientation_note": True},
+}
+DEFAULT_ITEM_SET = "v2"
+
 # Real per-patient folder/file layout — confirmed 2026-08-26 both from the
 # readme PDF and by actually listing Imaging-v202211.zip's central directory
 # (31,370 entries) via lumiere_downloader.list_zip_entries():

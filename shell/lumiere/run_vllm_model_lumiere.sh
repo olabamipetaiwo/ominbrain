@@ -10,20 +10,20 @@
 # cases actually exist.
 #
 # Usage:
-#   bash shell/run_vllm_model.sh <ModelName> [extra run_lumiere.py args]
+#   bash shell/lumiere/run_vllm_model_lumiere.sh <ModelName> [extra run_lumiere.py args]
 #
 # Example:
 #   srun --qos=so589980.ucf --partition=hpg-b200 --gres=gpu:b200:1 \
 #        --cpus-per-task=8 --mem=128gb --time=01:00:00 \
-#        bash shell/run_vllm_model.sh InternVL3-38B --n-cases 5   # override for a quick check
+#        bash shell/lumiere/run_vllm_model_lumiere.sh <ModelName> --n-cases 5   # override for a quick check
 #
 # Looks up the model's HF repo id and port from config/models.py directly (no
 # duplicated model list to drift out of sync — see run_opensource.sh/run_medical.sh
 # history for what happens when the list is hand-maintained separately).
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 
-MODEL_NAME=${1:?"Usage: bash shell/run_vllm_model.sh <ModelName> [extra args]"}
+MODEL_NAME=${1:?"Usage: bash shell/lumiere/run_vllm_model_lumiere.sh <ModelName> [extra args]"}
 shift
 
 source .venv/bin/activate
@@ -90,8 +90,12 @@ if [ "$READY" != "1" ]; then
 fi
 
 echo "===== SERVER READY — running eval ====="
-python3 run_lumiere.py --model "$MODEL_NAME" "$@"
-STATUS=$?
+STATUS=0
+for G in ${GATING_MODES:-gated nogate}; do   # gated | nogate — one server load, both evals
+    FLAG=""; [ "$G" = nogate ] && FLAG="--no-gating"
+    echo "===== eval: $MODEL_NAME ($G) ====="
+    python3 run_lumiere.py --model "$MODEL_NAME" "$@" $FLAG || STATUS=$?
+done
 
 if [ $STATUS -eq 0 ]; then
     echo "===== RESULT: SUCCESS — $MODEL_NAME served and evaluated ====="

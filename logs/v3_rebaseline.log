@@ -1,0 +1,194 @@
+  Patient-002: baseline week-040-2, change 106.1%
+  Patient-003: baseline week-000-2, change 2.0%
+  Patient-004: baseline week-041, change -56.1%
+  Patient-006: baseline week-001, change -50.4%
+  Patient-007: baseline week-001, change -71.1%
+  Patient-008: baseline week-002, change -64.5%
+  Patient-009: baseline week-015, change -88.9%
+  Patient-012: baseline week-022, change 335.5%
+  Patient-015: baseline week-084, change -2.5%
+  Patient-018: baseline week-003, change -67.1%
+  Patient-019: baseline week-005, change 13.7%
+  Patient-022: baseline week-001, change 104.0%
+  Patient-023: baseline week-099, change 1621.1%
+  Patient-024: baseline week-001, change 63.3%
+  Patient-028: baseline week-000-2, change 0.3%
+  Patient-029: baseline week-000-2, change -18.8%
+  Patient-030: baseline week-001, change -88.9%
+  Patient-031: baseline week-018, change 841.2%
+  Patient-032: baseline week-069, change -4.8%
+  Patient-033: baseline week-002, change -47.8%
+  Patient-034: baseline week-000-2, change -78.4%
+  Patient-035: baseline week-000-2, change 54.0%
+  Patient-037: baseline week-000-2, change 62.7%
+  Patient-041: baseline week-002, change -62.0%
+  Patient-042: baseline week-000-2, change -77.0%
+  Patient-043: baseline week-070, change 90.3%
+  Patient-048: baseline week-000-2, change -71.3%
+  [skip] Patient-049: no imaged post-op scan before week-029
+  Patient-051: baseline week-000-2, change -39.0%
+  Patient-052: baseline week-119, change 9.4%
+  Patient-054: baseline week-028, change -11.3%
+  Patient-055: baseline week-000-3, change -62.5%
+  Patient-058: baseline week-002, change 40.5%
+  Patient-059: baseline week-001, change 964.2%
+  Patient-060: baseline week-001, change -85.2%
+  Patient-061: baseline week-000-2, change 53.6%
+  Patient-062: baseline week-000-2, change -49.2%
+  Patient-063: baseline week-002, change -59.9%
+  Patient-064: baseline week-002, change -26.6%
+  Patient-065: baseline week-025, change 283.6%
+  Patient-066: baseline week-001, change -90.4%
+  Patient-067: baseline week-019-2, change -40.0%
+  [skip] Patient-068: no imaged post-op scan before week-004
+  Patient-070: baseline week-004, change 199.4%
+  Patient-071: baseline week-000-2, change -28.8%
+  Patient-072: baseline week-000-2, change -31.9%
+  Patient-073: baseline week-001, change -23.6%
+  Patient-074: baseline week-000-2, change -53.2%
+  Patient-075: baseline week-002, change 120.2%
+  Patient-077: baseline week-001, change -71.6%
+  Patient-078: baseline week-001, change -35.7%
+  Patient-085: baseline week-001, change 76.8%
+  Patient-089: baseline week-000-2, change -89.1%
+  Patient-091: baseline week-001, change -67.7%
+Rendering slices for Patient-002…
+  rendered data/lumiere/slices/Patient-002/week-040-2.png
+  rendered data/lumiere/slices/Patient-002/week-047.png
+  [skip] slices already rendered for Patient-003
+Rendering slices for Patient-004…
+  rendered data/lumiere/slices/Patient-004/week-041.png
+  rendered data/lumiere/slices/Patient-004/week-071.png
+Rendering slices for Patient-006…
+  rendered data/lumiere/slices/Patient-006/week-001.png
+  rendered data/lumiere/slices/Patient-006/week-015.png
+Rendering slices for Patient-007…
+  rendered data/lumiere/slices/Patient-007/week-001.png
+  rendered data/lumiere/slices/Patient-007/week-064.png
+Rendering slices for Patient-008…
+  rendered data/lumiere/slices/Patient-008/week-002.png
+  rendered data/lumiere/slices/Patient-008/week-066.png
+Rendering slices for Patient-009…
+  rendered data/lumiere/slices/Patient-009/week-015.png
+  rendered data/lumiere/slices/Patient-009/week-024.png
+Rendering slices for Patient-012…
+  rendered data/lumiere/slices/Patient-012/week-022.png
+  rendered data/lumiere/slices/Patient-012/week-048.png
+Rendering slices for Patient-015…
+  rendered data/lumiere/slices/Patient-015/week-084.png
+  rendered data/lumiere/slices/Patient-015/week-126.png
+Rendering slices for Patient-018…
+  rendered data/lumiere/slices/Patient-018/week-003.png
+  rendered data/lumiere/slices/Patient-018/week-082.png
+  [skip] slices already rendered for Patient-019
+Rendering slices for Patient-022…
+  rendered data/lumiere/slices/Patient-022/week-001.png
+  rendered data/lumiere/slices/Patient-022/week-037.png
+Rendering slices for Patient-023…
+  rendered data/lumiere/slices/Patient-023/week-099.png
+  rendered data/lumiere/slices/Patient-023/week-127.png
+  [skip] slices already rendered for Patient-024
+Rendering slices for Patient-028…
+  rendered data/lumiere/slices/Patient-028/week-000-2.png
+  rendered data/lumiere/slices/Patient-028/week-015.png
+Rendering slices for Patient-029…
+  rendered data/lumiere/slices/Patient-029/week-000-2.png
+  rendered data/lumiere/slices/Patient-029/week-059.png
+Rendering slices for Patient-030…
+  rendered data/lumiere/slices/Patient-030/week-001.png
+  rendered data/lumiere/slices/Patient-030/week-025.png
+Rendering slices for Patient-031…
+  rendered data/lumiere/slices/Patient-031/week-018.png
+  rendered data/lumiere/slices/Patient-031/week-087.png
+Rendering slices for Patient-032…
+  rendered data/lumiere/slices/Patient-032/week-069.png
+  rendered data/lumiere/slices/Patient-032/week-075.png
+Rendering slices for Patient-033…
+  rendered data/lumiere/slices/Patient-033/week-002.png
+  rendered data/lumiere/slices/Patient-033/week-076.png
+Rendering slices for Patient-034…
+  rendered data/lumiere/slices/Patient-034/week-000-2.png
+  rendered data/lumiere/slices/Patient-034/week-014.png
+  [skip] slices already rendered for Patient-035
+Rendering slices for Patient-037…
+  rendered data/lumiere/slices/Patient-037/week-000-2.png
+  rendered data/lumiere/slices/Patient-037/week-025.png
+Rendering slices for Patient-041…
+  rendered data/lumiere/slices/Patient-041/week-002.png
+  rendered data/lumiere/slices/Patient-041/week-020.png
+Rendering slices for Patient-042…
+  rendered data/lumiere/slices/Patient-042/week-000-2.png
+  rendered data/lumiere/slices/Patient-042/week-055.png
+Rendering slices for Patient-043…
+  rendered data/lumiere/slices/Patient-043/week-070.png
+  rendered data/lumiere/slices/Patient-043/week-098.png
+Rendering slices for Patient-048…
+  rendered data/lumiere/slices/Patient-048/week-000-2.png
+  rendered data/lumiere/slices/Patient-048/week-045.png
+Rendering slices for Patient-051…
+  rendered data/lumiere/slices/Patient-051/week-000-2.png
+  rendered data/lumiere/slices/Patient-051/week-023.png
+Rendering slices for Patient-052…
+  rendered data/lumiere/slices/Patient-052/week-119.png
+  rendered data/lumiere/slices/Patient-052/week-133.png
+Rendering slices for Patient-054…
+  rendered data/lumiere/slices/Patient-054/week-028.png
+  rendered data/lumiere/slices/Patient-054/week-036.png
+Rendering slices for Patient-055…
+  rendered data/lumiere/slices/Patient-055/week-000-3.png
+  rendered data/lumiere/slices/Patient-055/week-099.png
+  [skip] slices already rendered for Patient-058
+Rendering slices for Patient-059…
+  rendered data/lumiere/slices/Patient-059/week-001.png
+  rendered data/lumiere/slices/Patient-059/week-014.png
+Rendering slices for Patient-060…
+  rendered data/lumiere/slices/Patient-060/week-001.png
+  rendered data/lumiere/slices/Patient-060/week-065.png
+Rendering slices for Patient-061…
+  rendered data/lumiere/slices/Patient-061/week-000-2.png
+  rendered data/lumiere/slices/Patient-061/week-054.png
+Rendering slices for Patient-062…
+  rendered data/lumiere/slices/Patient-062/week-000-2.png
+  rendered data/lumiere/slices/Patient-062/week-050.png
+  [skip] slices already rendered for Patient-063
+Rendering slices for Patient-064…
+  rendered data/lumiere/slices/Patient-064/week-002.png
+  rendered data/lumiere/slices/Patient-064/week-049.png
+Rendering slices for Patient-065…
+  rendered data/lumiere/slices/Patient-065/week-025.png
+  rendered data/lumiere/slices/Patient-065/week-102.png
+Rendering slices for Patient-066…
+  rendered data/lumiere/slices/Patient-066/week-001.png
+  rendered data/lumiere/slices/Patient-066/week-046.png
+Rendering slices for Patient-067…
+  rendered data/lumiere/slices/Patient-067/week-019-2.png
+  rendered data/lumiere/slices/Patient-067/week-033.png
+  [skip] slices already rendered for Patient-070
+Rendering slices for Patient-071…
+  rendered data/lumiere/slices/Patient-071/week-000-2.png
+  rendered data/lumiere/slices/Patient-071/week-062.png
+Rendering slices for Patient-072…
+  rendered data/lumiere/slices/Patient-072/week-000-2.png
+  rendered data/lumiere/slices/Patient-072/week-090.png
+Rendering slices for Patient-073…
+  rendered data/lumiere/slices/Patient-073/week-001.png
+  rendered data/lumiere/slices/Patient-073/week-202.png
+  [skip] slices already rendered for Patient-074
+Rendering slices for Patient-075…
+  rendered data/lumiere/slices/Patient-075/week-002.png
+  rendered data/lumiere/slices/Patient-075/week-044.png
+Rendering slices for Patient-077…
+  rendered data/lumiere/slices/Patient-077/week-001.png
+  rendered data/lumiere/slices/Patient-077/week-070.png
+Rendering slices for Patient-078…
+  rendered data/lumiere/slices/Patient-078/week-001.png
+  rendered data/lumiere/slices/Patient-078/week-076.png
+Rendering slices for Patient-085…
+  rendered data/lumiere/slices/Patient-085/week-001.png
+  rendered data/lumiere/slices/Patient-085/week-050.png
+Rendering slices for Patient-089…
+  rendered data/lumiere/slices/Patient-089/week-000-2.png
+  rendered data/lumiere/slices/Patient-089/week-056.png
+Rendering slices for Patient-091…
+  rendered data/lumiere/slices/Patient-091/week-001.png
+  rendered data/lumiere/slices/Patient-091/week-014.png

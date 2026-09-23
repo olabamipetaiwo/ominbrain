@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
-# Run open-source models. Qwen2.5-VL-7B is served via Ollama; Qwen3-VL-30B and
-# InternVL3-38B need vLLM servers running first (see config/models.py for the
-# `vllm serve` commands and ports).
+# Run general-domain open models (Llama/Gemma family), all served via Ollama.
 #
-#   ollama pull qwen2.5vl:7b
+#   ollama pull gemma3:12b gemma3:27b llama4:scout
 set -e
 cd "$(dirname "$0")/.."
 
 N_CASES=${N_CASES:-100}
 
-for MODEL in "Qwen3-VL-30B" "InternVL3-38B" "Qwen2.5-VL-7B"; do
+for MODEL in "Gemma-3-12B" "Gemma-3-27B" "Llama-4-Scout"; do
     echo ""
     echo "=========================================="
     echo " Starting: $MODEL"

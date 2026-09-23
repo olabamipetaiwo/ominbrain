@@ -28,7 +28,7 @@ import sys
 from pathlib import Path
 
 from src.data_loader import load_omnibrain
-from config.models import MODELS, MODEL_MAP
+from config.models import ALL_MODELS, MODELS, MODEL_MAP
 from src.evaluator import CausalChainEvaluator
 from src.analysis import save_results
 
@@ -178,7 +178,7 @@ def main():
     if args.list_models:
         print(f"\n{'Name':<22} {'Category':<14} {'Backend':<10} Endpoint")
         print("-" * 70)
-        for m in MODELS:
+        for m in ALL_MODELS:
             backend = m.get("backend", "openai")
             endpoint = m.get("base_url") or "OpenAI API"
             print(f"{m['name']:<22} {m['category']:<14} {backend:<10} {endpoint}")

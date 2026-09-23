@@ -19,6 +19,12 @@ DRAFT_SYSTEM_PROMPT = (
     "Write 3-4 distractors that are clinically plausible (not obviously "
     "wrong), consistent with real glioblastoma cases in general, but "
     "factually inconsistent with THIS patient's given facts. "
+    "Answer-length rule: the correct option must NOT be recognisable by its "
+    "form. Make all options similar in length (within ~15% of each other), "
+    "level of detail, hedging and register — if the correct answer needs a "
+    "qualifier or rationale clause, give every distractor an equally detailed "
+    "clause; never make distractors absolute or curt while the correct answer "
+    "is nuanced. Vary which letter is correct. "
     "Always respond with valid JSON only — no markdown, no extra text."
 )
 
@@ -65,7 +71,52 @@ _PHASE_INSTRUCTIONS = {
         "(e.g. standard-of-care protocol, or how to interpret an apparent "
         "progression given the possible_pseudoprogression_flag). Mark "
         "distractor_confidence 'low' if the question touches progression-vs-"
-        "pseudoprogression, since that judgment call needs expert review."
+        "pseudoprogression, since that judgment call needs expert review. "
+        "STYLE RULE: every option must read like a cautious, real-world clinical "
+        "recommendation with the same structure — an action, a monitoring or "
+        "reassessment element (e.g. repeat imaging interval, tumor-board review), "
+        "and a rationale clause. Do NOT make distractors abrupt or absolute "
+        "(avoid 'immediately', 'definitively', 'directly', 'without', 'regardless'); "
+        "they should be plausible options a clinician could defend, wrong only "
+        "because of THIS patient's specific facts. Do NOT make the correct answer "
+        "the only one that mentions monitoring, repeat imaging or pseudoprogression."
+    ),
+}
+
+
+# Leak-free (v3) rewrite — see src/lumiere_leakage.py for the rules these instructions state and the
+# check the drafter retries against. The chain only works if each phase's answer must come from the
+# images or the quiz-taker's OWN earlier answers, so no stem/option may restate an earlier phase's answer.
+_LEAK_FREE_RULE = (
+    "CHAIN RULE (strict): this item is one step in a multi-step case. The quiz-taker answers earlier steps "
+    "themselves and sees their own earlier answers, so this item must NOT reveal any earlier step's answer. "
+    "In the STEM, you may state ONLY: the patient id, timepoint ids, and non-imaging clinical facts (age, sex, "
+    "IDH/MGMT status, extent of resection, treatment protocol). The stem must NOT state any imaging finding: no "
+    "percentages, no volumes or measurements, no lesion location/region names, no words describing change "
+    "(increase, decrease, growth, shrinkage, resolution, progression, regression, enlargement), and no RANO "
+    "response category. Instead, refer the quiz-taker to 'the imaging' and 'your earlier assessment of this "
+    "patient'. Do not invent clinical details (e.g. steroid dose, neurological status) that are not in the facts."
+)
+
+_PHASE_INSTRUCTIONS_LEAK_FREE = {
+    "LIL": (
+        "Write a question about the lesion's location and how its volume changed between the baseline and "
+        "follow-up timepoints given in the facts. Ground the answer in the given volumes_mm3/regions. The STEM "
+        "may name the timepoints and the baseline location, but must NOT state the follow-up location, the "
+        "percentage change, or the direction of change — those are what the quiz-taker must read off the images."
+    ),
+    "PJRF": (
+        _PHASE_INSTRUCTIONS["PJRF"] + " The STEM must NOT state the patient's survival time (that is the answer). "
+        "OPTIONS must differ only in the prognosis (e.g. survival range) and prognostic reasoning from "
+        "demographic/molecular factors; they must NOT mention imaging findings, volume change, or any RANO "
+        "response category."
+    ),
+    "TCM": (
+        _PHASE_INSTRUCTIONS["TCM"] + " The correct management follows from this patient's actual disease course "
+        "(given in the prior-chain block for YOUR reference only). OPTIONS must differ by the management action "
+        "and its monitoring plan, and must NOT restate the disease state: no RANO category, no percentages or "
+        "volumes, no words describing tumor change (increase, decrease, growth, progression, regression, "
+        "resolution). The quiz-taker must work out the disease state from their own earlier answers."
     ),
 }
 
@@ -75,11 +126,14 @@ def build_draft_prompt(
     phase: str,
     phase_facts: dict,
     chain_context: list[dict],
+    leak_free: bool = False,
 ) -> list[dict]:
     phase_name = config.PHASE_NAMES[phase]
     chain_block = ""
     if chain_context:
-        chain_block = "\n\n--- PRIOR PHASES IN THIS PATIENT'S CHAIN ---\n"
+        chain_block = ("\n\n--- PRIOR PHASES IN THIS PATIENT'S CHAIN (for your consistency only — do NOT "
+                       "restate these answers in this item) ---\n" if leak_free
+                       else "\n\n--- PRIOR PHASES IN THIS PATIENT'S CHAIN ---\n")
         for entry in chain_context:
             chain_block += (
                 f"[{entry['phase']}] Q: {entry['question']}\n"
@@ -87,12 +141,14 @@ def build_draft_prompt(
             )
         chain_block += "--- END PRIOR CHAIN ---"
 
+    task = (f"{_PHASE_INSTRUCTIONS_LEAK_FREE[phase]}\n\n{_LEAK_FREE_RULE}"
+            if leak_free and phase in _PHASE_INSTRUCTIONS_LEAK_FREE else _PHASE_INSTRUCTIONS[phase])
     text = (
         f"Patient: {patient_id}\n"
         f"Phase: {phase_name} ({phase})\n\n"
         f"--- VERIFIED FACTS FOR THIS PHASE ---\n{json.dumps(phase_facts, indent=2, default=str)}\n"
         f"{chain_block}\n\n"
-        f"Task: {_PHASE_INSTRUCTIONS[phase]}\n\n"
+        f"Task: {task}\n\n"
         f"Respond ONLY with this JSON:\n\n{_DRAFT_JSON_SCHEMA}"
     )
 

@@ -14,7 +14,7 @@
 # Example:
 #   srun --qos=so589980.ucf --partition=hpg-b200 --gres=gpu:b200:1 \
 #        --cpus-per-task=8 --mem=128gb --time=01:00:00 \
-#        bash shell/run_vllm_model.sh InternVL3-38B --n-cases 5   # override for a quick check
+#        bash shell/run_vllm_model.sh <ModelName> --n-cases 5   # override for a quick check
 #
 # Looks up the model's HF repo id and port from config/models.py directly (no
 # duplicated model list to drift out of sync — see run_opensource.sh/run_medical.sh

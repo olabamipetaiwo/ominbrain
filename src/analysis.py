@@ -32,6 +32,23 @@ def _wilson_ci(successes: int, n: int, z: float = 1.96) -> tuple[float, float] |
     return (round(max(0.0, center - margin), 3), round(min(1.0, center + margin), 3))
 
 
+def _majority_baseline(correct_texts: list[str]) -> float | None:
+    """Accuracy of a trivial 'always guess the most common correct answer' baseline for
+    this phase's actual questions. High here means the phase's answer distribution is
+    skewed (e.g. DSCR: most LUMIERE GBM patients are progressing, so "Progressive
+    disease" is correct ~65-69% of the time) — a real class imbalance, not a drafting
+    flaw, but it means raw accuracy alone overstates a model's skill on that phase
+    unless it's reported next to this number. Added 2026-09-22 after finding every
+    model's DSCR accuracy was at or below this baseline."""
+    texts = [t for t in correct_texts if t]
+    if not texts:
+        return None
+    counts = defaultdict(int)
+    for t in texts:
+        counts[t] += 1
+    return round(max(counts.values()) / len(texts), 3)
+
+
 def _phase_aggregate(results: list[dict]) -> dict:
     """Per-phase accuracy, faithfulness, and gating stats across all cases."""
     agg = {p: defaultdict(list) for p in config.PHASES}
@@ -58,6 +75,7 @@ def _phase_aggregate(results: list[dict]) -> dict:
                 agg[phase]["chain_faithfulness"].append(cf)
             for q in pdata["questions"]:
                 agg[phase]["q_correct"].append(int(q["correct"]))
+                agg[phase]["q_correct_text"].append(q.get("correct_answer_text") or "")
 
     out = {}
     for phase in config.PHASES:
@@ -67,6 +85,7 @@ def _phase_aggregate(results: list[dict]) -> dict:
             "acc": _safe_avg(d["phase_score"]),
             "acc_ci": _wilson_ci(sum(d["q_correct"]), n_q),
             "acc_n": n_q,
+            "majority_baseline": _majority_baseline(d["q_correct_text"]),
             "gate_block_rate": _safe_avg(d["gated_out"]),
             "local_faithfulness": _safe_avg(d["local_faithfulness"]),
             "kb_alignment": _safe_avg(d["kb_alignment"]),
@@ -144,8 +163,14 @@ def build_report(results: list[dict], model_name: str) -> str:
     lines.append(f"Chain completion:   {chain_comp}/{n_cases} ({chain_comp/n_cases:.0%})")
 
     lines.append("\n── Phase Results ")
+    lines.append(
+        "  MajBase = accuracy of always guessing this phase's most common correct answer "
+        "(flags class imbalance, e.g. DSCR's 'progressive disease' skew — high MajBase means "
+        "raw Acc alone overstates model skill; low/blank means answers are too varied for the "
+        "baseline to mean much, e.g. PJRF/TCM's free-text estimates)."
+    )
     header = (
-        f"{'Phase':<6} {'Acc':>6} {'95% CI':>10} {'N':>4} {'LocalF':>8} "
+        f"{'Phase':<6} {'Acc':>6} {'95% CI':>10} {'N':>4} {'MajBase':>8} {'LocalF':>8} "
         f"{'KBAlign':>8} {'ConceptP':>9} {'ChainF':>8} {'GateBlk':>8}"
     )
     lines.append(header)
@@ -154,6 +179,7 @@ def build_report(results: list[dict], model_name: str) -> str:
         d = phase_agg[phase]
         lines.append(
             f"{phase:<6} {fmt(d['acc']):>6} {fmt_ci(d['acc_ci']):>10} {d['acc_n']:>4} "
+            f"{fmt(d['majority_baseline']):>8} "
             f"{fmt(d['local_faithfulness']):>8} "
             f"{fmt(d['kb_alignment']):>8} {fmt(d['concept_precision']):>9} "
             f"{fmt(d['chain_faithfulness']):>8} {fmt(d['gate_block_rate']):>8}"

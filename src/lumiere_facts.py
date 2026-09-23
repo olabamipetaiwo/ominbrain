@@ -389,6 +389,58 @@ def _render_axial_slice_png(anatomical: np.ndarray, mask: np.ndarray, out_path: 
     return out_path
 
 
+def _week(tp: str) -> int:
+    return int(tp.split("-")[1])
+
+
+def postop_baseline_timepoint(facts: dict, imaged_timepoints: list[str]) -> str | None:
+    """RANO reference scan: the latest Post-Op-rated timepoint with full imaging that precedes the
+    follow-up (so a re-resection before the follow-up resets the reference). None if there is none."""
+    followup = facts["followup_timepoint"]
+    post_ops = [d["timepoint_id"] for d in facts["all_dscr_facts"]
+                if d["rating_code"] == "Post-Op" and d["timepoint_id"] in imaged_timepoints
+                and _week(d["timepoint_id"]) < _week(followup)]
+    return max(post_ops, key=lambda tp: (_week(tp), tp)) if post_ops else None
+
+
+def rebaseline_to_postop(patient_ids: list[str], src_dir: Path, out_dir: Path, force: bool = False) -> None:
+    """Re-derive LIL facts against the post-operative scan instead of the earliest scan.
+
+    build_patient_case_facts() takes the earliest imaged timepoint as baseline, which is pre-operative
+    for 42/54 patients — so LIL's "volume change" mostly measured the resection, while the DSCR (RANO)
+    rating is judged against the post-op scan. This keeps everything else identical (same follow-up,
+    DSCR/PJRF/TCM facts, answer keys) and recomputes only the LIL baseline + % change. Patients with
+    no imaged post-op scan before the follow-up are skipped (not kept on a pre-op baseline)."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    comp = load_completeness()
+    todo = [pid for pid in patient_ids if force or not (out_dir / f"{pid}.json").exists()]
+    if not todo:
+        print("Nothing to rebaseline.")
+        return
+    with fsspec.open(_zip_url(), mode="rb") as f:
+        with zipfile.ZipFile(f) as zf:
+            for pid in todo:
+                facts = json.loads((src_dir / f"{pid}.json").read_text())
+                new_tp = postop_baseline_timepoint(facts, _patient_timepoints(pid, comp))
+                if new_tp is None:
+                    print(f"  [skip] {pid}: no imaged post-op scan before {facts['followup_timepoint']}")
+                    continue
+                lil = facts["phase_facts"]["LIL"]
+                if new_tp != lil["baseline"]["timepoint_id"]:
+                    baseline = _extract_timepoint_imaging_facts(zf, pid, new_tp)
+                    if baseline is None:
+                        print(f"  [skip] {pid}: could not read {new_tp}")
+                        continue
+                    lil["baseline"] = baseline
+                    total = baseline["total_volume_mm3"]
+                    lil["volume_change_pct"] = (round(100 * (lil["followup"]["total_volume_mm3"] - total) / total, 1)
+                                                if total > 0 else None)
+                    facts["baseline_timepoint"] = new_tp
+                facts["baseline_rule"] = "post-op (RANO reference scan)"
+                (out_dir / f"{pid}.json").write_text(json.dumps(facts, indent=2, default=str))
+                print(f"  {pid}: baseline {new_tp}, change {lil['volume_change_pct']}%")
+
+
 def render_slices_for_patient(patient_id: str, facts: dict, out_dir: Path | None = None) -> dict[str, str]:
     """Renders one representative slice PNG per timepoint (baseline + followup)
     for a patient already extracted by build_patient_case_facts(). Returns
@@ -475,7 +527,17 @@ if __name__ == "__main__":
     p.add_argument("--patients", type=str, default=None, help="comma-separated patient IDs (overrides --select)")
     p.add_argument("--force", action="store_true", help="re-extract/re-render even if output already exists")
     p.add_argument("--render-slices", action="store_true", help="also render slice PNGs after extraction")
+    p.add_argument("--postop-baseline-set", type=str, default=None,
+                   help="write post-op-baseline facts for this item set (e.g. v3) from data/lumiere/facts/")
     args = p.parse_args()
+
+    if args.postop_baseline_set:
+        facts_dir = Path(lcfg.ITEM_SETS[args.postop_baseline_set]["facts_dir"])
+        src = Path(lcfg.LUMIERE_DATA_DIR) / "facts"
+        ids = args.patients.split(",") if args.patients else sorted(p.stem for p in src.glob("Patient-*.json"))
+        rebaseline_to_postop(ids, src, facts_dir, force=args.force)
+        render_all_slices(facts_dir=facts_dir, force=args.force)
+        raise SystemExit(0)
 
     if args.patients:
         ids = args.patients.split(",")

@@ -68,13 +68,27 @@ def _encode_image(image_bytes: bytes) -> str:
     return base64.b64encode(image_bytes).decode("utf-8")
 
 
-def _build_user_content(text: str, img_list: list[bytes]) -> list | str:
-    """Wrap text + images into the OpenAI multimodal content format."""
+def _build_user_content(text: str, img_list: list[bytes], img_labels: list[str] | None = None,
+                        img_note: str | None = None) -> list | str:
+    """Wrap text + images into the OpenAI multimodal content format.
+
+    img_labels (optional): one human-readable label per image (e.g. "baseline
+    (week-000)"), used instead of the generic "<image_N>:" tag when the caller knows
+    which image is which — currently only LUMIERE's LIL phase sets this (two images,
+    baseline + follow-up). Falls back to the original generic numbering when absent or
+    mismatched in length, so every other caller (OmniBrainBench's data_loader.py,
+    single-image phases) is unaffected.
+
+    img_note (optional): one line placed before the images (LUMIERE v3 states the display
+    orientation convention); absent for every other caller."""
     if not img_list:
         return text
-    content = []
+    labels = img_labels if img_labels and len(img_labels) == len(img_list) else None
+    content = [{"type": "text", "text": img_note}] if img_note else []
     for idx, img_bytes in enumerate(img_list, start=1):
-        if len(img_list) > 1:
+        if labels:
+            content.append({"type": "text", "text": f"<image_{idx}> — {labels[idx - 1]}:"})
+        elif len(img_list) > 1:
             content.append({"type": "text", "text": f"<image_{idx}>:"})
         content.append({
             "type": "image_url",
@@ -117,14 +131,17 @@ def build_main_prompt(
         f"Question: {question['question']}\n\n"
         f"Options:\n{options_text}\n\n"
         "Instructions:\n"
-        "1. Identify specific visual features in the image relevant to this question.\n"
+        "1. Identify specific visual features in the image(s) relevant to this question — "
+        "if two images are shown, compare them explicitly (e.g. size/extent change) using "
+        "their labels to keep track of which is which.\n"
         "2. Using those features (and any prior chain context above), select the best answer.\n"
         f"3. Respond ONLY with this JSON:\n\n{_ANSWER_JSON_SCHEMA}"
     )
 
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user",   "content": _build_user_content(text, case.get("image_bytes_list") or [])},
+        {"role": "user",   "content": _build_user_content(text, case.get("image_bytes_list") or [],
+                                                            case.get("image_labels"), case.get("image_note"))},
     ]
 
 
@@ -206,5 +223,6 @@ def build_adaptation_prompt(
 
     return [
         {"role": "system", "content": ADAPTATION_SYSTEM_PROMPT},
-        {"role": "user",   "content": _build_user_content(text, case.get("image_bytes_list") or [])},
+        {"role": "user",   "content": _build_user_content(text, case.get("image_bytes_list") or [],
+                                                            case.get("image_labels"), case.get("image_note"))},
     ]
