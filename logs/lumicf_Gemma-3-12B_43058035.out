@@ -386,4 +386,25 @@ Case 15/52: LUMIERE GBM Case (Patient-028)  [Patient-028]
   → score: 0% [FAIL]  local faithful: 100%
 
   Phase: TCM — Therapeutic Cycle Management
-    [Patient-028_TCM] main call… 
+    [Patient-028_TCM] main call… → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 16/52: LUMIERE GBM Case (Patient-029)  [Patient-029]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-029_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-029_LIL] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-029_DSCR] main call… → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-029_PJRF] main call… 
