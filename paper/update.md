@@ -1,5 +1,365 @@
 #Project Update
 
+## 2026-09-23 (later still x11) — paper: compiled the counterfactual-image substitution results and wrote them into §8 — all 4 grounding checks now complete
+
+All 4 `lumicf_*` jobs (submitted earlier this session) finished cleanly while the gating-causality jobs were
+queued behind them (`.err` files only benign Singularity bind-mount INFO lines, no real errors). User asked to
+compile and write up.
+
+**New tool**: `tools/compile_lumiere_counterfactual.py`. For each model, joins the own-image `v3` run against
+the matching `_cf_v3_` run per (patient, phase), and for flipped answers on LIL/DSCR specifically, checks
+whether the new answer's content (volume-change direction for LIL, RANO label for DSCR) matches what the
+*substituted* patient's own facts actually support (`data/lumiere/v3/counterfactual_pairs.json` has
+`partner_direction`/`partner_rano` per patient already, from the original pairing build). Output saved to
+`results/lumiere_counterfactual_summary.json`.
+
+**Findings** (open-weight suite, all 4 models, `v3`):
+- Flip rate: AIA (no image dependency by construction — its answer is a fixed cohort-wide string) sits at
+  10-17% across models, the baseline attributable to reformatting/decoding noise alone. LIL (12-42%) and DSCR
+  (6-27%) exceed that baseline for 3 of 4 models — some real sensitivity to the substituted image, not pure
+  noise.
+- Truth-tracking among flips (the decisive part): pooled across all 4 models and both phases, 26/73 flipped
+  answers actually matched the substituted patient's true direction/label — **35.6%, 95% Wilson CI
+  [25.6%, 47.1%]**, an interval sitting entirely *below* the 50% chance rate, not straddling it. Per-model:
+  only Llama-4-Scout reaches chance (50%/50%, n=6 each — small sample); every other model is below 50% on
+  both phases (MedGemma-4B 25%/0%, Gemma-3-12B 38%/36%, Gemma-3-27B 21%/46%).
+- Read together: models are *not* ignoring the substituted image (flip rate is elevated vs. the AIA baseline),
+  but the resulting answer change doesn't reliably reflect what's actually true in the new image — closer to
+  noise-like sensitivity to input-changing than to genuine content extraction.
+
+**Wrote this into the paper, not just as a clean win**: added a new "Counterfactual-image substitution"
+results paragraph to §8. Updated the "Reading against the pre-registration" paragraph honestly rather than
+declaring the pre-registered criterion satisfied outright — the flip-rate magnitude (6-42%) doesn't cleanly
+match the original "low" wording (it exceeds the AIA baseline for most models), so stated that explicitly as
+a partial match, while noting the *non-truth-tracking* result (the part that actually distinguishes grounding
+from noise) is unambiguous. Updated: §8's intro sentence ("three of four checks" → "all four checks"),
+abstract ("results from the first three checks" → "results from all four checks... with the counterfactual
+check showing that answers which do change mostly fail to track that image's actual content"), and
+Limitations (removed the "had not finished running" language, replaced with the flip-rate/pre-registration
+partial-match caveat; clarified what's still outstanding is the proprietary model suite, not this check).
+
+Recompiled full cycle — exit 0, no errors, no overfull/underfull warnings. Visually re-checked the new
+Results/Limitations pages.
+
+`paper/review.md`: counterfactual-image-substitution item moved from In Progress to Done with the pooled
+numbers; corresponding TODO line removed.
+
+## 2026-09-23 (later still x10) — code: built and queued the gating-causality experiment (reviewer finding #2)
+
+User asked whether it was already set up — it wasn't (checked: `CausalChainEvaluator`/`evaluate_case` only ever
+builds `chain_context` from a model's own real upstream answers within the same run; no mechanism existed to
+force a specific correct/incorrect/absent upstream context). Built it, then user expanded scope mid-design from
+an initial DSCR-only proposal to all 4 dependent phases (LIL, DSCR, PJRF, TCM) x all 4 open-weight models, for
+completeness against the reviewer's own chain-wide illustrative math (independent 80%-accuracy phases
+multiplying to ~33%, not phase-specific).
+
+**New files:**
+- `src/gating_causality.py` — core logic. For each patient and each of LIL/DSCR/PJRF/TCM, evaluates that
+  phase's question 3x (same image/question/options every time) varying only the injected upstream
+  `chain_context`: *correct* (every upstream phase's true answer), *incorrect* (every upstream phase forced to
+  a deterministic, alphabetically-first wrong option — reproducible, not random), *absent* (empty). Reuses
+  `_evaluate_question` from `src/evaluator.py` completely unmodified; manufactured context entries are built in
+  the exact same shape (`phase`/`question_id`/`question`/`model_answer`/`model_answer_text`/`visual_grounding`)
+  a real one would have, so they're indistinguishable in format to the model, only the content varies by
+  condition. `adaptation_enabled=False` throughout, to isolate the context-manipulation effect from that
+  orthogonal mechanism. `summarize()` reuses `src/analysis.py`'s `_wilson_ci` so CIs match the rest of the
+  paper's convention.
+- `run_lumiere_gating_causality.py` — thin CLI, same shape as `run_lumiere.py` (`--model`/`--all-models`,
+  `--n-cases`, `--item-set`, KB paths), plus `--phases` to subset LIL/DSCR/PJRF/TCM and `--include-unreviewed`
+  (required as of this writing — expert review of `v3` still hasn't completed, same as every other reported
+  result in the paper; first dry-run without this flag returned 0 cases, a good reminder this is genuinely
+  still an open item, not an oversight in the new script).
+- `shell/lumiere/lumiere_gating_causality.sbatch` — same generic per-model shape as
+  `lumiere_prelim_ollama.sbatch` (`MODELS`/`EXTRA_ARGS` at submission time, job-name override per model). 8h
+  time budget (vs. 6h for a full chain run) since this does 4 phases x 3 conditions = 12 main+probe calls per
+  patient, more than a normal 5-phase run despite skipping adaptation entirely.
+
+**Validated before submitting, not just written:** dry-ran `build_chain_context()` against real, already-loaded
+Patient-002 `v3` data (no API calls) — correct-condition letters matched Gemma-3-27B's actual known correct
+answers exactly (AIA=C, LIL=D, DSCR=D, matching the worked-example appendix from the x9 entry), incorrect
+condition picked the expected deterministic wrong letters. Also smoke-tested `summarize()` against a fabricated
+result shape to confirm the CI/accuracy aggregation runs end-to-end before trusting it on real output later.
+
+**Queued, not run yet**: submitted all 4 jobs, chained sequentially via `--dependency=afterany` on each other,
+with the first depending on all 3 currently-active `lumicf_*` (counterfactual) job IDs — `lumigc_MedGemma-4B`
+(43061666) → `lumigc_Gemma-3-12B` (43061678) → `lumigc_Gemma-3-27B` (43061679) → `lumigc_Llama-4-Scout`
+(43061683). This keeps total concurrent GPU usage at 2 throughout (per the standing GPU-concurrency-cap
+instruction), rather than adding a 3rd job competing for a slot. Confirmed via `squeue` after submission: both
+`lumicf_*` jobs still running, `lumicf_Llama-4-Scout` and all 4 `lumigc_*` jobs correctly showing `PENDING
+(Dependency)`.
+
+`paper/review.md` updated: gating-causality entry moved from "not started" to "queued" under In Progress with
+the job IDs; TODO line updated to "watch the queued jobs, then compile with `summarize()`."
+
+## 2026-09-23 (later still x9) — paper: added the worked-patient-example appendix the reviewer asked for
+
+Last open "fixable now" item from the x8 triage. Added Appendix A, "A Worked Patient Example," after the
+bibliography (`\appendix` + `\section{}`, standard ACL structure).
+
+**Picked Patient-002 for a mundane reason, not a good one**: it's the first case in evaluation order (first
+entry in every model's `raw_results.json`), chosen before looking at its content, specifically so the
+example couldn't be accused of cherry-picking. Walked its full leak-controlled (`v3`) 5-phase chain as
+answered by Gemma-3-27B (best open-weight model): AIA → LIL → DSCR → PJRF → TCM, with each phase's question,
+correct answer, model answer, and (for LIL/DSCR) the model's actual `visual_grounding`/`reasoning` text
+quoted verbatim.
+
+**Turned out to be a genuinely strong illustration of the paper's central finding, discovered while writing
+it, not engineered in**: at AIA (a question only about imaging *modalities*, not location), the model's
+`visual_grounding` volunteers an unprompted lesion location — "right temporal lobe" — that is wrong on both
+counts against the structured facts (true baseline location is Superior Parietal Lobule / Left Cerebral
+White Matter, true laterality is left). Ran `tools/audit_reasoning_facts.py`'s actual `check_item()`
+function against this claim in isolation (not by hand) — it labels it `laterality_flip`, a real, tool-caught
+contradiction. The same fabricated claim then reappears verbatim in the model's LIL and DSCR reasoning three
+phases running, at which point the same audit function reclassifies every claim as `copied` — correctly,
+since by then the claim is present in the model's own prior-turn output, which is exactly what the audit is
+built to detect and exactly why it can't tell a re-verified observation from one just carried forward
+(directly illustrates Limitations point 6, added in the x8 entry). All final answers on this chain are
+correct except PJRF, where the model picked a more pessimistic survival bucket than the one matching the
+recorded 48-week survival, included in the appendix for contrast rather than cutting it for looking
+untidy. Stated in the writeup, verifiably: "its fact-check labels above are exactly what
+`tools/audit_reasoning_facts.py` outputs when run on it, not a paraphrase."
+
+Recompiled full cycle after adding — exit 0, no errors, no overfull/underfull-adjacent rendering issues;
+rasterized and visually checked both new appendix pages (paper is now 15 pages, up from 13). `paper/review.md`
+TODO's "write one full worked patient example" line removed (Done section in that file is currently kept
+empty by the user's own edit — not refilled, per instructions not to revert deliberate changes outside our
+context).
+
+## 2026-09-23 (later still x8) — paper: fixed all 8 remaining "fixable now" reviewer items; `paper/review.md` status tracker updated
+
+User asked which In Progress/TODO items from `paper/review.md` could be fixed immediately (no new
+experiments, no external reviewer, no waiting on the running `lumicf_*` jobs); identified 8, user said do
+all 8 in one pass. All 8 done, plus a 9th (the §7-vs-§8 preregistration timing inconsistency, which turned
+out fixable now too — see below). `paper/review.md` rewritten with a `## Done` section for all of these.
+
+1. **§5 Patient-025 cohort-eligibility contradiction.** Traced `src/lumiere_facts.py`'s
+   `select_target_patients()`: the 55-patient eligibility count is two *independent* per-patient checks
+   (≥3 RANO-rated timepoints anywhere, and ≥1 complete-imaging timepoint anywhere) — not "at least one
+   timepoint with both," which is what the paper claimed. The *same-timepoint* requirement only appears
+   later, in `build_patient_case_facts()`'s `imaged_response_facts` filter, which is why Patient-025
+   (confirmed present in a live re-run of `select_target_patients()`, 55/55 selected) gets dropped at
+   extraction instead of never being in the 55 to begin with. Rewrote the Cohort paragraph to describe the
+   two-part criterion honestly instead of the single simultaneous-timepoint claim.
+
+2. **Limitations "<5%" phase-share line.** Clarified it's about OmniBrainBench's 6,823-question composition
+   (PJRF 64, TCM 51, confirmed well under 5% each), not the LUMIERE chain dataset — which has no such
+   imbalance (every patient contributes exactly one PJRF/TCM item). Added a note about the LUMIERE
+   dataset's own wide per-phase CIs at n=52 as the real reason results are reported unpooled there.
+
+3. **§7 vs §8 preregistration-criterion timing.** The "Reading against the pre-registration" paragraph
+   previously said "we read this as satisfying the paper's own pre-registered criterion" in the same
+   breath as admitting the 4th (counterfactual) check wasn't done — a real contradiction, not just
+   ambiguous phrasing. Reworded to explicitly state the criterion "cannot yet be reported as fully
+   satisfied" until that check resolves. Fixed independent of whether the running jobs finish soon (unlike
+   the original review.md triage assumed) — this was a wording fix, not something blocked on the jobs.
+
+4. **6,823 vs. 9,527 QA-pair count discrepancy + `source_file` attribution** (finding 6). Listed the actual
+   HF dataset repo's files (`huggingface_hub.list_repo_files` on `FrankPN/OmniBrainBench`):
+   `open-ended-qa_2704.json` + `closed-ended-qa_6823.json` = 9,527, exactly matching the reviewer's
+   public-abstract figure — added this to §4 rather than leaving the two numbers unreconciled. Also added
+   a sentence clarifying `source_file` is a field OmniBrainBench itself ships, but using it to represent
+   same-patient identity for a causal chain is KAB's own interpretive choice, not an OmniBrainBench claim.
+
+5. **No results reported for core KAB metrics** (finding 7). Pulled real per-model, per-phase numbers
+   (answer recoverability ~96-100%, ontology term coverage bimodal 15-48% vs 94-98%, answer-term overlap
+   0-73%, adaptation triggered only on LIL) from the v3 nogate `total_results.json` files and added a new
+   "KAB framework metrics" paragraph to §8. Explicitly stated gated chain completion is *not yet available*
+   (no gated `v3` run has been executed) rather than fabricating a number for it.
+
+6. **Metric renaming** (finding 1, naming half). Renamed the four measures the reviewer specifically named
+   as mismatched to what they observe, throughout the paper (definitions, Related Work citations, Results,
+   Limitations): KBAlign → **ontology term coverage**, ConceptPrecision → **answer-term overlap**, local
+   faithfulness → **answer recoverability** (and correct-but-unfaithful → correct-but-unrecoverable),
+   chain faithfulness → **upstream-term repetition**. Fixed the exact overclaim sentence the reviewer
+   quoted ("faithfulness metrics establish whether a model reasoned correctly" — paper's own flagged
+   lines). Also caught and fixed the adjacent knowledge-gap/activation-failure claim in the same
+   paragraph, which needs a generic-retry/irrelevant-hint control we haven't run; now stated as an open
+   caveat ("we report the targeted-hint adaptation rate alone") instead of an established distinction —
+   this wasn't explicitly one of the 8 planned items but was directly adjacent to the fix and cheap to
+   correct honestly while already in that paragraph.
+
+7. **Image-ablation paired statistics** (finding 3, CI half). Computed patient-clustered bootstrap 95% CIs
+   (10,000 resamples, real per-patient per-phase correctness from `raw_results.json`, not simulated) for
+   the image-minus-text-only accuracy difference, all 4 models. Result: none of the 4 CIs sit inside a
+   ±5pp margin, but all 4 sit inside ±8pp. Replaced the paper's "overlapping CIs ⇒ equivalence" framing
+   (exactly what the reviewer objected to) with the actual interval plus this explicit, honestly-reported
+   margin dependency, in both the Text-only ablation paragraph and the pre-registration paragraph. Also
+   added a caveat that the "decoding noise" explanation for per-question answer flips hasn't been
+   confirmed by repeat-run controls under unchanged inputs (finding 3's other sub-point).
+
+8. **Reproducibility details** (presentation, mostly). Added: exact Ollama tags (`medgemma:4b`,
+   `gemma3:12b`, `gemma3:27b`, `llama4:scout`, Q4_K_M) and decoding settings (temperature 0, 800-token
+   budget) to Models; a new "Failed-response handling" paragraph (3-try exponential backoff, lenient
+   non-strict JSON parse for literal-newline responses, answer-letter regex salvage since `"answer"` is
+   schema-first, unparseable-after-salvage scored incorrect rather than excluded — sourced directly from
+   `src/evaluator.py`); a new "Image rendering" paragraph (max-tumor-mask-area axial slice, atlas-
+   registered CT1 sequence, rotated 90°, 1st-99th-percentile intensity clip — sourced from
+   `_render_axial_slice_png()` in `src/lumiere_facts.py`); exact ontology versions (NCIt `26.07d` from its
+   `owl:versionInfo`; RadLex has no embedded version tag in the release, cited by download date instead);
+   and a claim-audit implementation note (deterministic numeric/hemisphere pattern matching against
+   structured facts, not an LLM judge — sourced from `tools/audit_reasoning_facts.py`), with a matching
+   paraphrase/synonymy-risk caveat added as a new Limitations point.
+
+9. **PDF misplaced line numbers "particularly on page 4 and near column endings."** Root-caused via the
+   full `pdflatex` log rather than guessing: both TikZ figures (`fig:overview`, `fig:lumiere-pipeline`,
+   both `figure*`) were mildly overfull relative to `\textwidth` (Overfull \hbox warnings of 10.3pt and
+   47.5pt). Wrapped both in `\resizebox{\textwidth}{!}{...}` — zero overfull/underfull warnings after.
+   Since the paper has grown substantially since the reviewer's read (this session alone added ~1.5 pages
+   of content, on top of earlier citation/em-dash fixes), rasterized and visually inspected **all 13
+   pages** of the recompiled PDF end-to-end (via `convert`/ImageMagick, since `pdftoppm`/`pdftotext` aren't
+   on this login node) rather than assuming page 4 still corresponds to the same content — found no visual
+   overlap anywhere, consistent with the log now being fully clean.
+
+Not done from this paragraph's original scope: one full worked patient example (reviewer explicitly asked
+for this in place of some construction-history detail) — still open, moved to `review.md`'s In Progress.
+
+Recompiled the full `pdflatex` → `bibtex` → `pdflatex` → `pdflatex` cycle after each batch of edits — final
+state: exit 0, no errors, no undefined references, no overfull/underfull box warnings at all.
+
+`paper/review.md` rewritten: all 11 items above (3 from the x7 entry + these 8/9) moved to a new `## Done`
+section with what was actually checked; `## In progress` now holds only the counterfactual jobs (running),
+the gating-causality experiment (not started, needs new runs), and the worked-patient-example writeup;
+`## Blocked` unchanged (still needs the external clinical reviewer + the reframe-the-paper decision with
+Prof. Wang); `## TODO` checklist updated with strikethroughs for the 8 completed items.
+
+## 2026-09-23 (later still x7) — paper: fixed 3 of the reviewer's internal-inconsistency findings (verified against real data, not just reworded)
+
+Continuing the triage from the entry below. For each item, checked the actual result JSONs / dataset / code before touching
+paper prose, per the reviewer's own complaint that construction-loop self-validation isn't enough — didn't want to fix a
+review finding by just rewording it into apparent consistency.
+
+**1. AIA "image advantage" sentence had the labels swapped (§8, ~line 331).** Checked
+`results/lumiere_Gemma-3-27B_v3_nogate_20260922_191649/total_results.json` against the matching `_textonly_v3_` run:
+real AIA accuracy is 86.5% with image, 76.9% text-only (image is *higher*). The paper's parenthetical read "86% text-only
+versus 77% image" — backwards. Fixed to "86% image versus 77% text-only", which now actually supports the sentence's own
+claim instead of contradicting it. One-line fix, no data/code change.
+
+**2. DSCR majority-class baseline was a real undercount (§8, ~line 337) — root cause was a bucketing bug in `src/analysis.py`.**
+Reviewer's math (35/54 progressive-disease cases → ≥35/52=67.3% after 2 exclusions) didn't match the paper's reported
+64-65%. Traced it to `_majority_baseline()`: it buckets by exact string match on `correct_answer_text`, and 2 of the 52
+v3-cohort DSCR items are worded `"Progressive disease (PD)"` vs. 33 worded `"Progressive disease"` — same class, different
+literal strings, so the naive bucketing undercounted (33/52≈64% instead of the true 35/52=67.3%). Confirmed this is
+DSCR-specific (checked PJRF/TCM/LIL answer-text distributions — all near-unique free text, unaffected) before touching the
+metric. **Fixed** `_majority_baseline()` to strip a trailing parenthetical abbreviation before bucketing (regex
+`\s*\([^()]*\)\s*$`), scoped narrowly to that one function so it can't silently change anything else. Regenerated
+`report.txt`/`total_results.json` for all 8 affected `v3_nogate`/`textonly_v3_nogate` result directories (4 models ×
+image/text-only) from their untouched `raw_results.json` — no re-inference needed. Corrected baseline is **67.3% for all
+four models** (previously reported as a misleading model-varying "64-65%", which was actually just the same bug applied to
+each model's report independently — it's a property of the question set, not the model, so it should never have varied).
+Updated the paper's "64-65%" to "67%". All four models still sit at/below the corrected (higher) baseline, so the
+reviewer's original point — no model shows RANO skill above class imbalance — holds, and is now more clearly true.
+
+**3. "2 questions" / "AIA-LIL pairs" (plural) / "2 cases" was a real undercount, not just inconsistent wording (abstract,
+§1, §4).** Re-ran both of the paper's own described methods directly against `src/data/closed-ended-qa_6823.json`
+(the cached OmniBrainBench dataset) rather than trusting the original one-off audit's output, since that script no longer
+exists in the repo: (a) group by `source_file`, find `image_path` values shared across ≥2 distinct `clinical_phase`
+values; (b) independently, strip modality/view/slice filename suffixes to recover per-patient case IDs, same check. Both
+methods agree: **2 genuine same-patient cross-phase cases (both VQA\_RAD, both one AIA question + one LIL question) = 4
+questions total**, zero spanning 3+ phases. The paper's "2 questions" undercounted by exactly 2x — it was counting cases/
+pairs but labeling them as questions. Fixed all three occurrences (abstract, §1 intro, §4) to state patients/pairs and
+questions separately and consistently: "2 patients... 4 questions total".
+
+Recompiled the full `pdflatex` → `bibtex` → `pdflatex` → `pdflatex` cycle after all edits — exit 0, no errors, no
+undefined references (`pdftotext` isn't available on this login node to grep the rendered PDF directly, but the .tex
+source and compile log were checked directly).
+
+**Not yet done** (deferred, larger scope): the Patient-025 eligibility-wording contradiction (§5 cohort paragraph — text
+currently implies the 55-patient count already used the stricter simultaneous-timepoint criterion that only got fixed for
+sampling afterward; needs tracing through `src/lumiere_loader.py`/`src/lumiere_facts.py` to state the actual sequencing
+accurately), the preregistration-timing inconsistency (§7 vs §8), and the Limitations "<5%" dataset-mismatch line — none
+of these were investigated this session. The 7 core methodological findings (metrics don't establish causal reasoning,
+gating conflates mechanical propagation with causal, image-ablation "equivalence" claim, copied-vs-grounded audit
+reliability, independent answerability validation, OmniBrainBench scope/attribution, no results for the core KAB metrics)
+are unstarted — those require new analysis/experiments, not just number-checking, and are a separate, bigger conversation
+(user indicated wanting to defer the "reframe the paper" question, likely with Prof. Wang, rather than decide it here).
+
+## 2026-09-23 (later still x6) — paper: received senior-reviewer review (paper/review.md), reject-and-revise, triage started
+
+User shared a full senior-reviewer review of the compiled 12-page manuscript (`paper/latex/acl_latex.pdf`), saved
+at `paper/review.md`. **Recommendation: reject in current form, encouraged to substantially revise.** Reviewer
+states high confidence on the internal inconsistencies and metric/claims gap; underlying implementation and
+clinical labels flagged as needing separate verification (reviewer did not reproduce experiments).
+
+**Core methodological findings (highest priority, in reviewer's order):**
+1. KAB metrics (KBAlign, ConceptPrecision, local/chain faithfulness) measure surface overlap/recoverability, not
+   correctness or causal dependency — the "establishes whether a model reasoned correctly" claim (paper lines
+   366–367) is unsupported as written. Recommends renaming metrics to describe what they actually measure and
+   validating against independent expert judgments + adversarial examples (right vocab/wrong patient, negated
+   findings, answer repetition, valid paraphrase).
+2. Gated chain scoring produces failure propagation *mechanically* (independent 80%-accuracy phases chained
+   multiplicatively → ~33% with zero real causal dependency), not necessarily causally. Needs
+   correct/incorrect/absent-upstream-context conditioning experiments to support the causal claim; "soft" gating
+   framing needs justification since the current rule reads as hard blocking.
+3. Image-ablation "statistical equivalence" claims (§8) aren't supported — CIs treated this way ignore that
+   questions are paired/patient-clustered, and non-significance ≠ equivalence. Needs paired accuracy-difference
+   CIs (patient-cluster-preserving) and a pre-specified equivalence margin if the claim is "no practical benefit."
+4. Copied-vs-grounded evidence audit (§7) can't distinguish real visual grounding expressed in option wording from
+   actual copying, or "unlabeled" from "fabricated" — reported 43–90% copied / 0–8% independently-supported rates
+   don't directly estimate image-grounded-reasoning frequency as currently defined.
+5. Benchmark answerability was validated against KAB's own auditor, not an external clinician — needs independent
+   clinical review of answerability/distractors/label validity, plus options-only/longest-option/majority-class/
+   no-chain-context baselines.
+6. OmniBrainBench continuity critique (§4) needs tighter scope — same-patient continuity isn't only same-image;
+   also flags a 6,823 (this paper) vs. 9,527 (public abstract) QA-pair count discrepancy needing explanation.
+7. §8 reports no results for the actual KAB metrics (ontology alignment, concept precision, faithfulness,
+   adaptation, gated completion) — empirical section is really just the image-grounding audit; title/abstract/
+   method vs. results mismatch.
+
+**Internal inconsistencies flagged (table, reviewer's §8), need reconciliation:** patient/question/pair counts
+vary across Abstract/§4; §5 cohort description excludes a patient for conditions it says are satisfied; §5 vs §8
+cohort math (35/52 = 67.3% floor) doesn't match the reported 64–65% majority baseline; §8 lines 818–820 attribute
+an image advantage to AIA but the supplied AIA numbers favor text-only (86% vs 77%); §7 vs §8 claims the
+preregistered criterion is satisfied before the counterfactual-substitution check it depends on is complete;
+Limitations' "<5%" phase-share claim doesn't match the illustrated 52-patient × 5-phase dataset.
+
+**Presentation/reproducibility:** reads partly as a dev log — wants a full worked patient example instead of
+construction history; missing exact model IDs, prompts, decoding settings, image rendering, ontology versions,
+failed-response handling, claim-audit implementation. PDF has misplaced line numbers overlapping text/equations
+near page 4 and column endings.
+
+**Reviewer's suggested revision strategy:** re-center the paper on patient continuity / answer leakage / image
+dependence in longitudinal brain-MRI eval (called the most defensible current contribution); treat KAB metrics as
+exploratory/unvalidated until supporting experiments exist; prioritize independent clinical validation, corrected
+paired stats, and repeat-run controls over running more models.
+
+**Decision (this session):** log-then-triage — record the review in full here first, then work through the
+mechanical/reconcilable items (internal inconsistencies, stats framing, presentation) before revisiting the
+bigger reframe-the-paper-around-continuity question, which the user wants to defer as a separate discussion
+(likely with Prof. Wang) rather than decide unilaterally right now.
+
+## 2026-09-23 (later still x5) — paper: fixed unresolved cross-refs/citations, removed excessive em-dashes and scare-quotes
+
+**Unresolved "Section ??" / "(?)" citations:** user asked why. Not a source bug -- LaTeX `\ref{}`/`\citep{}` need a
+full `pdflatex` -> `bibtex` -> `pdflatex` -> `pdflatex` cycle to resolve; whatever compiled the copy the user was
+reading had only run a single pass. Ran the full cycle here (confirmed `bibtex` ships inside the `texlive/2023`
+module, just needed the module loaded first) -- zero undefined references or citations now, References section
+renders with real author-year entries. `acl_latex.bbl` is generated by this and now tracked in the repo (already
+committed by the user separately, see below) so a plain `pdflatex` without `bibtex` still resolves citations for
+anyone else opening this in Overleaf or locally.
+
+**Em-dash reduction:** user flagged excessive ` -- ` usage paper-wide. Audited first (`awk` per-line occurrence
+count) rather than guessing: 77 raw hits, but 14 of those are literal TikZ `--` path-drawing syntax inside the two
+figures' code (not prose) -- left those untouched. Fixed all 63 real prose instances individually (not a blind
+find-replace, each needed a different fix depending on the sentence): colons where a dash introduced a list or
+elaboration, parentheses for true asides, commas for light appositives, semicolons where both sides were
+independent clauses, and two cases split into separate sentences. Compiled + visually verified after (rasterized
+pages, not just log output) -- reads as confident scientific prose now, not the hedge-heavy dash-per-clause style
+from before.
+
+**Scare-quote reduction:** user also flagged quotation marks, giving `"chain"` / `"gated out"` as the example.
+Distinguished two different uses that both used the same punctuation: **scare quotes** (hedging distance around an
+ordinary word, e.g. `"chain"`, `"gated out"`, `"volume change"`, `"progressive disease"`, `"right only with
+image"`) vs. **verbatim quotation** (marking actual quoted source text, e.g. `"$\geq$25\% increase"` from a cited
+clinical guideline, explicitly described in the same sentence as "quoted verbatim"). Removed/reworded the former
+(rephrased two sentences to drop the hedge entirely; converted defined/mentioned terms to `\emph{}`, matching the
+paper's own existing convention for terms like `\emph{self-leakage}`); left the latter alone since removing it
+would be wrong (verbatim clinical-guideline text should be quoted). Flagging this judgment call explicitly in case
+the user wants the verbatim one gone too.
+
+**Note:** the user is committing changes independently in a separate session/terminal while I work (saw a new
+commit `69257d0 dev::psper review` appear mid-session that I hadn't made). Continuing to leave commits to them
+rather than committing myself, per standing instructions not to commit unless asked.
+
 ## 2026-09-23 (later still x4) — paper: whole-paper tone/currency pass — expert-review track removed, roster history dropped, contributions as a list
 
 **User read the compiled paper and flagged it directly:** "it contains a lot of outdated stuff... every mention of

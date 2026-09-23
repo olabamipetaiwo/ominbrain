@@ -10,6 +10,7 @@ Produces two outputs:
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from collections import defaultdict
 
@@ -45,7 +46,11 @@ def _majority_baseline(correct_texts: list[str]) -> float | None:
         return None
     counts = defaultdict(int)
     for t in texts:
-        counts[t] += 1
+        # Strip a trailing parenthetical abbreviation (e.g. "Progressive disease (PD)"
+        # -> "Progressive disease") so two option texts naming the same class don't
+        # split the majority-class count across buckets and understate the baseline.
+        normalized = re.sub(r"\s*\([^()]*\)\s*$", "", t).strip()
+        counts[normalized] += 1
     return round(max(counts.values()) / len(texts), 3)
 
 
