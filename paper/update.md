@@ -1,5 +1,114 @@
 #Project Update
 
+## 2026-09-23 (later still x4) — paper: whole-paper tone/currency pass — expert-review track removed, roster history dropped, contributions as a list
+
+**User read the compiled paper and flagged it directly:** "it contains a lot of outdated stuff... every mention of
+a reviewer should be excluded," followed by "no need to also mention [the roster-removal sentence], we just stick
+to the current four we are using," and "I discovered that the tone used is as if we are giving a progress report
+on a project, we are to write it as a scientific paper." Three linked instructions, treated as one pass since they
+overlap (the expert-review narrative and the roster-history narrative were the two biggest sources of the
+progress-report feel).
+
+**Expert-review track removed paper-wide** (grepped every "review/reviewer/expert/unreviewed/validat*" hit first
+to scope it, ~15 mentions across 8 sections): abstract, intro (hybrid-pipeline sentence + contributions), Figure 2's
+lead-in sentence and caption, the LUMIERE section's Cohort/Contribution paragraphs, Results' pre-registration
+paragraph, Limitations, and the Ethics Statement. Two full paragraphs describing the review mechanism and the
+"preliminary vs. reviewed" framing (`Review mechanism`, `Preliminary evaluation on unreviewed items`) were deleted
+outright rather than trimmed, since their entire content was about the review process. `Hybrid drafting and expert
+review` was renamed `LLM drafting` and cut down to only the drafting-methodology content that's still true. Where a
+sentence's justification depended on review (e.g., "draft the full cohort so a review pass can cover it in one
+sitting"; Limitations' "provisional pending review" framing), rewrote the justification to something independently
+true rather than just deleting the clause and leaving a non sequitur (full-cohort drafting is now justified by
+maximizing item-set size; "provisional" is now justified by the v2->v3 leak-correction history and the
+still-incomplete counterfactual check alone). **Kept** one intentionally: "a point of reviewer scrutiny" in
+Limitations refers to this paper's own academic peer reviewers, not the clinical domain-expert -- different sense,
+not outdated, left as-is (flagging this judgment call in case the user meant literally every occurrence of the
+string).
+
+**Roster-revision history dropped from Models paragraph** (`sec:setup`), per the user's explicit correction --
+no more "the senior author restricted the roster... removed five models... we dropped Llava-Med-7B." States the
+current four open-weight models directly. This also removed the last "senior author" mentions in the paper
+(3 occurrences total, all tied to either this or the now-deleted review paragraphs). The Infrastructure paragraph
+and one Limitations sentence both referenced "the roster revision above" as a callback -- rewritten to state the
+current infrastructure fact plainly (open-weight suite is single-GPU, no tensor parallelism needed) without the
+historical callback, since the history it was calling back to no longer appears in the paper.
+
+**Contributions list converted from a run-on "First,...Second,...Third,...Fourth," paragraph to `itemize`**
+(added `\usepackage{enumitem}` for compact spacing) -- separate ask, addressed in the same pass since it landed
+mid-edit.
+
+**Also updated while in these paragraphs anyway** (natural consequence of removing "companion release"
+progress-report language, not a separate ask): abstract and intro now describe the image-grounding test suite and
+its provisional findings, since those are now actually in the paper (added earlier this session) and the old
+"full results in a companion release" line was already stale before this pass even started.
+
+Compiled and visually verified the same way as every other paper change this session (rasterize + look, not just
+exit-code): abstract, intro/contributions list, Figure 2's section, Models/Infrastructure, Results, Limitations,
+and Ethics all re-rendered clean, no dangling cross-refs, no orphaned sentences referencing deleted content.
+Page count 12 -> 11. Compile artifacts removed after.
+
+## 2026-09-23 (later still x3) — paper: Figure 3, text-only-vs-image results chart (the non-counterfactual-dependent follow-up)
+
+Built the results chart from the pair of follow-up options offered earlier (results chart vs. counterfactual
+flip-rate chart) — this one, since it visualizes numbers already in hand (Table 1 / `sec:results`) rather than
+the still-running counterfactual job (43058034-37).
+
+`figures/text_only_ablation.pdf` (source: `figures/make_textonly_chart.py`, kept in the repo for reproducibility —
+regenerate if the Table 1 numbers ever change), embedded as Figure 3 next to Table 1 in `sec:results`. Grouped bar
+chart, image vs. text-only accuracy per model, **drawn on the full 0-100% axis deliberately** (not zoomed/truncated)
+so the ~3pp gaps read as small, matching what the text and Table 1 already say — a truncated axis here would have
+visually overstated a difference the paper's own claim says is not real. Followed the `dataviz` skill's procedure:
+categorical colors are slots 1+2 (blue/orange) from its reference palette, documented in that skill's own
+`palette.md` as already passing the adjacent-pair CVD gate for bar charts (worst-case ΔE 9.1 light) — could not
+re-run `scripts/validate_palette.js` to confirm directly, no `node` on this cluster, so relied on the skill's own
+pre-validated documentation for this exact slot pair instead of skipping the check silently. Added a diagonal hatch
+on the text-only series as redundant (non-color) encoding for print/grayscale safety, direct value labels on all 8
+bars (dataset is small enough that this doesn't clutter), legend for the 2 series.
+
+**Bug caught before shipping:** first render had the 4 model x-axis labels overlapping/colliding (too long for a
+single-column figure width) — caught by rasterizing the rendered PDF page, not from matplotlib's exit code (it
+exits 0 either way). Fixed with two-line wrapped labels ("Llama-4-\nScout" etc.); re-rendered and confirmed clean.
+Installed `matplotlib` into the project `.venv` (wasn't present; a lightweight pip install, not model weights, ran
+on the login node — no GPU/SLURM needed for a static chart).
+
+Compiled + visually verified (same rasterize-and-look method as Figures 1-2): Table 1 and Figure 3 land side by
+side at the top of Section 8 as intended, no overlaps, all cross-refs resolve. Compile artifacts removed after.
+
+**Note for next commit:** `paper/latex/acl_latex.aux/.log/.out` show as tracked-but-deleted (`D`) in `git status`
+after cleanup — `git ls-files` confirms they're actually committed in this repo's history (commit `936a715`), which
+contradicts this conversation's opening `git status` snapshot showing them as untracked (`??`); root cause not
+investigated, flagging rather than silently fixing. Recommend `git rm --cached` on those three plus a `.gitignore`
+entry for `*.aux/*.log/*.out/*.bbl/*.blg` so every future compile stops dirtying `git status` — left undone since
+it's a git-tracking decision, not something asked for this session. New untracked content ready to be added
+whenever changes are committed: `paper/latex/figures/` (chart script + generated PDF).
+
+## 2026-09-23 (later still x2) — paper: Figure 2, LUMIERE construction pipeline (expert review excluded per user)
+
+**User decision:** exclude the domain-expert review step from this figure "for now" — pipeline shows only the
+automatic stages (fact extraction -> LLM drafting -> leakage audit/retry), ending at the leak-controlled (v3) item
+set as a terminal box. Caption and the referencing sentence in `sec:lumiere`'s opening paragraph both say explicitly
+that expert review is a separate, still-ongoing track not shown in the diagram — not silently omitted.
+
+`fig:lumiere-pipeline`, placed at the top of Section 5 (`sec:lumiere`), same TikZ visual language as Figure 1
+(rounded boxes, `arr` style, scriptsize sub-labels): LUMIERE Cohort -> Fact Extraction -> LLM Drafting -> Leakage
+Audit -> Leak-Controlled Item Set (v3), with a retry loop from the audit back to drafting labeled "violation found:
+retry (up to 8x), fed back into the drafting prompt."
+
+**Bug caught before shipping:** first version drew the retry loop as a `to[bend right=35]` curve with a
+`node[midway, below=0.9cm, ...]` label — rendered with the label text overlapping/illegible against the box row
+above it (confirmed by rasterizing the actual compiled page, not just checking pdflatex's exit code — the compile
+itself reported no error, only a generic "Overfull \hbox" warning that undersold how broken it looked). Root cause:
+`below=0.9cm` as a bare positioning key doesn't reliably offset a path label the way `node[below=X of Y]` does.
+Fixed by routing the loop with explicit coordinates above the row (`(audit.north) -- ++(0,0.55cm) -| (draft.north)`)
+and placing the label at an explicit computed midpoint coordinate instead of relying on `midway`+relative
+positioning together. Re-rendered and visually confirmed clean after the fix.
+
+**Process note for future figure work this session:** pdflatex exiting 0 / "no errors" is not sufficient
+verification for a TikZ diagram — always rasterize the actual page (`ghostscript` + `convert`, no `pdftoppm` on this
+node) and look at it before calling a figure done. A remaining `Overfull \hbox` warning in the log (from the caption
+paragraphs, ~10-47pt, both figures) did not visually manifest as an overflow in the rendered page and was left as-is
+after checking.
+
 ## 2026-09-23 (later still) — paper: Results section (steps 1-3 numbers) + Figure 1 (KAB framework overview)
 
 **Results section added** (`paper/latex/acl_latex.tex`, new `\section{Results}\label{sec:results}`, placed between
