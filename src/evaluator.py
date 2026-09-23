@@ -29,16 +29,37 @@ from openai import OpenAI
 import config
 from src.causal_graph import check_gate
 from src.kb_aligner import KBAligner
-from src.prompts import build_main_prompt, build_faithfulness_probe, build_adaptation_prompt
+from src.prompts import (
+    build_main_prompt,
+    build_faithfulness_probe,
+    build_adaptation_prompt,
+    ANSWER_RESPONSE_SCHEMA,
+    FAITHFULNESS_RESPONSE_SCHEMA,
+)
 
 
 def _avg(values: list[float]) -> float | None:
     return round(sum(values) / len(values), 3) if values else None
 
 
-def _call_model(client: OpenAI, messages: list[dict], label: str = "") -> str:
-    """API call with exponential backoff retry (3 attempts, 5/10/20s delays)."""
+def _call_model(
+    client: OpenAI,
+    messages: list[dict],
+    label: str = "",
+    guided_json_schema: dict | None = None,
+) -> str:
+    """API call with exponential backoff retry (3 attempts, 5/10/20s delays).
+
+    guided_json_schema, when set, is passed as extra_body={"guided_json": ...} —
+    vLLM's structured-output decoding, which forces the response to conform to the
+    schema at the token level. Only meaningful against a vLLM-backed model; other
+    backends silently ignore unknown extra_body fields or error, so only pass this
+    for vllm-backed evaluator runs (--guided-json).
+    """
     tag = f" ({label})" if label else ""
+    kwargs: dict = {}
+    if guided_json_schema is not None:
+        kwargs["extra_body"] = {"guided_json": guided_json_schema}
     for attempt in range(config.API_RETRY_ATTEMPTS):
         try:
             response = client.chat.completions.create(
@@ -46,6 +67,7 @@ def _call_model(client: OpenAI, messages: list[dict], label: str = "") -> str:
                 messages=messages,
                 max_tokens=config.MAX_TOKENS,
                 temperature=config.TEMPERATURE,
+                **kwargs,
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
@@ -59,22 +81,43 @@ def _call_model(client: OpenAI, messages: list[dict], label: str = "") -> str:
     return ""
 
 
+def _salvage_answer_letter(text: str) -> str | None:
+    """Best-effort recovery of the answer letter from JSON that failed to parse.
+
+    The response schema puts "answer" first, "visual_grounding" and "reasoning"
+    last (src/prompts.py's _ANSWER_JSON_SCHEMA) — a model that degenerates into a
+    repetition loop inside those later fields and hits MAX_TOKENS truncates the
+    JSON, but the answer field is written (and complete) before that happens.
+    Confirmed against MedGemma-4B's parse failures (round 1/2 runs, 2026-09-21/22):
+    all had "answer" present and well-formed, only later fields were cut off."""
+    m = re.search(r'"answer"\s*:\s*"([A-E])"', text)
+    return m.group(1) if m else None
+
+
+def _loads_lenient(candidate: str) -> dict | None:
+    """json.loads, then again with strict=False. MedGemma-4B sometimes emits a literal
+    newline inside a string value (e.g. "...standard of care.\\n" un-escaped) — otherwise
+    complete, valid JSON that strict mode rejects as a bare control character. Confirmed
+    against real parse failures (2026-09-22): 3/27 were exactly this, recovered losslessly
+    by strict=False; do not need the truncation-salvage path below."""
+    for strict in (True, False):
+        try:
+            return json.loads(candidate, strict=strict)
+        except json.JSONDecodeError:
+            continue
+    return None
+
+
 def _parse_json(text: str, required_keys: list[str]) -> dict | None:
     text = re.sub(r"```(?:json)?", "", text).strip().rstrip("`").strip()
-    try:
-        data = json.loads(text)
-        if all(k in data for k in required_keys):
-            return data
-    except json.JSONDecodeError:
-        pass
+    data = _loads_lenient(text)
+    if data and all(k in data for k in required_keys):
+        return data
     match = re.search(r"\{.*\}", text, re.DOTALL)
     if match:
-        try:
-            data = json.loads(match.group())
-            if all(k in data for k in required_keys):
-                return data
-        except json.JSONDecodeError:
-            pass
+        data = _loads_lenient(match.group())
+        if data and all(k in data for k in required_keys):
+            return data
     return None
 
 
@@ -124,6 +167,7 @@ def _run_adaptation(
     original_answer: str,
     original_reasoning: str,
     client: OpenAI,
+    guided_json: bool = False,
 ) -> dict:
     """
     Feedback-adaptation step.
@@ -136,7 +180,8 @@ def _run_adaptation(
         question, case_for_prompt, phase, chain_context,
         missed_concepts, original_answer, original_reasoning,
     )
-    raw = _call_model(client, messages, label="adaptation")
+    schema = ANSWER_RESPONSE_SCHEMA if guided_json else None
+    raw = _call_model(client, messages, label="adaptation", guided_json_schema=schema)
     parsed = _parse_json(raw, ["answer", "visual_grounding", "reasoning"])
 
     if parsed is None:
@@ -172,35 +217,54 @@ def _evaluate_question(
     aligner: KBAligner,
     client: OpenAI,
     adaptation_enabled: bool = True,
+    guided_json: bool = False,
+    text_only: bool = False,
 ) -> dict:
     qid = question["id"]
     print(f"    [{qid}] main call…", end=" ", flush=True)
 
-    img_list = _load_question_image(question)
+    img_list = [] if text_only else _load_question_image(question)
     if not img_list:
         print("[no image]", end=" ", flush=True)
     case_for_prompt = {
         **case,
         "image_bytes_list": img_list,
         "image_bytes": img_list[0] if img_list else None,
+        # Per-image labels (e.g. "baseline (week-000)"/"follow-up (week-047)"), set by
+        # lumiere_loader.py for LIL only; None for every other case, in which case
+        # prompts.py falls back to its existing generic <image_N> labeling.
+        "image_labels": None if text_only else question.get("_image_labels"),
+        "image_note": None if text_only else question.get("_image_note"),
     }
 
     messages = build_main_prompt(question, case_for_prompt, phase, chain_context)
-    raw = _call_model(client, messages, label="main")
+    answer_schema = ANSWER_RESPONSE_SCHEMA if guided_json else None
+    raw = _call_model(client, messages, label="main", guided_json_schema=answer_schema)
     parsed = _parse_json(raw, ["answer", "visual_grounding", "reasoning"])
 
     if parsed is None:
-        print("parse failed.")
+        salvaged = _salvage_answer_letter(raw)
+        if salvaged:
+            print(f"parse failed — salvaged answer {salvaged} from truncated JSON.")
+        else:
+            print("parse failed.")
+        model_answer = salvaged
+        model_answer_text = question["options"].get(salvaged, "") if salvaged else None
+        correct = salvaged == question["correct_answer"] if salvaged else False
         return {
             "id": qid,
             "question": question["question"],
             "correct_answer": question["correct_answer"],
-            "model_answer": None,
-            "model_answer_text": None,
-            "correct": False,
+            "correct_answer_text": question.get("correct_answer_text", ""),
+            "model_answer": model_answer,
+            "model_answer_text": model_answer_text,
+            "correct": correct,
             "visual_grounding": "",
             "reasoning": "",
             "raw_response": raw,
+            # Salvaged runs have no reasoning/visual_grounding text (truncated before those
+            # fields completed), so faithfulness and KB-grounding can't be scored — left as
+            # "not computed", not folded into the accuracy number either way.
             "local_faithful": None,
             "faithfulness_predicted": None,
             "kb_alignment_score": 0.0,
@@ -210,7 +274,9 @@ def _evaluate_question(
             "missed_concepts": [],
             "kb_used": "",
             "parse_error": True,
+            "answer_salvaged": bool(salvaged),
             "task_label": question.get("task_label", ""),
+            "counterfactual_partner": question.get("_counterfactual_partner"),
             **_NO_ADAPTATION,
         }
 
@@ -221,7 +287,8 @@ def _evaluate_question(
 
     print("| probe…", end=" ", flush=True)
     faith_msgs = build_faithfulness_probe(parsed["reasoning"], question["options"])
-    faith_raw = _call_model(client, faith_msgs, label="faithfulness")
+    faith_schema = FAITHFULNESS_RESPONSE_SCHEMA if guided_json else None
+    faith_raw = _call_model(client, faith_msgs, label="faithfulness", guided_json_schema=faith_schema)
     faith_parsed = _parse_json(faith_raw, ["predicted_answer"])
 
     if faith_parsed:
@@ -246,7 +313,7 @@ def _evaluate_question(
         adaptation = _run_adaptation(
             question, case_for_prompt, phase, chain_context,
             kb_result.missed_concepts, model_answer, parsed["reasoning"],
-            client,
+            client, guided_json=guided_json,
         )
     else:
         print()  # newline after probe result
@@ -273,6 +340,7 @@ def _evaluate_question(
         "kb_used": kb_result.kb_used,
         "parse_error": False,
         "task_label": question.get("task_label", ""),
+        "counterfactual_partner": question.get("_counterfactual_partner"),
         **adaptation,
     }
 
@@ -289,11 +357,15 @@ class CausalChainEvaluator:
         api_key: str | None = None,
         radlex_path: Path = Path("data/kb/radlex.owl"),
         ncit_path: Path = Path("data/kb/ncit.owl"),
+        guided_json: bool = False,
+        text_only: bool = False,
     ):
         self.model = model
         self.gating_enabled = gating_enabled
         self.gating_threshold = gating_threshold
         self.adaptation_enabled = adaptation_enabled
+        self.guided_json = guided_json
+        self.text_only = text_only  # ablation: strip images, see whether accuracy survives on text alone
         self.aligner = KBAligner(radlex_path=radlex_path, ncit_path=ncit_path)
         config.MODEL = model
 
@@ -350,6 +422,7 @@ class CausalChainEvaluator:
                 result = _evaluate_question(
                     q, case, phase, chain_context,
                     self.aligner, self._client, self.adaptation_enabled,
+                    guided_json=self.guided_json, text_only=self.text_only,
                 )
                 result["chain_grounding_terms_used"] = q.get("chain_grounding_terms", [])
                 question_results.append(result)

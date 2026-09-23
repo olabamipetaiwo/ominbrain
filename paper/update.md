@@ -1,0 +1,1009 @@
+#Project Update
+
+## 2026-09-23 (later still) — paper: Results section (steps 1-3 numbers) + Figure 1 (KAB framework overview)
+
+**Results section added** (`paper/latex/acl_latex.tex`, new `\section{Results}\label{sec:results}`, placed between
+`sec:grounding-test` and Limitations). Reports the three grounding-test checks that are actually complete and
+numbers-in-hand, all on `v3`: stem-leakage audit (v2 vs v3 violation rates), text-only ablation (headline table —
+3/4 models score >= as well text-only, 87-91% of individual questions get an identical answer with vs without the
+image, v3 vs v2 difficulty context), evidence fact-check (43-90% copied, 0-8% independently-supported), and the two
+secondary v3 findings that sharpen the reading (DSCR at/below the 64-65% majority baseline — construct-validity
+caveat, not grounding evidence; LIL at/near chance 23-40% — the one result that speaks to grounding directly).
+Closing paragraph explicitly reads these against the pre-registration already stated in `sec:grounding-test` and
+flags both remaining caveats (unreviewed items; counterfactual-image substitution — step 4 — still running, not
+included). Limitations section's opening paragraph updated to match (now says three of four checks are reported
+provisionally, not zero).
+
+**Figure 1 added** (`fig:overview`, new `\usepackage{tikz}` + `decorations.pathreplacing`/`positioning`/`calc`
+libraries): native TikZ diagram of the KAB framework — five-phase chain (AIA->LIL->DSCR->PJRF->TCM) with "gate"
+labels on each arrow, a brace below spanning the full chain labeling soft gating, and two dashed callouts above
+(Faithfulness -> AIA/LIL, Feedback-Adaptation -> DSCR/PJRF). Placed in the Introduction, referenced right after the
+five-phase/three-metric sentence. First draft had a third top callout ("Soft Gating") pointing only at TCM, which
+duplicated the brace below saying the same thing — cut it, kept the brace as the single soft-gating explanation.
+Chose TikZ over an external image (PNG/draw.io) so the figure stays editable in the paper source with no binary
+asset to keep in sync.
+
+**Verified by compiling and visually inspecting rendered pages** (`module load texlive/2023`; no `pdftoppm`/`gs`
+binary directly on PATH, used `module load ghostscript/9.22` + `convert` to rasterize pages for a visual check —
+note for future paper-compile sessions on this cluster). Two-pass `pdflatex` run, 0 errors, all new cross-refs
+(`sec:results`, `tab:textonly`, `fig:overview`) resolve; remaining `Citation ... undefined` warnings are pre-existing
+(no `.bbl`/bibtex run here, unrelated to this change). Confirmed Figure 1 renders legibly (5 boxes, gate labels,
+brace, both callouts, no overlap) and the Results section/table render correctly (checked via rasterized page
+images, not just log output). Compile artifacts (`.aux`/`.log`/`.out`/`.bbl`/`.blg`) removed after — only `.tex`
+and the regenerated `.pdf` are meant to be tracked.
+
+**Context: professor said** (relayed by user) **"you can start revising the paper, adding some overview/teaser
+figures etc."** — Figure 1 is the first figure of that revision pass. Not yet done: any additional figures (e.g., a
+LUMIERE dataset-construction pipeline figure, a results plot once the counterfactual test finishes) — scope not yet
+discussed with the user beyond this first one.
+
+## 2026-09-23 (later still) — Methods sections of the ACL draft rewritten to match actual project state
+`paper/latex/acl_latex.tex` had fallen well behind the last few days' work; per user request, rewrote the methods
+sections (not abstract/introduction/related work, which are unchanged pending a separate pass):
+- **Dataset construction (`sec:lumiere`):** added the precise cohort numbers (91 LUMIERE patients -> 55 eligible ->
+  54 extracted/drafted, Patient-025 excluded) and the real post-fix RANO distribution (PD 37, SD 9, PR 4, CR 4).
+  Added new paragraphs on the leak-controlled item-set rebuild (stem-leakage auditor, root cause in the drafting
+  prompt, retry loop, DSCR templating), post-operative rebaselining (42/54 pre-op baselines found, 44/54 changed,
+  Patient-049/068 excluded -> 52 patients, 20 up/32 down), the display-orientation note, and a new paragraph stating
+  plainly that preliminary evaluation runs on unreviewed items with the senior author's approval, not gated on
+  expert review completing.
+- **New Section 8, "Testing Whether Correct Answers Are Image-Grounded" (`sec:grounding-test`):** describes all four
+  non-grounding checks as pure methodology (setup, justification, decision rule) with zero outcome numbers, per the
+  academic-writing skill's methodology/findings genre boundary — stem-leakage audit (cross-referenced to sec:lumiere),
+  text-only ablation, evidence fact-check (copied/independently-supported/fabricated/laterality-flip categories,
+  RANO-threshold exclusion), and counterfactual-image substitution (pairing method, all-5-phases scope, the PJRF/TCM
+  confound caveat, and the pre-registered joint decision rule across all four checks).
+- **Experimental Setup:** model roster corrected to the actual current 7 models (3 proprietary + MedGemma-4B/
+  Gemma-3-12B/Gemma-3-27B/Llama-4-Scout, Q4 via Ollama), replacing the stale 12-model list; explains the no-
+  China-models roster cut and the Llava-Med-7B JSON-output drop. Infrastructure paragraph corrected from the old
+  "L4, multi-GPU tensor parallelism needed" claim to the actual single-GPU RTX PRO 6000 setup — the roster cut
+  removed every model that would have needed multi-GPU serving.
+- **Limitations:** corrected the sentence claiming all results are gated on expert-review completion (now inconsistent
+  with the new preliminary-evaluation paragraph); flagged the counterfactual test as still running at time of writing;
+  replaced the stale 30B-38B GPU-memory limitation with an accurate note that the roster revision resolved it; added
+  a limitation stating the local-faithfulness probe's structural inability to establish grounding on its own (why
+  Section 8 exists).
+- Compiled clean with `module load texlive/2023`: 2 pdflatex passes, 10 pages, 0 errors, all new `\label`/`\ref` pairs
+  resolved (remaining "undefined" warnings are pre-existing unrun-bibtex citation keys, not from these edits).
+- **Not yet touched:** Abstract, Introduction, Related Work, Ethics Statement — Abstract in particular should be
+  redone last, once Results exists, per the academic-writing skill's Abstract-last workflow.
+
+## 2026-09-23 (later) — step 4 built and submitted: counterfactual-image test, throttled to <=2 concurrent GPUs
+Per professor's request, all future job submissions cap total concurrent GPU usage at 2 (was previously up to 8
+concurrent, e.g. the v3 batch). Implemented here via SLURM `--dependency=afterany:<jobid>`, not by asking for fewer
+GPUs per job (each job still needs its own 1 GPU) — 2 jobs submitted to run immediately, the other 2 held with a
+dependency on the first 2 so they only start once a slot frees. Same pattern to reuse going forward.
+
+**Built, scoped 2026-09-23:**
+- `tools/build_lumiere_counterfactual_pairs.py`: deterministic (seed=42) patient pairing for v3 — every patient is
+  assigned a partner with the OPPOSITE LIL volume-change direction (v3's real 20-up/32-down split makes this always
+  achievable, 52/52). Not jointly optimized for DSCR's RANO label, but measured: 27/52 (52%) pairs also happen to
+  differ in RANO. Output: `data/lumiere/v3/counterfactual_pairs.json`.
+- `src/lumiere_loader.py`: new `counterfactual_pairs` param on `build_lumiere_cases()`/`load_lumiere()`. When set,
+  for every phase, only the resolved image file(s) are swapped to the PARTNER's own rendered slices — stem, options,
+  chain context, and image labels stay exactly the original patient's. Deliberately did NOT swap the image labels
+  (e.g. "baseline (week-084)") to the partner's own timepoint ids — the label stays what the original patient's text
+  says, so the manipulation is a pure pixel swap: text says X, the model is actually shown Y. Records
+  `_counterfactual_partner` on each question for traceability.
+  Verified with a dry-run (login node, no GPU): image_dir/image_path resolve to a genuinely different real patient's
+  files for all 5 phases, 0/52 self-paired, swapped files confirmed to exist on disk.
+- `run_lumiere.py`: new `--counterfactual-images` flag; results land in a `_cf`-suffixed folder
+  (`lumiere_<model>_cf_v3_nogate_*`) so they can't be confused with the plain v3 image run already in hand.
+- `src/evaluator.py`: `counterfactual_partner` field added to both result-dict construction paths (parse-success and
+  salvaged-parse-failure) — additive, `.get()` returns None for every non-counterfactual run (OmniBrainBench and
+  plain LUMIERE runs unaffected).
+
+**Scope decisions (user, 2026-09-23):** all 5 phases swapped (not just LIL/DSCR) for completeness — AIA/PJRF/TCM
+expected null (AIA is protocol-invariant; PJRF/TCM are single-image and largely text-driven per earlier findings).
+Non-gated only (gated adds nothing per the 2026-09-22 redundancy finding, and would cut N on exactly the phases
+under test). Metric: flip rate (own-image v3 answer vs counterfactual-image answer) as headline, with flips checked
+against whether they land on the swapped-in patient's actual correct answer (distinguishes real visual uptake from
+decoding noise).
+**Caveat flagged in advance:** since all 5 phases are swapped together, PJRF/TCM's chain context includes text from
+an upstream DSCR call that was itself run against a swapped image — their result isn't a perfectly isolated test of
+"does PJRF's own image matter." LIL and DSCR remain the clean, headline comparison.
+
+**Pre-registered expectation:** low flip rate on LIL/DSCR, not tracking the swapped patient's truth -> confirms
+non-grounding directly (closing the loop from steps 1-3). A high flip rate that DOES track the swapped-in truth would
+instead narrow the claim to "images are ignored because text is redundant here," not "models can't use images."
+
+**Submitted:** 4 jobs (one per model, `lumicf_<model>`), `--item-set v3 --counterfactual-images`, non-gated —
+43058034 (MedGemma-4B), 43058035 (Gemma-3-12B) running now; 43058036 (Gemma-3-27B, deps on 43058034), 43058037
+(Llama-4-Scout, deps on 43058035) queued behind them.
+
+## 2026-09-23 — v3 (leak-free) text-only ablation complete: image-non-grounding finding CONFIRMED on leak-free items
+All 8 v3 jobs (43010721-43010728) COMPLETED overnight, exit 0, no failures. Full non-gated overall accuracy, image vs
+text-only:
+| Model | Image | Text-only | Δ |
+|---|---|---|---|
+| Llama-4-Scout | 49% | 52% | +3 |
+| Gemma-3-27B | 54% | 50% | -3 |
+| Gemma-3-12B | 48% | 51% | +3 |
+| MedGemma-4B | 33% | 36% | +3 |
+
+Per-phase, 3/4 models have text-only >= image on every phase; Gemma-3-27B is the exception (image ahead, mainly AIA
+86% vs 77%), but per-phase CIs (n=52) overlap in every case, including that one. No model shows a real image
+advantage anywhere.
+
+**Reading against the pre-registration (2026-09-22, "Plan agreed + executed" section above):** text-only accuracy is
+within CI of with-image for all 4 models, on the leak-free v3 set — this satisfies "claim supported" and, combined
+with step 3's evidence fact-check (72-100% of correct answers' stated evidence copied straight from the prompt, not
+image-derived), the non-grounding finding is now confirmed independent of the v2 stem/option leaks. This was the
+open question from the leak-free rebuild: whether removing the leaks would restore image dependence. It did not.
+
+Side note: v3 items are substantially harder than v2 across the board (image-based overall down 13-19pp per model,
+e.g. Scout 67%->49%, MedGemma 45%->33%), consistent with the leak removal working as intended. DSCR remains at/near
+its own majority baseline in v3 too (56-65% vs MajBase 64%) — still no model shows RANO-assessment skill above chance
+given the class imbalance.
+
+Not yet decided: whether to also run the counterfactual-image test (step 4 of the plan) now that steps 1-3 already
+converged on the same answer, or treat this as sufficient and move to writing the section.
+
+## 2026-09-22 (latest) — expert review confirmed OPTIONAL, not a blocker; artifact send is a nice-to-have
+Prof. Wang confirmed sending `tools/lumiere_review_artifact.html` (rebuilt 2026-09-21, self-contained, localStorage
+autosave + download/load-review-file flow, no `window.claude` refs) to the radiologist/neuro-oncologist collaborator
+is OPTIONAL for now — consistent with the earlier v3 decision (see "v3 item set" entry below: "prof: expert review
+optional for now"). **Correction to my own framing above:** I called this "the last blocker" — wrong. It isn't a
+blocker at all: round-3/v3 evals already ran to completion on the unreviewed LLM-drafted items without it, and
+sync -> `lumiere_merge_reviewed.py` isn't gating anything currently in flight. User will send it when convenient;
+not time-critical.
+
+## 2026-09-22 (round 3) — LIL image-labeling fix, majority-baseline reporting, AIA finding, MedGemma re-run — RESULTS IN
+
+### LIL: images now labeled with their actual timepoint
+Investigated whether presentation (not just model skill) contributes to LIL's direction-flip errors. Found: the two images (baseline,
+follow-up) were always sent in the correct order but labeled only generically (`<image_1>:`, `<image_2>:`) — never tied to which
+timepoint is which; the question text mentions the weeks in prose but nothing links that to the image numbers. Fixed, additively:
+- `src/lumiere_loader.py`: new `_image_labels_for()` returns `["baseline (week-XXX)", "follow-up (week-YYY)"]` for LIL only (None
+  elsewhere) -> stored as `_image_labels` on the question dict.
+- `src/evaluator.py`: threads it through as `case["image_labels"]`.
+- `src/prompts.py`: `_build_user_content()` takes an optional `img_labels` param; when present and length-matched, renders
+  `<image_1> — baseline (week-000):` instead of the bare `<image_1>:`. Falls back to the exact old behavior when absent/mismatched —
+  verified OmniBrainBench's `data_loader.py` never sets this field, so `run_omnibrain.py` is provably unaffected (dry-run checked, no
+  GPU needed). Also nudged the instruction text to say "compare them explicitly... using their labels."
+
+### New: majority-baseline column in every report (src/analysis.py, tools/compile_lumiere_results.py)
+Added `_majority_baseline()`: per phase, the accuracy of a trivial "always guess the most common correct answer" baseline, shown as a
+new `MajBase` column in `report.txt` and folded into `tools/compile_lumiere_results.py`'s tables (flagged inline when >=40%). Two real
+findings this immediately surfaced, neither is a drafting bug — both are properties of the LUMIERE cohort itself, not fixable by
+re-drafting:
+- **DSCR (MajBase ~65-69%):** most LUMIERE GBM patients are progressing, so "Progressive disease" is both the correct answer AND the
+  longest option label most of the time (see round-2 entry above — reframes that "69% longest=correct" number as class imbalance, not
+  a guessability bug). Checked against round-2 non-gated DSCR accuracy: MedGemma 37%, Gemma-27B 59%, Gemma-12B 65%, Llama-Scout 63% —
+  **every model is at or below this trivial baseline.** Report DSCR accuracy next to MajBase in the paper; don't present it as raw
+  skill.
+- **AIA (MajBase 100%):** ALL 54 patients' correct AIA answer is the identical string ("T1-weighted, contrast-enhanced T1-weighted,
+  T2-weighted, and FLAIR sequences") — LUMIERE used one consistent imaging protocol for every patient. A baseline that always outputs
+  that fixed string scores 100% without looking at any image; models score 52-96%, i.e. below that ceiling — they sometimes talk
+  themselves into a wrong-sounding distractor despite the answer never varying. This means AIA does not test "identify modalities from
+  the image" so much as "avoid hallucinating a wrong modality" — a real limitation of this phase to state plainly in the paper. Not
+  fixable by re-drafting (it's a genuine property of the LUMIERE cohort, not a bug we introduced).
+- PJRF/TCM's MajBase is near 0 (free-text numeric estimates, ~unique per item) — the column is harmless noise there, as intended.
+
+### MedGemma-4B re-run: killed and resubmitted across all 4 models for consistency
+Per-user decision: rather than let the already-running MedGemma re-run (jobs 42932294/42932295, parse-fix only, predates the LIL/MajBase
+work above) finish on its own, killed both (`scancel`) and resubmitted ALL 4 models x {gated, nogate} = 8 jobs so every model's numbers
+reflect the parse-fix + LIL image-labeling fix + MajBase reporting consistently. Job IDs: 42941575-42941582 (`lumiv4_<model>_<mode>`).
+All 8 COMPLETED 2026-09-22 (00:35-12:41, exit 0; only 2 MedGemma nogate parse failures, both salvaged). Compiled ->
+`results/lumiere_summary.md/.csv` (now = round 3).
+
+### Round-3 results (non-gated accuracy; items still LLM-drafted, NOT expert-reviewed)
+| Model | AIA | LIL | DSCR (MajBase 65%) | PJRF | TCM | Overall | Chain completion |
+|---|---|---|---|---|---|---|---|
+| Llama-4-Scout | 96% | 50% | 59% | 54% | 74% | 67% | 15% |
+| Gemma-3-27B | 80% | 59% | 61% | 39% | 72% | 62% | 4% |
+| Gemma-3-12B | 89% | 48% | 63% | 35% | 65% | 60% | 2% |
+| MedGemma-4B | 54% | 52% | 39% | 33% | 46% | 45% | 4% |
+- **LIL image-labeling fix helped every model** (round 2 -> round 3, non-gated): Scout 33->50 (+17pp), Gemma-12B 39->48 (+9), Gemma-27B
+  54->59 (+5), MedGemma 46->52 (+6). AIA/DSCR/PJRF/TCM essentially unchanged, as expected (the fix only touched LIL). So part of the
+  earlier LIL deficit was presentation (unlabeled timepoints), not model skill. LIL is still the steepest drop after AIA (~50-59%).
+- **DSCR: all 4 models still at/below the 65% majority baseline.** No model shows response-assessment skill above "always say PD".
+- **Chain completion is very low (2-15%)** — almost no patient gets all 5 phases right; Scout is clearly best.
+- **Gating effect is mixed, not a clean signal:** conditional on upstream correctness, Scout's PJRF/TCM rise (60% n=15 / 89% n=9 vs 54%/74%
+  non-gated) but Gemma-12B's PJRF falls (8% n=12 vs 35%). Gated n's are tiny and CIs overlap heavily — do not claim a gating effect yet.
+- Correct-but-unfaithful counts are 0-3 per model — too few to support the "right for wrong reasons" story on this set.
+- MedGemma-4B (the only medical-tuned model) is last overall — medical tuning at 4B does not beat general 12-27B models here.
+
+### Gated runs are redundant with non-gated runs (checked 2026-09-22)
+- Every question answered in a gated run was answered identically in the matching non-gated run: 106/106, 136/136, 140/140,
+  155/155 (MedGemma, G-12B, G-27B, Scout), in all phases. Decoding is deterministic, and a question that passes the gate sees the same
+  chain context either way. So a gated run is just a subset of the non-gated run and adds no new model behavior. Every gated number
+  (gate-block rate, conditional accuracy, gated overall) can be recomputed offline from non-gated `raw_results.json`.
+- LUMIERE has one question per phase, so with GATING_THRESHOLD=0.5 the "soft" gate is really a hard pass/fail on the upstream
+  question. The gated "Overall" is lower only because blocked phases are scored 0. That is a scoring rule, not a model effect.
+- Non-gated runs also give the comparison arm the gated runs can't: accuracy when upstream was WRONG. P(phase correct | all upstream
+  correct) vs P(... | some upstream wrong), non-gated:
+  - MedGemma: LIL 52 vs 52, DSCR 40 vs 38, PJRF 33 vs 33, TCM 100 (n=2) vs 46
+  - G-12B: LIL 44 vs 83 (n=6), DSCR 57 vs 67, PJRF 8 vs 43, TCM 100 (n=1) vs 64
+  - G-27B: LIL 58 vs 64, DSCR 56 vs 66, PJRF 29 vs 42, TCM 50 (n=4) vs 74
+  - Scout: LIL 48 vs 100 (n=2), DSCR 60 vs 59, PJRF 60 vs 51, TCM 89 vs 71
+  **No consistent error propagation:** getting upstream phases right does not predict getting downstream right (the Gemmas are often
+  better AFTER an upstream error). Scout shows the expected direction only on PJRF/TCM, with overlapping CIs. So at this item quality
+  and n=54, the data do NOT support the causal-degradation claim. Possible causes: the phases may be answerable independently (the
+  MCQ gives enough text context), the items are still unreviewed, or n is too small.
+- Decision pending: future runs (especially the paid API models) can be non-gated only, with gating applied as an offline scoring pass.
+
+### "Right answer for wrong reasons": the zero count is a weak metric, not a negative finding (checked 2026-09-22)
+- `local_faithful` (src/evaluator.py) asks the SAME model to predict the answer from its own reasoning. The reasoning already restates
+  the chosen option in 781/1078 answers (72%, round-3 non-gated, all 4 models), so the probe nearly always "recovers" it. It flagged
+  4 of ~1,000 correct answers. This tests self-consistency, not whether the reasoning is right. A near-zero count is expected by
+  construction.
+- `kb_alignment_faithful` flags correct answers almost only in AIA (25-47 per model), where the answer is a fixed list of sequence names
+  (vocabulary artifact). It flags 0-6 in LIL and 0-1 in DSCR/PJRF/TCM. It isn't usable as a wrong-reasons signal either.
+- Proposed ways to actually test the claim, none run yet:
+  1. Fact-check the reasoning against LUMIERE ground truth (`data/lumiere/facts/*.json`: hemisphere/region, volumes, change
+     direction, RANO) -> "correct answer, reasoning contradicts the facts". Uses existing raw_results, no GPU needed.
+  2. Blind baseline via the existing `run_lumiere.py --text-only`: accuracy that survives without images is not image-grounded.
+  3. Counterfactual images (another patient's scans / L-R flip): the answer should change and doesn't -> not grounded.
+  If 1-3 also come up empty, drop the claim and reframe around the validity findings (no error propagation, below-majority DSCR).
+
+### Plan agreed + executed (2026-09-22): where do correct answers come from — image, question text, or neither?
+Steps: (1) stem-leakage audit, (2) text-only ablation, (3) evidence fact-check, (4) counterfactual images only if still
+unclear. Choices: steps 1+2 in parallel; rule-based checks only (no LLM judge); tell Prof. Wang after step 1's numbers.
+Pre-registered reading: text-only accuracy within CI of with-image AND evidence mostly copied/wrong -> claim supported
+("correct because of text, not image"); clear text-only drop AND image claims check out -> drop the claim.
+
+**Step 1 — stem leakage (`tools/audit_stem_leakage.py` -> `results/lumiere_stem_leakage.md/.csv`).** Rule-based lower bound:
+| Phase | Self leak (stem states own answer) | Upstream leak (stem states earlier phase's answer) | Any |
+|---|---|---|---|
+| AIA | 0% | — | 0% |
+| LIL | 13% (7) | — | 13% |
+| DSCR | 0% (exact label) | 98% (47/54 give LIL's exact % volume change) | 98% |
+| PJRF | 31% (17/54 state the actual survival, e.g. "She survived 93 weeks") | 72% (39 name the RANO label) | 85% |
+| TCM | — | 98% (44 give LIL %, 33 name the RANO label) | 98% |
+- The drafter wrote each later stem as a self-contained vignette restating earlier findings. This breaks the chain design: a model
+  that got LIL/DSCR wrong is handed the right answer in the next stem. **This likely explains the null error-propagation result above.**
+- The PJRF self-leaks are straightforward drafting bugs (the question gives the outcome, then asks which profile "explains" it).
+- A word-overlap guesser (pick the option sharing the most words with the stem) is at or below chance (2-30%). The leak is semantic
+  (e.g. "+67% volume" -> PD), not lexical, so simple overlap doesn't catch it.
+- Fixing this means re-drafting stems (dataset change -> expert review + Prof. Wang's sign-off). Not done.
+
+**Step 2 — text-only ablation:** jobs 43005289-43005292 (`lumitxt_<model>_nogate`, non-gated, `--text-only`). Added
+`EXTRA_ARGS` passthrough to `shell/lumiere/lumiere_prelim_ollama.sbatch`. Results in `results/lumiere_<model>_textonly_nogate_*`.
+All 4 COMPLETED 2026-09-22 (16:25-17:09). Text-only vs round-3 with-image (v2 items, non-gated):
+| Model | AIA | LIL | DSCR | PJRF | TCM | Overall |
+|---|---|---|---|---|---|---|
+| Llama-4-Scout | 89 (96) | 46 (50) | 61 (59) | 54 (54) | 74 (74) | 65 (67) |
+| Gemma-3-27B | 78 (80) | 52 (59) | 57 (61) | 43 (39) | 76 (72) | 61 (62) |
+| Gemma-3-12B | 93 (89) | 41 (48) | 63 (63) | 39 (35) | 65 (65) | 60 (60) |
+| MedGemma-4B | 57 (54) | 50 (52) | 24 (39) | 39 (33) | 54 (46) | 45 (45) |
+(text-only, with-image in parentheses.) Removing the images costs 0-2pp overall. Every per-phase difference is inside the
+n=54 CIs except MedGemma DSCR (-15pp). LIL drops a little for 3/4 models (4-7pp) but stays in CI. **On v2 items, accuracy
+does not depend on the images.** This matches the pre-registered "claim supported" reading (together with step 3's 72-100%
+copied-only evidence), and it is consistent with the stem leakage from step 1. v3 (leak-free) image vs text-only is the
+test of whether this holds once the leaks are removed.
+
+**Step 3 — evidence fact-check (`tools/audit_reasoning_facts.py` -> `results/lumiere_reasoning_facts.md/.csv`).** Each claim in
+visual_grounding+reasoning (hemisphere; measurements with units) is sorted into: copied (appears in the stem, options, or prior-chain
+text the model saw), supported (not shown, matches facts), fabricated (not shown, matches no fact), or laterality flip.
+- **Correct answers' evidence is almost entirely copied from the prompt:** copied-only 72-100% of correct LIL/DSCR/PJRF/TCM answers
+  across all 4 models. Supported-and-not-shown is 0-6%. The stated "visual grounding" almost never contains a correct fact the model
+  could only have gotten from the image.
+- **Fabricated measurements are rare on correct answers** (0-8%, mostly Gemma-12B/Scout LIL, e.g. Scout "baseline ~120-130 cm^3").
+  They are more common on INCORRECT DSCR answers (15-29%). So "right answer + false stated facts" is rare; fabrication tracks errors.
+- **Laterality: a display-convention confound, not model error.** Slices are rendered in radiological orientation: FSL MNI grid,
+  patient-right at voxel 0, then np.rot90 in `src/lumiere_facts.py:_render_axial_slice_png` -> patient-right on screen-left. The
+  prompt never states this. In AIA (no hemisphere in the prompt), models' hemisphere claims mostly disagree with the segmentation:
+  Scout 8/9, Gemma-27B 9/11. That fits reading screen-left as "left". So the models ARE locating the lesion on the image, just
+  under the other convention. Reported as its own label, not as wrong reasons. Fix candidates: state the convention in the prompt,
+  or render in neurological orientation. Either would change the stimulus, so it needs a decision.
+- Fixes to the checker made during validation: RANO criteria thresholds cited in reasoning ("≥25% increase") were being counted as
+  fabricated measurements -> now skipped.
+- Interim reading: in the sense of "correct answer but reasoning states false facts", the claim is weak (0-8%). In the sense of
+  "correct answer whose stated evidence is not image-derived", it is strong (72-100% copied-only). That second sense is what step 2
+  tests directly.
+
+## 2026-09-22 — v3 item set: leak-free stems/options + post-op baselines (prof: expert review optional for now)
+Decisions (user): rewrite items so no later stem/option restates an earlier answer; DSCR shown BOTH images; add an
+orientation line to the prompt in the same pass; post-op baselines; run the same 4 open models (no API models).
+v2 is kept intact and runnable (`run_lumiere.py --item-set v2|v3`, default v2), so "leaky vs leak-free" is itself a result.
+- **Leak rules** (`src/lumiere_leakage.py`, shared by the drafter's retry loop and the audit): stems may state only patient id,
+  timepoints and non-imaging clinical facts. DSCR/PJRF/TCM stems: no %, volumes/measurements, regions, change words, or RANO
+  labels. PJRF stem: no survival duration. PJRF/TCM options: no imaging findings or RANO labels (options differ by prognosis /
+  action). LIL stem: no % change, follow-up-only region, or direction. Under these rules v2 violates LIL 7, DSCR 54, PJRF 48,
+  TCM 54 of 54. **TCM options leaked too** (50/54 correct options described the direction of change, 26 named the RANO label),
+  so PJRF/TCM needed full redrafts, not stem edits.
+- **Root cause in the drafter:** `build_draft_prompt` fed each phase the earlier phases' correct answers, and the DSCR
+  instruction told it to let the quiz-taker "infer [the label] from lesion/volume-change facts" -> stems restated them.
+  Leak-free mode (`--leak-free-set v3`) still shows the drafter the upstream truth, for consistency, but forbids restating
+  it, and retries with the violations fed back (up to 8 attempts).
+- **DSCR stem is a fixed template (no LLM)** built from real table fields only: extent of resection (CRET/PRET), re-resection
+  between the scans, whether the baseline is pre-/post-op, and "within 3 months of radiotherapy" (LessThan3Months). Options
+  and answer are unchanged (the 4 RANO labels). **Found: v2 DSCR stems invented clinical details** ("clinically stable without
+  corticosteroid escalation"). LUMIERE has no steroid or neurological-status fields.
+- **Post-op baselines (`src/lumiere_facts.py::rebaseline_to_postop`, `--postop-baseline-set v3` -> `data/lumiere/v3/facts/`).**
+  v2 used the earliest imaged scan as the LIL baseline, which was pre-operative for 42/54 patients. So LIL's "volume
+  change" mostly measured the resection, while RANO (DSCR) is judged against the post-op scan. v3 baseline = the latest
+  imaged Post-Op scan before the follow-up (a re-resection before the follow-up resets it). Baseline changes for 44/54.
+  Follow-up, DSCR/PJRF/TCM facts and answer keys are unchanged. **Patient-049 and Patient-068 are excluded from v3 (52
+  patients):** their post-op scans lack CT1 + segmentation (049) or are absent from the imaging table (068). Keeping them
+  on a pre-op baseline would mix two baseline definitions.
+- Orientation: `config/lumiere.py::IMAGE_ORIENTATION_NOTE` ("radiological convention: patient's right on image left") is
+  prepended to image content for v3 only (via loader `_image_note` -> evaluator -> `prompts._build_user_content`).
+  OmniBrainBench and v2 are unaffected (verified that v2 loading is unchanged).
+- Drafter: Claude-4.5-Sonnet via own LiteLLM proxy on login-node port 8011 (8001 was already bound). Caveat for the
+  paper: Claude drafts the items and is on the roster -> footnote if it's ever evaluated on v3.
+- FSL for the atlas lookup: `module load fsl/6.0.7` (a bare `module load fsl` doesn't set FSLDIR).
+
+### v3 built + validated; DSCR answerability problem found and fixed (2026-09-22)
+- Rebaseline: 52 facts in `data/lumiere/v3/facts/`, 44 baselines changed, all new slices rendered. Volume change is now
+  20 up / 32 down (v2 was dominated by resection-driven drops).
+- Drafting (Claude via port-8011 proxy; stopped after): 52/52 patients clean. About 45 retries where the drafter restated a
+  finding and the fed-back violation fixed it. `tools/audit_stem_leakage.py --item-set v3` -> **0 v3-rule violations in
+  every phase** (`results/lumiere_stem_leakage_v3.md`). Hand-read 008 and 034 end to end: answer keys match the facts
+  (PJRF 93w -> "18-24 months", 74w -> "12-18 months"; TCM PD -> second-line, SD -> continue TMZ). Minor: PJRF/TCM stems
+  mention baseline+follow-up imaging but only the follow-up image is attached (the model has its chain context);
+  LIL options quote mm³ volumes the model can't measure from a 2D slice (it discriminates on direction/%/location).
+- **DSCR answerability (important, affected v2 too):** only ~18/52 expert RANO ratings agree with the baseline->follow-up
+  volume change the model sees (rough check: total volume incl. edema vs thresholds; RANO really uses 2D enhancing
+  products). 23 of 35 PD ratings come with SHRINKING total volume. Reasons: the rating rests on evidence not in the rendered
+  contrast-enhanced T1 slice (T2/FLAIR progression, 23 items; new or non-measurable lesions), and RANO judges PD against the
+  nadir, not the post-op scan. v2 hid this because its stems stated the key finding ("T2/FLAIR progression").
+  **Decision (user): give DSCR the rater's recorded findings as a radiology-report line** (`_report_findings()` in
+  `src/lumiere_drafter.py`: abbreviations expanded, "(PD according to clinic)" stripped since it names the label,
+  "Less than 3 months" dropped since the template states it; 41/52 have a rationale, 11 have none -> no line).
+  Leak rule for the DSCR stem relaxed to allow the report's own findings; it still bans LIL's % change, regions and any
+  RANO label (`--refresh-dscr v3` re-applied in place; still 0 violations). Consequence to state in the paper:
+  DSCR is now partly text-answerable ("apply RANO to image + report", like a clinician). The text-only arm measures how much.
+  Note: the legacy "upstream leak" column of the audit now flags 19 DSCR items only because it treats any change word as
+  LIL's answer. These are report words, and none contain LIL's %. The v3-rule column is the relevant one.
+- Also still open: the one rendered slice is contrast-enhanced T1 only, so T2/FLAIR findings are never visible in images
+  (LIL included).
+- Submitted 8 v3 jobs 43010721-43010728 (`lumiv3img_<model>`, `lumiv3txt_<model>`; non-gated; `EXTRA_ARGS="--item-set v3
+  [--text-only]"`). Results -> `results/lumiere_<model>[_textonly]_v3_nogate_*`.
+
+### RESULTS (2026-09-22): v2/v3 x with-image/text-only, non-gated, all 4 models (12 new jobs, all COMPLETED)
+Full table: `results/lumiere_summary_all.md` (Wilson CIs, majority baseline). v3 = 52 patients, v2 = 54.
+| Model | v2 image | v2 text-only | v3 image | v3 text-only |
+|---|---|---|---|---|
+| Llama-4-Scout | 67% | 65% | 49% | 52% |
+| Gemma-3-27B | 62% | 61% | 53% | 50% |
+| Gemma-3-12B | 60% | 60% | 48% | 51% |
+| MedGemma-4B | 45% | 45% | 33% | 36% |
+(overall = mean per-case score)
+
+**1. Images add nothing measurable, in either item set.** The paired, same-question comparison gives 87-91% identical
+correctness with vs without images for every model/set. "Right only with image" roughly equals "right only without":
+v2 66 vs 58, v3 55 vs 67 (summed over models). Text-only is never meaningfully worse, including LIL, the phase that most
+needs the image. This is the strongest result so far and the defensible form of the "right answer for wrong reasons" claim:
+**correct answers are not image-grounded.** It holds after the leaks were removed, so it's not a leak artifact.
+**2. The v2 leaks inflated scores by 9-18 points overall** (Scout 67->49, G-27B 62->53, G-12B 60->48, MedGemma 45->33).
+TCM fell most (v2 65-74% -> v3 27-60%). LIL fell 48-59% -> 23-40% (leak removal + post-op baselines). AIA and DSCR changed
+little. Caveat: v2->v3 also changed baselines, the DSCR report line, orientation note and 2 patients, so the drop isn't
+attributable to leak removal alone.
+**3. LIL is at chance on v3** for Gemma-12B (23%), Gemma-27B (27%) and Scout (25%) (4 options -> 25%). MedGemma 40%.
+Text-only LIL is the same (23-38%). Models can't read lesion change off the two slices.
+**4. DSCR is still at or below the majority baseline (64%)**: G-27B 65, Scout 58, G-12B 56, MedGemma 14% (far below chance).
+Even with the report findings, no model applies RANO better than "always PD".
+**5. Error propagation: still not supported on v3.** P(correct | upstream right) vs (| upstream wrong) is inconsistent in
+sign across models and phases. For the immediate predecessor: Scout DSCR 77 vs 51 and MedGemma PJRF 62 vs 32 / TCM 42 vs 18
+go the expected way, while Gemma-27B PJRF 18 vs 50, G-12B TCM 29 vs 43 and Scout TCM 25 vs 42 reverse. Most cells have
+n<20. **With LIL at chance, whether upstream is "right" is mostly luck, so there's little real signal to propagate.** The
+chain can't show causal degradation until the perception phases are above chance.
+**6. Evidence fact-check (v3):** correct answers' stated evidence is still mostly copied from the prompt (43-90%, except
+Gemma-27B, which now mostly cites no checkable claim). Image-supported claims 0-8%. Consistent with (1).
+
+**Implications for the paper (for discussion with Prof. Wang):**
+- Claim 2 (right for wrong reasons) -> **supported in a sharper form**: "models' correct answers do not depend on the image;
+  a text-only ablation matches with-image accuracy on 87-91% of questions." This is the headline candidate.
+- Claim 1 (causal degradation) -> **accuracy does fall from AIA to later phases, but error propagation is not
+  demonstrated.** It can't be tested while LIL is at chance. Options: make perception answerable (more/better slices,
+  FLAIR, fewer mm³ distractors), or reframe claim 1 as phase-wise difficulty rather than propagation.
+- Benchmark-validity findings worth reporting: stem leakage inflates scores 9-18 pts; pre-op baselines; DSCR ratings not
+  derivable from the shown image (~18/52); invented clinical details in LLM-drafted stems.
+
+## 2026-09-22 (later) — three follow-ups executed: PJRF re-draft caveat, comparison tool, LIL/MedGemma investigations
+
+### 1. PJRF/TCM "before -> after" caveat (important for how the numbers are described)
+`draft_patient_chain`'s retry loop makes a FRESH LLM call each retry — it does not edit the existing item's wording. Checked: 0 of 54
+PJRF items have identical `correct_answer_text` between round 1 and round 2 (e.g. "12-14 months" -> "13-15 months, representing survival
+beyond one year despite..."); question TYPE is unchanged (52/54 "survival-estimate" in both rounds). **So the round1->round2 PJRF/TCM
+delta is bias-removal + ordinary item-resampling variance (temperature 0.7 draft calls) confounded together, not a controlled edit of the
+same item.** Correct framing for the paper: "the new, less-guessable item set produces lower accuracy," not "de-biasing this exact item
+caused an N-point drop." Does not change the headline conclusion (old TCM/PJRF numbers were inflated by guessability) — only how precisely
+we can attribute the exact point-drop.
+
+### 2. `tools/compile_lumiere_results.py`: two-round comparison support (adapted, run)
+Added `latest_runs(before=, after=)` and `--split-at TIMESTAMP` (+ `--before-label`/`--after-label`) so one command produces a before/after
+table instead of only ever showing the latest run per model. Ran it: `results/lumiere_compare_round1_round2.md` (full table, all phases,
+gated+non-gated, all 4 models). Default no-args behavior unchanged (latest run per model) — now written to `results/lumiere_summary.md/.csv`
+and, since round 2 is now latest, reflects round 2 only; round 1 is preserved in its own `results/lumiere_*_20260921_1[6-7]*/` folders and in
+the compare table.
+
+### 3. LIL bottleneck: real finding, not just item difficulty — and a correction to the "perception failures" framing
+- **Correction:** `config.FAILURE_TYPE` assigns "perception" to any wrong AIA/LIL answer and "decision"/"reasoning" to wrong PJRF/TCM/DSCR
+  answers **by fixed phase label, not by diagnosing the actual failure**. So "perception failures dominate (31-55/run)" reported earlier is
+  largely tautological — LIL has the most questions and is *labeled* perception regardless of why the model got it wrong. Correcting this
+  framing before it goes in the paper.
+- **Real, substantive finding (checked directly against round-2 non-gated raw responses):** LIL questions ask for volume-CHANGE direction
+  (increase/decrease) between baseline and follow-up. Isolating wrong answers where both the correct and model answer text state a direction:
+  Gemma-3-12B flips direction (says grew when it shrank, or vice versa) in 17/25 (68%) of its wrong LIL answers; Llama-4-Scout 15/28 (54%);
+  Gemma-3-27B 9/20 (45%); MedGemma-4B 4/17 (24%). This IS a genuine, independently-verified perception/longitudinal-comparison failure — models
+  struggle specifically at comparing two scans over time, not just at reading a single image. Worth a paper claim on its own (a real
+  capability gap, distinct from the tautological phase-label framing above). Not yet checked: region-naming-only errors (right direction,
+  wrong volume/region) as a separate bucket, or whether this correlates with the raw magnitude of the true volume change.
+
+### 4. MedGemma-4B parse failures: root cause found (two distinct causes), fixed for future runs
+- All 27 parse failures across every MedGemma run so far (round 1 + round 2, gated + non-gated) were checked directly against saved
+  `raw_response` text. Two distinct causes, not one:
+  - **24/27: genuine truncation.** Repetition loop inside `visual_grounding`/`reasoning` hits `MAX_TOKENS=800`; JSON never closes. Confirmed
+    the answer field is always written and complete before this happens (schema puts "answer" first) — 27/27 parse failures had a clean,
+    recoverable `"answer": "X"` even when truncated.
+  - **3/27: NOT truncation — a strict-JSON quirk.** MedGemma occasionally emits a literal (unescaped) newline inside a string value; the JSON
+    is otherwise complete and valid, but Python's `json.loads(strict=True)` rejects the bare control character.
+- **Fix shipped in `src/evaluator.py`** (additive, default behavior unchanged for other models/OmniBrainBench — `run_omnibrain.py`'s
+  `CausalChainEvaluator(...)` call is untouched):
+  - `_loads_lenient()`: retries `json.loads(..., strict=False)` before giving up → recovers the 3/27 losslessly (full answer + reasoning +
+    visual_grounding, faithfulness probe can run normally on a live re-run).
+  - `_salvage_answer_letter()`: regex-extracts the answer letter from otherwise-unparseable (truncated) JSON → recovers the other 24/27's
+    answer, scored correctly; `answer_salvaged: true` flag added to the result dict; `visual_grounding`/`reasoning`/faithfulness/KB-alignment
+    stay "not computed" (None/0.0) for these, since that text was never generated.
+  - Verified against all 27 historical parse failures: 3 now fully parse, 24 salvage the answer, 0 remain unrecoverable.
+- **Decision: did NOT retroactively rescore existing result files.** Gating is sequential/dynamic (each phase's pass/block depends on the
+  running score), so patching an early phase's answer after the fact doesn't cleanly propagate to whether a later phase would have gated
+  in/out — editing raw_results.json post hoc would produce an inconsistent, unreproducible record. **Recommendation: re-run MedGemma-4B
+  (gated + non-gated) fresh now that the fix is in**, rather than hand-editing old JSON; the old runs stay as "pre-fix" for the record. This
+  is ~2 short GPU jobs (round 1: 29 min gated, 75-83 min non-gated) — not yet submitted, holding for go-ahead.
+  **Superseded (see round-3 section above, dated the same day but written later):** rather than a MedGemma-only re-run, all 4
+  models x {gated, non-gated} were killed/resubmitted together (jobs 42941575-42941582) so every model reflects the parse-fix +
+  LIL fix + MajBase consistently. Done — this recommendation is resolved, not still open.
+
+### Still open (not executed — need your input, not just compute)
+- **Text-only baseline:** capability now exists (`run_lumiere.py --text-only`, threaded through `CausalChainEvaluator(text_only=...)`,
+  strips images before the main call; `run_omnibrain.py` unaffected — flag defaults off). Not yet run — need to agree scope (which
+  model(s), gated/non-gated, all 5 phases or just PJRF/TCM/LIL) before spending GPU time.
+- **Send the rebuilt review artifact to the expert:** this needs the user to actually send `tools/lumiere_review_artifact.html` (or its
+  location) to the radiologist/neuro-oncologist collaborator — not something to execute from here without reviewer contact info.
+
+## 2026-09-22 — round-2 results in: item fix confirmed (TCM/PJRF drop as predicted), gated chain-completion collapsed
+
+**All 8 re-eval jobs COMPLETED, no failures** (job IDs 42918287-42918294; results in new `results/lumiere_<model>[_nogate]_2026092[12]*/`, round-1 results
+kept as the pre-fix baseline; wall-clock 29 min - 2h 07m, in line with round 1).
+
+### Non-gated PJRF/TCM, old items vs fixed items (N=54, directly comparable)
+| Model | TCM old -> new | PJRF old -> new |
+|---|---|---|
+| MedGemma-4B | 91% -> 56% | 48% -> 33% |
+| Gemma-3-12B | 96% -> 68% | 68% -> 35% |
+| Gemma-3-27B | 94% -> 72% | 63% -> 39% |
+| Llama-4-Scout | 100% -> 78% | 68% -> 57% |
+
+Every model now sits well above the item's own length-guessing floor (~25-30%, see section 2/3 above) but well below the old ceiling — reads as "the fix
+removed the shortcut without erasing all signal," i.e. TCM/PJRF now measure something closer to the intended task. Other phases (AIA/LIL/DSCR) essentially
+unchanged from round 1 (not re-drafted), as expected.
+
+### Side effect: gated chain completion collapsed
+| Model | Chains completed (gated), old -> new |
+|---|---|
+| MedGemma-4B | 3/54 -> 1/54 |
+| Gemma-3-12B | 5/54 -> 1/54 |
+| Gemma-3-27B | 8/54 -> 1/54 |
+| Llama-4-Scout | 9/54 -> 7/54 |
+
+With PJRF/TCM genuinely harder, the gate now blocks nearly everyone before TCM for 3 of 4 models — gated PJRF/TCM N is now 1-4 for most models (worse than
+round 1's already-low 3-13). **Recommendation: lean on non-gated numbers for PJRF/TCM in the paper** (as already decided for round 1); report the gated
+chain-completion rate itself as a finding — models rarely sustain quality across all 5 phases — rather than trying to report gated PJRF/TCM accuracy at
+these Ns.
+
+### Next
+1. Rebuild the full old-vs-new comparison (all phases, gated+non-gated) — `tools/compile_lumiere_results.py` not yet adapted for a two-round comparison.
+2. Investigate PJRF's larger-than-length-bias-alone drop (e.g. MedGemma 48%->33% despite length bias only 59%->37%) — check whether the wording/content
+   changed substantively, not just length.
+3. Still open from before: text-only baseline, LIL bottleneck, MedGemma parse-failure handling, send the rebuilt review artifact to the expert.
+4. Still uncommitted: notes/, new tools, modified src/ and shell/ files, new results/.
+
+---
+
+## 2026-09-21 (latest) — preliminary LUMIERE runs done (8/8); items found guessable; PJRF/TCM re-drafted, swapped in, artifact rebuilt
+
+**Status: source of truth for this work is this file.** (`notes/notes.md` is the user's personal scratch; not maintained by Claude.)
+
+### 1. Preliminary runs (all COMPLETED, no job errors)
+- 54 LUMIERE patients, 5 phases, LLM-drafted **unreviewed** items (`--include-unreviewed`), 4 open models (MedGemma-4B, Gemma-3-12B,
+  Gemma-3-27B, Llama-4-Scout; Ollama 0.33.0, Q4, RTX PRO 6000 96GB, temp 0, MAX_TOKENS 800), each **gated** (proposed protocol) and **non-gated**
+  (ablation, every phase asked). Results: `results/lumiere_<model>[_nogate]_<timestamp>/`; logs `logs/lumi_*`. Runtimes: gated 29-77 min, non-gated 75-143 min.
+- Overall accuracy gated / non-gated (do NOT compare across columns — different question mix): MedGemma 31.6/54.7, Gemma-12B 52.7/70.9,
+  Gemma-27B 52.6/69.1, Llama-4-Scout 58.2/72.1. Chain completion 3/5/8/9 of 54 (same gated and non-gated).
+- Per-phase non-gated accuracy: AIA 52/87/80/94, LIL 46/39/54/35, DSCR 37/65/56/63, PJRF 48/68/63/68, TCM 91/96/94/100 (MedGemma/12B/27B/Scout).
+- Observations: LIL is the weakest phase for every model (31-54%) and drives the gate; perception failures dominate the failure taxonomy (31-55/run);
+  correct-but-unfaithful is rare (0-3), so the "right answer for wrong reasons" safety framing has thin support on this data; 27B does not
+  clearly beat 12B (overlapping CIs); the gate's selection effect differs by model (higher later-phase accuracy when gated for MedGemma/Scout, lower for
+  12B, equal for 27B). MedGemma-4B has 11 non-gated / 3 gated parse failures (repetition loop hits MAX_TOKENS); decision on handling deferred.
+- Gated PJRF/TCM rest on 3-13 patients: report separately with Wilson CIs, never pooled.
+- Not run: the 3 proprietary API models.
+
+### 2. Finding: the drafted items are guessable from form (invalidates the TCM number)
+- TCM accuracy of 91-100% is largely an artifact. Answer-letter position is NOT the cause (post-shuffle key balanced; models' answer letters track the key).
+- **Option length is:** correct option is the longest in AIA 37%, LIL 63%, DSCR 69%, PJRF 59%, TCM 89% (chance 25%); TCM correct averages 139 chars vs 103
+  for distractors. "Always pick longest" ~ the models' TCM scores.
+- **Wording cue (TCM):** correct options are hedged ("repeat imaging in 4-8 weeks to distinguish pseudoprogression...") while distractors are absolute
+  ("immediately discontinue...", "definitively"). A hedge-minus-absolute keyword guesser picks the correct TCM option in 74% of original items (0% other phases).
+- Tool: `tools/check_option_bias.py` (per-phase longest-option rate, mean lengths, keyword-guesser rate). Word lists are ad hoc -> rough lower bound.
+- Paper implication: the runs above are the **pre-fix baseline** and must be reported as such (not silently discarded); DSCR/PJRF/LIL are probably inflated
+  too; text-only (no-image) baseline still to run for a stronger guessability estimate.
+
+### 3. Fix in progress (option-length bias)
+- `src/lumiere_prompts.py`: system prompt gained an answer-length rule (options within ~15% length, same detail/hedging/register, no curt absolute
+  distractors, vary the correct letter).
+- `src/lumiere_drafter.py`: `_length_biased()` + retry loop (reject if correct option >5% longer than the longest distractor; up to 5 retries); new flags
+  `--phases`, `--out-dir`, `--base-url`, `--fix-biased`. First pass used 15%-over-mean-distractor / 3 retries and only reached 44% (PJRF) / 57% (TCM)
+  longest-correct; tightened, re-drafted 16 patients in place (12 retries).
+- Re-drafted PJRF+TCM for all 54 patients into `data/lumiere/drafts_v2/` (Claude-4.5-Sonnet via own LiteLLM proxy on login-node port 8011; port 8001 was
+  occupied by an unknown service, so it was not used). AIA/LIL/DSCR carried over unchanged (incl. ct1 fixes). Patient-041's TCM initially failed to
+  parse and was filled by the fix-up pass. Live `data/lumiere/drafts/` NOT yet replaced (data dir is gitignored).
+- Result (longest = correct): PJRF 59% -> 37%, TCM 89% -> 43%; mean TCM length 260 vs 258. **TCM wording cue NOT fixed** (keyword guesser 76% on new drafts;
+  PJRF 0%).
+
+### 4. TCM wording-cue fix and swap into live drafts (2026-09-21, later)
+- `src/lumiere_prompts.py`: TCM instruction gained a STYLE RULE (every option a cautious, defensible recommendation with the same structure: action +
+  monitoring/reassessment + rationale; no abrupt/absolute distractors; correct answer must not be the only one mentioning monitoring/repeat imaging).
+- `src/lumiere_drafter.py`: `_cue_biased()` (hedge-minus-absolute keyword guesser) added to the retry check for TCM (`_biased()` = length OR cue); `HEDGE`/`ABSOLUTE`
+  word lists now live here and `tools/check_option_bias.py` imports them. Re-drafted TCM in `drafts_v2/` (41 patients + a fix-up pass; 28+ retries; 1 initial
+  parse failure retried successfully).
+- Final `drafts_v2` numbers: TCM longest-correct 89% (original) -> 30%; mean length 297 vs 298; keyword guesser 74% -> 0%. PJRF 59% -> 37%. AIA 37%, LIL 63%,
+  DSCR 69% unchanged (not re-drafted; DSCR options are short labels, needs a different check). All 270 items valid, 5 phases for all 54 patients.
+- **Swapped into live `data/lumiere/drafts/`** (only PJRF/TCM changed) and **rebuilt `tools/lumiere_review_artifact.html`** (270 items, 108 images, 2.71 MB, no
+  `window.claude`, new TCM text confirmed present). Backups: `data/lumiere/_backup_drafts_pre_v2_20260921/`, `_backup_review_artifact_pre_v2_20260921.html`,
+  `_backup_drafts_v2_pre_tcm_wording_20260921/`. `data/lumiere/reviewed/` left untouched (all 269 items pending, different schema, regenerated by the sync step when the
+  expert returns their file). LiteLLM proxy on port 8011 stopped. Logs: `logs/redraft_v2*.log`.
+- Caveats: guessability checks are heuristics (ad hoc word lists; not a model baseline); the drafter (Claude) shares a family with one proprietary eval model; the
+  earlier 8 runs used the OLD PJRF/TCM items and are the pre-fix baseline; the review artifact previously sent (if any) is now stale — send the rebuilt one.
+
+### 4b. Re-evaluation on the fixed items (submitted 2026-09-21)
+- **Pipeline gotcha found before submitting:** `src/lumiere_loader.py::merge_reviewed` reads question/options/answer from `data/lumiere/reviewed/`
+  (drafts/ is used only to backfill `timepoint`/`facts_used`). Swapping `drafts/` alone would have silently re-run the OLD PJRF/TCM items. Refreshed the 108 PJRF/TCM
+  rows in `reviewed/` from the new drafts (all were `pending`, no expert edits; backup `data/lumiere/_backup_reviewed_pre_v2_20260921/`). Verified drafts vs reviewed
+  question/options/answer identical for all 270 items, and that the loader's TCM questions (54/54) equal the new drafts. **After the expert returns their file, the sync
+  step will overwrite `reviewed/` — this coupling matters for future re-drafts.**
+- TCM now has 54 patients (was 53; Patient-041's TCM item was filled in), so PJRF/TCM N differs by one from round 1.
+- Submitted 8 jobs (same script/settings as round 1: `shell/lumiere/lumiere_prelim_ollama.sbatch`, hpg-rtx6000, 1 RTX PRO 6000, Ollama 0.33.0, temp 0,
+  `--n-cases 54 --include-unreviewed`), one per model x {gated, nogate}, names `lumiv2_<model>_<mode>`: job IDs 42918287-42918294. Results land in new timestamped
+  `results/lumiere_<model>[_nogate]_<timestamp>/` (round 1 results kept as the pre-fix baseline). Expected wall-clock ~0.5-2.5 h per job (round 1: gated 29-77 min,
+  non-gated 75-143 min). Old-vs-new comparison table to follow.
+
+### 5. Next
+1. (DONE, see section 4) TCM prompt + re-draft + swap + artifact rebuild.
+2. Send the REBUILT artifact to the expert (do not send older copies).
+3. (SUBMITTED, see 4b) Re-run gated + non-gated evals on new items; then report old vs new side by side per phase (expect TCM to drop from 91-100%).
+4. Text-only baseline; investigate LIL bottleneck; run `tools/compile_lumiere_results.py` (not yet run/checked); decide MedGemma parse-failure handling.
+5. (DONE) LiteLLM proxy on 8011 stopped.
+6. Still uncommitted: notes/, new tools, modified src/ and shell/ files.
+
+
+---
+
+## 2026-09-21 — professor's constraint: no China-developed models; Llava-Med dropped; roster now 7 (3 API + 4 open)
+
+**Decision (professor):** remove all China-developed models from the project. Llama- and
+Gemma-family models are explicitly fine ("llama, gemma, these kind of models").
+
+- **Removed:** Qwen2.5-VL-7B, Qwen3-VL-30B, InternVL3-38B, HuatuoGPT-V-34B, Lingshu-32B
+  (DeepSeek was already banned on HiPerGator, 2026-08).
+- **Kept:** GPT-5, Claude-4.5-Sonnet, Gemini-2.5-Pro (API); MedGemma-4B (Google),
+  Llava-Med-7B (Microsoft; Mistral-7B base, community "-hf" re-upload).
+- **Added (Ollama, default Q4 quant, 1 L4 each):** Gemma-3-12B (`gemma3:12b`),
+  Gemma-3-27B (`gemma3:27b`), Llama-3.2-Vision-11B (`llama3.2-vision:11b`), category
+  `general` in `config/models.py`.
+- **Side effect:** the old unsolved 30B+ VRAM/tensor-parallel problem is gone — nothing in
+  the roster needs more than one L4. `lumiere_vllm_b200.sbatch` is unused.
+- **Files updated:** `config/models.py`, `task.md`, `CLAUDE.md`, `shell/run_opensource.sh`,
+  `shell/run_medical.sh`, and example comments in the vLLM/chunked runner scripts.
+
+**Status: config edited and imports cleanly; NOTHING run yet.** New Ollama tags not pulled;
+no smoke test on any new model; changes uncommitted.
+
+**Also removed (user decision, same day): Llava-Med-7B** — cannot produce the required JSON
+(documented 2026-09-07). Its cached weights (both HF copies) were deleted. No vLLM models remain, so the
+vLLM sbatch scripts are unused.
+
+**Also (professor, same day): "we can try with the open-weight models" + "you can reserve use of
+RTX 6000".** Open-weight models are now the primary roster (`MODELS` in `config/models.py`:
+MedGemma-4B, Gemma-3-12B, Gemma-3-27B, Llama-3.2-Vision-11B). GPT-5/Claude/Gemini moved to
+`API_MODELS` — still runnable by name, but excluded from `--all-models` so no API spend
+happens by accident. Ollama jobs now target `hpg-rtx6000` (`gpu:rtx_pro_6000:1`, 96GB,
+QOS `so589980.ucf`; `-b` QOS is rejected there). No SLURM reservation exists for our account,
+so "reserve" = submit to that partition; `sbatch --test-only` accepted (est. start ~2026-09-24).
+
+**Llama swap (2026-09-21, after smoke test):** Llama-3.2-Vision-11B DROPPED — Ollama 0.33.0
+(required for the RTX PRO 6000; 0.20.2 has no sm_120 CUDA build and silently runs on CPU)
+cannot load the `mllama` architecture. Replaced by **Llama-4-Scout** (`llama4:scout`, 67GB Q4,
+109B MoE / 17B active, same Llama family). Pixtral is not in Ollama's library. Smoke test
+(5 cases, ollama 0.33.0, RTX 6000) passed for MedGemma-4B, Gemma-3-12B, Gemma-3-27B; Scout
+untested. Roster is now MedGemma-4B, Gemma-3-12B, Gemma-3-27B, Llama-4-Scout.
+
+**Real runs launched (2026-09-21 ~15:35):** smoke tests passed for all 4 models (Ollama 0.33.0,
+RTX PRO 6000). `results/` archived to `.scratch/results_archive_20260921` (includes
+`_invalid_flawed_key_20260921`). 8 jobs: 4 models x {gated, non-gated}, all 54 patients,
+`--include-unreviewed` (label results "LLM-drafted, unreviewed"). Job IDs 42873575-42873582
+(name `lumi_<model>_<gated|nogate>`, logs `logs/lumi_*`). Per-job Ollama port (11500 + jobid%400)
+added because 0.33.0's container ignores OLLAMA_HOST and jobs share nodes.
+**MedGemma-4B parse failures:** repetition loop at temperature 0 -> truncation at MAX_TOKENS=800 ->
+unclosed JSON (answer letter present but unparsed). DECISION: leave as-is until results are in,
+then revisit (repetition penalty / salvage answer / report as finding).
+
+**Open items**
+- Pull the three new tags (Ollama module + `ollama serve`, `OLLAMA_MODELS` on /blue), then
+  smoke-test each before the LUMIERE prelim runs (`task.md` has the sbatch commands).
+- Gemma-3-27B at Q4 is ~17GB of the L4's 22.5GB — may OOM on long image contexts; fallback
+  is a B200 or dropping it.
+- Methods must state: Ollama models are Q4-quantized (unlike FP16 vLLM runs), and that the
+  Llava-Med-7B checkpoint is a third-party "-hf" re-upload of Microsoft's weights.
+- Optionally confirm with the professor that Llava-Med's Mistral base is acceptable (Mistral
+  is French, so it should be fine).
+- Cached Chinese-model weights still on /blue (HF cache: HuatuoGPT-Vision-34B(-hf),
+  Lingshu-32B, InternVL3-38B, Qwen3-VL-30B; Ollama: qwen2.5vl) — delete pending user OK.
+- Results tables will have a different model set than the earlier proposal; any prior draft
+  text/figures naming the removed models need updating.
+
+## 2026-09-07 — Llava-Med-7B guided-JSON re-test: still degenerates, stronger finding now
+
+Ran the guided-JSON re-test flagged 2026-08-25 as required before reporting
+Llava-Med-7B's near-zero score as a finding. Added `--guided-json` to
+`run_omnibrain.py`/`src/evaluator.py` (passes `extra_body={"guided_json":
+schema}` to vLLM's OpenAI-compatible endpoint, forcing token-level structured
+output; new `ANSWER_RESPONSE_SCHEMA`/`FAITHFULNESS_RESPONSE_SCHEMA` in
+`src/prompts.py`). Ran on `hpg-turin` (SLURM job 41296339, ~3 min) against
+the same AIA-phase question set as the original 2026-08-21 run.
+
+**Result: 0/25 AIA questions answered — same as unconstrained decoding.**
+All 25 requests returned `200 OK` from the vLLM server (confirmed in
+`.scratch/vllm_serve_Llava-Med-7B.log` — no server-side errors, no rejected
+requests), but every response body was an empty string. This is a cleaner
+result than the original test: it's not a malformed-JSON parsing failure,
+it's the model producing zero content even when the server is enforcing
+valid JSON at the decoding level. Ruled out MAX_TOKENS (800, plenty) and
+temperature (0.0, greedy) as the cause.
+
+**This lands on the stronger of the two anticipated outcomes** (see
+2026-08-25 entry): "not fixable via output-format constraints — no coherent
+answer to extract even when forced into valid syntax." The near-zero score
+can now be reported as a genuine capability/robustness finding, not an
+artifact of prompt/parsing mismatch. Results saved to
+`results/Llava-Med-7B-guided-json_20260907_042950/`.
+
+**Not yet done:** re-frame the write-up as a deployment-readiness/robustness
+point (per the 2026-08-25 note) rather than a reasoning-quality point when
+this goes into the paper draft.
+
+## Target venue: NAACL 2027 (https://2027.naacl.org/)
+Confirmed 2026-08-27. CFP details (deadline, page limits, formatting/anonymity
+rules) not yet looked up — check the site directly once planning the writing
+timeline.
+
+## 2026-08-27 — fixed review-mechanism login wall; reviewer needs no Claude account now
+
+Found a real blocker in the review mechanism built 2026-08-26: it persisted
+decisions via the claude.ai `artifact` runtime capability
+(`claude.use("artifact") -> publish()`), which requires the *viewer* to be
+signed into a Claude account to write. The actual reviewer (radiologist/
+neuro-oncologist collaborator) doesn't have one — they hit a login wall
+trying to save. Evidence in the artifact's saved state: one item
+(Patient-091_DSCR) was left `"review_status": "edited"` with an empty
+`reviewer` field — a save that started but couldn't complete.
+
+**Fix:** `tools/build_lumiere_review_artifact.py` now generates a fully
+standalone `.html` file with no server/account dependency at all — every
+approve/edit/reject autosaves to the reviewer's own browser via
+`localStorage`, and a "Download review file" button produces an updated,
+self-contained `.html` they email back (or a "Load review file…" picker to
+resume from a previously downloaded one on another machine). Rebuilt and
+verified: valid standalone document, no leftover `window.claude` references,
+`tools/sync_lumiere_artifact_review.py` round-trips against it unchanged
+(that script never actually needed the Artifact tool — it only ever
+regex-parsed the `lumiere-data` script tag out of whatever HTML file it's
+pointed at).
+
+**Next step:** send `tools/lumiere_review_artifact.html` directly to the
+reviewer (email attachment or a shared-drive direct-download link — NOT the
+old claude.ai Artifact link, which is now superseded/stale) and have them
+open it locally. Once they send back a completed download, sync with:
+`python -m tools.sync_lumiere_artifact_review --html-file <path>` ->
+`tools/lumiere_merge_reviewed.py` -> `run_lumiere.py` smoke test. No agent/
+Claude Code session needs to be involved in the sync step anymore.
+
+## ✅ DECIDED (2026-08-26) — professor approved LUMIERE + hybrid LLM/expert build
+
+**Decision made.** Professor has approved option 3: build a real same-patient chain
+dataset on LUMIERE (91 real GBM patients) using the hybrid LLM-draft +
+domain-expert-review pipeline described below. This resolves the
+chain-validity/construct-validity issue that was blocking the paper's core causal-
+degradation claim (see investigation detail below for the original problem).
+
+**Immediate next steps now unblocked:**
+- Confirm radiologist/neuro-oncologist collaborator availability for the review step
+  (still open — materially affects timeline).
+- Pull LUMIERE's actual data dictionary/access process to confirm exact available
+  fields before designing the phase-to-field extraction pipeline.
+- Design the per-phase MCQ generation pipeline (fact extraction -> LLM draft -> expert
+  review) and the review interface/format for the domain expert.
+
+Full investigation, feasibility breakdown, and other options considered are preserved
+below for context.
+
+**Phase-by-phase feasibility (LLM-draftable vs. needs expert review), candidate = LUMIERE:**
+- AIA / LIL — near-programmatic: LUMIERE ships per-timepoint tumor segmentation
+  masks, so location/volume/volume-change facts are computable directly (atlas
+  registration + voxel counts), not really "annotation."
+- DSCR — LUMIERE already includes expert-assigned RANO response labels
+  (progression/stable/partial/complete response) per follow-up scan — existing
+  expert ground truth, not new annotation.
+- PJRF (prognosis) — survival data is structured, but plausible-but-wrong distractors
+  need someone who knows GBM prognostic literature; LLM-only distractors risk being
+  trivially or misleadingly wrong.
+- TCM (treatment) — Stupp protocol is templatable, but real judgment questions
+  (progression vs. pseudoprogression, a well-known confound even for radiologists)
+  need expert review of the answer key, not just LLM drafting.
+
+**Rough effort estimate:** ~20–30 chains (patients) × 5 phases ≈ 100–150 items;
+~10–15 min expert review per item (checking answer key + distractor plausibility,
+esp. PJRF/TCM) ≈ **20–35 hours of expert time** for a first pass. Full 91-patient
+LUMIERE cohort would scale to roughly 90–150 hours.
+
+**Open sub-question, not yet resolved:** whether Prof. Wang's group already has a
+radiologist/neuro-oncologist collaborator lined up for the review step, or whether
+that access still needs to be arranged — materially affects timeline, not yet answered.
+
+---
+
+## Investigation detail (raised 2026-08-21/22, discussion ongoing above)
+
+**Problem: OmniBrainBench does not actually support the causal-chain premise the KAB
+framework is built on.** The framework evaluates a model through 5 sequential phases
+(AIA → LIL → DSCR → PJRF → TCM) for *the same patient*, gating later phases on earlier
+ones. Investigated the real dataset structure directly and found:
+
+- Checked whether any image is shared across questions tagged with different clinical
+  phases — the only way "same patient, multiple phases" could be genuinely true.
+- Out of 6,823 total questions across 15 source sub-corpora (PubMedVision, MedXpert,
+  RSNA, BraTS2021, ISLES2022, RadImageNet, VQA_RAD, NOVA, NEJMIC, Br35h, baby_brain,
+  BraTS2023-MEN/MET, fastMRI, TCP, NOVA), only **2 questions** genuinely share a
+  same-patient image across two different phases (both from VQA_RAD, AIA+LIL only).
+- Re-verified with a second, more rigorous method: extracted real per-patient case IDs
+  by stripping known modality/view/slice suffixes from filenames per corpus (e.g.
+  `BraTS2021_00006_flair/t1/t1ce/t2` → case `BraTS2021_00006`; `ID_xxx_original/lung/
+  bone` → case `ID_xxx`; `sub-strokecase0001_ses-0001_adc/dwi/FLAIR` → same case).
+  Result: still only **2 genuine multi-phase same-patient cases in the entire
+  dataset**, 2 phases each. Zero span 3+ phases. Zero span all 5.
+- Root cause: each of the 15 source sub-corpora was built for one specific clinical
+  task (BraTS → tumor characterization, RSNA → hemorrhage classification, ISLES →
+  stroke, etc.), so a given real patient in that corpus is essentially only ever asked
+  *one* phase-type of question, never a full multi-phase battery.
+- What the current pipeline calls a "case" (`source_file` grouping, only 10 usable
+  under `min-phases=2`) is really **one whole origin sub-corpus** standing in for one
+  patient — the "chain" evaluated is stitched from *different real patients'*
+  questions within that corpus, not one patient's actual journey. When a model gets
+  "gated out" of DSCR after failing AIA, that's an artifact of this aggregation, not a
+  demonstration of causal degradation for one patient.
+
+**Searched for a replacement/supplementary dataset with genuine same-patient,
+multi-phase continuity — none exists ready-to-use:**
+
+| Dataset | Real same-patient continuity? | Covers prognosis/treatment? | Ready-made QA layer? |
+|---|---|---|---|
+| OmniBrainBench (current) | No (2 cases in 6,823 questions) | Nominally yes, not linked to real chains | Yes |
+| [NeuroQA](https://neuroqa.stanford.edu) (56,953 QA / 12,977 subjects, incl. BraTS-GLI/MEN) | Partial (a "Longitudinal" category = 2 timepoints, not a full chain) | **Explicitly excluded by design** — paper states it's "not intended to support claims about...treatment planning" | Yes |
+| [UCSF-PDGM-VQA](https://arxiv.org/abs/2605.17140) (2,387 QA / 473 studies) | No — single timepoint only | No | Yes |
+| [LUMIERE](https://www.nature.com/articles/s41597-022-01881-7) (91 real GBM patients) | **Yes** — real longitudinal MRI, RANO response assessment, survival, Stupp-protocol treatment | **Yes** | **No** — raw imaging + clinical data only, no questions |
+| [MU-Glioma-Post](https://www.cancerimagingarchive.net/collection/mu-glioma-post/) (203 patients, 617 post-treatment timepoints) | **Yes** | **Yes** (treatment + genomic data) | **No** — segmentation/clinical data, no questions |
+
+**The honest conclusion:** no published benchmark currently provides genuine
+same-patient continuity across a full imaging → diagnosis → prognosis → treatment
+arc. The datasets with real clinical continuity (LUMIERE, MU-Glioma-Post) have no
+question layer; the datasets with questions (OmniBrainBench, NeuroQA) don't have the
+continuity, and NeuroQA's authors explicitly disclaim prognosis/treatment support.
+
+**Options on the table, not yet decided:**
+1. Build a modest MCQ layer on top of LUMIERE ourselves (~91 real patients available;
+   even 20-30 annotated chains would be a genuine, defensible causal-chain dataset —
+   something that doesn't currently exist elsewhere). More work, but produces a real
+   contribution instead of working around a construct-validity gap.
+2. Drop the full 5-phase same-patient chain claim; pivot to per-phase KAB evaluation
+   at much larger scale (NeuroQA for AIA/LIL/DSCR-equivalent phases, existing sources
+   for whatever prognosis/treatment questions exist standalone) — keeps the KB-
+   alignment and feedback-adaptation contributions, loses the causal-chain narrative.
+3. Keep researching other TCIA collections (TCGA-GBM/LGG, etc.) for something closer
+   to ready-to-use before committing to option 1's build effort.
+
+**User's call (2026-08-21): flag this to the professor before proceeding further —
+this affects the paper's core framing, not just an implementation detail.**
+
+---
+
+## What Was Presented
+
+In the meeting, I walked the professor through two things I had worked out since the last discussion:
+
+### 1. Knowledge Base Selection (RadLex + NCIt)
+
+I explained why I chose **RadLex** and the **NCI Thesaurus (NCIt)** as the two knowledge bases for the Knowledge Alignment Benchmarking framework — and specifically why I did not go with UMLS.
+
+**RadLex** (RSNA, ~46k radiology-specific terms, OWL + CSV):
+- The only KB built exclusively for radiology
+- 71% of OmniBrainBench questions sit in AIA and LIL phases — imaging observation and lesion localization — which is exactly what RadLex covers
+- When the model describes something like "FLAIR hyperintensity in the left temporal lobe," RadLex is the authoritative source to validate that claim
+
+**NCI Thesaurus / NCIt** (NIH NCI, ~170k concepts, public domain):
+- OmniBrainBench is predominantly a brain tumor dataset (glioma, glioblastoma, meningioma dominate)
+- NCIt has the deepest coverage of brain tumor biology, WHO grading (Grade I–IV), staging, and treatment protocols of any freely available KB
+- Preferred over UMLS because NCIt is more specific to the tumor cases that actually appear in the dataset, and it is public domain with a direct download — no account or API key required, which removes a reproducibility barrier for reviewers
+
+The two KBs divide cleanly along the perception/reasoning boundary already in the framework:
+- AIA + LIL → RadLex
+- DSCR + PJRF + TCM → NCIt
+
+### 2. Knowledge Alignment Benchmarking (KAB) and Feedback-based Adaptation Loop
+
+I explained how I understand the KAB framework:
+
+**KAB** replaces the current vocabulary-matching grounding metric with real KB concept alignment. Instead of checking whether a hardcoded word like "lesion" appears in the output, we:
+1. Extract clinical concepts from the model's `reasoning` and `visual_grounding` fields
+2. Cross-reference those concepts against the appropriate KB for that phase
+3. Compute a **KB Alignment Score** (proportion of stated concepts that are valid KB entries) and a **Concept Precision Score** (are the KB concepts consistent with the correct answer?)
+
+**Feedback-based Adaptation Loop** — what happens when a phase produces unfaithful output:
+1. Retrieve the KB concept(s) the model missed or misused
+2. Inject them as a structured clinical knowledge correction into the prompt
+3. Re-run the phase
+4. Measure whether the model self-corrects — **Adaptation Rate**
+
+---
+
+
+
+
+# Status Log
+
+This section is a running log of project status, kept current so the project can be
+picked back up cold after any gap. Newest entry on top.
+
+## 2026-08-26 (latest) — full 55-patient batch drafted; expert-review artifact live
+
+Since the previous entry: expanded from the initial 30-patient target to the
+**full 55-patient eligible cohort** (54 successfully extracted/drafted — one,
+Patient-025, has no timepoint with both a real RANO rating and complete
+imaging) so the expert reviews everything in one pass. Added idempotency
+guards to `lumiere_facts.extract_all()`/`lumiere_drafter.draft_all()` so
+re-running against the expanded list doesn't redo the original 29 patients'
+work or re-spend API credit — confirmed working (a mid-run LiteLLM proxy
+outage caused one bad batch of empty drafts for the 25 new patients; the
+guard correctly detected empty `[]` files as "not actually done" and retried
+only those on the next run, not the whole set).
+
+**Result: 269 MCQ items across 54 patients, all schema-valid.**
+
+**Review mechanism changed from the Streamlit app to a published Artifact**,
+since the actual reviewer (a radiologist/neuro-oncologist collaborator) is
+not technical — SSH port-forwarding into a HiPerGator login node was a
+non-starter. Built `tools/build_lumiere_review_artifact.py`, which bundles
+all 269 items + 108 slice images (base64-embedded, ~2.5MB total) into one
+self-contained page using the `artifact` runtime capability (reviewer
+actions call `publish()`, persisting decisions server-side, readable back
+later — no cluster/terminal access needed at all for the reviewer).
+
+**Review link (durable — works independently of any Claude Code session
+being open; check by re-reading this URL from any future session):**
+https://claude.ai/code/artifact/af930975-d647-4f59-89f1-df1840384877
+
+Self-tested in a real browser (not just static validation) — confirmed
+`publish()` actually persists across reloads (4 test approvals landed and
+were readable back). Iterated once on UX feedback: added a prominent
+"N / 269 reviewed" progress counter + bar (was previously buried in small
+text) and a "Saving…" disabled-button state during publish (previously no
+loading feedback at all).
+
+**Update (same day, later):** built and tested `tools/sync_lumiere_artifact_review.py`
+end-to-end (Artifact `read` -> sync -> `merge_reviewed()` -> `build_lumiere_cases()`,
+simulated a fully-approved patient to confirm a complete 5-phase case builds
+correctly). Also caught and fixed a schema gap: the artifact's item data was
+missing `task_label` (required by `build_lumiere_cases()`) — fixed in
+`tools/build_lumiere_review_artifact.py`, artifact republished with the fix
+(same link, resets to all-269-pending — no real review data existed yet, so
+nothing lost).
+
+**Current state: fully built and ready for the actual expert reviewer.**
+Nothing left to do until they complete their pass — then:
+`python -m tools.sync_lumiere_artifact_review --html-file <path from Artifact
+read>` -> `tools/lumiere_merge_reviewed.py` -> `run_lumiere.py` smoke test.
+
+## 2026-08-26 (later) — LUMIERE pipeline built through fact extraction; blocked on API key for drafting
+
+Built the full LUMIERE ingestion pipeline (config/lumiere.py,
+src/lumiere_downloader.py, src/lumiere_facts.py, src/lumiere_prompts.py,
+src/lumiere_drafter.py, src/lumiere_loader.py, tools/lumiere_review_app.py,
+tools/lumiere_merge_reviewed.py, run_lumiere.py — see CLAUDE.md's new LUMIERE
+section for the technical detail). Verified real access via the Figshare API
+(collection DOI 10.6084/m9.figshare.c.5904905.v1) and confirmed the actual
+per-patient folder layout from the readme PDF and a live zip listing.
+
+**Progress so far:**
+- Selected 30 target patients by real multi-timepoint RANO coverage (>=3
+  response-rated follow-ups); 29 had complete-enough data to extract.
+- Extracted per-patient facts (AIA/LIL/DSCR/PJRF/TCM) with full provenance —
+  no registration step needed (DeepBraTumIA's atlas-space masks are already
+  MNI-aligned; precomputed volume JSONs ship with the dataset).
+- **Caught and fixed a real bug during build**: picking each patient's LAST
+  RANO-rated timepoint made every DSCR answer "progressive disease" (GBM
+  patients almost always end on PD before their final scan) — would have
+  made the DSCR phase trivially guessable. Fixed by sampling a random
+  eligible timepoint per patient; real distribution now PD 20 / SD 6 / CR 2 / PR 1.
+- Spot-checked chain coherence across all 29: volume-change direction vs.
+  RANO label, and survival-week vs. followup-week ordering, both consistent
+  except one flagged case (Patient-073, survival predates its sampled
+  followup timepoint) — left flagged for expert attention, not silently fixed.
+- Rendering slice PNGs (bridges LUMIERE's 3D NIfTI to the evaluator's 2D image
+  loader) — in progress as of this entry.
+
+**Blocked:** `OPENAI_API_KEY` (or another proprietary model's credentials) is
+not set in this environment — needed for the LLM-drafting step
+(src/lumiere_drafter.py) before expert review can start.
+
+**Not yet done:** LLM drafting, expert review (radiologist/neuro-oncologist
+collaborator availability still unconfirmed — see below), final merge, and
+the run_lumiere.py smoke test against the existing evaluator.
+
+## 2026-08-26 — professor approved LUMIERE + hybrid LLM/expert build
+
+Professor's decision is in: proceed with option 3 — build a real same-patient causal
+chain dataset on LUMIERE (91 real GBM patients) using the hybrid LLM-draft +
+domain-expert-review pipeline (see feasibility breakdown at top of file). This
+resolves the chain-validity issue flagged 2026-08-21/22 and unblocks the paper's core
+causal-degradation claim. Next: confirm radiologist/neuro-oncologist collaborator
+availability, pull LUMIERE's actual data dictionary, and design the per-phase MCQ
+generation pipeline + expert review interface.
+
+## 2026-08-25 — chain-validity issue: discussing hybrid LLM+expert build with professor (not yet decided)
+
+Professor is asking, in-meeting, about the feasibility of the chain-validity open
+issue's option 3: build a real same-patient chain dataset ourselves (candidate:
+LUMIERE, 91 real GBM patients, genuine longitudinal imaging + RANO response +
+survival + Stupp-protocol treatment), using a hybrid LLM + domain-expert pipeline.
+User confirmed the approach shape is hybrid (LLM drafts, expert reviews/corrects) —
+**this is the professor's live question, not a finalized decision.** See top of file
+for the full feasibility breakdown prepared to answer it (phase-by-phase LLM vs.
+expert-review split, ~20-35 expert hours estimated for a first pass of ~20-30 chains,
+~90-150 hours for the full cohort).
+
+**Not yet done / next steps:**
+- ~~Get the professor's actual decision on whether to proceed with LUMIERE + this
+  approach, or a different direction.~~ **DONE (2026-08-26): approved, see top of file.**
+- Confirm whether a radiologist/neuro-oncologist collaborator is already available
+  for the expert-review step, or needs to be arranged — blocks timeline planning.
+- Pull LUMIERE's actual data dictionary/access process to confirm exact available
+  fields (segmentation format, RANO label schema, survival/treatment fields) before
+  designing the phase-to-field extraction pipeline.
+- Design the per-phase MCQ generation pipeline (fact extraction -> LLM draft -> expert
+  review) and a review interface/format for the domain expert, once approved.
+- Decide on adding Qwen2.5-VL-3B (Ollama `qwen2.5vl:3b`) to `config/models.py` /
+  `shell/run_opensource.sh` — gives MedGemma-4B a matched-scale general-model pair.
+  Not yet added, pending go-ahead.
+- **Before reporting Llava-Med-7B's near-zero score as a finding**: re-test it with
+  vLLM's guided/structured-output decoding (`guided_json`) enabled. Currently the
+  "cannot produce valid JSON under instruction" claim is only tested at greedy
+  decoding with the standard prompt — a reviewer will ask whether constrained
+  decoding fixes it. Two outcomes both usable: still degenerates under guided
+  decoding -> stronger claim ("not fixable, no coherent answer to extract even when
+  forced into valid syntax"); works under guided decoding -> different, still-useful
+  finding ("needs structured-output tooling most deployment pipelines don't
+  provide") — but then the near-zero number must be updated, not kept as-is. Also
+  reframe the write-up as a deployment-readiness/robustness point, not a
+  reasoning-quality point, when this goes into the paper.
+
+
+
+
+## POSSIBLE CONTRIBUTION
+
+
+1. A new benchmark that doesn't currently exist. No published dataset has both genuine same-patient continuity and a full imaging→diagnosis→prognosis→treatment question layer — we confirmed this by process of elimination across every candidate (OmniBrainBench, NeuroQA, LUMIERE, MU-Glioma-Post, UCSF-ALPTDG, UCSD-PTGBM). Building the LUMIERE-based chain set makes us the first to have one. That's a standalone contributable artifact, independent of anything else in the paper.
+
+2. The causal-degradation finding becomes real, not artifactual. This is the important one. The paper's most novel claim — that model reasoning degrades across clinical phases for the same patient — was previously undermined by the fact that OmniBrainBench's "chains" were stitched from different real patients (2 of 6,823 questions were genuine). Once the chain is built on LUMIERE, that finding is no longer vulnerable to the obvious reviewer objection; it's now measuring what we always claimed it measures.
+
+3. The KAB framework itself — KB-grounded faithfulness + feedback-adaptation. RadLex/NCIt concept-alignment scoring and the feedback-adaptation loop (does the model self-correct when given a structured knowledge correction) were already planned contributions, unaffected by the dataset problem — but they become more meaningful measured on a real causal chain: "did correcting the model at phase 2 actually help phase 4" is only a meaningful question if phase 4 genuinely follows from phase 2 for the same patient.
+
+4. A reusable construction method. The hybrid LLM-draft + targeted-expert-review pipeline (~20–35 expert hours to turn a raw longitudinal clinical dataset into 20–30 validated causal-reasoning chains) is itself worth stating as a methods contribution — it's a cheap, repeatable way to build this kind of benchmark elsewhere, not just a one-off dataset.
+
+<!-- - Professor's decision on LUMIERE + hybrid build — APPROVED 2026-08-26
+- Whether a radiologist/neuro-oncologist collaborator is available
+- Pull LUMIERE's actual data dictionary before designing the extraction pipeline
+- Qwen2.5-VL-3B addition to config/models.py — awaiting go-ahead
+- Guided-JSON re-test on Llava-Med-7B before that finding goes in the paper -->

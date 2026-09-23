@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
-# Run open-source models via Ollama.
+# Run general-domain open models (Llama/Gemma family), all served via Ollama.
 #
-# Pull models first (one-time):
-#   ollama pull qwen3-vl:30b
-#   ollama pull internvl3:38b
-#   ollama pull qwen3-vl:8b
-#   ollama pull janus-pro:7b
+#   ollama pull gemma3:12b gemma3:27b llama4:scout
 set -e
 cd "$(dirname "$0")/.."
 
 N_CASES=${N_CASES:-100}
 
-for MODEL in "Qwen3-VL-30B" "InternVL3-38B" "Qwen3-VL-8B" "Janus-Pro-7B"; do
+for MODEL in "Gemma-3-12B" "Gemma-3-27B" "Llama-4-Scout"; do
     echo ""
     echo "=========================================="
     echo " Starting: $MODEL"

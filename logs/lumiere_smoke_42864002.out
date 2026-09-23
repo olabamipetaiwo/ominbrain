@@ -1,0 +1,22 @@
+Session ready: ollama serving (pid 1379226), venv active (ominbrain), models -> /blue, HF/pip caches -> /blue
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-70ed0e44-7b3d-b5f3-1cbe-afb03a2ba411)
+NAME                   ID              SIZE      MODIFIED      
+llama3.2-vision:11b    6f2f9757ae97    7.8 GB    4 minutes ago    
+gemma3:27b             a418f5838eaf    17 GB     4 minutes ago    
+gemma3:12b             f4031aab637d    8.1 GB    6 minutes ago    
+medgemma:4b            9fe4e9a6c9bd    3.3 GB    4 weeks ago      
+=== smoke: MedGemma-4B ===
+Built 5 LUMIERE cases | phase coverage: AIA:5 | LIL:5 | DSCR:5 | PJRF:5 | TCM:5
+
+############################################################
+  Model: MedGemma-4B  (medical)  [LUMIERE]
+  Cases: 5   Gating: True   Adaptation: True
+############################################################
+
+============================================================
+Case 1/5: LUMIERE GBM Case (Patient-002)  [Patient-002]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-002_AIA] main call… 

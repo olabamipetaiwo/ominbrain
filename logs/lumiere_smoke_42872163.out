@@ -1,0 +1,160 @@
+Session ready: ollama serving (pid 1532770), venv active (ominbrain), models -> /blue, HF/pip caches -> /blue
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-bc5f6e04-0c4c-3ed8-927b-8f93f6202b73)
+NAME                   ID              SIZE      MODIFIED          
+llama4:scout           bf31604e25c2    67 GB     14 minutes ago       
+llama3.2-vision:11b    6f2f9757ae97    7.8 GB    About an hour ago    
+gemma3:27b             a418f5838eaf    17 GB     About an hour ago    
+gemma3:12b             f4031aab637d    8.1 GB    2 hours ago          
+medgemma:4b            9fe4e9a6c9bd    3.3 GB    4 weeks ago          
+=== smoke: Llama-4-Scout ===
+Built 5 LUMIERE cases | phase coverage: AIA:5 | LIL:5 | DSCR:5 | PJRF:5 | TCM:5
+
+############################################################
+  Model: Llama-4-Scout  (general)  [LUMIERE]
+  Cases: 5   Gating: True   Adaptation: True
+############################################################
+
+============================================================
+Case 1/5: LUMIERE GBM Case (Patient-002)  [Patient-002]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-002_AIA] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-002_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+  *** GATE BLOCKED ***
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+  *** GATE BLOCKED ***
+
+  Phase: TCM — Therapeutic Cycle Management
+  *** GATE BLOCKED ***
+
+============================================================
+Case 2/5: LUMIERE GBM Case (Patient-003)  [Patient-003]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-003_AIA] main call… → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+  *** GATE BLOCKED ***
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+  *** GATE BLOCKED ***
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+  *** GATE BLOCKED ***
+
+  Phase: TCM — Therapeutic Cycle Management
+  *** GATE BLOCKED ***
+
+============================================================
+Case 3/5: LUMIERE GBM Case (Patient-004)  [Patient-004]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-004_AIA] main call… → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-004_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+  *** GATE BLOCKED ***
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+  *** GATE BLOCKED ***
+
+  Phase: TCM — Therapeutic Cycle Management
+  *** GATE BLOCKED ***
+
+============================================================
+Case 4/5: LUMIERE GBM Case (Patient-006)  [Patient-006]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-006_AIA] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-006_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+  *** GATE BLOCKED ***
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+  *** GATE BLOCKED ***
+
+  Phase: TCM — Therapeutic Cycle Management
+  *** GATE BLOCKED ***
+
+============================================================
+Case 5/5: LUMIERE GBM Case (Patient-007)  [Patient-007]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-007_AIA] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-007_LIL] main call… → B (✗) | probe… pred B → faithful | adapt… adapt =B (✗)
+  → score: 0% [FAIL]  local faithful: 100%  adapt: 0/1 (0%)
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+  *** GATE BLOCKED ***
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+  *** GATE BLOCKED ***
+
+  Phase: TCM — Therapeutic Cycle Management
+  *** GATE BLOCKED ***
+======================================================================
+OmniBrainBench — Causal Chain Evaluation
+Model: Llama-4-Scout   |   Cases: 5
+======================================================================
+
+Overall accuracy:   40.0%
+Chain completion:   0/5 (0%)
+
+── Phase Results 
+Phase     Acc     95% CI    N   LocalF  KBAlign  ConceptP   ChainF  GateBlk
+---------------------------------------------------------------------------
+AIA       80%  [38%-96%]    5     100%      22%        0%      —         0%
+LIL        0%   [0%-49%]    4     100%      37%       35%      —        20%
+DSCR      —        —        0      —        —         —        —       100%
+PJRF      —        —        0      —        —         —        —       100%
+TCM       —        —        0      —        —         —        —       100%
+
+── Adaptation Loop 
+  Questions triggered:    1
+  Adaptation rate:        0%
+
+── Failure Taxonomy ─
+  Perception failures:          5
+  Reasoning failures:           0
+  Decision-making failures:     0
+  Correct-but-unfaithful:       0  ← clinically dangerous
+
+── Per-Task Accuracy 
+  Imaging Modality Identification               acc=80%  n=5
+  Lesion Localization                           acc=0%  n=4
+
+
+Saved → results/lumiere_Llama-4-Scout_20260921_152453
+  raw_results.json
+  report.txt
+  total_results.json
