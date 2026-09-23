@@ -682,4 +682,42 @@ Case 27/52: LUMIERE GBM Case (Patient-048)  [Patient-048]
   → score: 0% [FAIL]  local faithful: 100%
 
   Phase: PJRF — Prognostic Judgment and Risk Forecasting
-    [Patient-048_PJRF] main call… → B (✗) | probe… 
+    [Patient-048_PJRF] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-048_TCM] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 28/52: LUMIERE GBM Case (Patient-051)  [Patient-051]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-051_AIA] main call… → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-051_LIL] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-051_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-051_PJRF] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-051_TCM] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 29/52: LUMIERE GBM Case (Patient-052)  [Patient-052]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-052_AIA] main call… 
