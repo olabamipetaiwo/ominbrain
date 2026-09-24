@@ -101,3 +101,6 @@ Any deviation after the first v4 run is entered here with its date and reason, a
 
 No item is dropped after a run. A patient without an item for a phase (LIL: 11 patients; PJRF: 1) is absent from that phase only. Unparseable model output scores incorrect
 (PJRF: forecast 0.5). Results are reported for every model that finishes; a model that does not finish is reported as such, not replaced.
+
+
+<!-- paper/acl_before_trim.tex -->
