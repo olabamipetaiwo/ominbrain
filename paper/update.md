@@ -1,5 +1,119 @@
 #Project Update
 
+## 2026-09-24 (verification pass) — the "not checked" items from the paper rewrite: compile, page fit, numbers, Related Work
+
+Done on a COPY of `paper/latex/` in the session scratchpad, so the repo has no new build artifacts (`acl_latex.pdf`/`.aux` in the repo are stale until you recompile).
+- **Compiles** (`pdflatex` + `bibtex` + 2x `pdflatex`, TeX Live 2023): 0 errors, no undefined refs or citations, 16 pages total. Two overfull boxes were both my new tables (5.8pt gating
+  table, 56pt options-only table): fixed by tighter column spacing, shorter headers and `\scriptsize` for the appendix table; no overfull boxes remain.
+- **Page fit:** the body (through the "Reading" paragraph) ends on page 8 (Limitations starts on page 8, Ethics on page 9). At the end of the body the current column holds 535pt of
+  704pt, so there is roughly 170pt (about a dozen lines) of slack after adding the Related Work paragraph. Measured with a deferred `\write` and `\pagetotal` in a scratch copy, not by eye.
+- **Numbers re-derived independently** from the raw result files (not via `lumiere_gating_stats.py` / `lumiere_tcm_lookup.py`): repeated runs 260/260 for all four models; TCM and DSCR
+  correct/wrong/absent accuracy for all four models; TCM ablation correct-minus-wrong for `incl-DSCR` and `excl-DSCR` (+1.9/-3.8, +15.4/+1.9, +26.9/+5.8, +26.9/+3.8); every options-only
+  accuracy and unparsed count; permutation numbers (32/95, mean 32.4, p .641; LIL 18/59; DSCR 14/36) match `results/lumiere_reviewer_stats.md`. All agree with the table in the paper (integer rounding
+  in the main-text table, one decimal in the appendix). Bootstrap intervals and McNemar/Fisher p-values were NOT recomputed independently (they come from the tools).
+- **Related Work:** added one paragraph, "Answering without the image", and five bib entries, each checked against the publisher or ACL Anthology record (title, authors, venue, pages) via web search on
+  2026-09-24; only published, peer-reviewed venues were added: Poliak et al. 2018 (*SEM, pp. 180-191), Goyal et al. 2017 (CVPR, pp. 6325-6334), Chen et al. 2024 (NeurIPS 37; MMStar), Yan et al. 2025
+  (Findings of ACL 2025, pp. 19188-19205), Jin et al. 2024 (npj Digital Medicine 7:190; author list confirmed from the arXiv record because Nature/PubMed blocked the fetch, volume/article number from the
+  search result, not the journal page). Claims attributed to them: Poliak (hypothesis-only beats majority on many NLI sets); Goyal (rebalanced pairs); Chen (visual content unnecessary for many samples);
+  Yan (below chance under probing pairs); Jin (flawed rationales in 35.5% of correct GPT-4V answers, mostly image comprehension). Read from abstracts and search summaries, not full texts.
+- **Reference list cleaned to published work only (user, 2026-09-24: "only published papers" covers the WHOLE list, not just new additions; I first under-scoped it).**
+  Checked each preprint-only entry for a peer-reviewed version (web search + arXiv abs page "Comments"/journal-ref fields):
+  - Removed, no published version found: Lanham et al. 2023 (arXiv only), Arcuschin et al. 2025 (only a non-archival workshop appearance), Somov et al. 2026 (arXiv, "20 pages, 4 figures, 7 tables", no venue),
+    Jung et al. 2026 (arXiv 2606.31825, no venue), Abbasi et al. 2026 NeuroQA (arXiv, no venue), Ghosh et al. 2026 UCSF-PDGM-VQA (arXiv, no venue).
+  - Replaced: chain-of-thought unfaithfulness now cites Turpin et al. 2023 (NeurIPS 36), which is published; it supports a narrower claim (biasing features change answers, explanations never mention them).
+  - Updated: OmniBrainBench is in the CVPR 2026 open-access repository (author list from arXiv; no page range found, so none given); Nguyen et al. 2025 bib entry had the arXiv title and no pages, now the IJCAI
+    title, pp. 7670-7678, DOI 10.24963/ijcai.2025/853; MU-Glioma-Post had a placeholder author ("Washington University School of Medicine and others"), now the real author list (Mahmoud et al., Sci. Data 12:1847, via Europe PMC).
+  - Text consequences (all in `acl_latex.tex`): dropped the claims "early reasoning failures cascade" (Jung), "unfaithfulness up to 13%" (Arcuschin) and "fail to update in up to 60% of cases" (Somov); the Related Work paragraph
+    "Cascading failure in medical reasoning" became "Shortcut tests and phased diagnosis in medical reasoning"; the NeuroQA and UCSF-PDGM-VQA sentences are gone and the novelty claim is now scoped to "published datasets we are aware of";
+    OmniBrainBench is no longer called "the largest" (NeuroQA, which is larger, is no longer discussed). Recompiled on the scratch copy: 0 errors, no undefined citations, 15 bib entries all cited, body still ends on page 8
+    (453pt of 704pt used at the end of the body, more slack than before).
+  - **Full-text verification pass (user, 2026-09-24: "check full papers, not abstracts").** Downloaded each paper's PDF (ACL Anthology, NeurIPS/CVF/IJCAI proceedings, arXiv; Europe PMC full text for the two open-access
+    Scientific Data papers), extracted the text locally (`pypdf` installed in `.venv`, pip cache on /blue) and read the passages behind each cited claim. The fetch tool cannot read PDFs, so this was done by hand.
+    Confirmed against the full text: Poliak (hypothesis-only significantly beats majority on six of ten datasets), Gururangan (fastText hypothesis-only 67.0 vs 34.3 SNLI; 53.9/52.3 vs 35.4/35.2 MNLI), McCoy
+    (lexical-overlap/subsequence/constituent heuristics; MNLI models perform very poorly on HANS), Turpin, Goyal (language priors; complementary-image pairs), Chen (visual content unnecessary for many samples; GeminiPro 42.7% on MMMU
+    without images), Yan (adversarial pairs with negated/hallucinated attributes; below random on specialized diagnostic questions), Jin (35.5% flawed rationales among correct choices; image comprehension 27.2%), Suter/LUMIERE
+    (91 patients, 638 study dates, rationale with RANO ratings, automated segmentations, survival for a subset, temozolomide chemo-radiation for all patients), Mahmoud/MU-Glioma-Post (203 patients, 594 timepoints, clinical CSV with
+    treatments and outcomes; no question layer).
+  - **Problems the full-text read found, all fixed in `acl_latex.tex`:**
+    1. **Croskerry 2009 did not support the claim it was cited for.** It describes a dual-process (System 1/System 2) model of diagnostic reasoning and error types, not a five-phase workflow or "sequential steps characterize
+       diagnostic error". Both uses (intro; Related Work) now cite OmniBrainBench for the five phases, and the Croskerry entry is deleted from `custom.bib`.
+    2. **Turpin:** the paper says models "systematically fail to mention" / "virtually never verbalize" the bias; my "never mention" overstated it. Reworded.
+    3. **Nguyen:** the paper says models "often rely on linguistic patterns or attend to irrelevant image areas", and its data are chest radiographs (MIMIC-CXR, VinDr-CXR); my text said models "rely on" shortcuts generally. Reworded and scoped.
+    4. **Yan:** wording now follows the paper (ground-truth questions paired with adversarial counterparts that negate/hallucinate attributes; below random on specialized diagnostic questions).
+    5. **OmniBrainBench is a brain-IMAGING benchmark (15 modalities, 30 source datasets), not brain-MRI** as the Related Work said. Fixed there. The paper's own KAB phrasing ("brain MRI case") is about our LUMIERE cases and stays.
+    6. **OmniBrainBench-Extended (important, affects our framing).** The CVPR supplement (Appendix A.4) describes a patient-level extension "supporting patient-level evaluation via subject IDs", grouping question types for the same
+       patient across the five phases, built on an ADNI longitudinal subset (Alzheimer's cohort; ADNI is restricted, so only annotations and metadata are to be released, "we will publicly release it at link"). Our text said we
+       "are not aware of an explicit claim" that its questions form patient-linked chains and that no published dataset combined same-patient continuity with a multiple-choice layer. Both statements are now scoped: our claim is about
+       the released 6,823-question closed-ended set; the Extended set is acknowledged in the intro, Related Work and appendix as not evaluated and not a brain-tumor cohort; the novelty claim now reads "published brain-tumor datasets".
+       I did NOT check whether OmniBrainBench-Extended is actually released, or whether its questions and phases would make the LUMIERE claim weaker for a reviewer; that is a decision for you and the professor.
+    7. **LUMIERE:** survival is available for a subset of patients only; "survival, and treatment records" now says "survival times for a subset of patients, and treatment information".
+    8. Added the CVPR 2026 page range 42732-42743 to the OmniBrainBench entry: the CVF page itself gives "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2026, pp. 42732-42743", and the
+       PDF footer says it is the CVPR Open Access version. (The earlier 403 was the fetch tool, not the site.)
+  - **OmniBrainBench check (user, 2026-09-24), done against the release itself, not the paper.**
+    (i) **OmniBrainBench-Extended is code, not data.** The authors' GitHub repo (`CUHK-AIM-Group/OmniBrainBench`, default branch `master`, last push 2026-03-29) has `data/omnibrainbench_extend/` with a README and three scripts
+    (`reorganize_adni.py`, `generate_adni_task_files.py`, `generate_vqa_from_tasks.py`) that build labels from ADNI: tasks 1-5 = FreeSurfer structure identification, modality identification, cognitive status (CN/MCI/dementia),
+    white-matter-hyperintensity localization (MARS-WMH nnU-Net), and a future-decline risk label from diagnosis changes across visits. Its README TODO marks ADNI done and UK Biobank NOT done. The task called "Risk Forecasting &
+    Treatment-Related Labels" generates risk categories (e.g. "Elevated risk of future cognitive impairment"); I found no therapy-selection or management questions in either script, so its TCM phase looks unimplemented. No question
+    data is distributed (ADNI is restricted; the README says the repo "does not redistribute ADNI/UKB raw data"). The HF dataset `FrankPN/OmniBrainBench` (last modified 2026-04-07) contains only the closed-ended (6,823) and open-ended
+    (2,704) sets; no extension files. The project page never mentions the extension. So it is not a usable competing same-patient dataset today, and it is Alzheimer's cognitive status, not a tumor cohort. The paper now says exactly
+    this in the appendix; Related Work says "label-generation code but no question data".
+    (ii) **Re-derived the chain-validity numbers from the released `closed-ended-qa_6823.json`, independently of the earlier analysis:** 6,823 questions; phase counts AIA 2,048 / LIL 2,813 / DSCR 1,847 / PJRF 64 / TCM 51 (match the
+    paper); 15 distinct `source_file` values (these are annotation-batch file names such as `RSNA_brain_QA_2643_revised.json`, so "15 source sub-corpora" is right); exactly **2 images shared across phases** (`synpic53207.jpg`,
+    `synpic56344.jpg`, both in `VQA_RAD_brain_QA_56_revised.json`, one AIA and one LIL question each = 4 questions); 450 filename-derived `sub-` subject groups, none with questions in two phases; a `case_ID` field exists only for
+    the 2,643 RSNA rows and is unique per row. Most source_files are single-phase (e.g. RSNA 2,642 LIL + 1 PJRF; TCP 447 AIA). This confirms the paper's "2 verifiable links" and the structural explanation.
+    (iii) **Venue discrepancy on their side, not ours:** the project page still says "accepted to NeurIPS 2025 Track on Datasets and Benchmarks" (visible text in the HTML, under News), while the README and the CVF
+    proceedings say CVPR 2026. A search of the NeurIPS proceedings/OpenReview found no OmniBrainBench paper in the 2025 D&B track (only an unrelated "OmniBench"), so the CVF proceedings record is the one I cite.
+  - **Could NOT read the full text (publisher returns 403; not open access; not in PMC):** Wen et al. 2010 (RANO) and Langlotz 2006 (RadLex). The claims resting on them are unverified at full-text level: RANO "draws on more than
+    an image pair (reference scan, clinical status, corticosteroid dose)" (the search-result text and the paper's well-known criteria agree, but I did not read the paper), and RadLex "for radiology anatomy, imaging modalities, and lesion
+    descriptors" (Langlotz 2006 is a three-page announcement paper; the routing of AIA/LIL to RadLex is our own design choice, not something the citation shows). Someone with journal access should check these two.
+  - Other unverified items: Jin's volume 7 / article 190 (journal page blocked; from search results); the paper's "15 source sub-corpora" for the closed-ended set is our own `source_file` count, and OmniBrainBench itself says 30 source
+    datasets overall (three, NEJMIC/Radiopaedia/StrokQD, used only for open-ended VQA), so 15 for the closed-ended set is plausible but not stated in the paper.
+  - After these edits: compiles with 0 errors and no undefined citations on the scratch copy, 14 bib entries all cited, body ends on page 8 with about 94pt of slack left (was about 170pt).
+- **Still open:** MedGemma diagnostic 43170217 (last checked PENDING); the user's own recompile in the repo.
+
+## 2026-09-24 (later) — TCM lookup tool, options-only parse flag, review.md refreshed, paper rewritten around shortcut learning; MedGemma diagnostic queued
+
+**Diagnostic job (MedGemma options-only).** `lumiodiag_MedGemma-4B` 43170217, submitted 2026-09-24, still PENDING (`QOSGrpMemLimit`, group memory cap) at
+last check. Same decoding and prompts as the primary run; only additions are `--save-raw` (stores each raw response and `answer_salvaged`) and
+`--run-tag` (`run_lumiere_options_only.py`; `shell/lumiere/lumiere_options_only.sbatch` takes `RUN_TAG`/`SAVE_RAW` env vars). Output:
+`results/lumiere_optionsonly_diag_MedGemma-4B_<ts>/` (the tag keeps it out of `lumiere_gating_stats.py`'s `lumiere_optionsonly_<model>_*` glob and, via the
+`lumiere_optionsonly_` prefix, out of `compile_lumiere_results.py`). Reason: the primary run stored only 4 fields per item, so the cause of the DSCR 52/52
+parse failure (and 35-40% on AIA/PJRF/TCM) is unknown; decoding is deterministic, so the rerun should reproduce the failures and now show the raw text.
+**Nothing about MedGemma's options-only cells is settled until it reports:** the paper flags them (dagger) and interprets nothing. Decoding is untouched
+(earlier decision with the professor still stands); any fix would need their OK and would make MedGemma non-comparable to its other runs.
+
+**New tool `tools/lumiere_tcm_lookup.py`** (CPU, fixed keyword rules on each TCM option's first 10 words; writes `results/lumiere_tcm_lookup.{md,json}`).
+Replaces the ad hoc x14 regex check. Numbers differ slightly from x14, which is superseded: DSCR key -> TCM key class **50/52** (PD 33/33 escalate,
+non-PD 17/19 continue; x14 said 48/52 with 35 PD), key class unique among the four options in **18/52** (x14: 22). The v3 set has 33 PD keys of 52, not 35.
+TCM correct | own DSCR correct vs wrong, with Fisher p: MedGemma 4/8 vs 10/44 (.19); Gemma-12B 17/29 vs 3/23 (.0013); Gemma-27B 26/34 vs 5/18 (.0010);
+Scout 18/30 vs 1/22 (3e-5); descriptive, confounded. PD-keyed patients, TCM answers in the escalate class (correct / wrong / absent context): MedGemma 8/7/8 of
+33 (does not follow the label); Gemma-12B 24/13/11; Gemma-27B 25/14/20; Scout 23/17/15.
+
+**`tools/lumiere_gating_stats.py`:** options-only cells with >20% unparseable responses (`PARSE_FLAG = 0.20`) are marked with a dagger and their
+own-image minus options-only row is suppressed (parse failures score incorrect, which manufactured MedGemma's "significant" +23pp PJRF and +15pp DSCR gains).
+Flagged: MedGemma AIA, DSCR, PJRF, TCM. Llama-4-Scout DSCR (7/52 = 13%) is not flagged, but its +38.5pp row is mildly inflated by those 7. The 20% cut-off was my
+choice (it falls in the gap between 13% and 35%), not prespecified. Re-ran the tool; `results/lumiere_gating_stats.{md,json}` regenerated.
+
+**`paper/review.md`:** status tracker refreshed (runs table now all done, findings #2/#4 updated, key numbers replaced with four-model results, TODO items 1-2
+ticked, diagnostic job noted).
+
+**Paper (`paper/latex/acl_latex.tex`) rewritten around shortcut learning** (scripted exact replacements, each asserted; pre-edit copy kept only in the
+session scratchpad, so `git diff` is the record). Changed: title; abstract (~165 words, up from ~140; drops the "34% vs 22%" sentence); intro paragraph 2 and the contribution
+list (evidence first, KAB now an exploratory instrument); Sec. 5 renamed "Controls for Shortcut Use" (donor-permutation null replaces the item-specific null;
+repeated-run and gating text no longer "queued"; new TCM-ablation and options-only paragraphs; analysis-plan paragraph notes the later exploratory additions);
+Sec. 6 results (text-only sentence now cites the deterministic repeated run; new "Repeated identical-input control", "Gating-causality and TCM",
+"Options-only baseline" paragraphs; new Table `tab:gating`; substitution paragraphs rewritten with permutation p = .64 and the AIA-flip reading; "Reading against the analysis
+plan" -> "Reading"); Limitations (flip-rate wording, 48 uncorrected contrasts, fixed wrong-context option, TCM-by-construction, confounded own-DSCR split, unparseable MedGemma
+options-only); Appendix (renamed; new Table `tab:optonly` with options-only / no-chain / own-image / unparsed, and a "TCM label lookup" paragraph).
+Checked: every `\begin` has its `\end`, no undefined or duplicate labels, brace balance unchanged (the file already had a +1 imbalance from a comment line before the edit).
+**NOT checked (user recompiles):** that it compiles, that the body still fits 8 pages (added a table and about 3 paragraphs, removed some stale text; the
+options-only table and TCM-lookup paragraph are in the appendix), and the Related Work section, which I did not touch. Numbers in the new text were copied from
+`results/lumiere_gating_stats.md`, `results/lumiere_tcm_lookup.md` and the x17 permutation entry, not re-derived; the "48 contrasts" is 4 models x 4 phases x 3.
+
+**Still open:** (a) read the MedGemma raw responses when 43170217 finishes and settle the options-only wording (prompt artifact versus repetition loop) — the dagger note
+in the stats tool, Table `tab:optonly` caption and Options-only paragraph may change; (b) recompile and page-fit check; (c) consider whether Related Work should say more
+about shortcut learning in medical VQA now that it is the headline.
+
 ## 2026-09-24 — all queued control jobs finished (exit 0); four-model `lumiere_gating_stats` compiled; first read of the shortcut evidence
 
 **Jobs.** `sacct` shows every `lumirep_*`, `lumigc_*`, `lumigcabl_*`, `lumiopt_*` job COMPLETED, exit 0; last was `lumiopt_Llama-4-Scout`

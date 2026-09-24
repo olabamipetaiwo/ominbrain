@@ -44,6 +44,10 @@ GC_PHASES = ["LIL", "DSCR", "PJRF", "TCM"]
 CONDITIONS = ["correct", "incorrect", "absent"]
 CONTRASTS = [("correct", "incorrect"), ("correct", "absent"), ("absent", "incorrect")]
 N_BOOT = 10_000
+# Options-only cells with more than this share of unparseable responses are flagged and their paired difference is
+# suppressed: unparseable answers score incorrect, which would manufacture an own-image advantage. 0.20 sits between the
+# worst non-MedGemma cell (Llama-4-Scout DSCR, 7/52 = 13%) and the next-worst flagged cells (MedGemma-4B, 35-100%).
+PARSE_FLAG = 0.20
 SEED = 20260923
 
 
@@ -227,6 +231,9 @@ def ablation_section(rng) -> tuple[dict, list[str]]:
             lines.append(f"| {m} | {desc} | {pct(cor.mean())} | {pct(inc.mean())} | {fmt(ci_)} | {fmt(cc_)} |")
             out[m][tag] = {"n": n, "acc_correct": float(cor.mean()), "acc_incorrect": float(inc.mean()),
                            "acc_absent_primary": float(ab.mean()), "correct-incorrect": ci_, "correct-absent": cc_}
+    lines += ["", f"† more than {PARSE_FLAG:.0%} of responses unparseable (parse failures score incorrect): the options-only accuracy is a "
+                  "lower bound and the paired difference is suppressed as an artifact. Cause not yet established for MedGemma-4B; see "
+                  "paper/update.md."]
     return out, lines + ([""] + notes if notes else [])
 
 
@@ -278,10 +285,16 @@ def options_section(rng) -> tuple[dict, list[str]]:
             nc = y if ph == "AIA" else np.array([float(absent[(i, ph)]) for i in ids]) if all((i, ph) in absent for i in ids) else None
             r = _paired(y, x, rng)
             fmt = lambda r: f"{100 * r['diff']:+.1f} [{100 * r['ci'][0]:+.1f}, {100 * r['ci'][1]:+.1f}] ({r['b']}/{r['c']}, p={r['mcnemar_p']:.3f})"
-            lines.append(f"| {m} | {ph} | {pct(x.mean())} [{pct(lo)}–{pct(hi)}] | {pct(nc.mean()) if nc is not None else 'n/a'} | "
-                         f"{pct(y.mean())} | {fmt(r)} | {pe} |")
+            flagged = n > 0 and pe / n > PARSE_FLAG
+            if flagged:   # parse failures score incorrect: options-only accuracy is a lower bound, the paired difference an artifact
+                lines.append(f"| {m} | {ph} | {pct(x.mean())}† [{pct(lo)}–{pct(hi)}] | {pct(nc.mean()) if nc is not None else 'n/a'} | "
+                             f"{pct(y.mean())} | † suppressed | {pe}/{n} |")
+            else:
+                lines.append(f"| {m} | {ph} | {pct(x.mean())} [{pct(lo)}–{pct(hi)}] | {pct(nc.mean()) if nc is not None else 'n/a'} | "
+                             f"{pct(y.mean())} | {fmt(r)} | {pe} |")
             out[m]["phases"][ph] = {"n": n, "acc_options_only": float(x.mean()), "acc_own_image": float(y.mean()),
-                                    "acc_no_chain": None if nc is None else float(nc.mean()), "own-options": r, "parse_errors": pe}
+                                    "acc_no_chain": None if nc is None else float(nc.mean()), "own-options": r, "parse_errors": pe,
+                                    "flagged_parse_errors": bool(flagged)}
     return out, lines + ([""] + notes if notes else [])
 
 

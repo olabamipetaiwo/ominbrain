@@ -37,7 +37,8 @@ from src.lumiere_loader import load_lumiere
 STEM_PLACEHOLDER = "[The question text is withheld. Choose the option most likely to be the correct answer.]"
 
 
-def run_model(model_cfg: dict, cases: list[dict], radlex_path: Path, ncit_path: Path) -> None:
+def run_model(model_cfg: dict, cases: list[dict], radlex_path: Path, ncit_path: Path,
+              save_raw: bool = False, run_tag: str = "") -> None:
     print(f"\n{'#'*60}\n  Model: {model_cfg['name']}  [options-only baseline]   Cases: {len(cases)}\n{'#'*60}")
     aligner = KBAligner(radlex_path=radlex_path, ncit_path=ncit_path)
     config.MODEL = model_cfg["model"]
@@ -60,6 +61,9 @@ def run_model(model_cfg: dict, cases: list[dict], radlex_path: Path, ncit_path: 
                                    adaptation_enabled=False, text_only=True)
             out["phases"][phase] = {"model_answer": r["model_answer"], "correct": r["correct"],
                                     "correct_answer": r["correct_answer"], "parse_error": r["parse_error"]}
+            if save_raw:   # diagnostic only: the primary runs did not keep the model's raw output
+                out["phases"][phase]["raw_response"] = r["raw_response"]
+                out["phases"][phase]["answer_salvaged"] = r.get("answer_salvaged", False)
         results.append(out)
 
     summary = {}
@@ -69,7 +73,11 @@ def run_model(model_cfg: dict, cases: list[dict], radlex_path: Path, ncit_path: 
         summary[phase] = {"acc": round(k / n, 3) if n else None, "acc_ci": _wilson_ci(k, n), "n": n}
 
     ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    out_dir = Path("results") / f"lumiere_optionsonly_{model_cfg['name']}_{ts}"
+    # A tagged run goes to lumiere_optionsonly_<tag>_<model>_<ts>: the `lumiere_optionsonly_` prefix keeps it out of
+    # compile_lumiere_results.py, and the tag keeps lumiere_gating_stats.py's `lumiere_optionsonly_<model>_*` glob
+    # from picking it up in place of the primary run.
+    tag = f"{run_tag}_" if run_tag else ""
+    out_dir = Path("results") / f"lumiere_optionsonly_{tag}{model_cfg['name']}_{ts}"
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "raw_results.json").write_text(json.dumps(results, indent=2))
     (out_dir / "summary.json").write_text(json.dumps(summary, indent=2))
@@ -87,6 +95,10 @@ def main():
     p.add_argument("--include-unreviewed", action="store_true",
                    help="Use LLM-drafted items pending expert review (required as of this writing)")
     p.add_argument("--item-set", choices=sorted(lcfg.ITEM_SETS), default="v3")
+    p.add_argument("--save-raw", action="store_true",
+                   help="Also store each raw model response in raw_results.json (diagnosing parse failures)")
+    p.add_argument("--run-tag", default="",
+                   help="Label for the results folder (e.g. diag) so the run is not mistaken for the primary one")
     p.add_argument("--radlex-path", type=Path, default=Path("data/kb/radlex.owl"))
     p.add_argument("--ncit-path", type=Path, default=Path("data/kb/ncit.owl"))
     args = p.parse_args()
@@ -102,7 +114,7 @@ def main():
         if m is None:
             print(f"Unknown model '{args.model}'.")
             sys.exit(1)
-        run_model(m, cases, args.radlex_path, args.ncit_path)
+        run_model(m, cases, args.radlex_path, args.ncit_path, save_raw=args.save_raw, run_tag=args.run_tag)
 
 
 if __name__ == "__main__":
