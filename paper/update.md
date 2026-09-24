@@ -1,5 +1,13 @@
 #Project Update
 
+## 2026-09-24 (conclusion, title options, references audit, review.md TODOs)
+
+- **Paper had no Conclusion section.** Added `\section{Conclusion}` (`sec:conclusion`) in `paper/latex/acl_latex.tex`: one paragraph with the question, the three controls' findings (same numbers as the abstract), the exploratory caveat, and next steps. It currently sits after Limitations in the file.
+- **Recompiled** on a scratch copy (pdflatex + bibtex + 2x pdflatex): 0 errors, no undefined refs or citations in the final pass, 17 pages. Results ends on p.8 and the Conclusion lands on p.9, so the body is now over 8 pages if the Conclusion counts; how ARR counts it is unconfirmed.
+- **Title:** current one is too long and has a typo ("Benchmarl"). Eight options given; recommended "Do Medical MLLMs Read the Scan? Shortcut Controls on Brain-MRI Question Answering". Not yet changed, waiting on the user's pick.
+- **References audit:** `custom.bib` has 14 entries, all cited, none orphaned. It is not everything consulted, by design (published-only rule). Uncited but used: DeepBraTumIA and HD-GLIO-AUTO, NCIt, the Gemma 3/MedGemma/Llama 4 reports (arXiv-only, excluded), and the statistics (Wilson, McNemar, permutation). 14 is thin for ACL; adding published citations is an open TODO.
+- **`paper/review.md` TODO section updated:** rewrite items ticked (each verified against the .tex, not assumed); new open items for title, page fit, and references.
+
 ## 2026-09-24 (verification pass) — the "not checked" items from the paper rewrite: compile, page fit, numbers, Related Work
 
 Done on a COPY of `paper/latex/` in the session scratchpad, so the repo has no new build artifacts (`acl_latex.pdf`/`.aux` in the repo are stale until you recompile).
