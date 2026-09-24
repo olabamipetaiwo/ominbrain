@@ -1377,4 +1377,117 @@ Case 49/52: LUMIERE GBM Case (Patient-078)
     [Patient-078/PJRF/correct] -> D (wrong)
     [Patient-078_PJRF] main call… → D (✗) | probe… pred D → faithful 
     [Patient-078/PJRF/incorrect] -> D (wrong)
-    [Patient-078_PJRF] main call… 
+    [Patient-078_PJRF] main call… parse failed — salvaged answer D from truncated JSON.
+    [Patient-078/PJRF/absent] -> D (wrong)
+    [Patient-078_TCM] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-078/TCM/correct] -> C (OK)
+    [Patient-078_TCM] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-078/TCM/incorrect] -> C (OK)
+    [Patient-078_TCM] main call… → C (✓) | probe… pred C → faithful 
+    [Patient-078/TCM/absent] -> C (OK)
+
+============================================================
+Case 50/52: LUMIERE GBM Case (Patient-085)
+============================================================
+    [Patient-085_LIL] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-085/LIL/correct] -> B (OK)
+    [Patient-085_LIL] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-085/LIL/incorrect] -> B (OK)
+    [Patient-085_LIL] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-085/LIL/absent] -> B (OK)
+    [Patient-085_DSCR] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-085/DSCR/correct] -> A (wrong)
+    [Patient-085_DSCR] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-085/DSCR/incorrect] -> A (wrong)
+    [Patient-085_DSCR] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-085/DSCR/absent] -> A (wrong)
+    [Patient-085_PJRF] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-085/PJRF/correct] -> C (wrong)
+    [Patient-085_PJRF] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-085/PJRF/incorrect] -> C (wrong)
+    [Patient-085_PJRF] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-085/PJRF/absent] -> C (wrong)
+    [Patient-085_TCM] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-085/TCM/correct] -> B (wrong)
+    [Patient-085_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-085/TCM/incorrect] -> A (wrong)
+    [Patient-085_TCM] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-085/TCM/absent] -> B (wrong)
+
+============================================================
+Case 51/52: LUMIERE GBM Case (Patient-089)
+============================================================
+    [Patient-089_LIL] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-089/LIL/correct] -> B (wrong)
+    [Patient-089_LIL] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-089/LIL/incorrect] -> B (wrong)
+    [Patient-089_LIL] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-089/LIL/absent] -> B (wrong)
+    [Patient-089_DSCR] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-089/DSCR/correct] -> B (wrong)
+    [Patient-089_DSCR] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-089/DSCR/incorrect] -> B (wrong)
+    [Patient-089_DSCR] main call… → B (✗) | probe… pred B → faithful 
+    [Patient-089/DSCR/absent] -> B (wrong)
+    [Patient-089_PJRF] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-089/PJRF/correct] -> A (wrong)
+    [Patient-089_PJRF] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-089/PJRF/incorrect] -> B (OK)
+    [Patient-089_PJRF] main call… → B (✓) | probe… pred B → faithful 
+    [Patient-089/PJRF/absent] -> B (OK)
+    [Patient-089_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-089/TCM/correct] -> A (wrong)
+    [Patient-089_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-089/TCM/incorrect] -> A (wrong)
+    [Patient-089_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-089/TCM/absent] -> A (wrong)
+
+============================================================
+Case 52/52: LUMIERE GBM Case (Patient-091)
+============================================================
+    [Patient-091_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-091/LIL/correct] -> C (wrong)
+    [Patient-091_LIL] main call… parse failed — salvaged answer C from truncated JSON.
+    [Patient-091/LIL/incorrect] -> C (wrong)
+    [Patient-091_LIL] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-091/LIL/absent] -> C (wrong)
+    [Patient-091_DSCR] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-091/DSCR/correct] -> C (wrong)
+    [Patient-091_DSCR] main call… → C (✗) | probe… pred C → faithful 
+    [Patient-091/DSCR/incorrect] -> C (wrong)
+    [Patient-091_DSCR] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-091/DSCR/absent] -> A (wrong)
+    [Patient-091_PJRF] main call… → D (✗) | probe… pred D → faithful 
+    [Patient-091/PJRF/correct] -> D (wrong)
+    [Patient-091_PJRF] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-091/PJRF/incorrect] -> A (OK)
+    [Patient-091_PJRF] main call… → A (✓) | probe… pred A → faithful 
+    [Patient-091/PJRF/absent] -> A (OK)
+    [Patient-091_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-091/TCM/correct] -> A (wrong)
+    [Patient-091_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-091/TCM/incorrect] -> A (wrong)
+    [Patient-091_TCM] main call… → A (✗) | probe… pred A → faithful 
+    [Patient-091/TCM/absent] -> A (wrong)
+
+============================================================
+Summary — MedGemma-4B
+============================================================
+  LIL:
+    correct      42% [30-56]  (n=52)
+    incorrect    44% [32-58]  (n=52)
+    absent       42% [30-56]  (n=52)
+  DSCR:
+    correct      15% [8-28]  (n=52)
+    incorrect    21% [12-34]  (n=52)
+    absent       19% [11-32]  (n=52)
+  PJRF:
+    correct      33% [22-46]  (n=52)
+    incorrect    36% [25-50]  (n=52)
+    absent       35% [23-48]  (n=52)
+  TCM:
+    correct      33% [22-46]  (n=52)
+    incorrect    15% [8-28]  (n=52)
+    absent       25% [15-38]  (n=52)
+
+Saved -> results/lumiere_gatingcausality_MedGemma-4B_20260923_093333

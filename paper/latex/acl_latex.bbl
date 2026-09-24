@@ -1,4 +1,4 @@
-\begin{thebibliography}{14}
+\begin{thebibliography}{15}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Abbasi et~al.(2026)}]{abbasi2026neuroqa}
@@ -118,5 +118,14 @@ Yannick Suter, Urspeter Knecht, Waldo Valenzuela, Michelle Notter, Ekkehard
   A comprehensive dataset of automated {MR} multi-sequence segmentation and
   clinical features}.
 \newblock \emph{Scientific Data}.
+
+\bibitem[{Wen et~al.(2010)Wen, Macdonald, Reardon, Cloughesy, Sorensen,
+  Galanis, DeGroot, Wick, Gilbert, Lassman et~al.}]{wen2010updated}
+Patrick~Y. Wen, David~R. Macdonald, David~A. Reardon, Timothy~F. Cloughesy,
+  A.~Gregory Sorensen, Evanthia Galanis, John DeGroot, Wolfgang Wick, Mark~R.
+  Gilbert, Andrew~B. Lassman, et~al. 2010.
+\newblock Updated response assessment criteria for high-grade gliomas:
+  {Response Assessment in Neuro-Oncology Working Group}.
+\newblock \emph{Journal of Clinical Oncology}, 28(11):1963--1972.
 
 \end{thebibliography}

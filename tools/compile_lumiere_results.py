@@ -25,6 +25,9 @@ import config
 from src.analysis import _failure_counts, _phase_aggregate
 
 RUN_RE = re.compile(r"^lumiere_(?P<model>.+)_(?P<ts>\d{8}_\d{6})$")
+# Control-experiment result folders have a different raw_results.json shape (no overall_score); RUN_RE would
+# otherwise read them as a "model". Compiled by tools/lumiere_gating_stats.py instead.
+NOT_CHAIN_RUNS = ("lumiere_gatingcausality_", "lumiere_gcablate_", "lumiere_optionsonly_")
 
 
 def latest_runs(results_dir: Path, before: str | None = None, after: str | None = None) -> dict[str, Path]:
@@ -36,7 +39,7 @@ def latest_runs(results_dir: Path, before: str | None = None, after: str | None 
     runs: dict[str, tuple[str, Path]] = {}
     for d in sorted(results_dir.glob("lumiere_*")):
         m = RUN_RE.match(d.name)
-        if not m or not (d / "raw_results.json").exists():
+        if not m or d.name.startswith(NOT_CHAIN_RUNS) or not (d / "raw_results.json").exists():
             continue
         model, ts = m["model"], m["ts"]
         if before is not None and ts >= before:

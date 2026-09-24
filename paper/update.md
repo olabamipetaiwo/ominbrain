@@ -1,5 +1,378 @@
 #Project Update
 
+## 2026-09-24 (verification pass) — the "not checked" items from the paper rewrite: compile, page fit, numbers, Related Work
+
+Done on a COPY of `paper/latex/` in the session scratchpad, so the repo has no new build artifacts (`acl_latex.pdf`/`.aux` in the repo are stale until you recompile).
+- **Compiles** (`pdflatex` + `bibtex` + 2x `pdflatex`, TeX Live 2023): 0 errors, no undefined refs or citations, 16 pages total. Two overfull boxes were both my new tables (5.8pt gating
+  table, 56pt options-only table): fixed by tighter column spacing, shorter headers and `\scriptsize` for the appendix table; no overfull boxes remain.
+- **Page fit:** the body (through the "Reading" paragraph) ends on page 8 (Limitations starts on page 8, Ethics on page 9). At the end of the body the current column holds 535pt of
+  704pt, so there is roughly 170pt (about a dozen lines) of slack after adding the Related Work paragraph. Measured with a deferred `\write` and `\pagetotal` in a scratch copy, not by eye.
+- **Numbers re-derived independently** from the raw result files (not via `lumiere_gating_stats.py` / `lumiere_tcm_lookup.py`): repeated runs 260/260 for all four models; TCM and DSCR
+  correct/wrong/absent accuracy for all four models; TCM ablation correct-minus-wrong for `incl-DSCR` and `excl-DSCR` (+1.9/-3.8, +15.4/+1.9, +26.9/+5.8, +26.9/+3.8); every options-only
+  accuracy and unparsed count; permutation numbers (32/95, mean 32.4, p .641; LIL 18/59; DSCR 14/36) match `results/lumiere_reviewer_stats.md`. All agree with the table in the paper (integer rounding
+  in the main-text table, one decimal in the appendix). Bootstrap intervals and McNemar/Fisher p-values were NOT recomputed independently (they come from the tools).
+- **Related Work:** added one paragraph, "Answering without the image", and five bib entries, each checked against the publisher or ACL Anthology record (title, authors, venue, pages) via web search on
+  2026-09-24; only published, peer-reviewed venues were added: Poliak et al. 2018 (*SEM, pp. 180-191), Goyal et al. 2017 (CVPR, pp. 6325-6334), Chen et al. 2024 (NeurIPS 37; MMStar), Yan et al. 2025
+  (Findings of ACL 2025, pp. 19188-19205), Jin et al. 2024 (npj Digital Medicine 7:190; author list confirmed from the arXiv record because Nature/PubMed blocked the fetch, volume/article number from the
+  search result, not the journal page). Claims attributed to them: Poliak (hypothesis-only beats majority on many NLI sets); Goyal (rebalanced pairs); Chen (visual content unnecessary for many samples);
+  Yan (below chance under probing pairs); Jin (flawed rationales in 35.5% of correct GPT-4V answers, mostly image comprehension). Read from abstracts and search summaries, not full texts.
+- **Reference list cleaned to published work only (user, 2026-09-24: "only published papers" covers the WHOLE list, not just new additions; I first under-scoped it).**
+  Checked each preprint-only entry for a peer-reviewed version (web search + arXiv abs page "Comments"/journal-ref fields):
+  - Removed, no published version found: Lanham et al. 2023 (arXiv only), Arcuschin et al. 2025 (only a non-archival workshop appearance), Somov et al. 2026 (arXiv, "20 pages, 4 figures, 7 tables", no venue),
+    Jung et al. 2026 (arXiv 2606.31825, no venue), Abbasi et al. 2026 NeuroQA (arXiv, no venue), Ghosh et al. 2026 UCSF-PDGM-VQA (arXiv, no venue).
+  - Replaced: chain-of-thought unfaithfulness now cites Turpin et al. 2023 (NeurIPS 36), which is published; it supports a narrower claim (biasing features change answers, explanations never mention them).
+  - Updated: OmniBrainBench is in the CVPR 2026 open-access repository (author list from arXiv; no page range found, so none given); Nguyen et al. 2025 bib entry had the arXiv title and no pages, now the IJCAI
+    title, pp. 7670-7678, DOI 10.24963/ijcai.2025/853; MU-Glioma-Post had a placeholder author ("Washington University School of Medicine and others"), now the real author list (Mahmoud et al., Sci. Data 12:1847, via Europe PMC).
+  - Text consequences (all in `acl_latex.tex`): dropped the claims "early reasoning failures cascade" (Jung), "unfaithfulness up to 13%" (Arcuschin) and "fail to update in up to 60% of cases" (Somov); the Related Work paragraph
+    "Cascading failure in medical reasoning" became "Shortcut tests and phased diagnosis in medical reasoning"; the NeuroQA and UCSF-PDGM-VQA sentences are gone and the novelty claim is now scoped to "published datasets we are aware of";
+    OmniBrainBench is no longer called "the largest" (NeuroQA, which is larger, is no longer discussed). Recompiled on the scratch copy: 0 errors, no undefined citations, 15 bib entries all cited, body still ends on page 8
+    (453pt of 704pt used at the end of the body, more slack than before).
+  - **Full-text verification pass (user, 2026-09-24: "check full papers, not abstracts").** Downloaded each paper's PDF (ACL Anthology, NeurIPS/CVF/IJCAI proceedings, arXiv; Europe PMC full text for the two open-access
+    Scientific Data papers), extracted the text locally (`pypdf` installed in `.venv`, pip cache on /blue) and read the passages behind each cited claim. The fetch tool cannot read PDFs, so this was done by hand.
+    Confirmed against the full text: Poliak (hypothesis-only significantly beats majority on six of ten datasets), Gururangan (fastText hypothesis-only 67.0 vs 34.3 SNLI; 53.9/52.3 vs 35.4/35.2 MNLI), McCoy
+    (lexical-overlap/subsequence/constituent heuristics; MNLI models perform very poorly on HANS), Turpin, Goyal (language priors; complementary-image pairs), Chen (visual content unnecessary for many samples; GeminiPro 42.7% on MMMU
+    without images), Yan (adversarial pairs with negated/hallucinated attributes; below random on specialized diagnostic questions), Jin (35.5% flawed rationales among correct choices; image comprehension 27.2%), Suter/LUMIERE
+    (91 patients, 638 study dates, rationale with RANO ratings, automated segmentations, survival for a subset, temozolomide chemo-radiation for all patients), Mahmoud/MU-Glioma-Post (203 patients, 594 timepoints, clinical CSV with
+    treatments and outcomes; no question layer).
+  - **Problems the full-text read found, all fixed in `acl_latex.tex`:**
+    1. **Croskerry 2009 did not support the claim it was cited for.** It describes a dual-process (System 1/System 2) model of diagnostic reasoning and error types, not a five-phase workflow or "sequential steps characterize
+       diagnostic error". Both uses (intro; Related Work) now cite OmniBrainBench for the five phases, and the Croskerry entry is deleted from `custom.bib`.
+    2. **Turpin:** the paper says models "systematically fail to mention" / "virtually never verbalize" the bias; my "never mention" overstated it. Reworded.
+    3. **Nguyen:** the paper says models "often rely on linguistic patterns or attend to irrelevant image areas", and its data are chest radiographs (MIMIC-CXR, VinDr-CXR); my text said models "rely on" shortcuts generally. Reworded and scoped.
+    4. **Yan:** wording now follows the paper (ground-truth questions paired with adversarial counterparts that negate/hallucinate attributes; below random on specialized diagnostic questions).
+    5. **OmniBrainBench is a brain-IMAGING benchmark (15 modalities, 30 source datasets), not brain-MRI** as the Related Work said. Fixed there. The paper's own KAB phrasing ("brain MRI case") is about our LUMIERE cases and stays.
+    6. **OmniBrainBench-Extended (important, affects our framing).** The CVPR supplement (Appendix A.4) describes a patient-level extension "supporting patient-level evaluation via subject IDs", grouping question types for the same
+       patient across the five phases, built on an ADNI longitudinal subset (Alzheimer's cohort; ADNI is restricted, so only annotations and metadata are to be released, "we will publicly release it at link"). Our text said we
+       "are not aware of an explicit claim" that its questions form patient-linked chains and that no published dataset combined same-patient continuity with a multiple-choice layer. Both statements are now scoped: our claim is about
+       the released 6,823-question closed-ended set; the Extended set is acknowledged in the intro, Related Work and appendix as not evaluated and not a brain-tumor cohort; the novelty claim now reads "published brain-tumor datasets".
+       I did NOT check whether OmniBrainBench-Extended is actually released, or whether its questions and phases would make the LUMIERE claim weaker for a reviewer; that is a decision for you and the professor.
+    7. **LUMIERE:** survival is available for a subset of patients only; "survival, and treatment records" now says "survival times for a subset of patients, and treatment information".
+    8. Added the CVPR 2026 page range 42732-42743 to the OmniBrainBench entry: the CVF page itself gives "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2026, pp. 42732-42743", and the
+       PDF footer says it is the CVPR Open Access version. (The earlier 403 was the fetch tool, not the site.)
+  - **OmniBrainBench check (user, 2026-09-24), done against the release itself, not the paper.**
+    (i) **OmniBrainBench-Extended is code, not data.** The authors' GitHub repo (`CUHK-AIM-Group/OmniBrainBench`, default branch `master`, last push 2026-03-29) has `data/omnibrainbench_extend/` with a README and three scripts
+    (`reorganize_adni.py`, `generate_adni_task_files.py`, `generate_vqa_from_tasks.py`) that build labels from ADNI: tasks 1-5 = FreeSurfer structure identification, modality identification, cognitive status (CN/MCI/dementia),
+    white-matter-hyperintensity localization (MARS-WMH nnU-Net), and a future-decline risk label from diagnosis changes across visits. Its README TODO marks ADNI done and UK Biobank NOT done. The task called "Risk Forecasting &
+    Treatment-Related Labels" generates risk categories (e.g. "Elevated risk of future cognitive impairment"); I found no therapy-selection or management questions in either script, so its TCM phase looks unimplemented. No question
+    data is distributed (ADNI is restricted; the README says the repo "does not redistribute ADNI/UKB raw data"). The HF dataset `FrankPN/OmniBrainBench` (last modified 2026-04-07) contains only the closed-ended (6,823) and open-ended
+    (2,704) sets; no extension files. The project page never mentions the extension. So it is not a usable competing same-patient dataset today, and it is Alzheimer's cognitive status, not a tumor cohort. The paper now says exactly
+    this in the appendix; Related Work says "label-generation code but no question data".
+    (ii) **Re-derived the chain-validity numbers from the released `closed-ended-qa_6823.json`, independently of the earlier analysis:** 6,823 questions; phase counts AIA 2,048 / LIL 2,813 / DSCR 1,847 / PJRF 64 / TCM 51 (match the
+    paper); 15 distinct `source_file` values (these are annotation-batch file names such as `RSNA_brain_QA_2643_revised.json`, so "15 source sub-corpora" is right); exactly **2 images shared across phases** (`synpic53207.jpg`,
+    `synpic56344.jpg`, both in `VQA_RAD_brain_QA_56_revised.json`, one AIA and one LIL question each = 4 questions); 450 filename-derived `sub-` subject groups, none with questions in two phases; a `case_ID` field exists only for
+    the 2,643 RSNA rows and is unique per row. Most source_files are single-phase (e.g. RSNA 2,642 LIL + 1 PJRF; TCP 447 AIA). This confirms the paper's "2 verifiable links" and the structural explanation.
+    (iii) **Venue discrepancy on their side, not ours:** the project page still says "accepted to NeurIPS 2025 Track on Datasets and Benchmarks" (visible text in the HTML, under News), while the README and the CVF
+    proceedings say CVPR 2026. A search of the NeurIPS proceedings/OpenReview found no OmniBrainBench paper in the 2025 D&B track (only an unrelated "OmniBench"), so the CVF proceedings record is the one I cite.
+  - **Could NOT read the full text (publisher returns 403; not open access; not in PMC):** Wen et al. 2010 (RANO) and Langlotz 2006 (RadLex). The claims resting on them are unverified at full-text level: RANO "draws on more than
+    an image pair (reference scan, clinical status, corticosteroid dose)" (the search-result text and the paper's well-known criteria agree, but I did not read the paper), and RadLex "for radiology anatomy, imaging modalities, and lesion
+    descriptors" (Langlotz 2006 is a three-page announcement paper; the routing of AIA/LIL to RadLex is our own design choice, not something the citation shows). Someone with journal access should check these two.
+  - Other unverified items: Jin's volume 7 / article 190 (journal page blocked; from search results); the paper's "15 source sub-corpora" for the closed-ended set is our own `source_file` count, and OmniBrainBench itself says 30 source
+    datasets overall (three, NEJMIC/Radiopaedia/StrokQD, used only for open-ended VQA), so 15 for the closed-ended set is plausible but not stated in the paper.
+  - After these edits: compiles with 0 errors and no undefined citations on the scratch copy, 14 bib entries all cited, body ends on page 8 with about 94pt of slack left (was about 170pt).
+- **Still open:** MedGemma diagnostic 43170217 (last checked PENDING); the user's own recompile in the repo.
+
+## 2026-09-24 (later) — TCM lookup tool, options-only parse flag, review.md refreshed, paper rewritten around shortcut learning; MedGemma diagnostic queued
+
+**Diagnostic job (MedGemma options-only).** `lumiodiag_MedGemma-4B` 43170217, submitted 2026-09-24, still PENDING (`QOSGrpMemLimit`, group memory cap) at
+last check. Same decoding and prompts as the primary run; only additions are `--save-raw` (stores each raw response and `answer_salvaged`) and
+`--run-tag` (`run_lumiere_options_only.py`; `shell/lumiere/lumiere_options_only.sbatch` takes `RUN_TAG`/`SAVE_RAW` env vars). Output:
+`results/lumiere_optionsonly_diag_MedGemma-4B_<ts>/` (the tag keeps it out of `lumiere_gating_stats.py`'s `lumiere_optionsonly_<model>_*` glob and, via the
+`lumiere_optionsonly_` prefix, out of `compile_lumiere_results.py`). Reason: the primary run stored only 4 fields per item, so the cause of the DSCR 52/52
+parse failure (and 35-40% on AIA/PJRF/TCM) is unknown; decoding is deterministic, so the rerun should reproduce the failures and now show the raw text.
+**Nothing about MedGemma's options-only cells is settled until it reports:** the paper flags them (dagger) and interprets nothing. Decoding is untouched
+(earlier decision with the professor still stands); any fix would need their OK and would make MedGemma non-comparable to its other runs.
+
+**New tool `tools/lumiere_tcm_lookup.py`** (CPU, fixed keyword rules on each TCM option's first 10 words; writes `results/lumiere_tcm_lookup.{md,json}`).
+Replaces the ad hoc x14 regex check. Numbers differ slightly from x14, which is superseded: DSCR key -> TCM key class **50/52** (PD 33/33 escalate,
+non-PD 17/19 continue; x14 said 48/52 with 35 PD), key class unique among the four options in **18/52** (x14: 22). The v3 set has 33 PD keys of 52, not 35.
+TCM correct | own DSCR correct vs wrong, with Fisher p: MedGemma 4/8 vs 10/44 (.19); Gemma-12B 17/29 vs 3/23 (.0013); Gemma-27B 26/34 vs 5/18 (.0010);
+Scout 18/30 vs 1/22 (3e-5); descriptive, confounded. PD-keyed patients, TCM answers in the escalate class (correct / wrong / absent context): MedGemma 8/7/8 of
+33 (does not follow the label); Gemma-12B 24/13/11; Gemma-27B 25/14/20; Scout 23/17/15.
+
+**`tools/lumiere_gating_stats.py`:** options-only cells with >20% unparseable responses (`PARSE_FLAG = 0.20`) are marked with a dagger and their
+own-image minus options-only row is suppressed (parse failures score incorrect, which manufactured MedGemma's "significant" +23pp PJRF and +15pp DSCR gains).
+Flagged: MedGemma AIA, DSCR, PJRF, TCM. Llama-4-Scout DSCR (7/52 = 13%) is not flagged, but its +38.5pp row is mildly inflated by those 7. The 20% cut-off was my
+choice (it falls in the gap between 13% and 35%), not prespecified. Re-ran the tool; `results/lumiere_gating_stats.{md,json}` regenerated.
+
+**`paper/review.md`:** status tracker refreshed (runs table now all done, findings #2/#4 updated, key numbers replaced with four-model results, TODO items 1-2
+ticked, diagnostic job noted).
+
+**Paper (`paper/latex/acl_latex.tex`) rewritten around shortcut learning** (scripted exact replacements, each asserted; pre-edit copy kept only in the
+session scratchpad, so `git diff` is the record). Changed: title; abstract (~165 words, up from ~140; drops the "34% vs 22%" sentence); intro paragraph 2 and the contribution
+list (evidence first, KAB now an exploratory instrument); Sec. 5 renamed "Controls for Shortcut Use" (donor-permutation null replaces the item-specific null;
+repeated-run and gating text no longer "queued"; new TCM-ablation and options-only paragraphs; analysis-plan paragraph notes the later exploratory additions);
+Sec. 6 results (text-only sentence now cites the deterministic repeated run; new "Repeated identical-input control", "Gating-causality and TCM",
+"Options-only baseline" paragraphs; new Table `tab:gating`; substitution paragraphs rewritten with permutation p = .64 and the AIA-flip reading; "Reading against the analysis
+plan" -> "Reading"); Limitations (flip-rate wording, 48 uncorrected contrasts, fixed wrong-context option, TCM-by-construction, confounded own-DSCR split, unparseable MedGemma
+options-only); Appendix (renamed; new Table `tab:optonly` with options-only / no-chain / own-image / unparsed, and a "TCM label lookup" paragraph).
+Checked: every `\begin` has its `\end`, no undefined or duplicate labels, brace balance unchanged (the file already had a +1 imbalance from a comment line before the edit).
+**NOT checked (user recompiles):** that it compiles, that the body still fits 8 pages (added a table and about 3 paragraphs, removed some stale text; the
+options-only table and TCM-lookup paragraph are in the appendix), and the Related Work section, which I did not touch. Numbers in the new text were copied from
+`results/lumiere_gating_stats.md`, `results/lumiere_tcm_lookup.md` and the x17 permutation entry, not re-derived; the "48 contrasts" is 4 models x 4 phases x 3.
+
+**Still open:** (a) read the MedGemma raw responses when 43170217 finishes and settle the options-only wording (prompt artifact versus repetition loop) — the dagger note
+in the stats tool, Table `tab:optonly` caption and Options-only paragraph may change; (b) recompile and page-fit check; (c) consider whether Related Work should say more
+about shortcut learning in medical VQA now that it is the headline.
+
+## 2026-09-24 — all queued control jobs finished (exit 0); four-model `lumiere_gating_stats` compiled; first read of the shortcut evidence
+
+**Jobs.** `sacct` shows every `lumirep_*`, `lumigc_*`, `lumigcabl_*`, `lumiopt_*` job COMPLETED, exit 0; last was `lumiopt_Llama-4-Scout`
+43121096 (ended 2026-09-24 03:18). Queue empty, so the GPU cap (4 for these experiments) is moot; standing cap is back to 2.
+Ran `python -m tools.lumiere_gating_stats` on the login node (CPU only) -> `results/lumiere_gating_stats.{md,json}`; all four models
+(MedGemma-4B, Gemma-3-12B, Gemma-3-27B, Llama-4-Scout) in every section. Numbers below are from that file; all p-values are exact
+McNemar, UNCORRECTED, n = 52 patients per cell. Nothing here is committed yet. This is a first read, not yet in the paper.
+
+**1. Repeated-run control (all 4 models):** 260/260 identical answers and identical correctness, 0 flips in every phase. Noise floor is 0
+(deterministic decoding). Still does not bound sensitivity to small input perturbations.
+
+**2. Gating-causality (correct / forced-wrong / absent upstream context):**
+- **TCM: correct context beats forced-wrong for all four models**, +17.3pp (MedGemma, p=.004), +34.6 (Gemma-12B), +38.5 (Gemma-27B), +17.3
+  (Scout, p=.004). Correct beats absent by +7.7 (MedGemma, p=.22, not significant), +42.3, +30.8, +26.9.
+- **DSCR: correct context hurts** for three models: Gemma-12B 50.0 vs 65.4 (incorrect and absent; p=.008 / .021), Gemma-27B correct-absent
+  -17.3pp (p=.012; correct-incorrect -9.6, p=.125), Scout correct-absent -13.5pp (p=.039; correct-incorrect -11.5, p=.070). MedGemma: no
+  detectable effect. Anchoring on the injected label is still a hypothesis, untested.
+- LIL and PJRF: flat for every model (no paired contrast with p < .2).
+
+**3. TCM ablation (which upstream entry carries the effect):**
+- DSCR entry alone reproduces the effect for Gemma-12B (+15.4pp correct-incorrect, p=.021), Gemma-27B (+26.9, p=.001) and Scout (+26.9, p<.001).
+- Everything except DSCR (AIA+LIL+PJRF) does not: +1.9 / +5.8 / +3.8, all CIs include 0.
+- **MedGemma-4B is the exception:** full context gives +17.3 but DSCR-only gives +1.9 (p=1.0) and no-DSCR -3.8. Its gap is unexplained (same as
+  the x14 note). PJRF (which carries the true survival estimate) is not an alternative route for the three larger models.
+- Reading: TCM accuracy in the larger models is largely a lookup of the upstream DSCR label. Consistent with the x14 keyword check (DSCR key
+  predicts TCM key class for 48/52). By construction of the TCM prompt, so it is not evidence of multi-phase reasoning.
+
+**4. Options-only baseline (no image, no stem, no chain; four options only):**
+- Options-only accuracy (%): MedGemma AIA/LIL/DSCR/PJRF/TCM 40/29/0/14/15; Gemma-12B 38/33/40/23/12; Gemma-27B 62/36/44/25/12;
+  Scout 44/36/19/21/19 (chance 25).
+- **MedGemma-4B options-only is contaminated by parse failures**: DSCR 52/52, TCM 21, AIA 19, PJRF 18. Its DSCR 0% is a format failure, not a
+  score; those cells must be flagged or excluded. Scout has 7 DSCR parse errors; the Gemma models have 0.
+- **AIA is not a clean shortcut cell**: it has one fixed answer string (non-LLM "majority text" = 100%). Options-only AIA above chance (Gemma-27B
+  62%) is therefore weak evidence; do not headline it.
+- DSCR: non-LLM majority-text baseline is 63.5%, above every options-only score and above most own-image scores. LIL/PJRF/TCM majority = 1.9%.
+- **Own-image minus options-only (paired):** LIL is at or below zero for the 12B (-9.6), 27B (-9.6), Scout (-11.5), all n.s.; MedGemma +11.5 n.s. -> no
+  detectable image benefit on LIL. TCM is large: +26.9 (12B, p=.003), +48.1 (27B, p<.001), +17.3 (Scout, p=.035), +11.5 (MedGemma, n.s.). DSCR:
+  +21.2 (27B, p=.043), +38.5 (Scout, p<.001), +15.4 (12B, n.s.).
+  **Caveat (checked, see "Own-image run contents" below):** "own-image" is the v3 `nogate` run, which carries the model's OWN earlier answers as chain
+  context, and options-only also drops the stem. The TCM Delta is therefore image + stem + own upstream answers versus none of them; it is NOT an image
+  effect.
+
+**Own-image run contents (code read + CPU check, 2026-09-24).** `results/lumiere_<model>_v3_nogate_*` = `run_lumiere.py` with gating OFF and adaptation
+ON, image(s) present. In `src/evaluator.py::evaluate_case`, `chain_context` is appended after every question with the model's own answer, its answer
+text and its visual-grounding note; `src/prompts.py::build_main_prompt` renders it as a "PRIOR REASONING CHAIN" block in every later phase. So each phase
+sees the model's own answers to ALL earlier phases (not gold, not forced-wrong); gating-causality's "correct" condition injects gold instead, and
+"absent" empties the list (image, stem and options kept). Consequence for §4 above: the "no-chain ctx" column (gating `absent`) is the right
+image-and-stem-without-chain comparator for LIL-TCM; own-image minus no-chain ctx isolates the effect of the model's own chain.
+Supporting check (own-image run, TCM accuracy split by whether the model's own DSCR answer was correct; n=52 per model, descriptive, no test, and
+confounded because patients the model gets right on DSCR may be easier throughout):
+MedGemma-4B 4/8 vs 10/44; Gemma-12B 17/29 vs 3/23; Gemma-27B 26/34 vs 5/18; Scout 18/30 vs 1/22 (TCM correct | DSCR correct vs | DSCR wrong).
+Reading: for the three larger models TCM correctness follows the model's own DSCR correctness; consistent with the DSCR-lookup account from
+gating-causality/ablation, and with why own-image TCM (59.6% for Gemma-27B) sits near the gold-context 63.5% and far above the absent 32.7%.
+Not established: the direction (does a correct DSCR answer cause a correct TCM answer, or do both reflect item difficulty).
+
+**Corrections to my own earlier same-day status message (not to any file):** I first read the raw `lumiopt_*` job summaries as "options-only well above
+chance supports shortcut learning". After compile: AIA is a fixed-string cell, MedGemma DSCR is a parse failure, and DSCR options-only sits below the
+63.5% label prior.
+
+**Not done / next:** (a) DONE, see above (own-image carries the model's own earlier answers); (b) decide how MedGemma's parse-failed options-only cells are
+reported (flag vs exclude; earlier MedGemma parse-failure decision applies); (c) tick the first two `paper/review.md` TODO items when the read is
+agreed; (d) then the paper rewrite (title, abstract, contributions, Sec. 1/8) and the stale substitution sentence.
+
+## 2026-09-23 (later still x17) — donor-permutation test done (substitution result weakens again); options-only compile section written; clinician review deferred; NAACL dates confirmed
+
+**Donor-permutation test** (`tools/lumiere_reviewer_stats.py::donor_permutation_test`, 20,000 replicates, seed 20260924; results in
+`results/lumiere_reviewer_stats.{md,json}`). Each patient's donor is redrawn uniformly from the opposite-LIL-direction side (the pairing rule), the
+observed flipped answers are held fixed, truth-tracking is recounted; one donor per patient is shared by all models/phases, so shared-patient
+dependence and donor reuse are respected. Result: observed 32/95 tracks the donor's label, permutation mean **32.4** (95% range 27-37), one-sided
+p = **0.64**. LIL 18/59 vs 17.4 (p .56); DSCR 14/36 vs 15.0 (p .73). **Reading: which donor's image was shown does not matter beyond what the
+label base rates predict.** This contradicts the "+11.9pp above item-specific chance" reading from x12: the item-specific null (flip drawn
+uniformly among the item's other options) ignores that models' answers are skewed toward common labels (e.g. PD ~70% of DSCR keys), so it under-
+states chance. Caveat: the pairing rule fixes every donor's LIL direction to the opposite of the patient's, so the LIL permutation is degenerate
+(p ~ 0.5 by construction); only DSCR is informative about donor-specificity. **Substitution now gives no evidence of image grounding**; the paper's
+"modest image sensitivity" sentence (Sec. 8) is not supported and must be rewritten in the reframe. Also still true: 67.8% of LIL flips land on the
+patient's OWN direction, i.e. away from the substituted image.
+
+**Options-only compile section** written (`tools/lumiere_gating_stats.py` section 4): per model x phase options-only accuracy [Wilson], the
+no-chain-context baseline (gating 'absent' condition; own-image for AIA), own-image accuracy, paired own - options-only difference with patient
+bootstrap CI and exact McNemar p; non-LLM reference rows (chance, majority text). Tested on SYNTHETIC results (fake dirs, deleted afterwards) - the
+code path works; no real options-only result exists yet (`lumiopt_*` still queued). Real numbers appear when the jobs finish.
+
+**Clinician review deferred (decision, user 2026-09-23):** will not be arranged for this submission; listed as a limitation of the paper (unreviewed,
+LLM-drafted items and answer keys; answerability from single slices unvalidated). Consequence: the v3 results are final as-is, no re-run after review.
+
+**NAACL 2027 (re-checked 2026-09-23):** ARR deadline **October 12, 2026** (AoE), commitment December 23, 2026, conference June 1-5, 2027, San Francisco;
+long papers 8 pages (9 camera-ready), short 4 (5). Shared ARR cycle with COLING 2027. References/limitations/appendices treatment not stated on the page.
+19 days from today to the ARR deadline.
+
+## 2026-09-23 (later still x16) — DECISION: professor approved reframing the paper around shortcut learning
+
+User relayed Prof. Wang's feedback: reframe around "shortcut learning". This closes the "Reframe around continuity/leakage/image-dependence"
+item in `paper/review.md` (Blocked list). Working claim: on these chain-structured brain-MRI MCQs, accuracy is largely explained by
+non-image, non-chain information (question text, option artifacts, upstream-label lookup), so it is weak evidence of image-grounded or
+causal reasoning. Not claimed: that models never use the image, or that errors propagate across phases. Exploratory (unreviewed items).
+Paper NOT yet rewritten (title, abstract, contributions, Sec. 1/8 still describe the causal-degradation framing).
+
+## 2026-09-23 (later still x15) — LLM options-only baseline built and queued; compile tool guarded
+
+`run_lumiere_options_only.py` + `shell/lumiere/lumiere_options_only.sbatch` (review.md TODO, reviewer item 9). Each of the 5 phase
+questions per patient is asked with NO image, NO question stem (fixed placeholder), NO chain context; only the four options,
+the phase header and the standard answer-format instructions (which still mention "visual features", same as the existing
+text-only ablation). Reuses `_evaluate_question` unmodified (text_only=True, adaptation off). 4 models x 5 phases x 52 patients,
+one call each; results -> `results/lumiere_optionsonly_<model>_<ts>/`. The no-chain-context baseline needs no new run: it is the
+"absent" condition of gating-causality (LIL-TCM) plus the own-image v3 run for AIA. Prompt checked on a real patient (no patient id or
+stem leaks). Jobs, each chained behind the tail of a different existing chain so no 5th concurrent GPU (cap-4 exception): 
+`lumiopt_MedGemma-4B` 43121093 (afterany 43119393), `lumiopt_Gemma-3-12B` 43121094 (afterany 43119394),
+`lumiopt_Gemma-3-27B` 43121095 (afterany 43091110), `lumiopt_Llama-4-Scout` 43121096 (afterany 43061683).
+NOT yet compiled (needs a section in `tools/lumiere_gating_stats.py`); not smoke-tested on a GPU node before queuing.
+Latent bug fixed: `tools/compile_lumiere_results.py`'s `RUN_RE` matched `lumiere_gatingcausality_*` / `lumiere_gcablate_*` folders as
+if they were model runs and would have crashed on their raw_results shape (no overall_score); they are now excluded (`NOT_CHAIN_RUNS`).
+Not re-run since.
+
+## 2026-09-23 (later still x14) — analysis: first pass at the TCM-leakage question (CPU only, ad hoc, not yet a tool)
+
+The TCM drafter prompt (`src/lumiere_prompts.py`) says the correct management "follows from this patient's actual disease
+course" and the quiz-taker "must work out the disease state from their own earlier answers", so TCM is a function of the
+upstream DSCR label by construction. Checked with a keyword classifier on the correct TCM option (escalate / continue /
+stop; approximate, regex-based): the DSCR key predicts the TCM key's action class for **48/52** patients (PD -> escalate
+31/35, SD/PR/CR -> continue 17/17). But the key's class is unique among the 4 options in only **22/52** items, so the label
+alone does not fix the letter in the other 30.
+Gemma-12B follows the injected label: on the 35 PD-keyed patients it picks an escalate-class option 25/35 with correct
+context, 15/35 with the forced-wrong DSCR label ("Stable disease"), 13 absent. MedGemma-4B does NOT (8/35 and 8/35,
+mostly picks "continue" whatever the context), yet its correct-vs-incorrect gap is 9 vs 0 discordant items - so its TCM
+gap is not explained by the class shift and is unexplained. Reading: the TCM dependence is at least partly a label
+lookup (intended by design, but then it is not evidence of multi-phase reasoning). Still to do: GPU ablation with only the
+DSCR entry vs everything-except-DSCR in the injected context; a proper tool replacing the regex classifier.
+
+**Built and queued the ablation (same day).** `src/gating_causality.py` / `run_lumiere_gating_causality.py` gained
+`--conditions`, `--context-include`, `--context-exclude`, `--context-tag` (defaults reproduce the original experiment
+exactly; ablation runs write to `results/lumiere_gcablate_<model>_<tag>_<ts>/`, a prefix the primary-run globs cannot
+match; the CLI rejects an include-set that is not upstream of the queried phase, which would silently equal "absent").
+New `shell/lumiere/lumiere_gating_ablation.sbatch`: per model, TCM only, correct/incorrect only, two variants -
+`incl-DSCR` (context = the DSCR entry alone) and `excl-DSCR` (AIA + LIL + PJRF). Verified the built contexts on a real
+patient before submitting. Jobs `lumigcabl_MedGemma-4B` 43118917 (afterany 43091110, the last `lumirep_*` job) ->
+`lumigcabl_Gemma-3-12B` 43118918: still 2 concurrent GPUs at all times. `tools/lumiere_gating_stats.py` got section 3
+(paired contrasts vs the primary run's full/absent conditions on the same patients); prints "not finished yet" until then.
+Side finding while testing: the "correct" PJRF context entry contains the true survival estimate, so PJRF is a second
+possible route into TCM besides DSCR; `excl-DSCR` tests it. Interpretation guide: incl-DSCR recovers the full effect ->
+label lookup; excl-DSCR alone recovers it -> other phases (incl. PJRF); neither does -> the effect needs the combination.
+**GPU cap raised 2 -> 4 for these listed experiments only (user relayed professor's OK, 2026-09-23); back to 2 afterwards.** Chains re-cut into 4 independent slots: gc 43061679 -> 43061683; rep 43091109 -> 43091110; ablation 43118917 -> 43119393 (27B); 43118918 -> 43119394 (Scout) (the first two ablation jobs no longer wait on the rep chain, dependency cleared with `scontrol update`).
+Extended to all four models (user go-ahead): `lumigcabl_Gemma-3-27B` 43119393 (afterany 43118918) -> `lumigcabl_Llama-4-Scout` 43119394; chain is 43091110 -> 43118917 -> 43118918 -> 43119393 -> 43119394, so still <= 2 concurrent GPUs.
+
+## 2026-09-23 (later still x13) — code: `tools/lumiere_gating_stats.py` compiles the repeated-run and gating-causality results
+
+CPU-only, re-runnable as jobs finish (skips models whose runs are missing/unfinished); writes
+`results/lumiere_gating_stats.{md,json}`. Seed 20260923, 10,000 patient-level bootstrap resamples.
+Covers MedGemma-4B and Gemma-3-12B so far; 27B and Llama-4-Scout still queued (`lumirep_*` / `lumigc_*`).
+
+- **Repeated-run control:** 260/260 identical answers for both models (acc 34.2 / 48.1 in both runs, parse errors
+  13/13 and 0/0). Decoding is deterministic, so the run-to-run noise floor is 0 and counterfactual flips come from the
+  input. Does not bound sensitivity to tiny input perturbations.
+- **Gating-causality, paired (item-level `correct`, exact McNemar, UNCORRECTED):** only TCM shows a clear
+  context dependence, correct - incorrect +17.3pp [+7.7,+28.8] (MedGemma, p=.004) and +34.6pp [+21.2,+48.1] (Gemma-12B).
+  LIL/PJRF: no detectable effect in either model. **Gemma-12B DSCR is significantly NEGATIVE**: correct context
+  50.0% vs 65.4% for incorrect and for absent (-15.4pp [-25.0,-5.8] / [-26.9,-5.8], p=.008 / .021) - correct upstream
+  context hurts. My earlier unpaired read said MedGemma's TCM CIs overlap; the paired test is significant.
+- **Open caveats (not yet in the paper):** TCM's dependence may be leakage (true upstream answers may hand over the
+  treatment answer) rather than reasoning; DSCR anchoring is a hypothesis, untested; 20+ uncorrected cells.
+
+## 2026-09-23 (later still x12) — paper: acted on the round-2 review (items 1-12 of the action list); two headline results changed
+
+User asked to execute action items 1-12 from `paper/review.md`'s "New Review". Everything below is from existing
+results (no new model calls) except item 11, which is queued. New tool: `tools/lumiere_reviewer_stats.py`
+(-> `results/lumiere_reviewer_stats.{md,json}`, CPU only, ~8 s, seed 20260923, 10,000 patient-level bootstrap resamples).
+
+**Bugs / inaccuracies found in our own numbers while doing this (all fixed in the paper)**
+1. *MedGemma "3pp vs 1.9pp".* The Table 1 numbers came from each run's `overall_score`, which comes from
+   `src/evaluator.py`'s `phase_score` and **drops parse-error items from the denominator**; with one question per
+   phase, a salvaged-correct answer scores 0. MedGemma had 13/9 parse errors (image/text-only), 3/1 of them
+   salvaged-correct. The bootstrap used the per-question `correct` flag. The paper's own Failed-response paragraph says
+   salvaged answers count, so the per-question basis is now used everywhere: MedGemma 34.2 / 36.2 (-1.9pp), not
+   33 / 36. Other three models are unaffected. `evaluator.py` NOT changed (would alter gating); documented in Setup.
+2. *Gemma-3-27B "54 vs 50 shown as 3pp".* 53.46 was double-rounded (53.5 -> 54). Correct 53.5 / 50.4 (+3.1).
+3. *Truth-label extractor bug* (`tools/compile_lumiere_counterfactual.py::_direction_word`): it tested
+   `"increase" in text`, missing "increasing"/"decreasing"/"stable"/"reduction" (the drafter's most common
+   phrasings) and misreading options that mention the opposite word for a sub-compartment. 22 of 95 flipped
+   LIL/DSCR answers were silently excluded (73 checkable). Rewrote it (total-volume clause first) and validated it
+   against every patient's correct LIL option (52/52; the one exception is Patient-028, whose +0.3% change is worded
+   "stable" although pairs.json says "up" - the truth label is now read from the item text, not the sign). Re-ran
+   the compile tool; `results/lumiere_counterfactual_summary.json` regenerated.
+4. *"Identical answer with and without image for 87-91% of items"* was wrong: 87-91% is same **correctness**;
+   identical answer is 77-89% (MedGemma 89, Gemma-12B 77, Gemma-27B 80, Llama 83). Fixed.
+5. *"v3 image accuracy is 13-19pp below v2"* is 9-18pp. Fixed (also noted the cohorts are 54 vs 52 patients).
+6. *"Pre-specified +-8pp margin"* was not: `update.md` (item 7 of the earlier review round) shows the margin was
+   chosen after computing the intervals. The paper now says so, and calls the 2026-09-22 log entry a "prespecified
+   analysis plan", not a preregistration (log not externally timestamped; the plan itself used CI overlap).
+
+**Result changes**
+- *Substitution, item-specific null (item 7).* Old: 26/73 = 35.6% vs "50% chance" -> "entirely below chance".
+  Now: 32/95 = 33.7% carry the donor's label; expected under a uniform choice among each item's other options =
+  20.7/95 = 21.8%; excess +11.9pp (patient-clustered 95% CI [+3.5, +20.3], donor-clustered [+2.9, +20.7]).
+  By phase LIL 18/59 (12.0 expected), DSCR 14/36 (8.7 expected). But 67.8% of LIL flips land on the ORIGINAL patient's
+  own direction (DSCR 47.2%), 30.5% of flips keep the same label, and the donor's fully correct LIL option was among
+  the options for 0/52 patients (label present 37/52; DSCR option 48/52, label 52/52). Paper conclusion is now
+  weaker: modest image sensitivity, not shown to be grounding; the third pre-plan condition ("low, non-tracking")
+  is NOT met and the paper says so. This reverses the earlier "below chance" claim.
+- *Text-only, paired (item 6).* Overall image - text-only: MedGemma -1.9 [-5.8,+1.9], Gemma-12B -2.7 [-7.3,+2.3]
+  (was [-7.7,...] in the paper; different bootstrap draw), Gemma-27B +3.1 [-0.8,+7.3], Llama -3.1 [-7.3,+1.2].
+  Per phase (20 cells): none lies entirely above 0; MedGemma DSCR/PJRF and Llama TCM end at 0 on the text-only side;
+  largest image advantage Gemma-27B AIA +9.6 [-1.9,+21.2] (b=8, c=3). Discordant items summed: 55 right-only-image vs
+  67 right-only-text (matches the paper). New per-phase forest plot replaces the duplicated bar chart
+  (old `text_only_ablation.pdf` and `make_textonly_chart.py` left in place, no longer included).
+- *Evidence audit, two dimensions (item 8; `tools/audit_reasoning_facts.py`, now also emits the 2-D table).* On v3,
+  answers with no checkable claim: 26-55% (MedGemma 35, Gemma-12B 31, Gemma-27B 55, Llama 26). Of claims (251-668
+  per model): in shown text & matches record 75-87%; in shown text but contradicts/unmatched 10-18%; NOT in text &
+  matches 1-2%; NOT in text & contradicts/unmatched 2-6%. The worked example (Patient-002, Gemma-27B) confirmed: LIL
+  has 3 in-text-supported claims and 2 in-text-contradicted (the repeated "right temporal lobe"), so the carried-forward
+  error is visible under the new scheme. Note `results/lumiere_reasoning_facts.{md,csv}` now also include the
+  `_cf_v3` runs (the tool picks up every latest run).
+- *Option-only baselines (item 9).* v3, n=52/phase: longest option AIA 37 / LIL 25 / DSCR 67 / PJRF 19 / TCM 6;
+  letter-prior 31-37; stem-overlap 0-33 (AIA 0, LIL 33, DSCR 8, PJRF 29, TCM 17); AIA text-majority 100% (fixed
+  answer string). DSCR longest = majority (67%), above every model. LLM options-only / no-chain-context baselines
+  still need GPU runs.
+
+**Paper edits (`paper/latex/acl_latex.tex`, `custom.bib` +`wen2010updated`)** - items 1-4, 10, 11 in the action list:
+abstract/intro/contributions/Fig. 1/related work reworded ("sequential", "threshold gating" - it is hard gating,
+"vocabulary and consistency", OmniBrainBench = incompatibility, "2 verifiable cross-phase links", adaptation/gating
+flagged exploratory); Sec. 3.3 rewritten (blocking = masking because a queried phase's inputs don't depend on gating;
+DSCR key independent of LIL baseline); Sec. 4 retitled and softened; Sec. 5 adds the RANO-inputs and single-slice
+answerability caveats and "zero violations = compliance with the auditor"; Sec. 7 rewrites the evidence audit, adds
+"regenerated not frozen upstream context", the analysis-plan disclosure, and paragraphs for the repeated-run control
+and the gating-causality experiment (design only, `sec:gating-causality`); Sec. 8 has the new Table 1, Fig. 3,
+Table 2 (flip rates with CIs), rewritten text-only / evidence / substitution / option-only / reading-vs-plan
+paragraphs; Limitations gets a lead paragraph on answerability, the PJRF/TCM key definition, unreviewed distractors and
+uncorrected multiplicity; Appendix PJRF/LIL paragraphs rewritten (48-week survival vs week-47 imaging). Compiled with
+`/apps/texlive/2023/bin/x86_64-linux` on PATH (`module load` did not put pdflatex on PATH in this shell): full
+pdflatex-bibtex-pdflatex-pdflatex cycle, 18 pages, no errors, no undefined refs, no overfull boxes (fixed two tables);
+Table 1 / Fig. 3 / Table 2 pages rasterized and inspected.
+
+**Item 11 (repeated identical-input control) - submitted.** `run_lumiere.py` got `--run-tag` (folder becomes
+`lumiere_<model>_rep2_v3_nogate_*`, so it cannot be picked up as the primary run). Jobs `lumirep_*`:
+43091107 (MedGemma-4B, running) -> 43091108 (Gemma-3-12B) -> 43091109 (Gemma-3-27B) -> 43091110 (Llama-4-Scout), chained
+`afterany`, same flags as the original own-image run (`--item-set v3 --no-gating`, adaptation left on to match).
+With the `lumigc_*` chain this is 2 concurrent GPUs (the cap). Still to write: a small compile script for rep1-vs-rep2
+flip rates.
+
+**Follow-up (same day): abstract to ~140 words; dataset-debugging history moved to new Appendix B (`sec:dev-history`).** Sec. 5 now
+has one "Item construction" paragraph describing only the final procedure (sampling rule, post-op LIL baseline, auditor-in-the-loop,
+templated DSCR stem, v3 = 52 patients); the two sampling bugs, v2 leakage rates/cause, rebaselining, and the v2-vs-v3 difficulty
+paragraph are in the appendix. Compiles clean, 18 pages: body (Intro-Results) ends p.13, Limitations p.14, refs p.15, appendices
+16-18. NAACL 2027 main-conference limit (https://2027.naacl.org/calls/main_conference_papers/, fetched 2026-09-23): long paper
+8 pages (9 camera-ready), short 4 (5); ARR deadline 2026-10-12, commitment 2026-12-23, notification 2027-02-10. The page did not say
+how references/limitations/appendices count (standard ACL/ARR practice: excluded) - confirm against the ARR CFP. Body was ~8,500
+words vs ~5,000-5,500 that fit in 8 pages.
+
+**Length cut done (same day): 18 -> 14 pages total; body (Intro-Results) now ends on p.7, Limitations p.7-8, refs p.8, appendices 9-14.**
+Rewrote Intro, Related Work, Framework, Compatibility, LUMIERE, Setup, Checks, Results, Limitations (~4,500 body words; script kept
+in the session scratchpad, pre-restructure tex saved there too - `git diff paper/latex/acl_latex.tex` shows the full change). Nothing
+substantive was dropped, it moved: metric definitions -> new Appendix C, OmniBrainBench compatibility details -> Appendix D, full evidence-
+audit method + option-only baselines -> Appendix E, Fig. 2 (LUMIERE pipeline) -> Appendix B, dev history -> Appendix B. Related Work merged from
+5 to 3 paragraphs; Framework cut to ~450 words; contributions 4 -> 3. Numbers unchanged (checked against results/lumiere_reviewer_stats.md).
+Refs to `sec:grounding-test`, `sec:results`, `sec:gating-causality`, `fig:phase-effects`, `tab:flip` all resolve; no multiply-defined labels.
+Figure numbering shifted (phase-effects is now Figure 2). Visually inspected pages 1-2, 5-8.
+
+**Not done / needs a decision:** PJRF/TCM key redesign (needs clinician), LIL/DSCR answerability fix (restrict vs
+supply more input - design choice), LLM option-only and no-chain-context baselines (GPU), donor-permutation null,
+appendix move of the dataset-debugging history. (Abstract was then shortened in a follow-up: ~390 -> ~200 words, dropped the framework/dataset restatements and the trailing contribution sentence, kept the three caveats: margin set post hoc, modest-above-null substitution result, answerability/keys unvalidated.) `paper/review.md` tracker rewritten to match.
+
 ## 2026-09-23 (later still x11) — paper: compiled the counterfactual-image substitution results and wrote them into §8 — all 4 grounding checks now complete
 
 All 4 `lumicf_*` jobs (submitted earlier this session) finished cleanly while the gating-causality jobs were

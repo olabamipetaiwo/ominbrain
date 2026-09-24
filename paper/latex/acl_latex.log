@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  23 SEP 2026 09:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  23 SEP 2026 10:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -870,179 +870,176 @@ LaTeX Font Info:    Trying to load font information for U+lasy on input line 75
 
 (/apps/texlive/2023/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-) [1{/apps/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/apps/tex
-live/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}
+)
+Underfull \hbox (badness 1527) in paragraph at lines 77--78
+\T1/ptm/m/n/10 (+20) adaptation, and threshold-gating mea-sures.
+ []
 
 
+Underfull \hbox (badness 1796) in paragraph at lines 85--86
+\T1/ptm/m/n/10.95 (+20) ([][]Croskerry[][], [][]2009[][]): \T1/ptm/b/n/10.95 (+
+20) A\T1/ptm/m/n/10.95 (+20) natomical and \T1/ptm/b/n/10.95 (+20) I\T1/ptm/m/n
+/10.95 (+20) maging
+ []
 
-]
-Underfull \hbox (badness 2181) in paragraph at lines 93--94
+
+Underfull \hbox (badness 2181) in paragraph at lines 85--86
 \T1/ptm/b/n/10.95 (+20) A\T1/ptm/m/n/10.95 (+20) ssessment (AIA), \T1/ptm/b/n/1
 0.95 (+20) L\T1/ptm/m/n/10.95 (+20) esion \T1/ptm/b/n/10.95 (+20) I\T1/ptm/m/n/
 10.95 (+20) dentification and
  []
 
 
-Underfull \hbox (badness 1648) in paragraph at lines 93--94
+Underfull \hbox (badness 1648) in paragraph at lines 85--86
 \T1/ptm/b/n/10.95 (+20) L\T1/ptm/m/n/10.95 (+20) ocalization (LIL), \T1/ptm/b/n
 /10.95 (+20) D\T1/ptm/m/n/10.95 (+20) iagnostic \T1/ptm/b/n/10.95 (+20) S\T1/pt
 m/m/n/10.95 (+20) ynthesis and
  []
 
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-52.
-(/apps/texlive/2023/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [2] [3]
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 17
-7.
-
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 14
+0.
 (/apps/texlive/2023/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 177.
+(Font)              scaled to size 10.95pt on input line 140.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+ [1{/apps/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/apps/texl
+ive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
-Underfull \vbox (badness 3039) has occurred while \output is active []
 
 
-Underfull \hbox (badness 1137) in paragraph at lines 184--185
-\T1/ptm/m/n/10.95 (+20) a model's \T1/zi4/m/n/10.95 visual_grounding \T1/ptm/m/
-n/10.95 (+20) and \T1/zi4/m/n/10.95 reasoning
+{/apps/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
+43.
+
+(/apps/texlive/2023/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 199--200
+ []\T1/ptm/b/n/10.95 (+20) Models.[] \T1/ptm/m/n/10.95 (+20) Four open-weight m
+od-els served
  []
 
 
-Underfull \vbox (badness 2460) has occurred while \output is active []
-
- [4{/apps/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}] [5]
-LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
-(Font)              scaled to size 9.0pt on input line 257.
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.0pt on input line 258.
- [6]
-Underfull \hbox (badness 1824) in paragraph at lines 270--271
-\T1/ptm/m/n/10.95 (+20) wrote each phase's ques-tion stem as a self-
+Underfull \hbox (badness 5077) in paragraph at lines 199--200
+\T1/ptm/m/n/10.95 (+20) of-experts, 17B ac-tive); tags \T1/zi4/m/n/10.95 medgem
+ma:4b\T1/ptm/m/n/10.95 (+20) ,
  []
 
-[7]
-Underfull \hbox (badness 2376) in paragraph at lines 287--288
-\T1/ptm/m/n/10.95 (+20) in-fer-ence runs on single-GPU SLURM jobs
- []
-
-[8]
-Underfull \hbox (badness 1199) in paragraph at lines 291--292
- []\T1/ptm/b/n/10.95 (+20) Knowledge bases.[] \T1/ptm/m/n/10.95 (+20) RadLex (R
-SNA, English-
+[4]
+Underfull \hbox (badness 2111) in paragraph at lines 208--209
+\T1/ptm/m/n/10.95 (+20) The vo-cab-u-lary and con-sis-tency met-rics test
  []
 
 
-Underfull \hbox (badness 4156) in paragraph at lines 291--292
-\T1/ptm/m/n/10.95 (+20) filtered OWL re-lease, down-loaded 2026-08-
+Underfull \hbox (badness 10000) in paragraph at lines 214--215
+ []\T1/ptm/b/n/10.95 (+20) Evidence fact-check.[] \T1/ptm/m/n/10.95 (+20) For e
+ach check-able
  []
 
 
-Underfull \hbox (badness 6348) in paragraph at lines 291--292
-\T1/ptm/m/n/10.95 (+20) 05; the re-lease file car-ries no em-bed-ded
+Underfull \hbox (badness 1852) in paragraph at lines 214--215
+\T1/zi4/m/n/10.95 reasoning \T1/ptm/m/n/10.95 (+20) (hemi-sphere or re-gion sta
+te-ments,
  []
 
 
-Underfull \hbox (badness 1735) in paragraph at lines 300--301
-\T1/ptm/m/n/10.95 (+20) changed), and com-pare ac-cu-racy against the
+Underfull \hbox (badness 1558) in paragraph at lines 214--215
+\T1/ptm/m/n/10.95 (+20) prop-er-ties: \T1/ptm/m/it/10.95 (+20) avail-abil-ity \
+T1/ptm/m/n/10.95 (+20) (al-ready in the stem,
  []
 
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 304--305
+
+Underfull \hbox (badness 1668) in paragraph at lines 218--219
+ []\T1/ptm/b/n/10.95 (+20) Repeated identical-input con-trol.[] \T1/ptm/m/n/10.
+95 (+20) For each
+ []
+
+<figures/phase_effects.pdf, id=211, 235.90384pt x 248.36084pt>
+File: figures/phase_effects.pdf Graphic file (type pdf)
+<use figures/phase_effects.pdf>
+Package pdftex.def Info: figures/phase_effects.pdf  used on input line 249.
+(pdftex.def)             Requested size: 219.08614pt x 230.66621pt.
+[5]
+Underfull \vbox (badness 1902) has occurred while \output is active []
+
+
+Underfull \hbox (badness 1668) in paragraph at lines 276--277
  []\T1/ptm/b/n/10.95 (+20) Counterfactual-image sub-sti-tu-tion.[] \T1/ptm/m/n/
-10.95 (+20) The
+10.95 (+20) Ta-ble [][]2[][]
  []
 
-
-Underfull \hbox (badness 3861) in paragraph at lines 304--305
-\T1/ptm/m/n/10.95 (+20) in-creases ver-sus de-creases be-tween base-line
- []
-
-
-Underfull \hbox (badness 3503) in paragraph at lines 304--305
-\T1/ptm/m/n/10.95 (+20) guar-an-tee-ing a sub-stan-tively dif-fer-ent im-age
- []
-
-<figures/text_only_ablation.pdf, id=247, 225.00061pt x 164.72557pt>
-File: figures/text_only_ablation.pdf Graphic file (type pdf)
-<use figures/text_only_ablation.pdf>
-Package pdftex.def Info: figures/text_only_ablation.pdf  used on input line 334
-.
-(pdftex.def)             Requested size: 219.08614pt x 160.39438pt.
-[10]
-Underfull \vbox (badness 1448) has occurred while \output is active []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 343--344
- []\T1/ptm/b/n/10.95 (+20) Evidence fact-check.[] \T1/ptm/m/n/10.95 (+20) Re-st
-rict-ing to cor-
- []
-
-
-Underfull \hbox (badness 3386) in paragraph at lines 343--344
-\T1/ptm/m/n/10.95 (+20) rect an-swers on \T1/zi4/m/n/10.95 v3\T1/ptm/m/n/10.95 
-(+20) , the frac-tion of stated
- []
-
-
-Underfull \hbox (badness 2027) in paragraph at lines 343--344
-\T1/ptm/m/n/10.95 (+20) gen-uine im-age use, in-de-pen-dently sup-ported,
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11 <./figures/text_only_ablation.pdf>] [12] [13] (./acl_latex.bbl
+[6 <./figures/phase_effects.pdf>] [7] (./acl_latex.bbl
 Underfull \hbox (badness 1655) in paragraph at lines 12--17
 \T1/ptm/m/n/10 (+20) Conmy. 2025.  [][]Chain-of-thought rea-son-ing in
  []
 
-) [14] [15] [16
+[8]) [9]
+LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
+(Font)              scaled to size 9.0pt on input line 360.
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 10.0pt on input line 361.
 
-] (./acl_latex.aux)
+Underfull \hbox (badness 1824) in paragraph at lines 369--370
+\T1/ptm/m/n/10.95 (+20) wrote each phase's ques-tion stem as a self-
+ []
+
+[10]
+LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
+(Font)              scaled to size 10.95pt on input line 374.
+
+Underfull \hbox (badness 1137) in paragraph at lines 379--380
+\T1/ptm/m/n/10.95 (+20) sub-stan-tially harder than \T1/zi4/m/n/10.95 v2 \T1/pt
+m/m/n/10.95 (+20) for ev-ery model
+ []
+
+[11]
+Underfull \hbox (badness 1137) in paragraph at lines 389--390
+\T1/ptm/m/n/10.95 (+20) a model's \T1/zi4/m/n/10.95 visual_grounding \T1/ptm/m/
+n/10.95 (+20) and \T1/zi4/m/n/10.95 reasoning
+ []
+
+[12] [13] [14] (./acl_latex.aux)
  ***********
 LaTeX2e <2023-11-01>
 L3 programming layer <2023-12-11>
  ***********
 Package rerunfilecheck Info: File `acl_latex.out' has not changed.
-(rerunfilecheck)             Checksum: F669D88C1EABCB7B093E714FB3F66C64;2011.
+(rerunfilecheck)             Checksum: BDE436C8819F4B76550085204F5E027B;3495.
  ) 
 Here is how much of TeX's memory you used:
- 26796 strings out of 474175
- 498442 string characters out of 5748183
- 1961457 words of memory out of 5000000
- 48100 multiletter control sequences out of 15000+600000
- 632402 words of font info for 388 fonts, out of 8000000 for 9000
+ 26809 strings out of 474175
+ 498606 string characters out of 5748183
+ 1965457 words of memory out of 5000000
+ 48107 multiletter control sequences out of 15000+600000
+ 632450 words of font info for 391 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,11n,87p,3448b,867s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,11n,87p,2543b,867s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </apps/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4
 b.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata
 -zi4r.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.
 pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></a
 pps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></apps/tex
 live/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></apps/texlive/20
-23/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></apps/texlive/2023/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></apps/texlive/2023/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr8.pfb></apps/texlive/2023/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmr9.pfb></apps/texlive/2023/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmsy10.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmsy7.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsy8.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.
+23/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></apps/texlive/2023/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></apps/texlive/2023/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr7.pfb></apps/texlive/2023/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmr8.pfb></apps/texlive/2023/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr9.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmsy10.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmsy7.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.
 pfb></apps/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></apps/t
 exlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></apps/texlive/2023/tex
 mf-dist/fonts/type1/urw/times/utmr8a.pfb></apps/texlive/2023/texmf-dist/fonts/t
 ype1/urw/times/utmri8a.pfb>
-Output written on acl_latex.pdf (16 pages, 302180 bytes).
+Output written on acl_latex.pdf (14 pages, 297214 bytes).
 PDF statistics:
- 529 PDF objects out of 1000 (max. 8388607)
- 428 compressed objects within 5 object streams
- 95 named destinations out of 1000 (max. 500000)
- 69234 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 537 PDF objects out of 1000 (max. 8388607)
+ 432 compressed objects within 5 object streams
+ 98 named destinations out of 1000 (max. 500000)
+ 69794 words of extra memory for PDF output out of 74296 (max. 10000000)
 

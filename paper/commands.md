@@ -57,3 +57,43 @@ Progress and finishing up:
 No need to review everything in one sitting — take breaks anytime, just download before you stop for the day if you're on a shared or different machine next time.
 
 Let me know if anything looks off or the file won't open — happy to fix it.
+
+
+-----
+
+
+Queue status:
+
+squeue -u $USER -o "%.10i %.28j %.8T %.10M %.10l %R"
+
+Recent job history (finished and running):
+
+sacct -u $USER -S $(date -d '2 days ago' +%F) -X --format=JobID%12,JobName%30,State%12,Elapsed,End -n
+
+Live progress of a running job (swap in the job name):
+
+tail -f logs/lumigcabl_MedGemma-4B_43118917.out
+
+To refresh the queue every 30 seconds:
+
+watch -n 30 'squeue -u $USER -o "%.10i %.28j %.8T %.10M %R"'
+
+
+----
+
+
+squeue -A so589980.ucf -o "%.10i %.10u %.28j %.8T %.10M %.10l %.10b %R"
+
+The %b column shows the GPUs each job requested, which is what matters for the cap.
+
+Group usage against the account limits:
+
+sshare -A so589980.ucf -l
+
+If HiPerGator has the RC helper loaded, this shows group GPU and CPU usage and limits:
+
+module load ufrc && slurmInfo so589980.ucf
+
+The account name is so589980.ucf, not so589980.
+
+Add -t RUNNING to squeue to hide pending jobs. Add -h | wc -l to count them.

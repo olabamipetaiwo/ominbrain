@@ -103,5 +103,97 @@ To make it usable, the options are:
 
 Given it's a named contribution of KAB (per the framework description above), I'd lean toward doing #1 first since it's just aggregation over data we already have — want me to write that pooling script and see what N we can get?
 
+------
+
+- Repeated-run control: MedGemma-4B and Gemma-3-12B.
+- Gating-causality: MedGemma-4B (3h25m) and Gemma-3-12B (5h09m).
+- All four counterfactual (lumicf_*) runs.
+
+What's left
+- Once the two Llama-4-Scout jobs finish, all four models will have both experiments.
+- I still need to write the small compile script for rep1-vs-rep2 flip rates. It isn't written yet, so the repeated-run results aren't analyzed.
+- The gating-causality results also aren't in the paper yet. Sec. 7 has design text only (sec:gating-causality).
+- Earlier today's work on the round-2 review is already in the paper. update.md records two headline results that changed:
+  - Substitution test: the "below chance" claim is reversed. It's now +11.9pp above an item-spec
+
+-----
+
+The paper is moving from a benchmark that measures causal degradation across the chain to a measurement-validity paper. It now asks whether these benchmarks and their metrics show that models use the image and the earlier phases at all. 
+The results so far support that framing and don't support the original one.
+
+The original claim
+- Claim: reasoning degrades across the five phases for the same patient, and KB-grounded faithfulness and feedback adaptation measure this.
+- Why LUMIERE: OmniBrainBench only has 2 real cross-phase links out of 6,823 questions, so we built a real same-patient chain dataset from LUMIERE.
+- Where it's weakened: the results no longer show clean degradation. Your professor's expectation and the title, "Evaluating Causal Clinical Reasoning", still assume that claim.
+
+What the results now say
+- Image dependence is weak.
+  - Text-only accuracy is within about ±8pp of image-present accuracy, and no per-phase cell is clearly above zero.
+  - Stated evidence mostly repeats text the model was shown.
+  - Answers that flip under a swapped image match the donor patient only modestly above item-specific chance (34% vs 22%). That reversed our earlier "below chance" claim.
+- Context dependence is confined to one phase. In the gating-causality runs, the wrong-context effect shows up at TCM in both models so far, with no detectable effect at LIL or PJRF. Gemma-12B at DSCR goes the wrong way: correct context hurts, with a paired p of .008 (uncorrected). Errors don't propagate down the chain in any simple way.
+- Decoding is deterministic. Rep1 and rep2 give identical answers for the two finished models, so the flips we see come from the input.
+
+Where this leaves the contributions
+- Still standing: the LUMIERE chain dataset (the first same-patient chain dataset we know of), the construction method, and the finding that OmniBrainBench can't support same-patient chains.
+- Weaker: the KAB framework. The abstract already flags adaptation and gating as exploratory and calls the metric "vocabulary and consistency" instead of faithfulness.
+- Weakest: "causal degradation" as a headline result.
+
+Open decisions
+- Framing: the reviewer's proposal to reframe around continuity, leakage and image dependence is listed in paper/review.md as a decision for Prof. Wang. I'd take it, because it fits what the data says. It's a change from what she approved, so she has to sign off.
+- Clinician validation: the paper's remaining weak point is that the answer keys and single-slice answerability aren't clinician-validated. That blocks several fixes and is the same bottleneck as the expert review of the LUMIERE items. Nothing we run on the cluster will fix it.
+- TCM leakage: TCM is our clearest context effect, but it may be leakage, not reasoning. Someone should check whether the true upstream answers give away the treatment answer before we call it context dependence.
+- Venue: NAACL 2027 is the target, and I haven't looked up the deadline.
+
+Next steps on our side
+1. Wait for the 27B and Scout jobs, then re-run lumiere_gating_stats.py.
+2. Check the TCM leakage question.
+3. Bring the reframing proposal to Prof. Wang, with the gating-causality table as the evidence.
 
 
+--------
+
+What the data shows
+
+The TCM effect is partly, but not fully, a lookup on the DSCR label.
+
+1. The TCM key follows from the DSCR key by construction. The drafter prompt says the correct management "follows from this patient's actual disease course". I classified each correct TCM option as escalate, continue or stop with a keyword regex, so it's approximate. The DSCR key predicts that class for 48 of 52 patients. Progressive disease maps to escalate for 31 of 35 patients, and stable disease, partial response and complete response map to continue for all 17.
+2. The label doesn't always fix the letter. In 30 of 52 items a distractor is in the same class as the key. So the label alone is a strong hint
+3. Gemma-3-12B follows the injected label. On the 35 patients whose DSCR key is progressive disease, it picks an escalate-class option:
+   - 25 of 35 with correct context;
+   - 15 of 35 when the DSCR label is forced wrong (the alphabetically-first wrong option, which for these patients is "Stable disease");
+   - 13 of 35 with no context.
+4. MedGemma-4B doesn't follow it. It picks escalate 8 of 35 times under both correct and wrong context, and mostly picks "continue" regardless. Yet its correct-vs-wrong TCM gap has 9 items right only under correct context and 0 the other way. The class shift doesn't explain that gap, so I don't have an explanation
+   for it yet.
+
+What it means
+
+- Not leakage in the cheating sense: by design, TCM depends on the prior disease state. The DSCR answer is supposed to inform treatment.
+- Not evidence of chain reasoning either: in Gemma-12B, "TCM depends on upstream context" mostly reduces to "the model reads the RANO label and maps it to a treatment". That is a lookup, not a causal chain built from the images.
+
+What's left to check
+
+- Ablation on the GPU: rerun TCM with only the DSCR entry in the injected context, then with everything except DSCR. If DSCR-only recovers the full effect, it's the label. If the other phases matter, it's broader. This needs a small change to src/gating_causality.py, and I'd add a --context-subset flag.
+- Label-only version: inject the bare label with no reasoning text, to separate the label from any wording overlap with the options. This may ex
+- A real tool: replace my regex classifier with one that reads the class from the drafter's structured output or the review file. The current numbers come from an ad hoc script and aren't reproducible from the repo yet.
+- Expert view: ask the clinician whether the TCM options really turn on the RANO category. That also feeds the blocked prognosis and TCM key val
+
+Under the cap, the ablation runs as two extra jobs after the current chains finish
+
+------
+
+Next steps
+1. Wait for the running and queued jobs, then run lumiere_gating_stats.py and add an options-only section to it.
+2. Rewrite the title, abstract, contributions and intro around shortcut learning, using the finished numbers.
+3. Rebuild the figures so the shortcut evidence is the centre: a per-phase decomposition of options, then stem, then image, then context.
+
+
+
+-----
+Steps after the run
+
+
+1. Check that every job finished cleanly, including the group-limited lumirep_Llama-4-Scout (43091110), which may run last.
+2. Run python -m tools.lumiere_gating_stats for the complete repeated-run, gating-causality and TCM ablation tables.
+3. Add an options-only section to that tool, since it isn't compiled yet, and run it.
+4. Report what the four-model results say for the shortcut framing before we touch the paper text.
