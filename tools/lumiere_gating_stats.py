@@ -241,6 +241,7 @@ def ablation_section(rng) -> tuple[dict, list[str]]:
 def options_section(rng) -> tuple[dict, list[str]]:
     from collections import Counter
 
+    from src.lumiere_labels import canonical_answer_text
     from src.lumiere_loader import load_lumiere
     from tools.lumiere_reviewer_stats import item_table as rs_item_table, load_run
 
@@ -250,7 +251,7 @@ def options_section(rng) -> tuple[dict, list[str]]:
     for ph in PHASES:
         qs = [c["phases"][ph][0] for c in cases if c["phases"].get(ph)]
         ref[ph] = {"n": len(qs), "chance": float(np.mean([1 / len(q["options"]) for q in qs])),
-                   "text_majority": Counter(q["correct_answer_text"] for q in qs).most_common(1)[0][1] / len(qs)}
+                   "text_majority": Counter(canonical_answer_text(q["correct_answer_text"]) for q in qs).most_common(1)[0][1] / len(qs)}
     lines = ["## 4. LLM options-only baseline (no image, no question stem, no chain context)", "",
              "Reference rows are non-LLM: chance = mean 1/#options; majority = share of the most common correct answer TEXT. "
              "'no-chain ctx' = gating-causality's absent condition (LIL-TCM), own-image run for AIA. Δ = own-image − options-only, "

@@ -108,11 +108,14 @@ LUMIERE_DATA_DIR = "data/lumiere"
 #   v3: leak-free rewrite (2026-09-22): no stem/option states an earlier phase's answer; DSCR sees both images;
 #       prompt states the image orientation convention; LIL baseline = post-op scan (RANO reference) instead of
 #       the earliest (usually pre-op) scan -> own facts_dir; 52 patients (2 have no imaged post-op scan).
+#   v4: answerable-by-construction set (src/lumiere_v4.py): every key is a stated function of the model-visible
+#       inputs (sequence shown, slice position, image-derived RANO rule, forecast scored by Brier, TCM rule).
 IMAGE_ORIENTATION_NOTE = ("Images are shown in radiological convention: the patient's right side is on the "
                           "left of the image.")
 ITEM_SETS = {
     "v2": {"dir": LUMIERE_DATA_DIR, "facts_dir": f"{LUMIERE_DATA_DIR}/facts", "orientation_note": False},
     "v3": {"dir": f"{LUMIERE_DATA_DIR}/v3", "facts_dir": f"{LUMIERE_DATA_DIR}/v3/facts", "orientation_note": True},
+    "v4": {"dir": f"{LUMIERE_DATA_DIR}/v4", "facts_dir": f"{LUMIERE_DATA_DIR}/v4/facts", "orientation_note": True},
 }
 DEFAULT_ITEM_SET = "v2"
 

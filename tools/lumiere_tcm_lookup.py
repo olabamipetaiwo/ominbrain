@@ -30,6 +30,7 @@ import re
 from math import comb
 from pathlib import Path
 
+from src.lumiere_labels import canonical_answer_text
 from src.lumiere_loader import load_lumiere
 
 MODELS = ["MedGemma-4B", "Gemma-3-12B", "Gemma-3-27B", "Llama-4-Scout"]
@@ -82,8 +83,8 @@ def key_analysis(cases: list[dict]) -> tuple[list[str], dict, dict]:
         d, t = c["phases"]["DSCR"][0], c["phases"]["TCM"][0]
         classes = {l: action_class(x) for l, x in t["options"].items()}
         key_cls = classes[t["correct_answer"]]
-        rows.append({"id": c["id"], "dscr": d["correct_answer_text"], "key_class": key_cls,
-                     "pred_class": predicted_class(d["correct_answer_text"]),
+        rows.append({"id": c["id"], "dscr": canonical_answer_text(d["correct_answer_text"]), "key_class": key_cls,
+                     "pred_class": predicted_class(canonical_answer_text(d["correct_answer_text"])),
                      "unique": sum(v == key_cls for v in classes.values()) == 1,
                      "classes": classes})
         ids.append(c["id"])

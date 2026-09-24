@@ -1,5 +1,47 @@
 #Project Update
 
+## 2026-09-24 (review round 3: answerability rebuilt as v4, numbers reconciled, paper restructured; GPU runs queued)
+
+Source: `paper/review.md` (professor's review; 2/5, soundness). User instruction: fix everything except the clinician review; GPU jobs may run in the background.
+
+**Concern 5 (numbers): root cause found and fixed.** Two spellings of one RANO key ("Progressive disease" x33, "Progressive disease (PD)" x2) made every string-comparing
+tool count 33 progressive-disease keys instead of 35: DSCR majority 63.5% (correct: 35/52 = 67.3%, as `src/analysis.py` already had it), TCM lookup 50/52 (correct: 52/52;
+35/35 PD escalate, 17/17 others continue), donor DSCR option availability 48 (correct: 52), PD-keyed TCM escalate counts (now 9/8/9, 26/14/11, 27/14/21, 24/17/15 of 35).
+The "33 vs 37" is 37 (54 patients) -> 35 (52; both dropped patients were PD). "Every model below the DSCR majority" is true at 67.3% (Gemma-3-27B 65.4%, exact binomial p .68 against
+the rate). Also a typo: MedGemma DSCR is 15%, not 14%. Fixes: `src/lumiere_labels.py` (canonical RANO strings), tools re-run (`results/lumiere_{reviewer,gating}_stats`, `lumiere_tcm_lookup`).
+`tools/paper_numbers.py` is now the single source: it writes `paper/latex/generated/{numbers.tex,tab_*.tex}` (117 macros, tables) and `--check` fails on known stale strings. The paper cites macros.
+"Only TCM depends on upstream context" rewritten (TCM benefits, DSCR is sensitive); "correct DSCR context" clarified (true answers of AIA and LIL supplied to DSCR, never DSCR's own label);
+appendix baselines wording fixed (AIA longest-option 37%, letter prior up to 37%).
+
+**Concern 1 (answerability): audit + rebuild.** New audit: an enhancement rule (RANO bidimensional product of the largest enhancing component on the displayed slice; progression vs nadir,
+response vs post-op baseline) reproduces the expert category for 130/268 first-line follow-ups (49%); 37 are undetermined (nothing measurable); by expert label PD 110/161, CR 12/15, SD 6/76, PR 2/16.
+Our automated product vs the rater's recorded target-lesion product: Spearman 0.57 (n=94), ours a median 1.4x larger. Also found: the v3 DSCR stem quotes the rater's recorded findings (the paper had said it
+was a structured template only): corrected.
+`v4` item set (`src/lumiere_measure.py`, `lumiere_v4.py`, `lumiere_v4_render.py`; data in `data/lumiere/v4/`, gitignored, regenerable: `python -m src.lumiere_v4 --measure` then `python -m src.lumiere_v4`):
+62 patients, one first-line follow-up each, strata by TCM rule class and DSCR category (quotas, seed 20260925, no model output used). AIA = sequence shown (balanced; positive control), LIL = hemisphere and
+anterior/posterior half on the displayed slice (n=51), DSCR = enhancement category from displayed baseline/nadir/follow-up slices (expert rating recorded, not the key; 27/62 agree), PJRF = 52-week
+mortality forecast scored by Brier (n=61; 34 died), TCM = rule(category, weeks since chemoradiotherapy) with 27 continue / 19 repeat-MRI / 16 change-therapy keys. The DSCR rule was adjusted (nadir, abstention) after inspecting
+its agreement with the expert ratings; disclosed in the plan. Reference numbers (`results/lumiere_v4_baselines.md`): category-only TCM lookup <= 74.2%; PJRF base rate 55.7%, Brier .255, a leave-one-out logistic on the
+stated facts .264 (AUC .547), i.e. PJRF cannot be beaten on these facts. Images checked by eye (orientation, keys).
+**Concern 2 (donor swap): matched pairs.** AIA/LIL/DSCR stems hold no patient facts and every option set holds all answers, so the donor's answer is always available; one donor per patient and phase with a different key (DSCR: same number of
+images); tracking measured as G = P(swap = donor key) - P(text-only = donor key).
+**Concern 3 (TCM): ** TCM key is a stated rule (documented treatment does not exist in LUMIERE: said so); same diagnosis maps to different actions by stated timing; `flip_window`, `flip_label`, `ctx_wrong` (seeded random wrong option, which also closes the optional per-label item) and a label-only lookup ceiling. The regex classifier is not used in v4.
+**Concern 4 (estimand/margin):** `paper/preregistration_v4.md` written before any v4 run (SHA-256 e841250b9aefc88e34321f1bf0fc7b936f6696c9807a2f8f4d5b38c77944ef8f, 2026-09-24; not externally timestamped): E1 to E5, +/-10 pp margin with the precision warning
+(reachable only if <= ~14% of items differ), positive-control rule, Holm over 12 E1 tests, fixed-context design (every condition asks one question with a manufactured context); chain runs are secondary.
+**PJRF (required revision):** prediction time = the follow-up scan, information stated in the stem, horizon 52 weeks, probability bins scored by Brier skill vs the leave-one-out base rate.
+**Concern 6:** paper refocused (KAB moved to Appendix B as exploratory; OmniBrainBench compat is motivation only; Nguyen et al. IJCAI 2025 is the related-work anchor).
+**Page fit / references:** Conclusion now before Limitations; body ends on page 5 of 20 (limit 8), leaving room for the v4 results. Five references added and verified against Europe PMC / publisher records (Kickingereder 2019
+Lancet Oncol 20:728-740, Isensee 2019 Hum Brain Mapp 40:4952-4964, Sioutos 2007 J Biomed Inform 40:30-43, McNemar 1947 Psychometrika 12:153-157, Wilson 1927 JASA 22:209-212). DeepBraTumIA has no separate
+peer-reviewed description that I could find; it is cited through LUMIERE, which cites Kickingereder for both tools. The RANO 12-week window is from the criteria as summarised by secondary sources (full text of Wen 2010 still unread by me).
+Title changed to "Do Medical MLLMs Read the Scan? Shortcut Controls on Brain-MRI Question Answering" (the earlier recommendation; user can revert). Compiles clean (0 errors, 0 undefined refs) on a scratch copy.
+**Not done, by instruction:** clinician review of answerability and keys (TCM rule, assumed schedule ending 10 weeks after surgery, automated segmentations, survival censoring). **Pending:** v4 model runs (below); the abstract, Results text and Conclusion
+carry "pending" markers until `results/lumiere_v4_stats.json` exists; conclusions must then be written under the decision rules of the plan.
+Tests: `python -m tests.test_lumiere_v4` (7 pass). Mock end-to-end of `run_lumiere_v4.py --mock` passes.
+**GPU jobs (user OK'd background runs; cap 2 concurrent).** Smoke `lumiv4_smoke` 43199049 (MedGemma-4B, 2 cases, all conditions). Real jobs are gated `afterok` on the smoke and chained `afterany` in two slots:
+slot A 43199273-43199278 = MedGemma-4B then Gemma-3-27B, each image (own/text/swap) -> context (ctx_*, flip_*) -> chain (image and text-only); slot B 43199279-43199284 = Gemma-3-12B then Llama-4-Scout, same order.
+**Cap raised to 3 GPUs (user, 2026-09-24, for this campaign); re-cut into 3 slots:** MedGemma-4B then Llama-4-Scout (43199282 now `afterany` 43199275), Gemma-3-12B, Gemma-3-27B (43199276 dependency cleared). Smoke 43199049 COMPLETED (7.5 min, all conditions ran; MedGemma had one unparseable PJRF answer, scored 0.5 by plan).
+Results -> `results/lumiere_v4_<model>_{image,context}_*` and `results/lumiere_<model>[_textonly]_v4_nogate_noadapt_*`. When done: `python -m tools.lumiere_v4_stats`, `python -m tools.paper_numbers`, then write the Results text.
+
 ## 2026-09-24 (conclusion, title options, references audit, review.md TODOs)
 
 - **Paper had no Conclusion section.** Added `\section{Conclusion}` (`sec:conclusion`) in `paper/latex/acl_latex.tex`: one paragraph with the question, the three controls' findings (same numbers as the abstract), the exploratory caveat, and next steps. It currently sits after Limitations in the file.

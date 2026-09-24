@@ -51,6 +51,9 @@ def _grounding_terms_for(task_label: str) -> list[str]:
 
 
 def _image_path_for(question: dict) -> str | list[str]:
+    # v4 items list their rendered files explicitly (may be empty for text-only PJRF/TCM items)
+    if question.get("image_files") is not None:
+        return list(question["image_files"])
     # v3 items name their images explicitly (DSCR gets baseline + follow-up, like LIL)
     if question.get("image_timepoints"):
         return [f"{tp}.png" for tp in question["image_timepoints"]]
@@ -87,6 +90,8 @@ def _image_labels_for(question: dict) -> list[str] | None:
     direction errors (up to 68% of one model's wrong LIL answers): the two images were
     already sent in the correct baseline-then-follow-up order, but only ever labeled
     generically ("<image_1>:", "<image_2>:"), never tied to which timepoint is which."""
+    if question.get("image_files") is not None:
+        return question.get("image_labels")
     if question.get("image_timepoints"):
         tps = question["image_timepoints"]
         return [f"baseline ({tps[0]})", f"follow-up ({tps[1]})"] if len(tps) == 2 else None
@@ -101,6 +106,8 @@ def _image_labels_for(question: dict) -> list[str] | None:
 
 
 def _image_dir_for(question: dict) -> Path:
+    if question.get("image_dir"):
+        return Path(question["image_dir"])
     return Path(lcfg.LUMIERE_DATA_DIR) / "slices" / question["patient_id"]
 
 
@@ -126,7 +133,8 @@ def merge_reviewed(reviewed_dir: Path | None = None,
         for row in rows:
             if row.get("review_status") in keep:
                 draft = drafts.get(row["id"], {})
-                for key in ("timepoint", "facts_used", "image_timepoints"):
+                for key in ("timepoint", "facts_used", "image_timepoints", "image_files", "image_labels", "image_dir",
+                            "forecast", "scoring", "ordered_options", "tcm_rule"):
                     if key not in row and key in draft:
                         row[key] = draft[key]
                 items.append(row)
@@ -174,21 +182,25 @@ def build_lumiere_cases(items: list[dict], n_cases: int | None = None,
             phase_qs = []
             for q in bucket:
                 options = q["options"]
-                if not (3 <= len(options) <= 5) or q["correct_answer"] not in options:
+                forecast = q.get("scoring") == "forecast"   # PJRF v4: no "correct" option, scored by Brier score
+                if not (3 <= len(options) <= 5) or (not forecast and q["correct_answer"] not in options):
                     continue  # ingest-time validation per plan
                 correct = q["correct_answer"]
-                if shuffle_options:
+                if shuffle_options and not q.get("ordered_options"):
                     options, correct = _shuffle_options(options, correct, q["id"])
 
                 image_path, image_dir = _image_path_for(q), _image_dir_for(q)
                 cf_partner = None
                 if counterfactual_pairs:
-                    partner_id = counterfactual_pairs.get(patient_id, {}).get("partner")
+                    entry = counterfactual_pairs.get(patient_id, {})
+                    # v3 pairs: one donor per patient; v4 pairs: one donor per (patient, phase)
+                    partner_id = (entry.get("partner_by_phase", {}).get(phase_abbr) if "partner_by_phase" in entry
+                                  else entry.get("partner"))
                     partner_q = by_patient_phase.get((partner_id, q["clinical_phase"])) if partner_id else None
                     if partner_q is not None:
                         image_path, image_dir = _image_path_for(partner_q), _image_dir_for(partner_q)
                         cf_partner = partner_id
-                    else:
+                    elif q.get("image_files") != []:   # text-only v4 items (PJRF, TCM) have no image to swap
                         print(f"WARNING: no counterfactual partner image for "
                               f"{patient_id}/{q['clinical_phase']} — using own image.")
 
@@ -206,6 +218,7 @@ def build_lumiere_cases(items: list[dict], n_cases: int | None = None,
                     "_image_labels": _image_labels_for(q),  # original patient's own labels — see docstring
                     "_image_note": image_note,
                     "_counterfactual_partner": cf_partner,
+                    **{k: q[k] for k in ("scoring", "forecast", "tcm_rule", "ordered_options") if k in q},
                 })
             if phase_qs:
                 phases_dict[phase_abbr] = phase_qs

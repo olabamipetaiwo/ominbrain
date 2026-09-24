@@ -1,0 +1,165 @@
+\begin{abstract}
+Multimodal LLMs are scored on medical image questions by final-answer accuracy, which cannot show whether an answer came from the image, the question text, or a shortcut, and removing the image says nothing about image use when the question cannot be answered from it. We build five-phase question chains from the LUMIERE glioblastoma cohort and first audit an expert-labeled version: only \vfourConcordantPct{}\% of expert RANO ratings can be reproduced from the enhancing lesion on the displayed slices, so image-removal results on those items cannot separate shortcut use from unanswerable questions. We rebuild the chains so that each answer key is a stated function of what the model sees: which sequence is shown, where the lesion lies on the displayed slice, the enhancement-based response category, a one-year mortality forecast scored by the Brier score, and a management rule that depends on both the response category and the time since chemoradiotherapy. Controls are fixed before the runs: a positive control that only the image can answer, matched donor-image swaps in which the donor's answer is always available, fixed-context comparisons, and fact-flip tests of the management rule, applied to four open-weight models. \ifnum\vfourPending=1 The v4 runs have not finished at the time of this draft; results are marked pending. \fi Items and keys are not clinician-validated.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Medical multimodal LLMs are usually scored on the letter they pick, which cannot separate a model that read the image and reasoned validly from one that used cues in the question or options, or guessed. Such shortcuts are well documented outside medicine: hypotheses alone beat chance on natural language inference \citep{gururangan2018annotation}, models adopt syntactic heuristics that fail on adversarial sets \citep{mccoy2019right}, and stated chain-of-thought often does not reflect what produced the answer \citep{turpin2023language}. In chest-radiograph question answering, models often rely on linguistic patterns or attend to irrelevant image regions, and textual and visual perturbation protocols exist for detecting this \citep{nguyen2025localizing}. A control that removes or swaps the image is only informative when the question can be answered from the image: if the displayed slice does not contain the evidence for the key, performance will not change for a model that reads images perfectly.
+
+We ask whether accuracy on brain-MRI questions reflects reading the scan or a shortcut, and we treat answerability as a property to be built and audited, not assumed. We use the five clinical phases of OmniBrainBench \citep{peng2026omnibrainbench}, anatomical and imaging assessment (AIA), lesion identification and localization (LIL), diagnostic synthesis and causal reasoning (DSCR), prognostic judgment and risk forecasting (PJRF), and therapeutic cycle management (TCM), arranged as a same-patient chain on the LUMIERE glioblastoma cohort \citep{suter2022lumiere}. Our first construction drafted items with an LLM from expert RANO ratings and cohort records. Auditing it shows that the keys are not functions of the model-visible inputs (Section~\ref{sec:audit}), so we rebuilt it (Section~\ref{sec:v4}) and fixed the controls before running them (Section~\ref{sec:controls}).
+
+The paper makes three contributions:
+\begin{itemize}[leftmargin=*, itemsep=2pt, topsep=2pt]
+    \item An answerability audit of an expert-labeled brain-MRI chain: an enhancement-based rule applied to the displayed slices reproduces the expert RANO category for only \vfourConcordantPct{}\% of \vfourFollowups{} follow-ups, and the released benchmark's groupings cannot support same-patient chains at all (2 verifiable cross-phase links in 6,823 questions).
+    \item A chain in which every key is a stated function of the model-visible inputs, and a control suite fixed in advance: a positive control that only the image can answer, matched donor-image swaps with the donor's answer always available, fixed-context comparisons, and fact-flip tests that separate use of the diagnosis label from use of other supplied facts.
+    \item \ifnum\vfourPending=1 Results on four open-weight models (pending at the time of this draft). \else Results on four open-weight models (Section~\ref{sec:results}). \fi The KAB vocabulary, adaptation and gating metrics we proposed earlier are kept only as exploratory instruments (Appendix~\ref{sec:kab}).
+\end{itemize}
+
+\section{Related Work}
+\label{sec:related-work}
+
+\paragraph{Shortcuts and faithfulness.} A model can reach a label without doing the intended task: hypothesis-only baselines beat the majority class on many NLI datasets \citep{poliak2018hypothesis, gururangan2018annotation}, models trained on such data adopt heuristics that fail on HANS \citep{mccoy2019right}, and biasing features in the input change chain-of-thought answers without appearing in the explanation \citep{turpin2023language}.
+
+\paragraph{Answering without the image.} In visual question answering, language priors let models answer without the image, and \citet{goyal2017making} rebalanced the data so each question has two images with different answers. \citet{chen2024right} find that visual content is unnecessary for many samples in popular multimodal benchmarks. In medicine, \citet{yan2025worse} show that state-of-the-art models score below random guessing on specialized diagnostic questions when ground-truth questions are paired with adversarial counterparts, \citet{jin2024hidden} find flawed rationales in 35.5\% of GPT-4V's correct answers, and \citet{nguyen2025localizing} introduce textual and visual perturbation tests for chest-radiograph questions. Their items are single questions; we apply the same logic to a same-patient chain and add a positive control, matched swaps, and interventions on the stated clinical facts.
+
+\paragraph{Brain benchmarks and same-patient continuity.} OmniBrainBench \citep{peng2026omnibrainbench} is a brain-imaging benchmark organized around a five-phase clinical workflow (15 modalities; 6,823 closed-ended questions). Its supplement describes a patient-level extension on the ADNI Alzheimer's cohort; the authors' repository provides label-generation code but no question data, and we did not evaluate it. LUMIERE \citep{suter2022lumiere} and MU-Glioma-Post \citep{muglioma2025post} provide real longitudinal glioma data with treatment and outcomes but no question layer.
+
+\section{Building Answerable Chains from LUMIERE}
+\label{sec:lumiere}
+
+\paragraph{Why not OmniBrainBench.} A chain needs one patient's phases. We checked whether any image is shared across questions of different phases within a grouped case: of 6,823 closed-ended questions only 2 verifiable cross-phase patient links exist (both in VQA\_RAD, one AIA and one LIL question each), and a second method based on filename identifiers agreed; the counts are lower bounds (Appendix~\ref{sec:app-compat}). Each sub-corpus was built for one task, so a patient is essentially asked one phase-type of question. This is an incompatibility between the released groupings and our evaluation, not a defect in a promise its authors made.
+
+\paragraph{LUMIERE.} LUMIERE \citep{suter2022lumiere} has 91 glioblastoma patients with longitudinal MRI (T1, contrast-enhanced T1, T2, FLAIR), automated segmentations (DeepBraTumIA and HD-GLIO-AUTO; \citealp{suter2022lumiere, kickingereder2019automated}), RANO ratings by one neuroradiologist \citep{wen2010updated}, and overall survival for most patients. Segmentations are automated and were not manually verified; the ratings are expert-assigned.
+
+\subsection{Audit: are the expert labels answerable from the displayed slices?}
+\label{sec:audit}
+
+Our first item set (\texttt{v3}, Appendix~\ref{sec:app-v3}) let an LLM draft each phase's question from the expert RANO rating, the volume change between two segmentations, and cohort records. Three properties make its keys unanswerable from what the model sees. (i)~LIL asked for whole-lesion volume change, which one 2D slice per timepoint does not determine. (ii)~AIA had one fixed answer for every patient. (iii)~DSCR used the expert rating, which need not follow from the enhancing lesion. We measured (iii): on the axial slice with the largest enhancing area at each scan, we computed the RANO bidimensional product (longest diameter times longest perpendicular diameter) of the largest enhancing component and applied the enhancement criteria (progression: at least 25\% above the smallest earlier measurement, the nadir, or a new measurable lesion; response against the post-operative baseline; measurable means at least 10 by 10 mm). Of \vfourFollowups{} first-line follow-ups (one per rated, imaged timepoint before any second surgery), \vfourUndetermined{} are undetermined because no measurable enhancing disease exists on the baseline or nadir scan, and the rule reproduces the expert category for \vfourConcordant{} (\vfourConcordantPct{}\%): progressive disease \vfourExpPDSame{} of \vfourExpPDN{}, complete response \vfourExpCRSame{} of \vfourExpCRN{}, stable disease \vfourExpSDSame{} of \vfourExpSDN{}, partial response \vfourExpPRSame{} of \vfourExpPRN{}. The remaining ratings rest on evidence outside contrast enhancement on the displayed slices, such as T2/FLAIR progression, the choice of reference scan, clinical status and steroid dose. LUMIERE documents that one neuroradiologist rated the studies but not what information they used, so we do not say which. Our automated product correlates only moderately with the diameters the rater recorded for the target lesion (Spearman \vfourBpRho{} over \vfourBpN{} follow-ups; ours is a median \vfourBpRatio{} times larger), which is a limit on the segmentation-based keys. Agreement is a proxy: it does not show that the rule is right where the two disagree.
+
+\subsection{The \texttt{v4} item set}
+\label{sec:v4}
+
+Each key is a stated function of the inputs the model receives (Table~\ref{tab:phases}). All random choices use fixed seeds and never look at model output.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.7cm}p{4.6cm}p{4.4cm}p{4.4cm}r}
+\toprule
+Phase & Question & Model-visible inputs & Key & $n$ \\
+\midrule
+AIA & Which MRI sequence is shown? & one axial slice (T1, T1 after contrast, T2 or FLAIR) & the sequence rendered (balanced) & \vfourNAIA{} \\
+LIL & Hemisphere and anterior/posterior half of the main tumor region & follow-up contrast-enhanced T1 slice at the level of the largest tumor region & position of the largest tumor-core component on that slice, relative to the midline and the brain's front-to-back midpoint & \vfourNLIL{} \\
+DSCR & RANO enhancement category at follow-up & baseline, nadir and follow-up slices at the level of the largest enhancing lesion; the RANO thresholds are stated & category from the bidimensional products on those slices & \vfourNDSCR{} \\
+PJRF & Probability of death within 52 weeks of this scan & age, sex, MGMT, IDH, extent of resection, weeks since surgery; alive at the scan & recorded outcome; scored by Brier score, not accuracy & \vfourNPJRF{} \\
+TCM & Next management step & the same clinical facts plus weeks since chemoradiotherapy; the category comes from the chain & rule: non-PD continue; PD within 12 weeks of radiotherapy repeat MRI first; PD later change therapy & \vfourNTCM{} \\
+\bottomrule
+\end{tabular}
+\caption{The \texttt{v4} phases. Stems for AIA, LIL and DSCR contain no patient-specific fact and every option set contains every possible answer, so a swapped image never conflicts with the text and the donor's answer is always available.}
+\label{tab:phases}
+\end{table*}
+
+\paragraph{Cohort.} Of the patients with a first-line follow-up (rated, imaged, before any second surgery, with an imaged post-operative reference scan), we select one follow-up per patient in strata defined by the TCM rule class (continue, repeat MRI first, change therapy) and by the DSCR category, with quotas fixed in advance and a fixed seed, giving \vfourPatients{} patients. Selection used tabular records and segmentation masks only. Progressive-disease follow-ups whose timing falls within 2 weeks of the 12-week window are left out.
+
+\paragraph{Images.} Each image is an atlas-space axial slice, skull-stripped by the dataset authors with HD-BET \citep{isensee2019automated}, at 4$\times$ magnification with a 20\,mm scale bar, in radiological orientation (checked against the affine). Slice levels are those on which the key is computed.
+
+\paragraph{AIA, LIL, DSCR.} AIA is the positive control: its key is the sequence rendered, uniform over four sequences, so text alone can reach only chance. LIL's key is the hemisphere and anterior/posterior half of the largest tumor-core component on the displayed slice; lesions within 10\,mm of a midline, smaller than 100\,mm$^2$ or crossing the midline are not asked about. DSCR's stem states the RANO enhancement criteria, and its key is the category computed from the bidimensional products. The expert rating is recorded for each item but is not the key.
+
+\paragraph{PJRF.} The prediction time is the follow-up scan, the available information is what the stem states plus the model's earlier assessment, and the outcome is death within 52 weeks of the scan, from the LUMIERE survival record (which we assume shares its origin with the week numbering; censoring is not documented). The model picks one of four probability bins (midpoints .10, .30, .50, .80) and is scored with the Brier score, not by whether it picked a ``correct'' bin. The recorded outcome is death in \vfourPjrfBase{}\% of \vfourPjrfN{} patients; a leave-one-out logistic model on the stated facts reaches Brier \vfourPjrfBrierLR{} against \vfourPjrfBrierBase{} for the constant base rate (AUC \vfourPjrfAucLR{}), so these facts support little beyond the base rate at this sample size.
+
+\paragraph{TCM.} LUMIERE records no treatment after chemoradiotherapy, so a documented treatment is not available and the key is a rule-based recommendation, not what was done: non-progressive disease continues adjuvant temozolomide; progressive disease within 12 weeks of completing radiotherapy is confirmed with repeat MRI before any change; later progressive disease prompts a change of therapy. The 12-week window is from the RANO criteria \citep{wen2010updated}, which also allow progression inside the window when new enhancement lies outside the radiation field; we cannot assess the field, so the rule is a simplification. Radiotherapy dates are not in LUMIERE, so the stem states the weeks since chemoradiotherapy under an assumed standard schedule (ending 10 weeks after surgery). The same diagnosis therefore maps to different actions depending on the stated timing (\vfourTcmConfirm{} repeat-MRI and \vfourTcmEscalate{} change-therapy items among \vfourTcmPdItems{} progressive-disease items), which lets a lookup of the category alone be told apart from use of the timing fact.
+
+\section{Controls and Pre-specified Analysis}
+\label{sec:controls}
+
+The analysis plan (\texttt{paper/preregistration\_v4.md}) was written before any \texttt{v4} model run; its hash is recorded in the project log, and the file is not externally timestamped. Models are the four open-weight models of the earlier study (MedGemma-4B, Gemma-3-12B, Gemma-3-27B, Llama-4-Scout; 4-bit, greedy decoding, 800 tokens; unparseable responses score incorrect). Each condition asks one question with a manufactured upstream context, so a phase's effect is not mixed with the model's own earlier answers.
+
+\begin{itemize}[leftmargin=*, itemsep=1pt, topsep=2pt]
+    \item \textbf{E1, image effect} (AIA, LIL, DSCR): accuracy with the image minus text only, paired by patient, with a patient-bootstrap interval. The margin is $\pm10$ percentage points, fixed in advance; ``within margin'' requires the whole interval inside it, and the interval half-width is about $1.96\sqrt{d/n}$ for a share $d$ of items whose correctness differs, so at $n=62$ the margin is reachable only if $d\le14\%$. Holm correction over the 12 model-phase tests; other contrasts are descriptive and unadjusted, with exact McNemar tests \citep{mcnemar1947note} and Wilson intervals \citep{wilson1927probable} where a proportion is reported. \textbf{AIA is the positive control:} for a model whose AIA interval is not above zero, the test has not been shown to detect image use, and E1 on LIL and DSCR supports no conclusion about it.
+    \item \textbf{E2, donor tracking}: swap the image for a donor's with a different key (one donor per patient and phase, same number of images); $G=1[\text{swap}=\text{donor key}]-1[\text{text only}=\text{donor key}]$, so the no-image prior is subtracted.
+    \item \textbf{E3, use of stated facts} (TCM): with the true context, move the stated timing across the 12-week window (\emph{flip\_window}) or replace the stated category by one that maps to another action class (\emph{flip\_label}), and report the share of answers that move to the rule's new answer. A category lookup alone cannot: it reaches at most \vfourTcmLookupConf{}\% (\vfourTcmLookupEsc{}\% if it always escalates), the rule 100\%.
+    \item \textbf{E4, upstream context}: true, randomly wrong (each earlier answer replaced by a seeded random incorrect option) or absent context.
+    \item \textbf{E5, PJRF}: Brier score and skill against the leave-one-out base rate, and AUC.
+\end{itemize}
+
+The ordinary five-phase chain (own answers as context) is run with and without images as a secondary analysis; each arm regenerates its upstream answers, so later-phase differences are total effects through the chain.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Reference values without a model}
+
+Table~\ref{tab:baselines} gives what constants and lookups reach. AIA is uniform over four answers, DSCR's most common category is progressive disease for \vfourMajorityDSCR{}\% of items, and a category-only TCM lookup reaches at most \vfourTcmLookupConf{}\%.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrl}
+\toprule
+Phase & $n$ & Chance & Most common key \\
+\midrule
+AIA & \vfourNAIA{} & 25.0 & \vfourMajorityAIA{}\% \\
+LIL & \vfourNLIL{} & 25.0 & \vfourMajorityLIL{}\% \\
+DSCR & \vfourNDSCR{} & 25.0 & \vfourMajorityDSCR{}\% \\
+TCM & \vfourNTCM{} & 25.0 & \vfourMajorityTCM{}\% (lookup $\le$ \vfourTcmLookupConf{}\%) \\
+PJRF & \vfourNPJRF{} & (Brier) & base rate \vfourPjrfBase{}\% \\
+\bottomrule
+\end{tabular}
+\caption{Non-model references on the \texttt{v4} items: chance, share of the most common key, the ceiling of a category-only TCM lookup, and the PJRF base rate.}
+\label{tab:baselines}
+\end{table}
+
+\subsection{Image controls and stated facts}
+
+\ifnum\vfourPending=1
+\fbox{\parbox{0.94\linewidth}{\small \textbf{Pending.} The \texttt{v4} model runs (E1 to E5) had not finished when this draft was generated. The tables below are filled by \texttt{tools/paper\_numbers.py} from \texttt{results/lumiere\_v4\_stats.json}; the conclusions in this subsection are to be written from them under the decision rules of Section~\ref{sec:controls}.}}
+\fi
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{generated/tab_v4_e1}
+\caption{E1: accuracy (\%) with the image and with text only, with no upstream context, and the paired difference in percentage points. AIA is the positive control.}
+\label{tab:e1}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{generated/tab_v4_e2}
+\caption{E2: share of answers (\%) that equal the donor's key when the image is swapped, and when there is no image; the gain is the difference in percentage points.}
+\label{tab:e2}
+\end{table*}
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{generated/tab_v4_e3}
+\caption{E3: TCM accuracy under true, random wrong and absent upstream context, and the share of answers that move to the rule's answer after the stated category is changed (label) or the stated timing crosses the 12-week window (timing, progressive-disease items).}
+\label{tab:e3}
+\end{table}
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{generated/tab_v4_e5}
+\caption{E5: PJRF Brier score with the true upstream context, against the leave-one-out constant base rate; skill $=1-$ Brier / base-rate Brier.}
+\label{tab:e5}
+\end{table}
+
+\subsection{What the first item set showed}
+\label{sec:v3-summary}
+
+On \texttt{v3} (Appendix~\ref{sec:app-v3}; exploratory, with a margin chosen after seeing the intervals) removing the images changed accuracy by \vthreeDiffScout{}, \vthreeDiffGemmaTwentySeven{}, \vthreeDiffGemmaTwelve{} and \vthreeDiffMedGemma{} percentage points for Llama-4-Scout, Gemma-3-27B, Gemma-3-12B and MedGemma-4B. Given the audit above this is what one would see whether or not the models read the images, and we draw no shortcut conclusion from it. Two \texttt{v3} results are about the items' structure. TCM keys follow the DSCR category by construction (\tcmAgree{} of \tcmN{} keys map from the category to their action class), and accordingly correct upstream context beats forced-wrong context for all four models. DSCR is a class-imbalanced phase: progressive disease is the key for \dscrMajorityCount{} of \nPatVthree{} items (\dscrMajorityPct{}\%), above every model's DSCR accuracy. The motivation for the \texttt{v4} controls is that neither result can tell use of the category from use of the other stated facts.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Accuracy on an expert-labeled brain-MRI chain cannot show whether models read the scan: only \vfourConcordantPct{}\% of expert RANO ratings are reproducible from the enhancing lesion on the displayed slices, and the benchmark we started from cannot support same-patient chains. We rebuilt the chain on LUMIERE so that every key is a stated function of the model-visible inputs, and fixed a control suite in advance, with a positive control that only the image can answer, matched donor swaps, fixed-context comparisons and fact-flip tests of a management rule. \ifnum\vfourPending=1 The results of the four-model runs are pending at the time of this draft. \fi Clinician review of the keys, and in particular of the management rule and the assumed radiotherapy schedule, is the outstanding step, and proprietary models are not run. The controls apply to any chain-structured medical benchmark whose keys are made answerable from its inputs.

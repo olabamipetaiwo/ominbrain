@@ -11,6 +11,7 @@ requests>=2.31.0
 pandas>=2.0.0
 nibabel>=5.0.0
 streamlit>=1.35.0
+scipy>=1.11.0
 
 
 

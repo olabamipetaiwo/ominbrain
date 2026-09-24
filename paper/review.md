@@ -1,5 +1,17 @@
 # Review 
 
+## Status (2026-09-24, updated after the v4 rebuild)
+
+- [x] PJRF/TCM task definitions: prediction time, information and 52-week horizon stated; Brier scoring; TCM key is a stated rule and the paper says a documented treatment does not exist in LUMIERE.
+- [x] Page fit: Conclusion moved before Limitations; body ends on page 5 (limit 8).
+- [x] References: DeepBraTumIA/HD-GLIO-AUTO (via LUMIERE and Kickingereder 2019), HD-BET, NCIt, Wilson, McNemar added and checked against publisher/Europe PMC records; medical-VQA shortcut work is Nguyen et al. 2025 (already cited) and Yan/Jin.
+- [x] Concern 5 numbers: root cause (two spellings of one label) fixed; `tools/paper_numbers.py` generates macros and tables; `--check` guards stale strings.
+- [x] Concern 1: answerability audit (49% agreement) and answerable-by-construction `v4` items. Clinician validation NOT done (outstanding by design).
+- [x] Concern 2/3/4/6: matched donor swaps, fact-flip tests, rule baselines, pre-registered estimands and margin, KAB demoted to an appendix.
+- [x] Optional: randomised wrong context (`ctx_wrong`); regex classifier not used in v4 (v3 rule kept as a deterministic tool).
+- [ ] v4 model runs (queued) and the Results text written from `results/lumiere_v4_stats.json` under the decision rules in `paper/preregistration_v4.md`.
+- [ ] Clinician review of v4 keys (TCM rule, assumed schedule, segmentation-based keys). Deliberately left.
+
 
 Required revision: define the prediction time, available information, and outcome horizon. Use an appropriate
 probabilistic survival task or clinician-validated risk categories. For TCM, similarly distinguish documented

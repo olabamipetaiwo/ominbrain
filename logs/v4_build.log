@@ -1,0 +1,174 @@
+rendering Patient-001
+rendering Patient-002
+rendering Patient-003
+rendering Patient-004
+rendering Patient-005
+rendering Patient-006
+rendering Patient-007
+rendering Patient-008
+rendering Patient-009
+rendering Patient-011
+rendering Patient-012
+rendering Patient-017
+rendering Patient-018
+rendering Patient-019
+rendering Patient-021
+rendering Patient-022
+rendering Patient-023
+rendering Patient-024
+rendering Patient-027
+rendering Patient-028
+rendering Patient-029
+rendering Patient-030
+rendering Patient-031
+rendering Patient-032
+rendering Patient-033
+rendering Patient-034
+rendering Patient-035
+rendering Patient-037
+rendering Patient-039
+rendering Patient-040
+rendering Patient-041
+rendering Patient-042
+rendering Patient-043
+rendering Patient-045
+rendering Patient-046
+rendering Patient-048
+rendering Patient-050
+rendering Patient-051
+rendering Patient-052
+rendering Patient-054
+rendering Patient-055
+rendering Patient-058
+rendering Patient-059
+rendering Patient-061
+rendering Patient-062
+rendering Patient-063
+rendering Patient-064
+rendering Patient-065
+rendering Patient-066
+rendering Patient-067
+rendering Patient-070
+rendering Patient-071
+rendering Patient-072
+rendering Patient-073
+rendering Patient-074
+rendering Patient-075
+rendering Patient-077
+rendering Patient-078
+rendering Patient-080
+rendering Patient-084
+rendering Patient-089
+rendering Patient-090
+{
+  "n_patients_with_first_line_candidates": 69,
+  "n_candidate_followups": 231,
+  "rule_vs_expert_concordance": {
+    "n": 231,
+    "concordant": 130,
+    "by_expert_label": {
+      "progressive disease": {
+        "n": 144,
+        "concordant": 110,
+        "rule_undetermined": 0
+      },
+      "stable disease": {
+        "n": 58,
+        "concordant": 6,
+        "rule_undetermined": 0
+      },
+      "partial response": {
+        "n": 15,
+        "concordant": 2,
+        "rule_undetermined": 0
+      },
+      "complete response": {
+        "n": 14,
+        "concordant": 12,
+        "rule_undetermined": 0
+      }
+    },
+    "confusion_expert_by_rule": {
+      "complete response|complete response": 12,
+      "complete response|progressive disease": 2,
+      "partial response|complete response": 5,
+      "partial response|partial response": 2,
+      "partial response|progressive disease": 6,
+      "partial response|stable disease": 2,
+      "progressive disease|complete response": 17,
+      "progressive disease|partial response": 5,
+      "progressive disease|progressive disease": 110,
+      "progressive disease|stable disease": 12,
+      "stable disease|complete response": 15,
+      "stable disease|partial response": 4,
+      "stable disease|progressive disease": 33,
+      "stable disease|stable disease": 6
+    }
+  },
+  "n_selected": 62,
+  "selected_by_tcm_class": {
+    "C": 27,
+    "F": 19,
+    "E": 16
+  },
+  "selected_by_rule_label": {
+    "complete response": 9,
+    "progressive disease": 35,
+    "partial response": 7,
+    "stable disease": 11
+  },
+  "selected_by_expert_label": {
+    "stable disease": 26,
+    "progressive disease": 32,
+    "partial response": 3,
+    "complete response": 1
+  },
+  "selected_expert_agrees": 27,
+  "n_undetermined_followups": 37,
+  "selected_lil_eligible": 51,
+  "quota": {
+    "F": 20,
+    "E": 20,
+    "C": 28
+  },
+  "seed": 20260925,
+  "phase_counts": {
+    "AIA": 62,
+    "LIL": 51,
+    "DSCR": 62,
+    "PJRF": 61,
+    "TCM": 62
+  },
+  "aia_sequence_counts": {
+    "t1": 16,
+    "ct1": 16,
+    "t2": 15,
+    "flair": 15
+  },
+  "pjrf_outcome_counts": {
+    "1": 34,
+    "0": 27
+  },
+  "lil_key_counts": {
+    "Right hemisphere, posterior half": 16,
+    "Left hemisphere, posterior half": 15,
+    "Right hemisphere, anterior half": 11,
+    "Left hemisphere, anterior half": 9
+  },
+  "dscr_key_counts": {
+    "Complete response": 9,
+    "Progressive disease": 35,
+    "Partial response": 7,
+    "Stable disease": 11
+  },
+  "tcm_key_counts": {
+    "continue": 27,
+    "confirm": 19,
+    "escalate": 16
+  },
+  "pairs_built": {
+    "AIA": 62,
+    "LIL": 51,
+    "DSCR": 54
+  }
+}

@@ -33,6 +33,7 @@ from pathlib import Path
 import numpy as np
 
 import config
+from src.lumiere_labels import canonical_answer_text
 from src.lumiere_loader import load_lumiere
 from tools.compile_lumiere_counterfactual import PAIRS_PATH, _direction_word, _rano_word, truth_label
 
@@ -330,7 +331,7 @@ def counterfactual_section(rng) -> tuple[dict, list[str]]:
                 own_id, donor_id = f"{c}_{ph}", f"{pr['partner']}_{ph}"
                 if own_id in opts and donor_id in opts:
                     shown = set(opts[own_id]["options"].values())
-                    comp.append((ph, opts[donor_id]["correct_text"] in shown))
+                    comp.append((ph, canonical_answer_text(opts[donor_id]["correct_text"]) in {canonical_answer_text(s) for s in shown}))
     for ph in ("LIL", "DSCR"):
         vals = [v for p, v in comp if p == ph]
         lines.append("")
@@ -406,7 +407,7 @@ def baseline_section() -> tuple[dict, list[str]]:
             st = _toks(q["question"])
             best = max(q["options"], key=lambda k: len(st & _toks(q["options"][k])))
             ov += best == q["correct_answer"]
-        text_maj = Counter(q["correct_answer_text"] for q in qs).most_common(1)[0][1]
+        text_maj = Counter(canonical_answer_text(q["correct_answer_text"]) for q in qs).most_common(1)[0][1]
 
         def cell(k):
             lo, hi = wilson(k, n)
