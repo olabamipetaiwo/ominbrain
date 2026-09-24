@@ -467,3 +467,51 @@ Case 36/62: LUMIERE GBM Case (Patient-048)
 ============================================================
 Case 37/62: LUMIERE GBM Case (Patient-050)
 ============================================================
+    [Patient-050/AIA/own] -> A (wrong)
+    [Patient-050/LIL/own] -> C (OK)
+    [Patient-050/DSCR/own] -> B (wrong)
+    [Patient-050/AIA/text] -> C (wrong)
+    [Patient-050/LIL/text] -> C (OK)
+    [Patient-050/DSCR/text] -> B (wrong)
+    [Patient-050/AIA/swap] -> C (wrong)
+    [Patient-050/LIL/swap] -> B (wrong)
+    [Patient-050/DSCR/swap] -> B (wrong)
+
+============================================================
+Case 38/62: LUMIERE GBM Case (Patient-051)
+============================================================
+    [Patient-051/AIA/own] -> C (wrong)
+    [Patient-051/DSCR/own] -> C (wrong)
+    [Patient-051/AIA/text] -> C (wrong)
+    [Patient-051/DSCR/text] -> C (wrong)
+    [Patient-051/AIA/swap] -> C (wrong)
+    [Patient-051/DSCR/swap] -> C (wrong)
+
+============================================================
+Case 39/62: LUMIERE GBM Case (Patient-052)
+============================================================
+    [Patient-052/AIA/own] -> C (wrong)
+    [Patient-052/DSCR/own] -> A (OK)
+    [Patient-052/AIA/text] -> A (wrong)
+    [Patient-052/DSCR/text] -> C (wrong)
+    [Patient-052/AIA/swap] -> C (wrong)
+    [Patient-052/DSCR/swap] -> A (OK)
+
+============================================================
+Case 40/62: LUMIERE GBM Case (Patient-054)
+============================================================
+    [Patient-054/AIA/own] -> C (wrong)
+    [Patient-054/LIL/own] -> C (OK)
+    [Patient-054/DSCR/own] -> B (wrong)
+    [Patient-054/AIA/text] -> C (wrong)
+    [Patient-054/LIL/text] -> A (wrong)
+    [Patient-054/DSCR/text] -> B (wrong)
+    [Patient-054/AIA/swap] -> B (OK)
+    [Patient-054/LIL/swap] -> C (OK)
+    [Patient-054/DSCR/swap] -> B (wrong)
+
+============================================================
+Case 41/62: LUMIERE GBM Case (Patient-055)
+============================================================
+    [Patient-055/AIA/own] -> B (OK)
+    [Patient-055/LIL/own] -> B (wrong)

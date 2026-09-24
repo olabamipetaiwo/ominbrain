@@ -301,3 +301,10 @@ The research question is worthwhile, and the controls are thoughtful, but the ex
 
   The revision now has a credible experimental foundation. The next decisive steps are completing v4, fixing the prompt–key mismatch, and making the claims follow
   the results. None of those recommendations depends on obtaining clinical review.
+
+
+  -----
+
+  I added tools/v4_status.sh, which shows the queue, finished jobs and result folders. I also noted the status and a rerun command in paper/update.md. Right now the three image jobs have run about 1 hour 12 minutes each, none has finished, and nine are queued behind them.
+
+run bash tools/v4_status.sh or just tell me, and I'll check the jobs. I'll then run python -m tools.lumiere_v4_stats and python -m tools.paper_numbers, and report the results before anything goes into the paper. If a job failed, the next job in its slot still starts, and the note in paper/update.md has the command to rerun the failed one.
