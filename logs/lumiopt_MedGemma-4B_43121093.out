@@ -1,0 +1,386 @@
+Session ready: ollama serving (pid 1979570), venv active (ominbrain), models -> /blue, HF/pip caches -> /blue
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-64f3ff51-afb9-722f-dae4-bf8c18402160)
+NAME                   ID              SIZE      MODIFIED    
+llama4:scout           bf31604e25c2    67 GB     2 days ago     
+llama3.2-vision:11b    6f2f9757ae97    7.8 GB    2 days ago     
+gemma3:27b             a418f5838eaf    17 GB     2 days ago     
+gemma3:12b             f4031aab637d    8.1 GB    2 days ago     
+medgemma:4b            9fe4e9a6c9bd    3.3 GB    4 weeks ago    
+=== options-only: MedGemma-4B ===
+Built 52 LUMIERE cases | phase coverage: AIA:52 | LIL:52 | DSCR:52 | PJRF:52 | TCM:52
+
+############################################################
+  Model: MedGemma-4B  [options-only baseline]   Cases: 52
+############################################################
+
+Case 1/52: Patient-002
+    [Patient-002_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-002_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-002_DSCR] main call… [no image] parse failed.
+    [Patient-002_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-002_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 2/52: Patient-003
+    [Patient-003_AIA] main call… [no image] parse failed — salvaged answer D from truncated JSON.
+    [Patient-003_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-003_DSCR] main call… [no image] parse failed.
+    [Patient-003_PJRF] main call… [no image] parse failed.
+    [Patient-003_TCM] main call… [no image] parse failed.
+
+Case 3/52: Patient-004
+    [Patient-004_AIA] main call… [no image] parse failed.
+    [Patient-004_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-004_DSCR] main call… [no image] parse failed.
+    [Patient-004_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-004_TCM] main call… [no image] parse failed.
+
+Case 4/52: Patient-006
+    [Patient-006_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-006_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-006_DSCR] main call… [no image] parse failed.
+    [Patient-006_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-006_TCM] main call… [no image] parse failed.
+
+Case 5/52: Patient-007
+    [Patient-007_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-007_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-007_DSCR] main call… [no image] parse failed.
+    [Patient-007_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-007_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 6/52: Patient-008
+    [Patient-008_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-008_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-008_DSCR] main call… [no image] parse failed.
+    [Patient-008_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-008_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+
+Case 7/52: Patient-009
+    [Patient-009_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-009_LIL] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-009_DSCR] main call… [no image] parse failed.
+    [Patient-009_PJRF] main call… [no image] parse failed.
+    [Patient-009_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+
+Case 8/52: Patient-012
+    [Patient-012_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-012_LIL] main call… [no image] → D (✓) | probe… pred D → faithful 
+    [Patient-012_DSCR] main call… [no image] parse failed.
+    [Patient-012_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-012_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+
+Case 9/52: Patient-015
+    [Patient-015_AIA] main call… [no image] → D (✓) | probe… pred D → faithful 
+    [Patient-015_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-015_DSCR] main call… [no image] parse failed.
+    [Patient-015_PJRF] main call… [no image] → D (✓) | probe… pred D → faithful 
+    [Patient-015_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 10/52: Patient-018
+    [Patient-018_AIA] main call… [no image] parse failed.
+    [Patient-018_LIL] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-018_DSCR] main call… [no image] parse failed.
+    [Patient-018_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-018_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+
+Case 11/52: Patient-019
+    [Patient-019_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-019_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-019_DSCR] main call… [no image] parse failed.
+    [Patient-019_PJRF] main call… [no image] parse failed.
+    [Patient-019_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 12/52: Patient-022
+    [Patient-022_AIA] main call… [no image] parse failed.
+    [Patient-022_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-022_DSCR] main call… [no image] parse failed.
+    [Patient-022_PJRF] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-022_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+
+Case 13/52: Patient-023
+    [Patient-023_AIA] main call… [no image] parse failed.
+    [Patient-023_LIL] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-023_DSCR] main call… [no image] parse failed.
+    [Patient-023_PJRF] main call… [no image] parse failed.
+    [Patient-023_TCM] main call… [no image] parse failed.
+
+Case 14/52: Patient-024
+    [Patient-024_AIA] main call… [no image] parse failed.
+    [Patient-024_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-024_DSCR] main call… [no image] parse failed.
+    [Patient-024_PJRF] main call… [no image] parse failed.
+    [Patient-024_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+
+Case 15/52: Patient-028
+    [Patient-028_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-028_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-028_DSCR] main call… [no image] parse failed.
+    [Patient-028_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-028_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 16/52: Patient-029
+    [Patient-029_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-029_LIL] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-029_DSCR] main call… [no image] parse failed.
+    [Patient-029_PJRF] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-029_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+
+Case 17/52: Patient-030
+    [Patient-030_AIA] main call… [no image] parse failed.
+    [Patient-030_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+    [Patient-030_DSCR] main call… [no image] parse failed.
+    [Patient-030_PJRF] main call… [no image] parse failed.
+    [Patient-030_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+
+Case 18/52: Patient-031
+    [Patient-031_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-031_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-031_DSCR] main call… [no image] parse failed.
+    [Patient-031_PJRF] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-031_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+
+Case 19/52: Patient-032
+    [Patient-032_AIA] main call… [no image] parse failed.
+    [Patient-032_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-032_DSCR] main call… [no image] parse failed.
+    [Patient-032_PJRF] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-032_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+
+Case 20/52: Patient-033
+    [Patient-033_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-033_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-033_DSCR] main call… [no image] parse failed.
+    [Patient-033_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-033_TCM] main call… [no image] parse failed.
+
+Case 21/52: Patient-034
+    [Patient-034_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-034_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-034_DSCR] main call… [no image] parse failed.
+    [Patient-034_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-034_TCM] main call… [no image] → B (✓) | probe… pred B → faithful 
+
+Case 22/52: Patient-035
+    [Patient-035_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-035_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-035_DSCR] main call… [no image] parse failed.
+    [Patient-035_PJRF] main call… [no image] parse failed.
+    [Patient-035_TCM] main call… [no image] parse failed.
+
+Case 23/52: Patient-037
+    [Patient-037_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-037_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-037_DSCR] main call… [no image] parse failed.
+    [Patient-037_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-037_TCM] main call… [no image] parse failed.
+
+Case 24/52: Patient-041
+    [Patient-041_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-041_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+    [Patient-041_DSCR] main call… [no image] parse failed.
+    [Patient-041_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-041_TCM] main call… [no image] parse failed.
+
+Case 25/52: Patient-042
+    [Patient-042_AIA] main call… [no image] parse failed — salvaged answer C from truncated JSON.
+    [Patient-042_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-042_DSCR] main call… [no image] parse failed.
+    [Patient-042_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-042_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 26/52: Patient-043
+    [Patient-043_AIA] main call… [no image] parse failed — salvaged answer B from truncated JSON.
+    [Patient-043_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-043_DSCR] main call… [no image] parse failed.
+    [Patient-043_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-043_TCM] main call… [no image] parse failed.
+
+Case 27/52: Patient-048
+    [Patient-048_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-048_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-048_DSCR] main call… [no image] parse failed.
+    [Patient-048_PJRF] main call… [no image] parse failed.
+    [Patient-048_TCM] main call… [no image] parse failed.
+
+Case 28/52: Patient-051
+    [Patient-051_AIA] main call… [no image] → D (✓) | probe… pred D → faithful 
+    [Patient-051_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-051_DSCR] main call… [no image] parse failed.
+    [Patient-051_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-051_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+
+Case 29/52: Patient-052
+    [Patient-052_AIA] main call… [no image] → B (✗) | probe… pred A → UNFAITHFUL 
+    [Patient-052_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-052_DSCR] main call… [no image] parse failed.
+    [Patient-052_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-052_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 30/52: Patient-054
+    [Patient-054_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+    [Patient-054_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-054_DSCR] main call… [no image] parse failed.
+    [Patient-054_PJRF] main call… [no image] parse failed.
+    [Patient-054_TCM] main call… [no image] parse failed.
+
+Case 31/52: Patient-055
+    [Patient-055_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-055_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-055_DSCR] main call… [no image] parse failed.
+    [Patient-055_PJRF] main call… [no image] parse failed.
+    [Patient-055_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+
+Case 32/52: Patient-058
+    [Patient-058_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-058_LIL] main call… [no image] → A (✓) | probe… pred A → faithful 
+    [Patient-058_DSCR] main call… [no image] parse failed.
+    [Patient-058_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-058_TCM] main call… [no image] → D (✓) | probe… pred A → UNFAITHFUL 
+
+Case 33/52: Patient-059
+    [Patient-059_AIA] main call… [no image] parse failed — salvaged answer B from truncated JSON.
+    [Patient-059_LIL] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-059_DSCR] main call… [no image] parse failed.
+    [Patient-059_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-059_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 34/52: Patient-060
+    [Patient-060_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-060_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-060_DSCR] main call… [no image] parse failed.
+    [Patient-060_PJRF] main call… [no image] parse failed.
+    [Patient-060_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 35/52: Patient-061
+    [Patient-061_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-061_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+    [Patient-061_DSCR] main call… [no image] parse failed.
+    [Patient-061_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-061_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 36/52: Patient-062
+    [Patient-062_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-062_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-062_DSCR] main call… [no image] parse failed.
+    [Patient-062_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-062_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 37/52: Patient-063
+    [Patient-063_AIA] main call… [no image] parse failed.
+    [Patient-063_LIL] main call… [no image] → A (✓) | probe… pred A → faithful 
+    [Patient-063_DSCR] main call… [no image] parse failed.
+    [Patient-063_PJRF] main call… [no image] → D (✓) | probe… pred D → faithful 
+    [Patient-063_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+
+Case 38/52: Patient-064
+    [Patient-064_AIA] main call… [no image] parse failed.
+    [Patient-064_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+    [Patient-064_DSCR] main call… [no image] parse failed.
+    [Patient-064_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-064_TCM] main call… [no image] parse failed.
+
+Case 39/52: Patient-065
+    [Patient-065_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-065_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-065_DSCR] main call… [no image] parse failed.
+    [Patient-065_PJRF] main call… [no image] parse failed — salvaged answer B from truncated JSON.
+    [Patient-065_TCM] main call… [no image] parse failed.
+
+Case 40/52: Patient-066
+    [Patient-066_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-066_LIL] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-066_DSCR] main call… [no image] parse failed.
+    [Patient-066_PJRF] main call… [no image] parse failed.
+    [Patient-066_TCM] main call… [no image] parse failed.
+
+Case 41/52: Patient-067
+    [Patient-067_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-067_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-067_DSCR] main call… [no image] parse failed.
+    [Patient-067_PJRF] main call… [no image] parse failed.
+    [Patient-067_TCM] main call… [no image] parse failed.
+
+Case 42/52: Patient-070
+    [Patient-070_AIA] main call… [no image] parse failed.
+    [Patient-070_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-070_DSCR] main call… [no image] parse failed.
+    [Patient-070_PJRF] main call… [no image] parse failed.
+    [Patient-070_TCM] main call… [no image] parse failed.
+
+Case 43/52: Patient-071
+    [Patient-071_AIA] main call… [no image] parse failed.
+    [Patient-071_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-071_DSCR] main call… [no image] parse failed.
+    [Patient-071_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-071_TCM] main call… [no image] parse failed.
+
+Case 44/52: Patient-072
+    [Patient-072_AIA] main call… [no image] parse failed.
+    [Patient-072_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+    [Patient-072_DSCR] main call… [no image] parse failed.
+    [Patient-072_PJRF] main call… [no image] parse failed.
+    [Patient-072_TCM] main call… [no image] parse failed.
+
+Case 45/52: Patient-073
+    [Patient-073_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-073_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-073_DSCR] main call… [no image] parse failed.
+    [Patient-073_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-073_TCM] main call… [no image] parse failed.
+
+Case 46/52: Patient-074
+    [Patient-074_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-074_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-074_DSCR] main call… [no image] parse failed.
+    [Patient-074_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-074_TCM] main call… [no image] parse failed.
+
+Case 47/52: Patient-075
+    [Patient-075_AIA] main call… [no image] parse failed.
+    [Patient-075_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-075_DSCR] main call… [no image] parse failed.
+    [Patient-075_PJRF] main call… [no image] parse failed.
+    [Patient-075_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+
+Case 48/52: Patient-077
+    [Patient-077_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-077_LIL] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-077_DSCR] main call… [no image] parse failed.
+    [Patient-077_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-077_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+
+Case 49/52: Patient-078
+    [Patient-078_AIA] main call… [no image] parse failed.
+    [Patient-078_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-078_DSCR] main call… [no image] parse failed.
+    [Patient-078_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-078_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+
+Case 50/52: Patient-085
+    [Patient-085_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-085_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-085_DSCR] main call… [no image] parse failed.
+    [Patient-085_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-085_TCM] main call… [no image] parse failed.
+
+Case 51/52: Patient-089
+    [Patient-089_AIA] main call… [no image] parse failed.
+    [Patient-089_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+    [Patient-089_DSCR] main call… [no image] parse failed.
+    [Patient-089_PJRF] main call… [no image] parse failed.
+    [Patient-089_TCM] main call… [no image] → A (✗) | probe… pred A → faithful 
+
+Case 52/52: Patient-091
+    [Patient-091_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+    [Patient-091_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+    [Patient-091_DSCR] main call… [no image] parse failed.
+    [Patient-091_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+    [Patient-091_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+
+Summary — MedGemma-4B
+  AIA   40%  (n=52)
+  LIL   29%  (n=52)
+  DSCR  0%  (n=52)
+  PJRF  14%  (n=52)
+  TCM   15%  (n=52)
+Saved -> results/lumiere_optionsonly_MedGemma-4B_20260923_192851

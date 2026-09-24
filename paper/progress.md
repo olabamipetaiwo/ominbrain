@@ -1,3 +1,0 @@
- <!-- - Llama 4 Scout is multimodal, a 109B mixture-of-experts model with 17B active parameters. It needs about 55GB at 4-bit, so it fits one card. It runs on Ollama or vLLM, and I haven't confirmed the Ollama tag or its vision support there.
-   - Llama-3.2-90B-Vision needs 2 cards or heavy quantization.
-   - Gemma-3-27B at bf16 (about 54GB) would give a full-precision run alongside the Q4 one, so the paper has a quantization comparison. -->

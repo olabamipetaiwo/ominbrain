@@ -20,6 +20,12 @@ skipped with a note, so this can be re-run as the queued jobs complete.
               upstream phase EXCEPT DSCR (excl-DSCR) injected, correct/incorrect conditions. Compared with the
               full-context and absent conditions of the primary run on the same patients.
 
+  4. options LLM options-only baseline (`lumiopt_*`): the model sees only the four options (no image, no stem,
+              no chain). Per phase: options-only accuracy, the no-chain-context baseline (gating-causality's
+              'absent' condition for LIL-TCM; the own-image run for AIA, which has no upstream phase), own-image
+              accuracy, and the paired own-image - options-only difference with a patient-bootstrap CI and
+              exact McNemar p. Non-LLM reference rows (chance, majority answer text) come from the v3 items.
+
 Usage
 -----
 python -m tools.lumiere_gating_stats      # prints, writes results/lumiere_gating_stats.{json,md}
@@ -224,12 +230,67 @@ def ablation_section(rng) -> tuple[dict, list[str]]:
     return out, lines + ([""] + notes if notes else [])
 
 
+# ---------------------------------------------------------------- 4. options-only
+def options_section(rng) -> tuple[dict, list[str]]:
+    from collections import Counter
+
+    from src.lumiere_loader import load_lumiere
+    from tools.lumiere_reviewer_stats import item_table as rs_item_table, load_run
+
+    out, notes = {}, []
+    cases = load_lumiere(include_unreviewed=True, item_set="v3")
+    ref = {}
+    for ph in PHASES:
+        qs = [c["phases"][ph][0] for c in cases if c["phases"].get(ph)]
+        ref[ph] = {"n": len(qs), "chance": float(np.mean([1 / len(q["options"]) for q in qs])),
+                   "text_majority": Counter(q["correct_answer_text"] for q in qs).most_common(1)[0][1] / len(qs)}
+    lines = ["## 4. LLM options-only baseline (no image, no question stem, no chain context)", "",
+             "Reference rows are non-LLM: chance = mean 1/#options; majority = share of the most common correct answer TEXT. "
+             "'no-chain ctx' = gating-causality's absent condition (LIL-TCM), own-image run for AIA. Δ = own-image − options-only, "
+             f"paired, patient-clustered bootstrap ({N_BOOT:,} resamples); p exact McNemar, uncorrected.", "",
+             "| Phase | n | chance | majority text |", "|---|---|---|---|"]
+    for ph in PHASES:
+        lines.append(f"| {ph} | {ref[ph]['n']} | {pct(ref[ph]['chance'])} | {pct(ref[ph]['text_majority'])} |")
+    lines += ["", "| Model | Phase | options-only [Wilson 95%] | no-chain ctx | own-image | Δ own − options-only [95% CI] (b/c, p) | parse errors (options-only) |",
+              "|---|---|---|---|---|---|---|"]
+    for m in MODELS:
+        d = latest(f"results/lumiere_optionsonly_{m}_*", need="summary.json")
+        if d is None:
+            notes.append(f"- {m}: options-only run not finished yet")
+            continue
+        oo = json.loads((d / "raw_results.json").read_text())
+        own = rs_item_table(load_run("img", m))
+        prim = latest(f"results/lumiere_gatingcausality_{m}_*", need="summary.json")
+        absent = {}
+        if prim:
+            for c in json.loads((prim / "raw_results.json").read_text()):
+                for ph, v in c["phases"].items():
+                    absent[(c["case_id"], ph)] = bool(v["absent"]["correct"])
+        out[m] = {"run": str(d), "phases": {}}
+        for ph in PHASES:
+            rows = [(c["case_id"], c["phases"][ph]) for c in oo if ph in c["phases"]]
+            ids = [i for i, _ in rows if (i, ph) in own]
+            x = np.array([float(bool(v["correct"])) for i, v in rows if (i, ph) in own])   # options-only
+            y = np.array([float(bool(own[(i, ph)]["correct"])) for i in ids])              # own-image
+            n = len(ids)
+            pe = int(sum(bool(v.get("parse_error")) for _, v in rows))
+            lo, hi = wilson(int(x.sum()), n)
+            nc = y if ph == "AIA" else np.array([float(absent[(i, ph)]) for i in ids]) if all((i, ph) in absent for i in ids) else None
+            r = _paired(y, x, rng)
+            fmt = lambda r: f"{100 * r['diff']:+.1f} [{100 * r['ci'][0]:+.1f}, {100 * r['ci'][1]:+.1f}] ({r['b']}/{r['c']}, p={r['mcnemar_p']:.3f})"
+            lines.append(f"| {m} | {ph} | {pct(x.mean())} [{pct(lo)}–{pct(hi)}] | {pct(nc.mean()) if nc is not None else 'n/a'} | "
+                         f"{pct(y.mean())} | {fmt(r)} | {pe} |")
+            out[m]["phases"][ph] = {"n": n, "acc_options_only": float(x.mean()), "acc_own_image": float(y.mean()),
+                                    "acc_no_chain": None if nc is None else float(nc.mean()), "own-options": r, "parse_errors": pe}
+    return out, lines + ([""] + notes if notes else [])
+
+
 def main():
     rng = np.random.default_rng(SEED)
-    res, md = {}, ["# LUMIERE control experiments: repeated-run, gating-causality and TCM context ablation (v3)", "",
+    res, md = {}, ["# LUMIERE control experiments: repeated-run, gating-causality, TCM ablation and options-only (v3)", "",
                    "Generated by `tools/lumiere_gating_stats.py`.", ""]
     for name, fn in (("repeat", repeat_section), ("gating", lambda: gating_section(rng)),
-                     ("ablation", lambda: ablation_section(rng))):
+                     ("ablation", lambda: ablation_section(rng)), ("options", lambda: options_section(rng))):
         r, lines = fn()
         res[name] = r
         md += lines + [""]

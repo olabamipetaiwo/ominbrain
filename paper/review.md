@@ -1,187 +1,86 @@
-# Review
+# Review status
 
-Status tracker for the round-2 review (full text kept unedited under "New Review" below). Numbering in
-parentheses is the reviewer's. Full detail and numbers: `paper/update.md` 2026-09-23 "(later still x12)".
-
----
-
-## Done (2026-09-23)
+Status tracker for the round-2 reviewer's findings and the work that follows from them. Updated 2026-09-23 (evening).
+Detail, numbers and history live in `paper/update.md` (entries "x12" to "x17"). The reviewer's full text is not kept
+here any more; it is in git at commit `6e776ff` (`git show 6e776ff:paper/review.md`). Finding numbers below are the reviewer's.
 
 ---
 
-## In progress
+## Direction
 
-- **Gating-causality experiments** (finding 2). `lumigc_*` chain: MedGemma-4B done; Gemma-3-12B running (43061678) ->
-  Gemma-3-27B (43061679) -> Llama-4-Scout (43061683). Results not yet in the paper (design paragraph only).
-- **Repeated identical-input control** (finding 4). `lumirep_*` chain, own-image v3, non-gated, tag `rep2`:
-  43091107 (MedGemma-4B) -> 43091108 (Gemma-3-12B) -> 43091109 (Gemma-3-27B) -> 43091110 (Llama-4-Scout), each
-  `afterany` the previous. Runs alongside the gating chain = 2 concurrent GPUs (the cap). Needs a compile script
-  (flip rate rep1 vs rep2 per phase) once done; results land in `results/lumiere_<model>_rep2_v3_nogate_*`.
+**Decided 2026-09-23 (Prof. Wang): reframe the paper around shortcut learning.** Working claim: on these chain-structured brain-MRI
+MCQs, accuracy is largely explained by question text, option artifacts and upstream-label lookup, so it is weak evidence of image-grounded
+or causal reasoning. Not claimed: that models never use the image, or that errors propagate across phases. Exploratory (unreviewed items).
+The paper text has NOT been rewritten yet; it is waiting for the runs below.
+
+Venue: NAACL 2027 via ARR. **ARR deadline 2026-10-12** (AoE), commitment 2026-12-23, conference 2027-06-01 to 06-05 (San Francisco).
+Long paper: 8 pages (9 camera-ready). Shared ARR cycle with COLING 2027.
 
 ---
 
-## Blocked
+## Findings from the reviewer: where each stands
 
-Needs an external clinician (same bottleneck as the LUMIERE expert-review pass).
+| # | Finding | Status |
+|---|---|---|
+| 1 | Images may not contain enough information (single slice; RANO needs more than two images) | **Open, limitation.** Disclosed in Sec. 6 and Limitations. No fix planned (needs the clinician review, deferred). |
+| 2 | Continuity is not a causal chain | **Mostly addressed.** Reworded as "sequential evaluation" and "hard gating". Correct/wrong/absent intervention run: only TCM depends on context (MedGemma-4B, Gemma-3-12B compiled; 27B and Scout still running). TCM ablation queued. |
+| 3 | Prognosis/TCM answer key confuses outcome with a unique prediction | **Open, limitation.** Text rewritten (48-week survival vs week-47 imaging). Redesign needs a clinician, deferred. |
+| 4 | Substitution "below chance" is invalid | **Fixed in analysis, paper text stale.** Item-specific null (+11.9pp) is superseded by the donor-permutation test: 32/95 vs permutation mean 32.4, p = .64, no evidence of grounding (LIL permutation is degenerate by pairing design; DSCR informative). Repeated-run control: 260/260 identical answers in 2 of 4 models (27B compile pending, Scout running). |
+| 5 | Evidence auditor cannot show claims were not visually verified | **Partly addressed.** Two-dimension audit done; "no checkable claim" reported separately (26-55%). Independent expert validation not done (limitation). |
+| 6 | OmniBrainBench attribution | **Done.** Framed as an incompatibility with our sequential evaluation; "2 verifiable cross-phase links". |
+| 7 | Framework not supported by the experiments | **Addressed by the reframe.** Adaptation and gating flagged exploratory; measures named "vocabulary and consistency". KAB becomes supporting, not the headline. |
 
-- **Answerability of each item from exactly the model-visible inputs** (finding 1).
-- ~~**Reframe around continuity/leakage/image-dependence** (reviewer's overall strategy): decision with Prof. Wang.~~ **DECIDED 2026-09-23: professor approved reframing around shortcut learning.** Paper text not yet rewritten.
+Reporting corrections: all done and in the paper (MedGemma -1.9pp on the per-question basis, Gemma-27B 53.5/50.4 rounding, paired CIs, "prespecified
+analysis plan" with the +-8pp margin disclosed as post hoc, per-phase forest plot, "zero violations = compliance with the auditor", regenerated vs frozen
+upstream context, hard gating = masking). Also done: abstract cut to ~140 words, dataset-debugging history moved to Appendix B, body fits 8 pages.
+Not done by choice: adding the proprietary models (GPT-5, Claude, Gemini); the reviewer said it would not fix the validity concerns.
 
+---
 
-- **Prognosis / TCM answer keys** (finding 3): clinician-validated risk categories, defined prediction time.
-- **Evidence-audit reliability** (finding 5) and **adversarial metric-validation cases** (finding 1 of old review).
-- **Distractor quality / label validity.**
+## Runs (GPU cap raised 2 -> 4 for exactly these jobs, per the professor; back to 2 afterwards)
+
+Status at last check: 4 running, 7 pending. Each pending job is chained behind another chain's last job, so never more than 4 GPUs.
+
+| Experiment | MedGemma-4B | Gemma-3-12B | Gemma-3-27B | Llama-4-Scout |
+|---|---|---|---|---|
+| Repeated identical input (rep2) | done | done | done, not compiled | running (43091110) |
+| Gating-causality (correct/wrong/absent) | done | done | running (43061679) | pending (43061683) |
+| TCM ablation (`incl-DSCR`, `excl-DSCR`) | running (43118917) | running (43118918) | pending (43119393) | pending (43119394) |
+| LLM options-only baseline | pending (43121093) | pending (43121094) | pending (43121095) | pending (43121096) |
+
+Not GPU-tested: `run_lumiere_options_only.py` (prompt checked on a real patient, no model call). Check the first `lumiopt_*` log when it starts.
+Everything else the paper reports (own-image, text-only, counterfactual images, all v3) is finished for all four models.
+
+---
+
+## Key numbers so far (v3, 52 patients, open-weight models)
+
+- Text-only vs image-present: within about +-8pp overall; no per-phase cell entirely above 0.
+- Substitution: 32/95 flips match the donor label; permutation mean 32.4 (p = .64). 67.8% of LIL flips land on the patient's own direction.
+- Repeated runs: identical answers (noise floor 0), MedGemma-4B and Gemma-3-12B.
+- Gating-causality (correct / wrong / absent, %): TCM MedGemma 33/15/25, Gemma-12B 62/27/19; LIL and PJRF flat; Gemma-12B DSCR 50/65/65 (correct context hurts, p = .008, uncorrected).
+- TCM key follows the DSCR key's action class for 48/52 patients (keyword classifier, ad hoc); Gemma-12B follows the injected DSCR label, MedGemma-4B does not.
+- Longest-option baseline: 67% on DSCR, above every model. AIA has one fixed answer string.
 
 ---
 
 ## TODO
 
-- [ ] When `lumirep_*` finish: compile rep1-vs-rep2 flip rates; rewrite the flip-rate and "reading against the plan"
-      paragraphs with the direct decoding-variability baseline; drop the "queued" language.
-- [ ] When `lumigc_*` finish: `summarize()` in `src/gating_causality.py`; write up correct/incorrect/absent.
-- [ ] Options-only and no-chain-context LLM baselines (need GPU; queue after the two chains, respect the 2-GPU cap).
-- [ ] Permutation over donor assignments for the substitution null (current CIs are clustered bootstrap only).
-- [ ] Decide LIL/DSCR answerability fix: restrict to slice-observable findings, or supply multi-slice/clinical context.
-- [ ] Redesign PJRF/TCM scoring (prediction time, information cutoff, risk categories) - needs clinician input.
-- [x] Dataset-debugging history moved to Appendix B; abstract ~140 words; body cut to fit NAACL's 8-page limit (2026-09-23, 18 -> 14 pages total; body ends p.7). Metric definitions, compatibility details and audit method are in Appendices C-E.
-- [ ] Line up an external clinical reviewer.
+**When all the jobs above finish**
+- [ ] Check every job exited 0 (`sacct`), then `python -m tools.lumiere_gating_stats` (repeated-run, gating-causality, TCM ablation, options-only, all four models).
+- [ ] Read the four-model results; decide what the shortcut story says (does `incl-DSCR`/`excl-DSCR` explain TCM; how high is options-only vs own-image).
 
-## New Review
+**Then rewrite the paper around shortcut learning**
+- [ ] Title, abstract, contributions, intro, Sec. 8. Lead evidence: text-only, substitution (permutation), gating-causality, TCM ablation, options-only.
+- [ ] Replace the stale substitution sentence ("modest image sensitivity", +11.9pp over item-specific chance) with the permutation result.
+- [ ] Rewrite the flip-rate paragraphs against the repeated-run baseline; drop "queued" language.
+- [ ] Write up gating-causality and the TCM lookup finding, with the Gemma-12B DSCR reversal and its caveats (uncorrected p; anchoring is a hypothesis).
+- [ ] Limitations: clinician review deferred (unreviewed LLM-drafted items and keys), single-slice answerability, PJRF/TCM key definition, unreviewed distractors, uncorrected multiplicity, four open models only, wrong-context condition is one fixed choice.
+- [ ] Recompile LaTeX (`/apps/texlive/2023/bin/x86_64-linux` on PATH), confirm the body fits 8 pages and no undefined refs.
 
+**Optional**
+- [ ] Randomised or per-label wrong-context variant of gating-causality (code change + GPU).
+- [ ] Replace the regex action-class classifier in the TCM analysis with a reproducible tool.
 
-What works well
-
-  The paper asks an important question: does a correct medical VQA answer reflect information obtained from the image?
-  The combination of text-only evaluation, image substitution, and evidence auditing is useful. Reporting majority-class
-  baselines, patient-clustered uncertainty, and failures in the initial dataset also strengthens the paper. The worked
-  patient example makes the limitations of answer accuracy tangible.
-
-  The principal concerns, in order of importance, are:
-
-  1. The supplied images may not contain enough information to answer the questions.
-
-     At line 274 (paper/latex/acl_latex.tex:274), each timepoint is represented by one axial contrast-enhanced T1 slice.
-     Yet LIL asks about whole-lesion volume changes, sometimes with precise percentages.
-
-     Two independently selected maximum-area slices do not uniquely determine a three-dimensional volume change.
-     Consequently, low performance could reflect insufficient input rather than failure to use available visual
-     evidence.
-
-     DSCR introduces an additional concern: RANO assessment incorporates information beyond a pair of images, including
-     clinical status, corticosteroid use, and appropriate reference scans. Specify the criteria used for LUMIERE’s
-     labels and whether the model receives their required inputs. The RANO consensus paper makes these dependencies
-     explicit.
-
-     Required revision: obtain expert judgments using exactly the model-visible inputs. Either supply sufficient
-     imaging/context or restrict questions to findings reliably observable in the supplied slices.
-
-  2. Same-patient continuity does not establish a causal reasoning chain.
-
-     The gating section treats correctness at every preceding phase as necessary for valid downstream reasoning. That is
-     an imposed scoring rule, not demonstrated causal dependence. A model can misidentify a sequence yet correctly
-     identify a lesion; it can also answer every question correctly through independent shortcuts.
-
-     The paper itself says DSCR labels remain unchanged after modifying the LIL baseline. This further underscores that
-     the asserted dependencies require justification.
-
-     Required revision: describe the structure as a same-patient sequential evaluation. To support causal claims,
-     intervene on upstream context—correct, incorrect, and absent—while holding downstream inputs fixed. Measure whether
-     downstream behavior changes appropriately. Also, a binary threshold that zeros downstream scores is operationally
-     hard gating; “soft” needs explanation.
-
-  3. The prognosis answer key confuses an observed outcome with a uniquely correct prediction.
-
-     The worked example at line 385 (paper/latex/acl_latex.tex:385) marks approximately 12 months correct because the
-     patient actually survived 48 weeks. A plausible nine-month forecast is marked wrong.
-
-     An individual’s realized survival does not establish that one narrow forecast was the uniquely justified answer at
-     the prediction date. The example also involves imaging at week 47 and survival measured from surgery, making the
-     information cutoff particularly important.
-
-     Required revision: define the prediction time, available information, and outcome horizon. Use an appropriate
-     probabilistic survival task or clinician-validated risk categories. For TCM, similarly distinguish documented
-     treatment from a justified treatment recommendation.
-
-  4. The image-substitution experiment does not yet support its “below chance” conclusion.
-
-     At line 345 (paper/latex/acl_latex.tex:345), 26/73 truth-tracking flips are compared against 50% chance. “Binary-
-     ish” is not a defensible null model.
-
-     The relevant probability depends on the answer options, their direction/category distribution, the original answer,
-     and conditioning on a flip. Furthermore:
-      - The original options may contain no fully correct answer for the substituted patient.
-      - The donor’s RANO label may depend on clinical facts that were not substituted.
-      - Responses share patients across models and phases, so the pooled Wilson interval ignores dependence.
-      - AIA’s invariant answer does not make all image-induced changes pure decoding noise.
-
-     Required revision: validate donor-compatible answer options, derive an item-specific or permutation-based null, and
-     account for shared patients and donor reuse. Add repeated identical-input runs as the direct variability control.
-     Until then, remove “below chance” and “decoding variance alone.”
-
-  5. The evidence auditor cannot establish that copied claims were not visually verified.
-
-     The paper acknowledges this limitation, but its conclusions still rely heavily on it. A model can inspect an image
-     and correctly select wording already present in an option. Conversely, a novel fact matching the patient record
-     need not have been inferred visually.
-
-     The mutually exclusive categories also hide errors: the worked example’s false location becomes “copied” once
-     repeated upstream.
-
-     Required revision: score two separate dimensions: whether a claim was available in the text, and whether it is
-     supported, contradicted, or unverifiable. Validate the audit against independent expert annotation. Report “no
-     checkable claim” separately, with explicit denominators.
-
-  6. The OmniBrainBench criticism needs more careful attribution.
-
-     Your methods explicitly state that interpreting source_file as patient identity was your own KAB-side decision. The
-     abstract and introduction nevertheless present the resulting failure as a construct-validity defect in
-     OmniBrainBench.
-
-     Its published abstract describes coverage of clinical tasks; that alone does not promise patient-linked
-     longitudinal chains.
-
-     Required revision: frame the finding as an incompatibility between the released benchmark and your proposed
-     sequential evaluation unless you identify an explicit contrary claim. Replace “only 2 patients” with “only 2
-     verifiable cross-phase patient links” unless identifier completeness is established. Shared images are also not the
-     only possible evidence of patient continuity.
-
-  7. The advertised framework is not supported by the reported experiments.
-
-     The introduction claims adaptation distinguishes knowledge gaps from activation failures. The methods correctly
-     explain why the current experiment cannot make that distinction. Gating is central to the framework but has no
-     reported results; adaptation triggers only 1–4 times per model.
-
-     Required revision: align the contributions with completed evidence. Either validate these components through
-     appropriate controls or present them as exploratory extensions. Ontology coverage and answer recoverability should
-     be named as vocabulary and consistency measures throughout, rather than promoted as causal faithfulness measures.
-
-  Statistical and reporting corrections
-
-  - Reconcile MedGemma’s table difference of approximately three percentage points with the patient-averaged difference
-    of 1.9 points. With five scored items per patient, pooled and patient-mean differences should agree.
-
-  - Explain rounding for Gemma-3-27B: the displayed 54% versus 50% yields four points, while the table reports three.
-  - Replace comparisons against individual Wilson intervals with paired uncertainty for the actual difference.
-  - Provide a timestamped preregistration artifact, including the ±8-point margin, or use “prespecified analysis plan”
-    if that is what exists.
-
-  - Report phase-specific image effects. Overall equivalence can conceal differences between visually dependent and
-    largely textual tasks.
-
-  - “Zero audit violations” establishes compliance with that auditor, not absence of leakage—especially when generation
-    was optimized against the same rules.
-
-  - Clarify whether upstream context is frozen across experimental arms or regenerated. These estimate different
-    effects.
-
-  - Clarify whether gating prevents execution or merely masks scores; both descriptions currently appear.
-
-  How I would reshape the paper
-
-  I would center it on “Auditing Image Dependence in Longitudinal Brain MRI Question Answering.” Shorten the abstract
-  substantially, replace the duplicated accuracy bar chart with phase-level paired effects and uncertainty, and move
-  dataset debugging history into an appendix.
-
-  The next priority should be expert validation of answerability and answer keys, followed by corrected substitution
-  controls and statistical analysis. Adding proprietary models would broaden coverage, but it would not resolve the
-  current validity concerns.
+**Deferred, listed as limitations rather than fixed**
+- Clinician review of the v3 items; answerability fix for LIL/DSCR; PJRF/TCM scoring redesign.

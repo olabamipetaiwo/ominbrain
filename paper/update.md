@@ -1,5 +1,94 @@
 #Project Update
 
+## 2026-09-24 — all queued control jobs finished (exit 0); four-model `lumiere_gating_stats` compiled; first read of the shortcut evidence
+
+**Jobs.** `sacct` shows every `lumirep_*`, `lumigc_*`, `lumigcabl_*`, `lumiopt_*` job COMPLETED, exit 0; last was `lumiopt_Llama-4-Scout`
+43121096 (ended 2026-09-24 03:18). Queue empty, so the GPU cap (4 for these experiments) is moot; standing cap is back to 2.
+Ran `python -m tools.lumiere_gating_stats` on the login node (CPU only) -> `results/lumiere_gating_stats.{md,json}`; all four models
+(MedGemma-4B, Gemma-3-12B, Gemma-3-27B, Llama-4-Scout) in every section. Numbers below are from that file; all p-values are exact
+McNemar, UNCORRECTED, n = 52 patients per cell. Nothing here is committed yet. This is a first read, not yet in the paper.
+
+**1. Repeated-run control (all 4 models):** 260/260 identical answers and identical correctness, 0 flips in every phase. Noise floor is 0
+(deterministic decoding). Still does not bound sensitivity to small input perturbations.
+
+**2. Gating-causality (correct / forced-wrong / absent upstream context):**
+- **TCM: correct context beats forced-wrong for all four models**, +17.3pp (MedGemma, p=.004), +34.6 (Gemma-12B), +38.5 (Gemma-27B), +17.3
+  (Scout, p=.004). Correct beats absent by +7.7 (MedGemma, p=.22, not significant), +42.3, +30.8, +26.9.
+- **DSCR: correct context hurts** for three models: Gemma-12B 50.0 vs 65.4 (incorrect and absent; p=.008 / .021), Gemma-27B correct-absent
+  -17.3pp (p=.012; correct-incorrect -9.6, p=.125), Scout correct-absent -13.5pp (p=.039; correct-incorrect -11.5, p=.070). MedGemma: no
+  detectable effect. Anchoring on the injected label is still a hypothesis, untested.
+- LIL and PJRF: flat for every model (no paired contrast with p < .2).
+
+**3. TCM ablation (which upstream entry carries the effect):**
+- DSCR entry alone reproduces the effect for Gemma-12B (+15.4pp correct-incorrect, p=.021), Gemma-27B (+26.9, p=.001) and Scout (+26.9, p<.001).
+- Everything except DSCR (AIA+LIL+PJRF) does not: +1.9 / +5.8 / +3.8, all CIs include 0.
+- **MedGemma-4B is the exception:** full context gives +17.3 but DSCR-only gives +1.9 (p=1.0) and no-DSCR -3.8. Its gap is unexplained (same as
+  the x14 note). PJRF (which carries the true survival estimate) is not an alternative route for the three larger models.
+- Reading: TCM accuracy in the larger models is largely a lookup of the upstream DSCR label. Consistent with the x14 keyword check (DSCR key
+  predicts TCM key class for 48/52). By construction of the TCM prompt, so it is not evidence of multi-phase reasoning.
+
+**4. Options-only baseline (no image, no stem, no chain; four options only):**
+- Options-only accuracy (%): MedGemma AIA/LIL/DSCR/PJRF/TCM 40/29/0/14/15; Gemma-12B 38/33/40/23/12; Gemma-27B 62/36/44/25/12;
+  Scout 44/36/19/21/19 (chance 25).
+- **MedGemma-4B options-only is contaminated by parse failures**: DSCR 52/52, TCM 21, AIA 19, PJRF 18. Its DSCR 0% is a format failure, not a
+  score; those cells must be flagged or excluded. Scout has 7 DSCR parse errors; the Gemma models have 0.
+- **AIA is not a clean shortcut cell**: it has one fixed answer string (non-LLM "majority text" = 100%). Options-only AIA above chance (Gemma-27B
+  62%) is therefore weak evidence; do not headline it.
+- DSCR: non-LLM majority-text baseline is 63.5%, above every options-only score and above most own-image scores. LIL/PJRF/TCM majority = 1.9%.
+- **Own-image minus options-only (paired):** LIL is at or below zero for the 12B (-9.6), 27B (-9.6), Scout (-11.5), all n.s.; MedGemma +11.5 n.s. -> no
+  detectable image benefit on LIL. TCM is large: +26.9 (12B, p=.003), +48.1 (27B, p<.001), +17.3 (Scout, p=.035), +11.5 (MedGemma, n.s.). DSCR:
+  +21.2 (27B, p=.043), +38.5 (Scout, p<.001), +15.4 (12B, n.s.).
+  **Caveat (checked, see "Own-image run contents" below):** "own-image" is the v3 `nogate` run, which carries the model's OWN earlier answers as chain
+  context, and options-only also drops the stem. The TCM Delta is therefore image + stem + own upstream answers versus none of them; it is NOT an image
+  effect.
+
+**Own-image run contents (code read + CPU check, 2026-09-24).** `results/lumiere_<model>_v3_nogate_*` = `run_lumiere.py` with gating OFF and adaptation
+ON, image(s) present. In `src/evaluator.py::evaluate_case`, `chain_context` is appended after every question with the model's own answer, its answer
+text and its visual-grounding note; `src/prompts.py::build_main_prompt` renders it as a "PRIOR REASONING CHAIN" block in every later phase. So each phase
+sees the model's own answers to ALL earlier phases (not gold, not forced-wrong); gating-causality's "correct" condition injects gold instead, and
+"absent" empties the list (image, stem and options kept). Consequence for §4 above: the "no-chain ctx" column (gating `absent`) is the right
+image-and-stem-without-chain comparator for LIL-TCM; own-image minus no-chain ctx isolates the effect of the model's own chain.
+Supporting check (own-image run, TCM accuracy split by whether the model's own DSCR answer was correct; n=52 per model, descriptive, no test, and
+confounded because patients the model gets right on DSCR may be easier throughout):
+MedGemma-4B 4/8 vs 10/44; Gemma-12B 17/29 vs 3/23; Gemma-27B 26/34 vs 5/18; Scout 18/30 vs 1/22 (TCM correct | DSCR correct vs | DSCR wrong).
+Reading: for the three larger models TCM correctness follows the model's own DSCR correctness; consistent with the DSCR-lookup account from
+gating-causality/ablation, and with why own-image TCM (59.6% for Gemma-27B) sits near the gold-context 63.5% and far above the absent 32.7%.
+Not established: the direction (does a correct DSCR answer cause a correct TCM answer, or do both reflect item difficulty).
+
+**Corrections to my own earlier same-day status message (not to any file):** I first read the raw `lumiopt_*` job summaries as "options-only well above
+chance supports shortcut learning". After compile: AIA is a fixed-string cell, MedGemma DSCR is a parse failure, and DSCR options-only sits below the
+63.5% label prior.
+
+**Not done / next:** (a) DONE, see above (own-image carries the model's own earlier answers); (b) decide how MedGemma's parse-failed options-only cells are
+reported (flag vs exclude; earlier MedGemma parse-failure decision applies); (c) tick the first two `paper/review.md` TODO items when the read is
+agreed; (d) then the paper rewrite (title, abstract, contributions, Sec. 1/8) and the stale substitution sentence.
+
+## 2026-09-23 (later still x17) — donor-permutation test done (substitution result weakens again); options-only compile section written; clinician review deferred; NAACL dates confirmed
+
+**Donor-permutation test** (`tools/lumiere_reviewer_stats.py::donor_permutation_test`, 20,000 replicates, seed 20260924; results in
+`results/lumiere_reviewer_stats.{md,json}`). Each patient's donor is redrawn uniformly from the opposite-LIL-direction side (the pairing rule), the
+observed flipped answers are held fixed, truth-tracking is recounted; one donor per patient is shared by all models/phases, so shared-patient
+dependence and donor reuse are respected. Result: observed 32/95 tracks the donor's label, permutation mean **32.4** (95% range 27-37), one-sided
+p = **0.64**. LIL 18/59 vs 17.4 (p .56); DSCR 14/36 vs 15.0 (p .73). **Reading: which donor's image was shown does not matter beyond what the
+label base rates predict.** This contradicts the "+11.9pp above item-specific chance" reading from x12: the item-specific null (flip drawn
+uniformly among the item's other options) ignores that models' answers are skewed toward common labels (e.g. PD ~70% of DSCR keys), so it under-
+states chance. Caveat: the pairing rule fixes every donor's LIL direction to the opposite of the patient's, so the LIL permutation is degenerate
+(p ~ 0.5 by construction); only DSCR is informative about donor-specificity. **Substitution now gives no evidence of image grounding**; the paper's
+"modest image sensitivity" sentence (Sec. 8) is not supported and must be rewritten in the reframe. Also still true: 67.8% of LIL flips land on the
+patient's OWN direction, i.e. away from the substituted image.
+
+**Options-only compile section** written (`tools/lumiere_gating_stats.py` section 4): per model x phase options-only accuracy [Wilson], the
+no-chain-context baseline (gating 'absent' condition; own-image for AIA), own-image accuracy, paired own - options-only difference with patient
+bootstrap CI and exact McNemar p; non-LLM reference rows (chance, majority text). Tested on SYNTHETIC results (fake dirs, deleted afterwards) - the
+code path works; no real options-only result exists yet (`lumiopt_*` still queued). Real numbers appear when the jobs finish.
+
+**Clinician review deferred (decision, user 2026-09-23):** will not be arranged for this submission; listed as a limitation of the paper (unreviewed,
+LLM-drafted items and answer keys; answerability from single slices unvalidated). Consequence: the v3 results are final as-is, no re-run after review.
+
+**NAACL 2027 (re-checked 2026-09-23):** ARR deadline **October 12, 2026** (AoE), commitment December 23, 2026, conference June 1-5, 2027, San Francisco;
+long papers 8 pages (9 camera-ready), short 4 (5). Shared ARR cycle with COLING 2027. References/limitations/appendices treatment not stated on the page.
+19 days from today to the ARR deadline.
+
 ## 2026-09-23 (later still x16) — DECISION: professor approved reframing the paper around shortcut learning
 
 User relayed Prof. Wang's feedback: reframe around "shortcut learning". This closes the "Reframe around continuity/leakage/image-dependence"

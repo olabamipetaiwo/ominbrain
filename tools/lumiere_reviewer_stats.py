@@ -159,6 +159,41 @@ def _label(phase: str, text: str) -> str | None:
     return _direction_word(text) if phase == "LIL" else _rano_word(text)
 
 
+def donor_permutation_test(ev: list[dict], pairs: dict, n_perm: int = 20_000) -> dict:
+    """Permutation null over DONOR ASSIGNMENT, at patient level.
+
+    H0: a flipped answer is unrelated to which donor's image was shown. Each replicate redraws every patient's
+    donor uniformly from the patients on the opposite LIL-direction side (exactly the pairing rule in
+    tools/build_lumiere_counterfactual_pairs.py, reuse allowed), keeps every observed flipped answer fixed, and
+    recounts truth-tracking against the new donor's truth label. One donor per patient is shared by all models
+    and both phases, so shared-patient dependence and donor reuse are preserved rather than ignored."""
+    prng = np.random.default_rng(SEED + 1)
+    patients = sorted(pairs)
+    pidx = {p: i for i, p in enumerate(patients)}
+    side = {p: pairs[p]["own_direction"] for p in patients}
+    eligible = [np.array([pidx[q] for q in patients if side[q] != side[p]]) for p in patients]
+    ev_pat = np.array([pidx[e["patient"]] for e in ev])
+    # M[e, d] = would event e count as truth-tracking if donor d had been shown
+    M = np.zeros((len(ev), len(patients)), dtype=bool)
+    for i, e in enumerate(ev):
+        for j, d in enumerate(patients):
+            M[i, j] = e["new_lab"] == truth_label(d, e["phase"])
+    draws = np.stack([prng.integers(0, len(eligible[i]), n_perm) for i in range(len(patients))], axis=1)
+    donor_idx = np.stack([eligible[i][draws[:, i]] for i in range(len(patients))], axis=1)   # (n_perm, n_patients)
+    hits = M[np.arange(len(ev))[None, :], donor_idx[:, ev_pat]]                             # (n_perm, n_events)
+    obs = np.array([e["tracks"] for e in ev], dtype=bool)
+    counts = hits.sum(axis=1)
+    out = {"n_perm": n_perm, "observed": int(obs.sum()), "n": len(ev), "perm_mean": float(counts.mean()),
+           "perm_lo": float(np.percentile(counts, 2.5)), "perm_hi": float(np.percentile(counts, 97.5)),
+           "p_ge": float((counts >= obs.sum()).mean()), "by_phase": {}}
+    for ph in ("LIL", "DSCR"):
+        sel = np.array([e["phase"] == ph for e in ev])
+        c = hits[:, sel].sum(axis=1)
+        out["by_phase"][ph] = {"observed": int(obs[sel].sum()), "n": int(sel.sum()), "perm_mean": float(c.mean()),
+                               "p_ge": float((c >= obs[sel].sum()).mean())}
+    return out
+
+
 def counterfactual_section(rng) -> tuple[dict, list[str]]:
     pairs = json.load(open(PAIRS_PATH))
     opts = option_tables()
@@ -211,7 +246,7 @@ def counterfactual_section(rng) -> tuple[dict, list[str]]:
                 labs = [_label(ph, t) for t in others]
                 labs = [x for x in labs if x]
                 p_null = (sum(x == partner_truth for x in labs) / len(labs)) if labs else np.nan
-                events.append({"model": m, "phase": ph, "patient": c, "donor": pr["partner"],
+                events.append({"model": m, "phase": ph, "patient": c, "donor": pr["partner"], "new_lab": new_lab,
                                "tracks": int(new_lab == partner_truth),
                                "toward_own": int(new_lab == own_truth), "p_null": p_null,
                                "same_label_as_before": int(new_lab == _label(ph, a["model_answer_text"]))})
@@ -248,6 +283,8 @@ def counterfactual_section(rng) -> tuple[dict, list[str]]:
     toward_own_ph = {ph: float(np.mean([e["toward_own"] for e in ev if e["phase"] == ph])) for ph in ("LIL", "DSCR")}
     same_lab = float(np.mean([e["same_label_as_before"] for e in ev]))
 
+    perm = donor_permutation_test(ev, pairs)
+
     lines += ["", "### Truth-tracking among flipped, checkable LIL/DSCR items (pooled over models)", "",
               f"- Observed: {k}/{n} = {100 * k / n:.1f}%. Naive Wilson (treats items as independent): "
               f"[{100 * w_lo:.1f}, {100 * w_hi:.1f}].",
@@ -263,6 +300,19 @@ def counterfactual_section(rng) -> tuple[dict, list[str]]:
               f"so 'donor truth' and 'own truth' are not exclusive there).",
               f"- Flips that keep the same direction/RANO label (only wording, magnitude, or location changed): "
               f"{100 * same_lab:.1f}% — these are flips but cannot be truth-tracking by construction.",
+              f"- **Donor-permutation test** (patient-level; {perm['n_perm']:,} replicates): each patient's donor is redrawn "
+              f"uniformly from the patients on the opposite LIL-direction side (the pairing design; reuse allowed), the model's "
+              f"observed flipped answers are held fixed, and truth-tracking is recounted. Observed {perm['observed']}/{n}; "
+              f"permutation mean {perm['perm_mean']:.1f} (95% range {perm['perm_lo']:.0f}–{perm['perm_hi']:.0f}); "
+              f"one-sided P(count ≥ observed) = {perm['p_ge']:.3f}. LIL: {perm['by_phase']['LIL']['observed']}/"
+              f"{perm['by_phase']['LIL']['n']} vs mean {perm['by_phase']['LIL']['perm_mean']:.1f} "
+              f"(p = {perm['by_phase']['LIL']['p_ge']:.3f}); DSCR: {perm['by_phase']['DSCR']['observed']}/"
+              f"{perm['by_phase']['DSCR']['n']} vs mean {perm['by_phase']['DSCR']['perm_mean']:.1f} "
+              f"(p = {perm['by_phase']['DSCR']['p_ge']:.3f}). Unlike the item-specific null, this respects the shared-patient "
+              f"and donor-reuse structure (one donor per patient across all models and phases). CAVEAT: the pairing rule fixes every "
+              f"donor's LIL direction to the opposite of the patient's, so for LIL every eligible donor has the same label and the "
+              f"permutation cannot separate donors (its p is ~0.5 by construction); only the DSCR row, where donor RANO labels "
+              f"differ, is informative about donor-specificity.",
               "", "Per model × phase (k/n observed vs expected under the item-specific null):", "",
               "| Model | Phase | observed | expected | n |", "|---|---|---|---|---|"]
     for m in MODELS:
@@ -315,7 +365,8 @@ def counterfactual_section(rng) -> tuple[dict, list[str]]:
                      "naive_wilson": [w_lo, w_hi], "excess": obs_excess,
                      "excess_ci_patient": [float(el), float(eh)], "excess_ci_donor": [float(del_), float(deh)],
                      "rate_ci_patient": [float(pl), float(ph_)], "rate_ci_donor": [float(dl), float(dh)],
-                     "toward_own_truth": toward_own, "toward_own_truth_by_phase": toward_own_ph, "same_label_flip": same_lab}
+                     "toward_own_truth": toward_own, "toward_own_truth_by_phase": toward_own_ph, "same_label_flip": same_lab,
+                     "donor_permutation": perm}
     return out, lines
 
 
