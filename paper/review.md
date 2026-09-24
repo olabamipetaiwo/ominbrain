@@ -1,95 +1,12 @@
-# Review status
+# Review 
 
-Status tracker for the round-2 reviewer's findings and the work that follows from them. Updated 2026-09-24.
-Detail, numbers and history live in `paper/update.md` (entries "x12" to "x17"). The reviewer's full text is not kept
-here any more; it is in git at commit `6e776ff` (`git show 6e776ff:paper/review.md`). Finding numbers below are the reviewer's.
 
-  The paper asks an important question: does a correct medical VQA answer reflect information obtained from the image?
-  The combination of text-only evaluation, image substitution, and evidence auditing is useful. Reporting majority-class
-  baselines, patient-clustered uncertainty, and failures in the initial dataset also strengthens the paper. The worked
-  patient example makes the limitations of answer accuracy tangible.
+Required revision: define the prediction time, available information, and outcome horizon. Use an appropriate
+probabilistic survival task or clinician-validated risk categories. For TCM, similarly distinguish documented
+treatment from a justified treatment recommendation.
 
-## Direction
-
-**Decided 2026-09-23 (Prof. Wang): reframe the paper around shortcut learning.** Working claim: on these chain-structured brain-MRI
-MCQs, accuracy is largely explained by question text, option artifacts and upstream-label lookup, so it is weak evidence of image-grounded
-or causal reasoning. Not claimed: that models never use the image, or that errors propagate across phases. Exploratory (unreviewed items).
-All runs below finished 2026-09-24; results compiled. The LaTeX text was rewritten around this direction 2026-09-24 (recompile and page-fit check are the user's).
-
-Venue: NAACL 2027 via ARR. **ARR deadline 2026-10-12** (AoE), commitment 2026-12-23, conference 2027-06-01 to 06-05 (San Francisco).
-Long paper: 8 pages (9 camera-ready). Shared ARR cycle with COLING 2027.
-
-     At line 274 (paper/latex/acl_latex.tex:274), each timepoint is represented by one axial contrast-enhanced T1 slice.
-     Yet LIL asks about whole-lesion volume changes, sometimes with precise percentages.
-
-## Findings from the reviewer: where each stands
-
-| # | Finding | Status |
-|---|---|---|
-| 1 | Images may not contain enough information (single slice; RANO needs more than two images) | **Open, limitation.** Disclosed in Sec. 6 and Limitations. No fix planned (needs the clinician review, deferred). |
-| 2 | Continuity is not a causal chain | **Addressed.** Reworded as "sequential evaluation" and "hard gating". Correct/wrong/absent intervention run (4 models): only TCM depends on context, and the DSCR entry alone carries it for the three larger models (ablation); correct DSCR context hurts DSCR for three models. MedGemma-4B is the exception (no DSCR-only effect). See `results/lumiere_gating_stats.md`, `results/lumiere_tcm_lookup.md`. |
-| 3 | Prognosis/TCM answer key confuses outcome with a unique prediction | **Open, limitation.** Text rewritten (48-week survival vs week-47 imaging). Redesign needs a clinician, deferred. |
-| 4 | Substitution "below chance" is invalid | **Fixed in analysis, paper text stale.** Item-specific null (+11.9pp) is superseded by the donor-permutation test: 32/95 vs permutation mean 32.4, p = .64, no evidence of grounding (LIL permutation is degenerate by pairing design; DSCR informative). Repeated-run control: 260/260 identical answers in all 4 models (noise floor 0). |
-| 5 | Evidence auditor cannot show claims were not visually verified | **Partly addressed.** Two-dimension audit done; "no checkable claim" reported separately (26-55%). Independent expert validation not done (limitation). |
-| 6 | OmniBrainBench attribution | **Done.** Framed as an incompatibility with our sequential evaluation; "2 verifiable cross-phase links". |
-| 7 | Framework not supported by the experiments | **Addressed by the reframe.** Adaptation and gating flagged exploratory; measures named "vocabulary and consistency". KAB becomes supporting, not the headline. |
-
-Reporting corrections: all done and in the paper (MedGemma -1.9pp on the per-question basis, Gemma-27B 53.5/50.4 rounding, paired CIs, "prespecified
-analysis plan" with the +-8pp margin disclosed as post hoc, per-phase forest plot, "zero violations = compliance with the auditor", regenerated vs frozen
-upstream context, hard gating = masking). Also done: abstract cut to ~140 words, dataset-debugging history moved to Appendix B, body fits 8 pages.
-Not done by choice: adding the proprietary models (GPT-5, Claude, Gemini); the reviewer said it would not fix the validity concerns.
-
-     Required revision: obtain expert judgments using exactly the model-visible inputs. Either supply sufficient
-     imaging/context or restrict questions to findings reliably observable in the supplied slices.
-
-## Runs
-
-All finished 2026-09-24 (`sacct`: COMPLETED, exit 0; last was `lumiopt_Llama-4-Scout` 43121096). Compiled by `python -m tools.lumiere_gating_stats`
-(and `python -m tools.lumiere_tcm_lookup`). Nothing in the primary experiment set is pending.
-
-| Experiment | MedGemma-4B | Gemma-3-12B | Gemma-3-27B | Llama-4-Scout |
-|---|---|---|---|---|
-| Repeated identical input (rep2) | done | done | done | done |
-| Gating-causality (correct/wrong/absent) | done | done | done | done |
-| TCM ablation (`incl-DSCR`, `excl-DSCR`) | done | done | done | done |
-| LLM options-only baseline | done, **parse-failure contaminated** (DSCR 52/52) | done | done | done (DSCR 7/52 unparsed) |
-
-**One diagnostic job:** `lumiodiag_MedGemma-4B` 43170217 (options-only rerun, same decoding, raw responses saved to
-`results/lumiere_optionsonly_diag_MedGemma-4B_*`). Purpose: find why MedGemma's options-only DSCR fails 52/52. Until it reports, MedGemma's
-options-only cells are flagged, not interpreted (see `paper/update.md`, 2026-09-24).
-
----
-
-## Key numbers so far (v3, 52 patients, open-weight models)
-
-- Text-only vs image-present: within about +-8pp overall; no per-phase cell entirely above 0.
-- Substitution: 32/95 flips match the donor label; permutation mean 32.4 (p = .64). 67.8% of LIL flips land on the patient's own direction.
-- Repeated runs: identical answers for all four models (noise floor 0).
-- Gating-causality TCM (correct / wrong / absent, %): MedGemma 33/15/25, Gemma-12B 62/27/19, Gemma-27B 64/25/33, Scout 60/42/33. LIL and PJRF flat. DSCR: correct context hurts for Gemma-12B (50/65/65, p = .008), Gemma-27B and Scout (correct - absent -17pp p = .012, -13.5pp p = .039); all uncorrected.
-- TCM ablation: DSCR entry alone reproduces the correct-vs-wrong gap for Gemma-12B (+15pp), Gemma-27B (+27pp), Scout (+27pp); without DSCR it does not (all CIs include 0). MedGemma-4B: no DSCR-only effect.
-- TCM key follows the DSCR key's class for 50/52 patients (`tools/lumiere_tcm_lookup.py`; class unique among the options in only 18/52). TCM correct given own DSCR correct vs wrong: Gemma-12B 17/29 vs 3/23, Gemma-27B 26/34 vs 5/18, Scout 18/30 vs 1/22 (descriptive, confounded).
-- Options-only (chance 25): MedGemma cells flagged (parse failures 52/52 DSCR, 18-21/52 AIA/PJRF/TCM); Gemma-12B 38/33/40/23/12, Gemma-27B 62/36/44/25/12, Scout 44/36/19/21/19 (AIA/LIL/DSCR/PJRF/TCM). AIA has one fixed answer string, so its above-chance rate is not a shortcut signal.
-- Longest-option baseline: 67% on DSCR, above every model. AIA has one fixed answer string.
-
-     An individual’s realized survival does not establish that one narrow forecast was the uniquely justified answer at
-     the prediction date. The example also involves imaging at week 47 and survival measured from surgery, making the
-     information cutoff particularly important.
-
-     Required revision: define the prediction time, available information, and outcome horizon. Use an appropriate
-     probabilistic survival task or clinician-validated risk categories. For TCM, similarly distinguish documented
-     treatment from a justified treatment recommendation.
-
-**When all the jobs above finish**
-- [x] Check every job exited 0 (`sacct`), then `python -m tools.lumiere_gating_stats` (repeated-run, gating-causality, TCM ablation, options-only, all four models). Done 2026-09-24.
-- [x] Read the four-model results; decide what the shortcut story says. Done 2026-09-24: TCM is largely a lookup of the upstream DSCR label; options-only vs own-image is confounded by the model's own chain (own-image carries its earlier answers), so the like-for-like comparator is the no-chain 'absent' condition.
-
-**Then rewrite the paper around shortcut learning**
-- [ ] Title, abstract, contributions, intro, Sec. 8. Lead evidence: text-only, substitution (permutation), gating-causality, TCM ablation, options-only.
-- [ ] Replace the stale substitution sentence ("modest image sensitivity", +11.9pp over item-specific chance) with the permutation result.
-- [ ] Rewrite the flip-rate paragraphs against the repeated-run baseline; drop "queued" language.
-- [ ] Write up gating-causality and the TCM lookup finding, with the Gemma-12B DSCR reversal and its caveats (uncorrected p; anchoring is a hypothesis).
-- [ ] Limitations: clinician review deferred (unreviewed LLM-drafted items and keys), single-slice answerability, PJRF/TCM key definition, unreviewed distractors, uncorrected multiplicity, four open models only, wrong-context condition is one fixed choice.
-- [ ] Recompile LaTeX (`/apps/texlive/2023/bin/x86_64-linux` on PATH), confirm the body fits 8 pages and no undefined refs.
+- [ ] Page fit: on the scratch compile Results ends on p.8 and Conclusion lands on p.9 (it currently sits AFTER Limitations). Check how ARR counts pages, then trim or move the Conclusion before Limitations.
+- [ ] References: only 14 entries (published-only rule). Add published citations for DeepBraTumIA, HD-GLIO-AUTO, NCIt, medical-VQA shortcut work, and the statistics used (Wilson, McNemar); verify each against the publisher or ACL Anthology record.
 
 **Optional**
 - [ ] Randomised or per-label wrong-context variant of gating-causality (code change + GPU).
@@ -97,3 +14,171 @@ options-only cells are flagged, not interpreted (see `paper/update.md`, 2026-09-
 
 **Deferred, listed as limitations rather than fixed**
 - Clinician review of the v3 items; answerability fix for LIL/DSCR; PJRF/TCM scoring redesign.
+
+
+-------
+
+### Review
+
+My recommendation: reject in its current form and invite substantial revision. ARR overall assessment: 2/5 (“Resubmit next cycle”). The research question is
+  worthwhile, and the controls are thoughtful, but the experiment does not yet distinguish model shortcut behavior from problems in the benchmark’s construction.
+
+  This is a simulated senior-reviewer assessment, not an official NAACL review or a claim of Stanford affiliation. I reviewed the current LaTeX manuscript (paper/
+  latex/acl_latex.tex), titled “Right Answer, No Image: Shortcut Learning in Brain-MRI Question Answering.”
+
+  Version warning: the existing compiled PDF has an older title and lacks several experiments now in the source. My scientific assessment below uses the .tex; the
+  PDF should be regenerated before submission. paper/latex/acl_latex.pdf
+
+  The topic fits NAACL’s clinical NLP, multimodality, and evaluation areas. NAACL 2027 uses ARR, so I have followed its review categories. NAACL call, ARR review
+  form.
+
+   Criterion          Assessment
+  ━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Overall            2/5 — substantial revision
+  ─────────────────  ────────────────────────────────────────────────────────────────────────────────────────
+   Soundness          2/5 — central inference remains inadequately supported
+  ─────────────────  ────────────────────────────────────────────────────────────────────────────────────────
+   Excitement         3/5 — interesting research question and controls
+  ─────────────────  ────────────────────────────────────────────────────────────────────────────────────────
+   Reproducibility    3/5 — useful detail, but release and exact execution specifications need strengthening
+  ─────────────────  ────────────────────────────────────────────────────────────────────────────────────────
+   Confidence         4/5 on methodological assessment; experiments were not independently reproduced
+
+  Paper summary. The paper constructs five-phase question chains from 52 LUMIERE patients and evaluates four open-weight models. It compares image-present and text-
+  only performance, substitutes patient images, audits stated evidence, and manipulates upstream answers. It finds small aggregate accuracy differences after
+  removing images, image-induced answer changes without detected donor-label tracking, and substantial treatment-answer sensitivity to diagnosis context.
+
+  Strengths
+
+  - The paper goes beyond accuracy. Text-only, options-only, repeated-input, image-substitution, and context interventions offer complementary information.
+  - The reporting is unusually candid. The manuscript acknowledges its post hoc equivalence margin, unvalidated questions, failed original decision-rule condition,
+    and limitations of its metrics. This transparency deserves credit.
+
+  - The upstream-context experiment is promising. The 17–39 percentage-point treatment-accuracy changes identify an experimentally manipulable dependence worth
+    studying.
+
+  - The distinction between textual consistency and causal faithfulness is appropriate. The current manuscript generally avoids treating answer recoverability as
+    proof of faithful reasoning.
+
+  - Patient-clustered uncertainty is appropriate for questions sharing a patient.
+
+  Major concerns
+
+  1. Answerability is the decisive unresolved issue.
+
+  The benchmark asks questions that the supplied evidence may not answer:
+
+  - LIL asks for whole-lesion volume change from one axial slice per timepoint.
+  - DSCR uses expert RANO labels while withholding some information involved in their assignment.
+  - AIA has the same correct answer across all patients.
+  - PJRF scores forecasts against realized survival.
+  - TCM combines recorded treatment and drafted recommendations without clinician validation.
+
+  These problems affect the interpretation of the primary experiment. If the image lacks the required information, removing it may leave performance unchanged even
+  for a model capable of using relevant visual evidence.
+
+  The strongest supported conclusion is therefore:
+
+  > On this constructed dataset, adding the supplied images yields little aggregate accuracy benefit.
+
+  That is narrower than establishing shortcut learning as the principal explanation. Acknowledging this limitation is good practice, but does not resolve it.
+
+  Required revision: have qualified clinicians independently assess answerability and answer-key validity from exactly the inputs shown to models. Report agreement
+  and adjudication, and rerun the primary analyses on a validated subset. A clinician accuracy comparison under the same input restrictions would be especially
+  informative.
+
+  2. The counterfactual substitution does not provide a clean test of visual truth tracking.
+
+  The manuscript reports that:
+
+  - The donor’s exact LIL answer is available in 0/52 option sets.
+  - Even the donor’s LIL direction is available in only 37/52.
+  - Textual clinical facts remain those of the original patient.
+  - The LIL permutation is degenerate because donor direction is fixed by construction.
+
+  Consequently, the intervention often presents conflicting evidence or makes the donor-correct answer unavailable. Failure to select that answer cannot cleanly
+  establish failure to track the image.
+
+  Furthermore, (p=.64) means this test did not detect donor-specific tracking. It does not establish the stronger statement that donor identity “does not matter.”
+
+  Required revision: construct matched image pairs with a shared question and option set that permits both correct answers. Keep nonvisual facts compatible, fix
+  upstream context when estimating a direct image effect, and report DSCR separately from the uninformative LIL permutation component.
+
+  3. The TCM result establishes context sensitivity more clearly than shortcut use.
+
+  Treatment answers changing when diagnosis changes is not inherently undesirable. The benchmark deliberately makes treatment follow disease course, so this
+  dependence is partly built into the task.
+
+  The class-level lookup analysis also does not fully explain option selection: the predicted action class identifies a unique option in only 18/52 cases. Thus, the
+  finding that diagnosis predicts the correct action class in 50/52 cases does not establish that a simple lookup reproduces model accuracy.
+
+  “Reproduces the effect” also needs qualification: the DSCR-only contrast is substantially smaller than the full-context contrast for Gemma-3-12B.
+
+  Required revision: include cases where identical diagnosis labels require different actions because other supplied facts differ. Test whether models respond to
+  those facts. Compare against an explicit rule-based option-selection baseline.
+
+  4. The equivalence claim is exploratory and aggregate.
+
+  Choosing the ±8-point margin after inspecting confidence intervals makes it a description of observed precision, not independent confirmation of practical
+  equivalence. Eight points also needs substantive justification.
+
+  Pooling across five heterogeneous phases can conceal opposing effects. Moreover, because each arm regenerates upstream answers, later-phase differences measure the
+  total effect of removing images throughout the chain, rather than an isolated same-phase image contribution.
+
+  Required revision: define the primary estimand and a meaningful margin before a new evaluation. Report phase-specific effects and include a fixed-context
+  comparison. Keep the current results explicitly exploratory.
+
+  5. Several numerical and interpretive inconsistencies need correction.
+
+  These are material because they affect the paper’s conclusions:
+
+   Issue                                                                             Why it matters
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DSCR majority accuracy appears as both 67% and 63.5%                              At 63.5%, Gemma-3-27B’s reported 65.4% exceeds the majority baseline
+                                                                                     numerically; the claim that every model falls below it is incorrect. This alone
+                                                                                     does not establish significant superiority.
+  ────────────────────────────────────────────────────────────────────────────────  ─────────────────────────────────────────────────────────────────────────────────
+   The 54-patient cohort has 37 progressive-disease cases, while the final 52-       Removing two patients cannot remove four progressive-disease labels without
+   patient analysis describes 33                                                     another change that needs explanation.
+  ────────────────────────────────────────────────────────────────────────────────  ─────────────────────────────────────────────────────────────────────────────────
+   “Only TCM depends on upstream context”                                            The same paragraph reports DSCR accuracy changes under upstream-context
+                                                                                     interventions. Distinguish beneficial dependence from sensitivity.
+  ────────────────────────────────────────────────────────────────────────────────  ─────────────────────────────────────────────────────────────────────────────────
+   Appendix baselines “sit at or below” 25% except DSCR                              Reported AIA and majority-letter baselines exceed 25%.
+  ────────────────────────────────────────────────────────────────────────────────  ─────────────────────────────────────────────────────────────────────────────────
+   “Correct DSCR context” in the DSCR experiment                                     Clarify whether this means correct context supplied to DSCR, consisting of
+                                                                                     earlier phases, rather than injecting DSCR’s own label.
+
+  All reported counts, percentages, and conclusions should be generated from one authoritative results table.
+
+  6. The contribution needs tighter focus.
+
+  KAB receives substantial emphasis, but its proposed components are not strongly validated:
+
+  - Recoverability is near ceiling.
+  - Ontology coverage measures vocabulary membership.
+  - Adaptation triggers too rarely for a meaningful conclusion.
+  - Gating is an imposed scoring convention, with no gated results reported.
+
+  Meanwhile, medical VQA shortcut evaluation already has relevant precedent, including visual and textual perturbation protocols in HEAL-MedVQA. The paper’s
+  distinctive contribution should be the insight provided by longitudinal chains and upstream-context interventions. Nguyen et al., IJCAI 2025.
+
+  I would reduce KAB’s prominence and center the paper on a validated empirical finding. The OmniBrainBench compatibility analysis is useful motivation, but should
+  not carry substantial novelty weight when the original release did not promise the linkage being sought.
+
+  Questions I would ask during author response
+
+  1. What fraction of questions can clinicians answer from the exact model-visible inputs?
+  2. Does the image-ablation finding persist on that answerable subset?
+  3. What are the authoritative final DSCR counts and majority baseline?
+  4. Can donor tracking be tested where both answers are available and the remaining context is compatible?
+  5. Does diagnosis-only treatment prediction remain strong when other clinical facts distinguish actions?
+
+  What would change my recommendation
+
+  The highest-priority work is clinical validation and repair of the evaluation, followed by a valid counterfactual subset and reconciliation of the reported
+  numbers. Adding proprietary models would broaden coverage, but would not resolve the central validity issue.
+
+  A revised paper showing that models still obtain correct answers through textual cues on clinician-validated, visually answerable questions, while failing
+  controlled image interventions, would support a substantially stronger contribution. I would not currently recommend Findings either: the unresolved concern is
+  soundness, which remains central to that venue.
