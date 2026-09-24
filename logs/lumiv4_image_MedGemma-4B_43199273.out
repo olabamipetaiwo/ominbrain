@@ -462,3 +462,8 @@ Case 36/62: LUMIERE GBM Case (Patient-048)
     [Patient-048/DSCR/text] -> C (wrong)
     [Patient-048/AIA/swap] -> B (OK)
     [Patient-048/LIL/swap] -> C (wrong)
+    [Patient-048/DSCR/swap] -> C (wrong)
+
+============================================================
+Case 37/62: LUMIERE GBM Case (Patient-050)
+============================================================
