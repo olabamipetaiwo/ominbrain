@@ -174,3 +174,130 @@ The research question is worthwhile, and the controls are thoughtful, but the ex
   A revised paper showing that models still obtain correct answers through textual cues on clinician-validated, visually answerable questions, while failing
   controlled image interventions, would support a substantially stronger contribution. I would not currently recommend Findings either: the unresolved concern is
   soundness, which remains central to that venue.
+
+
+--------
+
+
+ My remaining major concerns, excluding clinical review
+
+  1. The current title announces a finding that the new study has not established.
+
+  The abstract, results, generated tables, and conclusion all acknowledge that v4 runs are pending. The paper also correctly withdraws shortcut conclusions from v3.
+
+  Consequently, “Right Answer, No Image: Shortcut Learning…” currently states the outcome before the decisive experiment has reported it.
+
+  The alternative already commented in your source is better:
+
+  > Do Medical MLLMs Read the Scan? Shortcut Controls on Brain-MRI Question Answering
+
+  Complete the experiments before choosing a conclusion-bearing title. A rigorous finding of image use, mixed behavior, or inconclusive effects could all support a
+  useful paper.
+
+  2. The 49% agreement statistic is still interpreted too strongly.
+
+  Your audit finds that an automated enhancement rule agrees with expert categories on 130/268 follow-ups. That establishes disagreement between two procedures.
+
+  It does not establish that only 49% of labels can be recovered from the images, or that every remaining label necessarily depends on information outside them.
+  Disagreement could also arise from segmentation error, lesion selection, measurement differences, or the simplified rule. Your reported measurement correlation of
+  0.57 and median measurement ratio of 1.4 make these alternatives particularly relevant.
+
+  The sentence attributing the remaining ratings to outside evidence is therefore unsupported.
+
+  Use:
+
+  > “Our slice-based enhancement rule agreed with expert RANO ratings on 130 of 268 follow-ups (48.5%). This disagreement prevents us from assuming that the
+  > displayed inputs support the expert labels.”
+
+  Also report rule coverage separately from agreement: 37 follow-ups are undetermined. Agreement among determinate cases is approximately 56.3%, alongside the 48.5%
+  overall figure.
+
+  This is an inference issue, independent of requesting clinical review.
+
+  3. “Every key is a stated function of the model-visible inputs” is not accurate across all five phases.
+
+  There are different task types here:
+
+  - AIA–DSCR evaluate image-derived labels.
+  - TCM evaluates a constructed decision rule.
+  - PJRF evaluates a probabilistic forecast against a subsequently observed outcome.
+
+  PJRF’s observed outcome is not a deterministic function of its supplied predictors. Using Brier score makes the evaluation more appropriate; it does not make
+  individual mortality outcomes answerable by construction.
+
+  A more precise claim would be:
+
+  > “We define image-derived targets for AIA–DSCR, a rule-based target for TCM, and an explicitly timed probabilistic forecasting task for PJRF.”
+
+  There is also an implementation mismatch: the TCM question does not explicitly give the decision rule. The rule is stored in metadata, while the question asks for
+  the appropriate management step. If the intended experiment tests application of a supplied rule, put that rule in the prompt. Otherwise, performance combines rule
+  knowledge with use of the supplied facts.
+
+  4. The statistical decision rules need reconciliation with the implementation.
+
+  The analysis computes Holm-adjusted p-values, but the displayed E1 verdict is assigned from the unadjusted bootstrap interval. Thus, a cell can say “image helps”
+  while failing the stated multiplicity correction.
+
+  Additionally, “image helps” and “within margin” are not mutually exclusive. An interval of [+2, +8] percentage points satisfies both. Report these as separate
+  properties:
+
+  - Evidence of a positive image effect.
+  - Whether the effect is contained within the predefined practical margin.
+
+  The ±10-point margin is now prospective, which is an improvement. However, its rationale should concern practical performance, not whether a model “reads the
+  scan.” A small net accuracy effect can coexist with substantial image use.
+
+  E2 also makes positive tracking claims across multiple model–phase comparisons without correction. That can be exploratory, but the designation should be
+  consistent between the analysis plan and conclusions.
+
+  5. I found a concrete mismatch between the DSCR prompt and label-generation code.
+
+  The prompt defines measurability as at least 10 mm by 10 mm. The implementation tests whether the diameter product is at least 100 mm².
+
+  Those conditions are not equivalent: 20 mm × 5 mm passes the implemented product threshold but fails the stated dimensional requirement.
+
+  This is a target-definition bug, regardless of clinical interpretation. Align the prompt and implementation, identify affected items, and document any resulting
+  change to the fixed item set and analysis plan.
+
+  6. The fact-flip results must measure a paired response, not just post-intervention correctness.
+
+  The main reported statistic counts whether the answer matches the rule after a flip. A model could already have selected that answer before the intervention and
+  remain unchanged.
+
+  The code includes a useful conditional measure for initially correct responses, but the primary presentation should show:
+
+  - Original answer matches the original rule.
+  - Changed answer matches the changed rule.
+  - Answer actually changes when the rule requires it.
+
+  For timing flips, emphasize the progressive-disease subset where the correct action changes. Unchanged non-progressive cases are useful negative controls, not
+  evidence of timing sensitivity.
+
+  Smaller corrections
+
+  - AIA is approximately balanced—16/16/15/15—not exactly uniform. Text-only performance is not mathematically forced to equal 25% in this finite sample.
+  - A logistic baseline failing to beat the base rate does not establish that the supplied facts contain no predictive information. Say “this baseline did not
+    improve on the base rate.”
+
+  - Replacing unparseable PJRF responses with 0.5 can reward failed outputs with reasonable Brier scores. Report failure rates and sensitivity to that handling.
+  - “Cannot support same-patient chains at all” is stronger than finding only two verifiable links. State that the release does not provide sufficient verified
+    linkage for your five-phase evaluation.
+
+  My updated assessment
+
+   Aspect                               Assessment
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Research question                    Strong
+  ───────────────────────────────────  ────────────────────────────────
+   Revised control design               Substantially improved
+  ───────────────────────────────────  ────────────────────────────────
+   Claim precision                      Still needs revision
+  ───────────────────────────────────  ────────────────────────────────
+   Implementation–method agreement      At least one material mismatch
+  ───────────────────────────────────  ────────────────────────────────
+   Empirical completeness               Pending
+  ───────────────────────────────────  ────────────────────────────────
+   Current submission recommendation    Revise; not ready yet
+
+  The revision now has a credible experimental foundation. The next decisive steps are completing v4, fixing the prompt–key mismatch, and making the claims follow
+  the results. None of those recommendations depends on obtaining clinical review.
