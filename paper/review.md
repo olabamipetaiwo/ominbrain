@@ -20,14 +20,9 @@ treatment from a justified treatment recommendation.
 
 ### Review
 
-My recommendation: reject in its current form and invite substantial revision. ARR overall assessment: 2/5 (“Resubmit next cycle”). The research question is
-  worthwhile, and the controls are thoughtful, but the experiment does not yet distinguish model shortcut behavior from problems in the benchmark’s construction.
+My recommendation: reject in its current form and invite substantial revision. ARR overall assessment: 2/5 (“Resubmit next cycle”). 
 
-  This is a simulated senior-reviewer assessment, not an official NAACL review or a claim of Stanford affiliation. I reviewed the current LaTeX manuscript (paper/
-  latex/acl_latex.tex), titled “Right Answer, No Image: Shortcut Learning in Brain-MRI Question Answering.”
-
-  Version warning: the existing compiled PDF has an older title and lacks several experiments now in the source. My scientific assessment below uses the .tex; the
-  PDF should be regenerated before submission. paper/latex/acl_latex.pdf
+The research question is worthwhile, and the controls are thoughtful, but the experiment does not yet distinguish model shortcut behavior from problems in the benchmark’s construction.
 
   The topic fits NAACL’s clinical NLP, multimodality, and evaluation areas. NAACL 2027 uses ARR, so I have followed its review categories. NAACL call, ARR review
   form.
@@ -64,7 +59,7 @@ My recommendation: reject in its current form and invite substantial revision. A
 
   Major concerns
 
-  1. Answerability is the decisive unresolved issue.
+  ### 1. Answerability is the decisive unresolved issue.
 
   The benchmark asks questions that the supplied evidence may not answer:
 
@@ -87,7 +82,7 @@ My recommendation: reject in its current form and invite substantial revision. A
   and adjudication, and rerun the primary analyses on a validated subset. A clinician accuracy comparison under the same input restrictions would be especially
   informative.
 
-  2. The counterfactual substitution does not provide a clean test of visual truth tracking.
+  ### 2. The counterfactual substitution does not provide a clean test of visual truth tracking.
 
   The manuscript reports that:
 
@@ -104,7 +99,7 @@ My recommendation: reject in its current form and invite substantial revision. A
   Required revision: construct matched image pairs with a shared question and option set that permits both correct answers. Keep nonvisual facts compatible, fix
   upstream context when estimating a direct image effect, and report DSCR separately from the uninformative LIL permutation component.
 
-  3. The TCM result establishes context sensitivity more clearly than shortcut use.
+  ### 3. The TCM result establishes context sensitivity more clearly than shortcut use.
 
   Treatment answers changing when diagnosis changes is not inherently undesirable. The benchmark deliberately makes treatment follow disease course, so this
   dependence is partly built into the task.
@@ -117,7 +112,7 @@ My recommendation: reject in its current form and invite substantial revision. A
   Required revision: include cases where identical diagnosis labels require different actions because other supplied facts differ. Test whether models respond to
   those facts. Compare against an explicit rule-based option-selection baseline.
 
-  4. The equivalence claim is exploratory and aggregate.
+  ### 4. The equivalence claim is exploratory and aggregate.
 
   Choosing the ±8-point margin after inspecting confidence intervals makes it a description of observed precision, not independent confirmation of practical
   equivalence. Eight points also needs substantive justification.
@@ -128,7 +123,7 @@ My recommendation: reject in its current form and invite substantial revision. A
   Required revision: define the primary estimand and a meaningful margin before a new evaluation. Report phase-specific effects and include a fixed-context
   comparison. Keep the current results explicitly exploratory.
 
-  5. Several numerical and interpretive inconsistencies need correction.
+  ### 5. Several numerical and interpretive inconsistencies need correction.
 
   These are material because they affect the paper’s conclusions:
 
@@ -151,7 +146,7 @@ My recommendation: reject in its current form and invite substantial revision. A
 
   All reported counts, percentages, and conclusions should be generated from one authoritative results table.
 
-  6. The contribution needs tighter focus.
+  ### 6. The contribution needs tighter focus.
 
   KAB receives substantial emphasis, but its proposed components are not strongly validated:
 
@@ -166,7 +161,7 @@ My recommendation: reject in its current form and invite substantial revision. A
   I would reduce KAB’s prominence and center the paper on a validated empirical finding. The OmniBrainBench compatibility analysis is useful motivation, but should
   not carry substantial novelty weight when the original release did not promise the linkage being sought.
 
-  Questions I would ask during author response
+  ### Questions I would ask during author response
 
   1. What fraction of questions can clinicians answer from the exact model-visible inputs?
   2. Does the image-ablation finding persist on that answerable subset?
@@ -174,7 +169,7 @@ My recommendation: reject in its current form and invite substantial revision. A
   4. Can donor tracking be tested where both answers are available and the remaining context is compatible?
   5. Does diagnosis-only treatment prediction remain strong when other clinical facts distinguish actions?
 
-  What would change my recommendation
+  ### What would change my recommendation
 
   The highest-priority work is clinical validation and repair of the evaluation, followed by a valid counterfactual subset and reconciliation of the reported
   numbers. Adding proprietary models would broaden coverage, but would not resolve the central validity issue.
