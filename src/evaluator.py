@@ -38,6 +38,9 @@ from src.prompts import (
 )
 
 
+USAGE = {"calls": 0, "prompt_tokens": 0, "total_tokens": 0}  # successful calls only
+
+
 def _avg(values: list[float]) -> float | None:
     return round(sum(values) / len(values), 3) if values else None
 
@@ -69,6 +72,11 @@ def _call_model(
                 temperature=config.TEMPERATURE,
                 **kwargs,
             )
+            u = getattr(response, "usage", None)
+            if u is not None:  # token accounting for API-cost estimates (run_lumiere_v4.py prints it)
+                USAGE["calls"] += 1
+                USAGE["prompt_tokens"] += getattr(u, "prompt_tokens", 0) or 0
+                USAGE["total_tokens"] += getattr(u, "total_tokens", 0) or 0
             return response.choices[0].message.content.strip()
         except Exception as e:
             is_last = attempt == config.API_RETRY_ATTEMPTS - 1

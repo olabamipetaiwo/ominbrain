@@ -2,9 +2,17 @@
 \toprule
 Model & Phase & $n$ & Image & Text-only & $\Delta$ [95\% CI] & Verdict \\
 \midrule
-MedGemma-4B & AIA / LIL / DSCR & -- & -- & -- & -- & -- \\
-Gemma-3-12B & AIA / LIL / DSCR & -- & -- & -- & -- & -- \\
-Gemma-3-27B & AIA / LIL / DSCR & -- & -- & -- & -- & -- \\
-Llama-4-Scout & AIA / LIL / DSCR & -- & -- & -- & -- & -- \\
+MedGemma-4B & AIA & 62 & 35.5 & 27.4 & +8.1 [+1.6, +16.1] & image helps \\
+MedGemma-4B & LIL & 51 & 25.5 & 25.5 & +0.0 [$-$9.8, +9.8] & within $\pm$10 pp \\
+MedGemma-4B & DSCR & 62 & 16.1 & 12.9 & +3.2 [$-$3.2, +9.7] & within $\pm$10 pp \\
+Gemma-3-12B & AIA & 62 & 29.0 & 25.8 & +3.2 [$-$8.1, +14.5] & inconclusive \\
+Gemma-3-12B & LIL & 51 & 37.3 & 27.5 & +9.8 [$-$3.9, +23.5] & inconclusive \\
+Gemma-3-12B & DSCR & 62 & 53.2 & 43.5 & +9.7 [+1.6, +19.4] & image helps \\
+Gemma-3-27B & AIA & 62 & 32.3 & 25.8 & +6.5 [$-$4.8, +17.7] & inconclusive \\
+Gemma-3-27B & LIL & 51 & 29.4 & 21.6 & +7.8 [$-$3.9, +19.6] & inconclusive \\
+Gemma-3-27B & DSCR & 62 & 54.8 & 56.5 & $-$1.6 [$-$4.8, +0.0] & within $\pm$10 pp \\
+Llama-4-Scout & AIA & 62 & 37.1 & 27.4 & +9.7 [+3.2, +17.7] & image helps \\
+Llama-4-Scout & LIL & 51 & 47.1 & 35.3 & +11.8 [$-$3.9, +27.5] & inconclusive \\
+Llama-4-Scout & DSCR & 62 & 40.3 & 38.7 & +1.6 [$-$11.3, +14.5] & inconclusive \\
 \bottomrule
 \end{tabular}

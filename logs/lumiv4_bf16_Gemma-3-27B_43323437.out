@@ -1,0 +1,41 @@
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-309a82a4-73ac-f5d4-2fd2-597a442abbe8)
+Built 2 LUMIERE cases | phase coverage: AIA:2 | LIL:2 | DSCR:2 | PJRF:2 | TCM:2
+Built 2 LUMIERE cases | phase coverage: AIA:2 | LIL:2 | DSCR:2 | PJRF:2 | TCM:2
+
+############################################################
+  Model: Gemma-3-27B-bf16  [v4 conditions: own, text, swap]  cases: 2
+############################################################
+Built 62 LUMIERE cases | phase coverage: AIA:62 | LIL:51 | DSCR:62 | PJRF:61 | TCM:62
+
+============================================================
+Case 1/2: LUMIERE GBM Case (Patient-001)
+============================================================
+    [Patient-001/AIA/own] -> D (wrong)
+    [Patient-001/LIL/own] -> C (wrong)
+    [Patient-001/DSCR/own] -> B (wrong)
+    [Patient-001/AIA/text] -> D (wrong)
+    [Patient-001/LIL/text] -> B (wrong)
+    [Patient-001/DSCR/text] -> B (wrong)
+    [Patient-001/AIA/swap] -> B (wrong)
+    [Patient-001/LIL/swap] -> B (wrong)
+    [Patient-001/DSCR/swap] -> B (wrong)
+
+============================================================
+Case 2/2: LUMIERE GBM Case (Patient-002)
+============================================================
+    [Patient-002/AIA/own] -> B (wrong)
+    [Patient-002/LIL/own] -> B (wrong)
+    [Patient-002/DSCR/own] -> A (wrong)
+    [Patient-002/AIA/text] -> A (wrong)
+    [Patient-002/LIL/text] -> B (wrong)
+    [Patient-002/DSCR/text] -> A (wrong)
+    [Patient-002/AIA/swap] -> B (wrong)
+    [Patient-002/LIL/swap] -> B (wrong)
+    [Patient-002/DSCR/swap] -> A (wrong)
+
+API usage (successful calls): {'calls': 18, 'prompt_tokens': 11544, 'total_tokens': 14335}  (total_tokens includes hidden thinking tokens)
+
+Saved -> results/lumiere_v4_Gemma-3-27B-bf16_smoke_20260925_151623
+  AIA: own: 0.0; text: 0.0; swap: 0.0
+  LIL: own: 0.0; text: 0.0; swap: 0.0
+  DSCR: own: 0.0; text: 0.0; swap: 0.0

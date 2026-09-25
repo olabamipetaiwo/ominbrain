@@ -39,11 +39,22 @@ import os
 
 API_MODELS = [  # optional — not run by --all-models
     {
-        "name": "Gemini-2.5-Pro",
-        "model": "gemini/gemini-2.5-pro",
-        "base_url": "http://localhost:8002/v1",
-        "api_key": "local",  # LiteLLM reads GOOGLE_API_KEY
+        "name": "Gemini-3.6-Flash",
+        "model": "gemini-3.6-flash",  # control model. gemini-2.5-pro: 404 (not available to new users); gemini-3.1-pro-preview: 429, free-tier quota 0 (2026-09-25)
+        # Google's OpenAI-compatible endpoint, no LiteLLM proxy (2026-09-25; key in .env as GEMINI_API_KEY)
+        "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "api_key_env": "GEMINI_API_KEY",
+        "max_tokens": 16384,  # Gemini's hidden thinking tokens count against the cap; 800 would truncate
         "category": "proprietary",
+    },
+    {   # precision control (2026-09-25): Google's bf16 release of the model that runs at 4-bit in Ollama as Gemma-3-27B,
+        # served by vLLM (shell/lumiere/lumiere_v4_bf16.sbatch). Not part of the registered four; see the preregistration change log.
+        "name": "Gemma-3-27B-bf16",
+        "model": "google/gemma-3-27b-it",
+        "base_url": os.environ.get("VLLM_BASE_URL", "http://localhost:8127/v1"),
+        "api_key": "local",
+        "category": "precision-control",
+        "backend": "vllm",
     },
     {
         "name": "GPT-5",

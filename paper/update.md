@@ -1,5 +1,80 @@
 #Project Update
 
+## 2026-09-25 (later still) — bf16 precision control queued (Gemma-3-27B)
+
+Purpose: separate quantization from model quality in the open-model AIA/LIL results (the open models ran at Q4_K_M in Ollama; the Gemini control is an API model). User chose option A (Google's own weights): licence accepted on Hugging Face and a read token put in the gitignored `.env`
+(`HF_TOKEN`; verified 200 on the gated repo, account checked, token not printed). `google/gemma-3-27b-it` (52 GB, 23 files) downloaded on the login node to `/blue/so589980.ucf/ta117847.ucf/.cache/huggingface/hub` (2.5 TB free on /blue at the time).
+Code (uncommitted): `config/models.py` entry `Gemma-3-27B-bf16` (optional list, backend vllm, port from `VLLM_BASE_URL`; not in `--all-models`, and its folder name does not match the stats tool's `lumiere_v4_Gemma-3-27B_*` glob); `shell/lumiere/lumiere_v4_bf16.sbatch` (vLLM bf16, `--limit-mm-per-prompt '{"image": 4}'`, waits for readiness, runs `run_lumiere_v4.py`; `N=2` = smoke).
+Jobs: smoke 43323437 (pending, `QOSGrpGRES`: the group's GPU quota was in use by other users), full run 43323485 chained `afterok` on it. The smoke exits 0 even if answers are empty, so its log must be read and the full run cancelled if the answers are wrong.
+Declared in the preregistration change log with a fixed reading rule (AIA interval above 0 and clearly above the 4-bit model's = quantization explains part of the gap; near chance = it does not; otherwise inconclusive). Reported outside the Holm family; vLLM-vs-Ollama stack difference is a stated confound.
+Still to do after the run: add it to the stats tool as a second control block (not done yet) and one sentence in the paper's Limitations and Results.
+
+## 2026-09-25 (later still) — appendices condensed: 20 pages -> 12 (appendices ~12 pp -> ~4 pp)
+
+User instruction: appendices too long, cut to about 5-6 pages. Body (pp 1-8) untouched. Appendix A (v3) rewritten tight (construction, setup, controls, results; kept `tab:textonly`, `tab:gating`; dropped the flip table, `tab:optonly`, the phase-effects figure and the evidence-audit detail that duplicates Section 6); B (KAB) now one paragraph without the TikZ figure and merges the old C (metric definitions, section deleted; label `sec:app-metrics` kept);
+D (OmniBrainBench compatibility), E (audit / option-only / TCM lookup) and F (worked example) condensed; G (item-set development history + pipeline figure) deleted (history pointer to this file). All cross-references still resolve (0 undefined, 0 multiply defined). Pre-trim copy: scratchpad `acl_latex_before_appendix_trim.tex` (also recoverable from git history once committed; nothing is committed).
+Numbers in the condensed text that are still hand-typed ranges from the v3 study (flip rates, evidence-audit shares, options-only ranges, 260/260 repeats) are copied from the previous appendix text, not regenerated; scalars with macros still use macros.
+
+## 2026-09-25 (later) — Gemini positive control set up; `--skip-cases` added; first full control run submitted
+
+Why: two of four open models fail the AIA positive control, so E1 cannot show the test detects image use for them (see the entry below). Added one API control model (declared in the `paper/preregistration_v4.md` change log first).
+Model search: `gemini-2.5-pro` -> 404 "no longer available to new users"; `gemini-3.1-pro-preview` -> 429, free-tier quota 0; `gemini-3.6-flash` works (free tier only allows 20 requests, so billing was enabled and the key replaced).
+Chosen control: `gemini-3.6-flash`; fallback `gemini-3.1-pro-preview`. The tier is not what makes a control strong: it must pass the AIA check (interval above 0 and swap tracking), and a failure by Flash is ambiguous (weak model vs bad items), which is why Pro is the fallback.
+Code (uncommitted): `config/models.py` (entry `Gemini-3.6-Flash`, Google OpenAI-compatible endpoint, `api_key_env`, per-model `max_tokens` 16384); `run_lumiere_v4.py` (per-model token cap, key from env, empty-response count -> `empty_responses.json`,
+`usage.json`, `--skip-cases N`); `src/evaluator.py` (`USAGE` token accounting on successful calls); `shell/lumiere/lumiere_v4_gemini.sbatch` (CPU job).
+Smoke (2 patients x own/text/swap x AIA/LIL/DSCR = 18 calls, 0 empty): 24,524 prompt tokens, 37,687 total (incl. hidden thinking), about 1.4k prompt and 0.7k output tokens per call; scaled to ~550 calls ~ 0.75M prompt + 0.4M output tokens.
+Two earlier smoke attempts (404 and 429 on every call) and one partial one (1 of 18 succeeded, then quota) were deleted from `results/` because their empty answers score as failures and the stats tool merges every `lumiere_v4_<model>_*` folder.
+The kept smoke folder is renamed `results/lumiere_v4_Gemini-3.6-Flash_part1_20260925_112542` (patients 1-2); the full run skips them (`--skip-cases 2`) and the stats tool merges the two folders by (case, phase, condition).
+**Full control run finished** (job 43303009, exit 0, 46 min, 507 calls, 0 API errors, 0 empty responses; folders `lumiere_v4_Gemini-3.6-Flash_{part1,image}_*`, merged 525 records). Tokens: 732,810 prompt, 1,077,360 total
+(~345k output incl. hidden thinking) for 507 calls; smoke extrapolation (0.75M / 0.4M) was close. Price per token not recorded here: multiply by the `gemini-3.6-flash` rate on Google's page.
+`tools/lumiere_v4_stats.py` now has `CONTROLS = ["Gemini-3.6-Flash"]`, computed after the four-model loop so the registered tables are byte-identical (checked by diff), reported in a separate section and in `res["controls"]` (outside the Holm family, E1/E2 only).
+Results (n = 62 AIA / 51 LIL / 62 DSCR):
+- **Positive control passes.** E1 AIA own 93.5 vs text-only 24.2, +69.4 [+56.5, +80.6] (44/1 discordant): the test detects image use when a model has it. LIL 100.0 vs 33.3, +66.7 [+52.9, +78.4].
+- **E2 donor tracking, AIA and LIL:** swapped image gives the donor's key 93.5% (AIA) and 100% (LIL), gain +72.6 [+61.3, +83.9] and +74.5 [+62.7, +86.3]; the patient's own key is kept 0% of the time. This is what full image tracking looks like and is the contrast for the open models.
+- **DSCR is the exception, and it limits the paper's DSCR claim.** E1 own 61.3 vs text 56.5, +4.8 [-6.5, +16.1], inconclusive. Text-only accuracy equals the majority-key share exactly (35/62 = 56.5%, `results/lumiere_v4_baselines.md`): text-only answers "Progressive disease" for everyone.
+  Own-image adds 3 items over that. The image is used (E2 gain +16.1 [+4.8, +27.4]; 59.7% of answers change under a swap) but does not lift accuracy far above the class prior. Reading: DSCR (comparing baseline, nadir and follow-up slices) is hard even for a model that
+  reads AIA and LIL perfectly, so a null DSCR image effect in the open models is NOT evidence of shortcut use by itself; the AIA and LIL contrasts are the ones this design can interpret. Say so in the paper.
+Caveats: one control model, one run, temperature 0 on an API model whose weights can change; same unreviewed items; Flash (not Pro) as agreed in the change log.
+**Paper: full Results written (2026-09-25, `paper/latex/acl_latex.tex`; `body_main.tex` is an older extract and was not touched).** `tools/paper_numbers.py` now reads `res["controls"]` and emits result macros `vfour<Eone|Etwo|Ethree|Efour|Efive|Esix><Field><Phase><Model>` (Model tag Gemini/MedGemma/GemmaTwelve/GemmaTwentySeven/Scout; 431 macros total) and `tab_v4_ctrl.tex`;
+`--check` finds no stale numbers. Every number in the new prose is a macro. `\vfourPending` is set by `paper_numbers` itself (0 whenever `lumiere_v4_stats.json` has models), so it had already flipped to 0 when the stats first ran.
+Edits: abstract (results sentence, pending clause removed); Introduction bullet 3; Section 4 new "Control model" paragraph (mirrors the preregistration change log, incl. 16,384-token cap, API route, Holm exclusion, empty-response count);
+Section 5 (Results) pending box replaced by paragraphs: control model, E1, E2, E3/E4, E5, chain, "what this shows and does not show", plus Table `tab:ctrl` (table*); Conclusion rewritten (pending clause gone; "only one proprietary control model is run"); Limitations: 4-bit vs API confound, one control model run once.
+Compiles clean on a scratch copy (0 errors, 0 undefined, 20 pages; Controls p4, Results p5, Conclusion/Limitations p6, tables float to p7-8).
+Wording rules kept: "non-use of the image", never "shortcut learning as such"; no DSCR image claim (control fails to separate it from the class prior); no LIL/DSCR claim for Gemma-3-12B/27B (failed AIA control under the plan); Gemma-3-12B DSCR +9.7 called uninterpretable.
+**Title changed (2026-09-25, user instruction):** active title is now "Do Medical MLLMs Read the Scan? Shortcut Controls on Brain-MRI Question Answering"; the previous "Right Answer, No Image: Shortcut Learning in Brain-MRI Question Answering" is kept as a comment. Reason: the old title states a mechanism (learned shortcut) the results do not show, as `paper/review.md` line 188 also said; the data show non-use of the image plus class-prior reliance in DSCR/TCM. Framing (evaluation validity: answerability audit + positive control; shortcut learning as motivation and hypothesis) and the new title were APPROVED by the professor (user relayed 2026-09-25). Recompiles clean.
+Also open: budget alert on the Google Cloud project (user); optional unquantized run of one open model to separate quantization from the AIA/LIL gap (needs approval under the GPU cap); clinician review; all uncommitted.
+
+## 2026-09-25 — all 11 v4 jobs finished (exit 0); `lumiere_v4_stats` and `paper_numbers` run; first read of the v4 results (NOT conclusive)
+
+**Runs.** `lumiv4_{image,context,chain}` x {MedGemma-4B, Gemma-3-12B, Gemma-3-27B, Llama-4-Scout} (43199273-43199284) all COMPLETED, exit 0 (Scout chain 4h21m, last to finish). Concurrency was 3 GPUs for this
+campaign (user-approved, standing cap otherwise 2; the "cap 2" line in the entry below is superseded for these jobs). Scheduling-only deviation: the Scout chain (43199284) had its `afterany` dependency on the
+Scout context job removed (`scontrol update ... Dependency=`) so it could start while two slots were idle; chain arms regenerate their own upstream answers, so no result depends on the order. No change to the
+pre-registration; its change log stays "(none yet)".
+**Analysis.** `python -m tools.lumiere_v4_stats` -> `results/lumiere_v4_stats.{md,json}`; `python -m tools.paper_numbers` -> `paper/latex/generated/*` rewritten (117 macros/tables; uncommitted). Run through `srun` on a compute node.
+
+**Results (pre-registered decision rules; patient-bootstrap 95% CIs, exact McNemar, Holm over 12 E1 tests).**
+- E1 image effect (own - text): positive control (AIA) has its interval above 0 only for MedGemma-4B (+8.1 [+1.6, +16.1]) and Llama-4-Scout (+9.7 [+3.2, +17.7]); Gemma-3-12B (+3.2) and Gemma-3-27B (+6.5) fail it,
+  so by the plan nothing is claimed about their LIL/DSCR image use (Gemma-3-12B DSCR +9.7 [+1.6, +19.4] carries the "image helps" label but is not usable under this rule). No test survives Holm (smallest adjusted p .375, Scout AIA).
+  AIA accuracy is 29-37% against 25% chance: no model reads the sequence well even with the image. "Within margin" only for MedGemma-4B LIL/DSCR and Gemma-3-27B DSCR; the rest inconclusive.
+- E2 donor tracking (gain over the text-only prior): clear only for Llama-4-Scout LIL (+23.5 [+7.8, +39.2]), Scout AIA (+12.9 [+3.2, +24.2]) and Gemma-3-27B AIA (+12.9 [+1.6, +24.2]). Gemma-3-27B DSCR: swapped image changes the
+  answer on 4.8% of items (image ignored); Gemma-3-27B LIL gain is negative (-11.8 [-25.5, 0.0]). All other cells include 0.
+- E3 TCM: with gold context accuracy is 46.8 / 62.9 / 54.8 / 45.2 (MedGemma-4B / Gemma-3-12B / Gemma-3-27B / Scout), BELOW the category-lookup reference (69.4-74.2%). Following the rule after the timing flip (PD items, n=35): 5.7 / 60.0 / 54.3 / 68.6%
+  (MedGemma-4B ignores timing); after the label flip: 64.5 / 53.2 / 58.1 / 38.7%. Gold beats wrong context clearly only for Gemma-3-12B (+27.4 [+16.1, +38.7]).
+- E4: DSCR is insensitive to upstream context everywhere; LIL shows no gold advantage.
+- E5 PJRF: skill vs base rate +.036 to -.173 (no model beats a constant convincingly, as the plan anticipated). MedGemma-4B `ctx_absent` had 61/61 parse failures, so its 0.250 Brier is the 0.5-forecast rule, not a forecast.
+- E6 chain (secondary): mostly small/inconclusive; largest Scout TCM +12.9 [+1.6, +25.8] (p .077) and Scout AIA +9.7 [+3.2, +17.7] (p .031), Gemma-3-27B LIL +11.8 [0.0, +23.5].
+
+**What this does and does not support.** Consistent with the shortcut-learning framing (weak image use, weak use of stated facts), but NOT conclusive: n=51-62 per cell gives wide intervals, most E1 contrasts are inconclusive,
+nothing survives Holm, two of four models fail the positive control, the items are not clinician-reviewed, and the DSCR rule was adjusted after inspecting expert agreement (disclosed). Paper wording must stay at
+"we find no evidence that ... ", never "we show that models do not read the scan". The clearest per-model statements are Scout LIL tracking (positive) and MedGemma-4B ignoring the timing fact (negative).
+**Still open:** clinician review (deliberately left); paper Abstract/Results/Conclusion "pending" markers still to be replaced from `results/lumiere_v4_stats.json` under the plan's rules; the MedGemma-4B `ctx_absent` PJRF parse
+failures should be inspected before that cell is reported.
+**MedGemma-4B parse failures inspected (2026-09-25; `results/lumiere_v4_MedGemma-4B_context_20260924_163443/raw_results.json`).** PJRF `ctx_absent`: all 61 responses are the identical refusal "I am unable to answer this question. I do not have access to the image."
+(no letter, so the pre-registered 0.5 forecast rule applies; this is model behaviour, not a harness bug; no other model refuses: 0 parse errors for Gemma-3-12B/27B, 0 for Scout). Other MedGemma parse errors (PJRF gold 21, wrong 10; DSCR 5-6; TCM 9-15 per condition) are
+repetition loops: valid JSON opens with the answer letter, then the reasoning field repeats one sentence until the 800-token cap truncates it (raw ~3.6-4k chars). `evaluator._salvage_answer_letter` recovers the letter and scores it, so MCQ accuracies
+(E1-E4) already include those answers (e.g. TCM gold: 15 flagged, 3 correct); `parse_error` is a flag, not a zero. PJRF forecasts for these fall back to 0.5 although a letter was recoverable, but 30 of the 31 recoverable letters are C (= the 0.5 bin)
+and one is B (0.3), so the Brier effect is negligible. Report as: MedGemma-4B degenerates into repetition on ~15-25% of TCM/PJRF answers and refuses the no-context PJRF prompt; no rerun, no change to the plan.
+
 ## 2026-09-24 (review round 3: answerability rebuilt as v4, numbers reconciled, paper restructured; GPU runs queued)
 
 Source: `paper/review.md` (professor's review; 2/5, soundness). User instruction: fix everything except the clinician review; GPU jobs may run in the background.

@@ -28,8 +28,8 @@ from src.lumiere_labels import canonical_answer_text
 
 OUT = Path("paper/latex/generated")
 MODELS = ["MedGemma-4B", "Gemma-3-12B", "Gemma-3-27B", "Llama-4-Scout"]
-TAG = {"MedGemma-4B": "MedGemma", "Gemma-3-12B": "GemmaTwelve", "Gemma-3-27B": "GemmaTwentySeven", "Llama-4-Scout": "Scout"}
-SHORT = {"MedGemma-4B": "MedGemma-4B", "Gemma-3-12B": "Gemma-3-12B", "Gemma-3-27B": "Gemma-3-27B", "Llama-4-Scout": "Llama-4-Scout"}
+TAG = {"Gemini-3.6-Flash": "Gemini", "MedGemma-4B": "MedGemma", "Gemma-3-12B": "GemmaTwelve", "Gemma-3-27B": "GemmaTwentySeven", "Llama-4-Scout": "Scout"}
+SHORT = {"Gemini-3.6-Flash": "Gemini-3.6-Flash", "MedGemma-4B": "MedGemma-4B", "Gemma-3-12B": "Gemma-3-12B", "Gemma-3-27B": "Gemma-3-27B", "Llama-4-Scout": "Llama-4-Scout"}
 PHASES = ["AIA", "LIL", "DSCR", "PJRF", "TCM"]
 STALE = [r"63\.5", r"33 of 33", r"(?<!which gave )50 of 52", r"48 and 52", r"33 progressive", r"14\\%\)"]   # figures that came from the label-spelling bug or typos
 
@@ -228,6 +228,69 @@ def v4(mc: Macros) -> None:
             e2.append(f"{SHORT[m]} & AIA / LIL / DSCR & -- & -- & -- & -- & -- \\\\")
             e3.append(f"{SHORT[m]} & -- & -- & -- & -- & -- \\\\")
             e5.append(f"{SHORT[m]} & -- & -- & -- & -- & -- \\\\")
+    # scalar macros for the prose: vfour<Est><Field><Phase><Model>, e.g. \\vfourEoneOwnAIAScout; control model tag is Gemini
+    if st and st.get("models"):
+        def put(est, field, ph, model, val, fmt=f1):
+            mc.add(f"vfour{est}{field}{ph}{TAG[model]}", fmt(val))
+        for m, r in {**st["models"], **st.get("controls", {})}.items():
+            for ph, v in r.get("E1", {}).items():
+                for fld, val in (("Own", v["acc_a"]), ("Text", v["acc_b"])):
+                    put("Eone", fld, ph, m, val)
+                put("Eone", "Diff", ph, m, v["diff"], signed)
+                put("Eone", "Lo", ph, m, v["ci"][0], signed)
+                put("Eone", "Hi", ph, m, v["ci"][1], signed)
+                if "p_holm" in v:
+                    mc.add(f"vfourEoneHolm{ph}{TAG[m]}", f"{v['p_holm']:.2f}")
+                mc.add(f"vfourEoneOnlyOwn{ph}{TAG[m]}", v["only_a"])
+                mc.add(f"vfourEoneOnlyText{ph}{TAG[m]}", v["only_b"])
+            for ph, v in r.get("E2", {}).items():
+                put("Etwo", "Gain", ph, m, v["gain"], signed)
+                put("Etwo", "Lo", ph, m, v["gain_ci"][0], signed)
+                put("Etwo", "Hi", ph, m, v["gain_ci"][1], signed)
+                put("Etwo", "Swap", ph, m, v["swap_answers_donor_key"])
+                put("Etwo", "Changes", ph, m, v["swap_flips_answer_vs_own"])
+        for m, r in st["models"].items():
+            e = r.get("E3", {})
+            t = TAG[m]
+            for cond, nm in (("ctx_gold", "Gold"), ("ctx_wrong", "Wrong"), ("ctx_absent", "Absent")):
+                if cond in e:
+                    mc.add(f"vfourEthree{nm}{t}", f1(e[cond]["acc"]))
+            if "flip_label" in e:
+                mc.add(f"vfourEthreeLabel{t}", f1(e["flip_label"]["follows_rule_after_flip"]))
+            pdw = e.get("flip_window", {}).get("progressive_disease_items")
+            if pdw:
+                mc.add(f"vfourEthreeTiming{t}", f1(pdw["follows"]))
+            if "ctx_gold" in e:
+                for cls in ("continue", "confirm", "escalate"):
+                    if f"acc_{cls}" in e["ctx_gold"]:
+                        mc.add(f"vfourEthreeGold{cls.capitalize()}{t}", f"{e['ctx_gold'][f'acc_{cls}']['acc']:.0f}")
+            for ph in ("TCM",):
+                for name, cell in r.get("E4", {}).get(ph, {}).items():
+                    key = {"gold_minus_wrong": "GoldWrong", "gold_minus_absent": "GoldAbsent"}.get(name)
+                    if key:
+                        mc.add(f"vfourEfour{key}Diff{t}", signed(cell["diff"]))
+                        mc.add(f"vfourEfour{key}Lo{t}", signed(cell["ci"][0]))
+                        mc.add(f"vfourEfour{key}Hi{t}", signed(cell["ci"][1]))
+            g = r.get("E5", {}).get("ctx_gold")
+            if g:
+                mc.add(f"vfourEfiveSkill{t}", f"{g['skill']:+.3f}".replace("-", "$-$"))
+                mc.add(f"vfourEfiveBrier{t}", f"{g['brier']:.3f}")
+                mc.add(f"vfourEfiveAuc{t}", f"{g['auc']:.2f}")
+                mc.add(f"vfourEfiveMid{t}", f"{100 * g['answer_counts'].get('C', 0) / g['n']:.0f}")
+            for ph, v in r.get("E6", {}).items():
+                mc.add(f"vfourEsixDiff{ph}{t}", signed(v["diff"]))
+                mc.add(f"vfourEsixLo{ph}{t}", signed(v["ci"][0]))
+                mc.add(f"vfourEsixHi{ph}{t}", signed(v["ci"][1]))
+        ctrl = st.get("controls", {}).get("Gemini-3.6-Flash")
+        if ctrl:
+            crows = []
+            for ph in ("AIA", "LIL", "DSCR"):
+                a, b = ctrl["E1"][ph], ctrl["E2"][ph]
+                crows.append(f"{ph} & {a['n']} & {f1(a['acc_a'])} & {f1(a['acc_b'])} & {signed(a['diff'])} [{signed(a['ci'][0])}, {signed(a['ci'][1])}] & "
+                             f"{f1(b['swap_answers_donor_key'])} & {signed(b['gain'])} [{signed(b['gain_ci'][0])}, {signed(b['gain_ci'][1])}] \\\\")
+            (OUT / "tab_v4_ctrl.tex").write_text(tabular("lrrrlrl", ["Phase & $n$ & Image & Text-only & $\\Delta$ [95\\% CI] & Swap: donor key & Gain [95\\% CI] \\\\"], crows))
+            mc.add("vfourCtrlEmpty", ctrl["empty_responses"])
+            mc.add("vfourCtrlRecords", ctrl["n_records"])
     heads = {
         "e1": ("llrrrll", ["Model & Phase & $n$ & Image & Text-only & $\\Delta$ [95\\% CI] & Verdict \\\\"]),
         "e2": ("llrrrrl", ["Model & Phase & $n$ & Own image & Swap: donor key & Text: donor key & Gain [95\\% CI] \\\\"]),

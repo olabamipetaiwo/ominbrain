@@ -1,0 +1,987 @@
+Session ready: ollama serving (pid 3856312), venv active (ominbrain), models -> /blue, HF/pip caches -> /blue
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-7735d54a-1b8e-17d6-b4dc-b1386dec4bee)
+NAME                   ID              SIZE      MODIFIED    
+llama4:scout           bf31604e25c2    67 GB     2 days ago     
+llama3.2-vision:11b    6f2f9757ae97    7.8 GB    3 days ago     
+gemma3:27b             a418f5838eaf    17 GB     3 days ago     
+gemma3:12b             f4031aab637d    8.1 GB    3 days ago     
+medgemma:4b            9fe4e9a6c9bd    3.3 GB    4 weeks ago    
+=== v4 context conditions: Gemma-3-27B ===
+Built 62 LUMIERE cases | phase coverage: AIA:62 | LIL:51 | DSCR:62 | PJRF:61 | TCM:62
+
+############################################################
+  Model: Gemma-3-27B  [v4 conditions: ctx_gold, ctx_wrong, ctx_absent, flip_label, flip_window]  cases: 62
+############################################################
+
+============================================================
+Case 1/62: LUMIERE GBM Case (Patient-001)
+============================================================
+    [Patient-001/LIL/ctx_gold] -> B (wrong)
+    [Patient-001/DSCR/ctx_gold] -> B (wrong)
+    [Patient-001/PJRF/ctx_gold] -> A (p=0.1)
+    [Patient-001/TCM/ctx_gold] -> C (OK)
+    [Patient-001/LIL/ctx_wrong] -> B (wrong)
+    [Patient-001/DSCR/ctx_wrong] -> B (wrong)
+    [Patient-001/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-001/TCM/ctx_wrong] -> A (wrong)
+    [Patient-001/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-001/TCM/ctx_absent] -> A (wrong)
+    [Patient-001/TCM/flip_label] -> A (wrong)
+    [Patient-001/TCM/flip_window] -> C (OK)
+
+============================================================
+Case 2/62: LUMIERE GBM Case (Patient-002)
+============================================================
+    [Patient-002/LIL/ctx_gold] -> B (wrong)
+    [Patient-002/DSCR/ctx_gold] -> A (wrong)
+    [Patient-002/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-002/TCM/ctx_gold] -> B (OK)
+    [Patient-002/LIL/ctx_wrong] -> B (wrong)
+    [Patient-002/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-002/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-002/TCM/ctx_wrong] -> C (wrong)
+    [Patient-002/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-002/TCM/ctx_absent] -> A (wrong)
+    [Patient-002/TCM/flip_label] -> A (wrong)
+    [Patient-002/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 3/62: LUMIERE GBM Case (Patient-003)
+============================================================
+    [Patient-003/LIL/ctx_gold] -> B (OK)
+    [Patient-003/DSCR/ctx_gold] -> C (wrong)
+    [Patient-003/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-003/TCM/ctx_gold] -> C (OK)
+    [Patient-003/LIL/ctx_wrong] -> B (OK)
+    [Patient-003/DSCR/ctx_wrong] -> C (wrong)
+    [Patient-003/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-003/TCM/ctx_wrong] -> C (OK)
+    [Patient-003/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-003/TCM/ctx_absent] -> A (wrong)
+    [Patient-003/TCM/flip_label] -> A (wrong)
+    [Patient-003/TCM/flip_window] -> C (OK)
+
+============================================================
+Case 4/62: LUMIERE GBM Case (Patient-004)
+============================================================
+    [Patient-004/DSCR/ctx_gold] -> B (OK)
+    [Patient-004/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-004/TCM/ctx_gold] -> C (wrong)
+    [Patient-004/DSCR/ctx_wrong] -> B (OK)
+    [Patient-004/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-004/TCM/ctx_wrong] -> A (wrong)
+    [Patient-004/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-004/TCM/ctx_absent] -> C (wrong)
+    [Patient-004/TCM/flip_label] -> A (wrong)
+    [Patient-004/TCM/flip_window] -> C (wrong)
+
+============================================================
+Case 5/62: LUMIERE GBM Case (Patient-005)
+============================================================
+    [Patient-005/LIL/ctx_gold] -> A (wrong)
+    [Patient-005/DSCR/ctx_gold] -> D (OK)
+    [Patient-005/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-005/TCM/ctx_gold] -> B (wrong)
+    [Patient-005/LIL/ctx_wrong] -> B (wrong)
+    [Patient-005/DSCR/ctx_wrong] -> D (OK)
+    [Patient-005/PJRF/ctx_wrong] -> D (p=0.8)
+    [Patient-005/TCM/ctx_wrong] -> A (OK)
+    [Patient-005/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-005/TCM/ctx_absent] -> B (wrong)
+    [Patient-005/TCM/flip_label] -> A (OK)
+    [Patient-005/TCM/flip_window] -> B (wrong)
+
+============================================================
+Case 6/62: LUMIERE GBM Case (Patient-006)
+============================================================
+    [Patient-006/LIL/ctx_gold] -> D (wrong)
+    [Patient-006/DSCR/ctx_gold] -> A (OK)
+    [Patient-006/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-006/TCM/ctx_gold] -> A (wrong)
+    [Patient-006/LIL/ctx_wrong] -> B (wrong)
+    [Patient-006/DSCR/ctx_wrong] -> A (OK)
+    [Patient-006/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-006/TCM/ctx_wrong] -> C (wrong)
+    [Patient-006/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-006/TCM/ctx_absent] -> A (wrong)
+    [Patient-006/TCM/flip_label] -> C (wrong)
+    [Patient-006/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 7/62: LUMIERE GBM Case (Patient-007)
+============================================================
+    [Patient-007/LIL/ctx_gold] -> B (wrong)
+    [Patient-007/DSCR/ctx_gold] -> B (OK)
+    [Patient-007/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-007/TCM/ctx_gold] -> C (OK)
+    [Patient-007/LIL/ctx_wrong] -> B (wrong)
+    [Patient-007/DSCR/ctx_wrong] -> B (OK)
+    [Patient-007/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-007/TCM/ctx_wrong] -> B (wrong)
+    [Patient-007/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-007/TCM/ctx_absent] -> C (OK)
+    [Patient-007/TCM/flip_label] -> A (wrong)
+    [Patient-007/TCM/flip_window] -> C (OK)
+
+============================================================
+Case 8/62: LUMIERE GBM Case (Patient-008)
+============================================================
+    [Patient-008/DSCR/ctx_gold] -> C (OK)
+    [Patient-008/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-008/TCM/ctx_gold] -> A (wrong)
+    [Patient-008/DSCR/ctx_wrong] -> C (OK)
+    [Patient-008/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-008/TCM/ctx_wrong] -> B (wrong)
+    [Patient-008/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-008/TCM/ctx_absent] -> A (wrong)
+    [Patient-008/TCM/flip_label] -> B (wrong)
+    [Patient-008/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 9/62: LUMIERE GBM Case (Patient-009)
+============================================================
+    [Patient-009/LIL/ctx_gold] -> B (wrong)
+    [Patient-009/DSCR/ctx_gold] -> B (OK)
+    [Patient-009/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-009/TCM/ctx_gold] -> B (wrong)
+    [Patient-009/LIL/ctx_wrong] -> B (wrong)
+    [Patient-009/DSCR/ctx_wrong] -> B (OK)
+    [Patient-009/PJRF/ctx_wrong] -> D (p=0.8)
+    [Patient-009/TCM/ctx_wrong] -> D (wrong)
+    [Patient-009/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-009/TCM/ctx_absent] -> B (wrong)
+    [Patient-009/TCM/flip_label] -> D (wrong)
+    [Patient-009/TCM/flip_window] -> B (wrong)
+
+============================================================
+Case 10/62: LUMIERE GBM Case (Patient-011)
+============================================================
+    [Patient-011/LIL/ctx_gold] -> D (wrong)
+    [Patient-011/DSCR/ctx_gold] -> C (OK)
+    [Patient-011/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-011/TCM/ctx_gold] -> D (wrong)
+    [Patient-011/LIL/ctx_wrong] -> D (wrong)
+    [Patient-011/DSCR/ctx_wrong] -> C (OK)
+    [Patient-011/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-011/TCM/ctx_wrong] -> C (OK)
+    [Patient-011/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-011/TCM/ctx_absent] -> D (wrong)
+    [Patient-011/TCM/flip_label] -> C (OK)
+    [Patient-011/TCM/flip_window] -> D (wrong)
+
+============================================================
+Case 11/62: LUMIERE GBM Case (Patient-012)
+============================================================
+    [Patient-012/LIL/ctx_gold] -> D (wrong)
+    [Patient-012/DSCR/ctx_gold] -> A (OK)
+    [Patient-012/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-012/TCM/ctx_gold] -> A (wrong)
+    [Patient-012/LIL/ctx_wrong] -> D (wrong)
+    [Patient-012/DSCR/ctx_wrong] -> A (OK)
+    [Patient-012/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-012/TCM/ctx_wrong] -> C (OK)
+    [Patient-012/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-012/TCM/ctx_absent] -> A (wrong)
+    [Patient-012/TCM/flip_label] -> C (OK)
+    [Patient-012/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 12/62: LUMIERE GBM Case (Patient-017)
+============================================================
+    [Patient-017/LIL/ctx_gold] -> C (OK)
+    [Patient-017/DSCR/ctx_gold] -> C (OK)
+    [Patient-017/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-017/TCM/ctx_gold] -> D (wrong)
+    [Patient-017/LIL/ctx_wrong] -> C (OK)
+    [Patient-017/DSCR/ctx_wrong] -> C (OK)
+    [Patient-017/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-017/TCM/ctx_wrong] -> A (wrong)
+    [Patient-017/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-017/TCM/ctx_absent] -> D (wrong)
+    [Patient-017/TCM/flip_label] -> A (wrong)
+    [Patient-017/TCM/flip_window] -> D (wrong)
+
+============================================================
+Case 13/62: LUMIERE GBM Case (Patient-018)
+============================================================
+    [Patient-018/LIL/ctx_gold] -> A (wrong)
+    [Patient-018/DSCR/ctx_gold] -> C (wrong)
+    [Patient-018/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-018/TCM/ctx_gold] -> D (OK)
+    [Patient-018/LIL/ctx_wrong] -> A (wrong)
+    [Patient-018/DSCR/ctx_wrong] -> C (wrong)
+    [Patient-018/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-018/TCM/ctx_wrong] -> D (OK)
+    [Patient-018/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-018/TCM/ctx_absent] -> B (wrong)
+    [Patient-018/TCM/flip_label] -> B (wrong)
+    [Patient-018/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 14/62: LUMIERE GBM Case (Patient-019)
+============================================================
+    [Patient-019/LIL/ctx_gold] -> B (wrong)
+    [Patient-019/DSCR/ctx_gold] -> D (wrong)
+    [Patient-019/PJRF/ctx_gold] -> A (p=0.1)
+    [Patient-019/TCM/ctx_gold] -> B (wrong)
+    [Patient-019/LIL/ctx_wrong] -> B (wrong)
+    [Patient-019/DSCR/ctx_wrong] -> D (wrong)
+    [Patient-019/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-019/TCM/ctx_wrong] -> B (wrong)
+    [Patient-019/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-019/TCM/ctx_absent] -> B (wrong)
+    [Patient-019/TCM/flip_label] -> B (wrong)
+    [Patient-019/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 15/62: LUMIERE GBM Case (Patient-021)
+============================================================
+    [Patient-021/DSCR/ctx_gold] -> D (wrong)
+    [Patient-021/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-021/TCM/ctx_gold] -> C (OK)
+    [Patient-021/DSCR/ctx_wrong] -> D (wrong)
+    [Patient-021/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-021/TCM/ctx_wrong] -> C (OK)
+    [Patient-021/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-021/TCM/ctx_absent] -> D (wrong)
+    [Patient-021/TCM/flip_label] -> D (wrong)
+    [Patient-021/TCM/flip_window] -> C (OK)
+
+============================================================
+Case 16/62: LUMIERE GBM Case (Patient-022)
+============================================================
+    [Patient-022/DSCR/ctx_gold] -> D (OK)
+    [Patient-022/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-022/TCM/ctx_gold] -> B (OK)
+    [Patient-022/DSCR/ctx_wrong] -> D (OK)
+    [Patient-022/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-022/TCM/ctx_wrong] -> A (wrong)
+    [Patient-022/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-022/TCM/ctx_absent] -> B (OK)
+    [Patient-022/TCM/flip_label] -> A (wrong)
+    [Patient-022/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 17/62: LUMIERE GBM Case (Patient-023)
+============================================================
+    [Patient-023/LIL/ctx_gold] -> D (wrong)
+    [Patient-023/DSCR/ctx_gold] -> A (OK)
+    [Patient-023/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-023/TCM/ctx_gold] -> B (OK)
+    [Patient-023/LIL/ctx_wrong] -> D (wrong)
+    [Patient-023/DSCR/ctx_wrong] -> A (OK)
+    [Patient-023/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-023/TCM/ctx_wrong] -> C (wrong)
+    [Patient-023/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-023/TCM/ctx_absent] -> B (OK)
+    [Patient-023/TCM/flip_label] -> C (wrong)
+    [Patient-023/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 18/62: LUMIERE GBM Case (Patient-024)
+============================================================
+    [Patient-024/LIL/ctx_gold] -> B (wrong)
+    [Patient-024/DSCR/ctx_gold] -> A (wrong)
+    [Patient-024/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-024/TCM/ctx_gold] -> A (OK)
+    [Patient-024/LIL/ctx_wrong] -> B (wrong)
+    [Patient-024/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-024/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-024/TCM/ctx_wrong] -> A (OK)
+    [Patient-024/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-024/TCM/ctx_absent] -> D (wrong)
+    [Patient-024/TCM/flip_label] -> D (wrong)
+    [Patient-024/TCM/flip_window] -> A (OK)
+
+============================================================
+Case 19/62: LUMIERE GBM Case (Patient-027)
+============================================================
+    [Patient-027/LIL/ctx_gold] -> C (OK)
+    [Patient-027/DSCR/ctx_gold] -> B (OK)
+    [Patient-027/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-027/TCM/ctx_gold] -> D (wrong)
+    [Patient-027/LIL/ctx_wrong] -> C (OK)
+    [Patient-027/DSCR/ctx_wrong] -> B (OK)
+    [Patient-027/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-027/TCM/ctx_wrong] -> C (OK)
+    [Patient-027/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-027/TCM/ctx_absent] -> D (wrong)
+    [Patient-027/TCM/flip_label] -> C (OK)
+    [Patient-027/TCM/flip_window] -> D (wrong)
+
+============================================================
+Case 20/62: LUMIERE GBM Case (Patient-028)
+============================================================
+    [Patient-028/DSCR/ctx_gold] -> A (OK)
+    [Patient-028/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-028/TCM/ctx_gold] -> D (wrong)
+    [Patient-028/DSCR/ctx_wrong] -> A (OK)
+    [Patient-028/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-028/TCM/ctx_wrong] -> B (wrong)
+    [Patient-028/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-028/TCM/ctx_absent] -> D (wrong)
+    [Patient-028/TCM/flip_label] -> B (wrong)
+    [Patient-028/TCM/flip_window] -> D (wrong)
+
+============================================================
+Case 21/62: LUMIERE GBM Case (Patient-029)
+============================================================
+    [Patient-029/LIL/ctx_gold] -> C (wrong)
+    [Patient-029/DSCR/ctx_gold] -> B (wrong)
+    [Patient-029/TCM/ctx_gold] -> A (wrong)
+    [Patient-029/LIL/ctx_wrong] -> A (wrong)
+    [Patient-029/DSCR/ctx_wrong] -> B (wrong)
+    [Patient-029/TCM/ctx_wrong] -> A (wrong)
+    [Patient-029/TCM/ctx_absent] -> C (wrong)
+    [Patient-029/TCM/flip_label] -> C (wrong)
+    [Patient-029/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 22/62: LUMIERE GBM Case (Patient-030)
+============================================================
+    [Patient-030/LIL/ctx_gold] -> C (wrong)
+    [Patient-030/DSCR/ctx_gold] -> D (OK)
+    [Patient-030/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-030/TCM/ctx_gold] -> B (OK)
+    [Patient-030/LIL/ctx_wrong] -> C (wrong)
+    [Patient-030/DSCR/ctx_wrong] -> D (OK)
+    [Patient-030/PJRF/ctx_wrong] -> B (p=0.3)
+    [Patient-030/TCM/ctx_wrong] -> C (wrong)
+    [Patient-030/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-030/TCM/ctx_absent] -> B (OK)
+    [Patient-030/TCM/flip_label] -> C (wrong)
+    [Patient-030/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 23/62: LUMIERE GBM Case (Patient-031)
+============================================================
+    [Patient-031/LIL/ctx_gold] -> C (wrong)
+    [Patient-031/DSCR/ctx_gold] -> A (wrong)
+    [Patient-031/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-031/TCM/ctx_gold] -> C (OK)
+    [Patient-031/LIL/ctx_wrong] -> C (wrong)
+    [Patient-031/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-031/PJRF/ctx_wrong] -> B (p=0.3)
+    [Patient-031/TCM/ctx_wrong] -> A (wrong)
+    [Patient-031/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-031/TCM/ctx_absent] -> D (wrong)
+    [Patient-031/TCM/flip_label] -> D (wrong)
+    [Patient-031/TCM/flip_window] -> C (OK)
+
+============================================================
+Case 24/62: LUMIERE GBM Case (Patient-032)
+============================================================
+    [Patient-032/LIL/ctx_gold] -> B (OK)
+    [Patient-032/DSCR/ctx_gold] -> B (wrong)
+    [Patient-032/PJRF/ctx_gold] -> A (p=0.1)
+    [Patient-032/TCM/ctx_gold] -> D (OK)
+    [Patient-032/LIL/ctx_wrong] -> B (OK)
+    [Patient-032/DSCR/ctx_wrong] -> B (wrong)
+    [Patient-032/PJRF/ctx_wrong] -> B (p=0.3)
+    [Patient-032/TCM/ctx_wrong] -> A (wrong)
+    [Patient-032/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-032/TCM/ctx_absent] -> C (wrong)
+    [Patient-032/TCM/flip_label] -> C (wrong)
+    [Patient-032/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 25/62: LUMIERE GBM Case (Patient-033)
+============================================================
+    [Patient-033/LIL/ctx_gold] -> B (wrong)
+    [Patient-033/DSCR/ctx_gold] -> D (wrong)
+    [Patient-033/PJRF/ctx_gold] -> A (p=0.1)
+    [Patient-033/TCM/ctx_gold] -> D (OK)
+    [Patient-033/LIL/ctx_wrong] -> C (wrong)
+    [Patient-033/DSCR/ctx_wrong] -> D (wrong)
+    [Patient-033/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-033/TCM/ctx_wrong] -> D (OK)
+    [Patient-033/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-033/TCM/ctx_absent] -> A (wrong)
+    [Patient-033/TCM/flip_label] -> A (wrong)
+    [Patient-033/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 26/62: LUMIERE GBM Case (Patient-034)
+============================================================
+    [Patient-034/LIL/ctx_gold] -> B (OK)
+    [Patient-034/DSCR/ctx_gold] -> B (OK)
+    [Patient-034/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-034/TCM/ctx_gold] -> D (OK)
+    [Patient-034/LIL/ctx_wrong] -> B (OK)
+    [Patient-034/DSCR/ctx_wrong] -> B (OK)
+    [Patient-034/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-034/TCM/ctx_wrong] -> C (wrong)
+    [Patient-034/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-034/TCM/ctx_absent] -> D (OK)
+    [Patient-034/TCM/flip_label] -> C (wrong)
+    [Patient-034/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 27/62: LUMIERE GBM Case (Patient-035)
+============================================================
+    [Patient-035/LIL/ctx_gold] -> C (wrong)
+    [Patient-035/DSCR/ctx_gold] -> C (OK)
+    [Patient-035/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-035/TCM/ctx_gold] -> B (wrong)
+    [Patient-035/LIL/ctx_wrong] -> C (wrong)
+    [Patient-035/DSCR/ctx_wrong] -> C (OK)
+    [Patient-035/PJRF/ctx_wrong] -> B (p=0.3)
+    [Patient-035/TCM/ctx_wrong] -> A (OK)
+    [Patient-035/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-035/TCM/ctx_absent] -> B (wrong)
+    [Patient-035/TCM/flip_label] -> A (OK)
+    [Patient-035/TCM/flip_window] -> B (wrong)
+
+============================================================
+Case 28/62: LUMIERE GBM Case (Patient-037)
+============================================================
+    [Patient-037/LIL/ctx_gold] -> C (OK)
+    [Patient-037/DSCR/ctx_gold] -> D (OK)
+    [Patient-037/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-037/TCM/ctx_gold] -> B (wrong)
+    [Patient-037/LIL/ctx_wrong] -> C (OK)
+    [Patient-037/DSCR/ctx_wrong] -> D (OK)
+    [Patient-037/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-037/TCM/ctx_wrong] -> A (wrong)
+    [Patient-037/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-037/TCM/ctx_absent] -> B (wrong)
+    [Patient-037/TCM/flip_label] -> A (wrong)
+    [Patient-037/TCM/flip_window] -> B (wrong)
+
+============================================================
+Case 29/62: LUMIERE GBM Case (Patient-039)
+============================================================
+    [Patient-039/LIL/ctx_gold] -> C (wrong)
+    [Patient-039/DSCR/ctx_gold] -> A (wrong)
+    [Patient-039/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-039/TCM/ctx_gold] -> C (OK)
+    [Patient-039/LIL/ctx_wrong] -> C (wrong)
+    [Patient-039/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-039/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-039/TCM/ctx_wrong] -> C (OK)
+    [Patient-039/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-039/TCM/ctx_absent] -> A (wrong)
+    [Patient-039/TCM/flip_label] -> A (wrong)
+    [Patient-039/TCM/flip_window] -> C (OK)
+
+============================================================
+Case 30/62: LUMIERE GBM Case (Patient-040)
+============================================================
+    [Patient-040/LIL/ctx_gold] -> C (wrong)
+    [Patient-040/DSCR/ctx_gold] -> D (OK)
+    [Patient-040/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-040/TCM/ctx_gold] -> D (wrong)
+    [Patient-040/LIL/ctx_wrong] -> C (wrong)
+    [Patient-040/DSCR/ctx_wrong] -> D (OK)
+    [Patient-040/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-040/TCM/ctx_wrong] -> C (wrong)
+    [Patient-040/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-040/TCM/ctx_absent] -> D (wrong)
+    [Patient-040/TCM/flip_label] -> C (wrong)
+    [Patient-040/TCM/flip_window] -> D (wrong)
+
+============================================================
+Case 31/62: LUMIERE GBM Case (Patient-041)
+============================================================
+    [Patient-041/LIL/ctx_gold] -> B (wrong)
+    [Patient-041/DSCR/ctx_gold] -> C (wrong)
+    [Patient-041/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-041/TCM/ctx_gold] -> C (wrong)
+    [Patient-041/LIL/ctx_wrong] -> B (wrong)
+    [Patient-041/DSCR/ctx_wrong] -> C (wrong)
+    [Patient-041/PJRF/ctx_wrong] -> D (p=0.8)
+    [Patient-041/TCM/ctx_wrong] -> A (wrong)
+    [Patient-041/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-041/TCM/ctx_absent] -> A (wrong)
+    [Patient-041/TCM/flip_label] -> A (wrong)
+    [Patient-041/TCM/flip_window] -> C (wrong)
+
+============================================================
+Case 32/62: LUMIERE GBM Case (Patient-042)
+============================================================
+    [Patient-042/DSCR/ctx_gold] -> D (OK)
+    [Patient-042/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-042/TCM/ctx_gold] -> B (OK)
+    [Patient-042/DSCR/ctx_wrong] -> D (OK)
+    [Patient-042/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-042/TCM/ctx_wrong] -> A (wrong)
+    [Patient-042/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-042/TCM/ctx_absent] -> B (OK)
+    [Patient-042/TCM/flip_label] -> A (wrong)
+    [Patient-042/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 33/62: LUMIERE GBM Case (Patient-043)
+============================================================
+    [Patient-043/LIL/ctx_gold] -> B (wrong)
+    [Patient-043/DSCR/ctx_gold] -> C (OK)
+    [Patient-043/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-043/TCM/ctx_gold] -> C (OK)
+    [Patient-043/LIL/ctx_wrong] -> B (wrong)
+    [Patient-043/DSCR/ctx_wrong] -> C (OK)
+    [Patient-043/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-043/TCM/ctx_wrong] -> A (wrong)
+    [Patient-043/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-043/TCM/ctx_absent] -> C (OK)
+    [Patient-043/TCM/flip_label] -> D (wrong)
+    [Patient-043/TCM/flip_window] -> C (OK)
+
+============================================================
+Case 34/62: LUMIERE GBM Case (Patient-045)
+============================================================
+    [Patient-045/LIL/ctx_gold] -> B (OK)
+    [Patient-045/DSCR/ctx_gold] -> A (OK)
+    [Patient-045/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-045/TCM/ctx_gold] -> B (wrong)
+    [Patient-045/LIL/ctx_wrong] -> B (OK)
+    [Patient-045/DSCR/ctx_wrong] -> A (OK)
+    [Patient-045/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-045/TCM/ctx_wrong] -> A (OK)
+    [Patient-045/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-045/TCM/ctx_absent] -> B (wrong)
+    [Patient-045/TCM/flip_label] -> A (OK)
+    [Patient-045/TCM/flip_window] -> B (wrong)
+
+============================================================
+Case 35/62: LUMIERE GBM Case (Patient-046)
+============================================================
+    [Patient-046/LIL/ctx_gold] -> C (wrong)
+    [Patient-046/DSCR/ctx_gold] -> C (wrong)
+    [Patient-046/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-046/TCM/ctx_gold] -> A (wrong)
+    [Patient-046/LIL/ctx_wrong] -> C (wrong)
+    [Patient-046/DSCR/ctx_wrong] -> C (wrong)
+    [Patient-046/PJRF/ctx_wrong] -> D (p=0.8)
+    [Patient-046/TCM/ctx_wrong] -> B (wrong)
+    [Patient-046/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-046/TCM/ctx_absent] -> B (wrong)
+    [Patient-046/TCM/flip_label] -> B (wrong)
+    [Patient-046/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 36/62: LUMIERE GBM Case (Patient-048)
+============================================================
+    [Patient-048/LIL/ctx_gold] -> B (OK)
+    [Patient-048/DSCR/ctx_gold] -> A (OK)
+    [Patient-048/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-048/TCM/ctx_gold] -> B (wrong)
+    [Patient-048/LIL/ctx_wrong] -> B (OK)
+    [Patient-048/DSCR/ctx_wrong] -> A (OK)
+    [Patient-048/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-048/TCM/ctx_wrong] -> A (OK)
+    [Patient-048/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-048/TCM/ctx_absent] -> B (wrong)
+    [Patient-048/TCM/flip_label] -> A (OK)
+    [Patient-048/TCM/flip_window] -> B (wrong)
+
+============================================================
+Case 37/62: LUMIERE GBM Case (Patient-050)
+============================================================
+    [Patient-050/LIL/ctx_gold] -> B (wrong)
+    [Patient-050/DSCR/ctx_gold] -> C (OK)
+    [Patient-050/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-050/TCM/ctx_gold] -> B (OK)
+    [Patient-050/LIL/ctx_wrong] -> B (wrong)
+    [Patient-050/DSCR/ctx_wrong] -> C (OK)
+    [Patient-050/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-050/TCM/ctx_wrong] -> B (OK)
+    [Patient-050/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-050/TCM/ctx_absent] -> B (OK)
+    [Patient-050/TCM/flip_label] -> C (wrong)
+    [Patient-050/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 38/62: LUMIERE GBM Case (Patient-051)
+============================================================
+    [Patient-051/DSCR/ctx_gold] -> D (wrong)
+    [Patient-051/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-051/TCM/ctx_gold] -> A (OK)
+    [Patient-051/DSCR/ctx_wrong] -> D (wrong)
+    [Patient-051/PJRF/ctx_wrong] -> B (p=0.3)
+    [Patient-051/TCM/ctx_wrong] -> A (OK)
+    [Patient-051/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-051/TCM/ctx_absent] -> C (wrong)
+    [Patient-051/TCM/flip_label] -> C (wrong)
+    [Patient-051/TCM/flip_window] -> A (OK)
+
+============================================================
+Case 39/62: LUMIERE GBM Case (Patient-052)
+============================================================
+    [Patient-052/DSCR/ctx_gold] -> B (wrong)
+    [Patient-052/PJRF/ctx_gold] -> B (p=0.3)
+    [Patient-052/TCM/ctx_gold] -> B (wrong)
+    [Patient-052/DSCR/ctx_wrong] -> B (wrong)
+    [Patient-052/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-052/TCM/ctx_wrong] -> A (OK)
+    [Patient-052/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-052/TCM/ctx_absent] -> C (wrong)
+    [Patient-052/TCM/flip_label] -> C (wrong)
+    [Patient-052/TCM/flip_window] -> A (OK)
+
+============================================================
+Case 40/62: LUMIERE GBM Case (Patient-054)
+============================================================
+    [Patient-054/LIL/ctx_gold] -> B (wrong)
+    [Patient-054/DSCR/ctx_gold] -> C (OK)
+    [Patient-054/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-054/TCM/ctx_gold] -> A (wrong)
+    [Patient-054/LIL/ctx_wrong] -> B (wrong)
+    [Patient-054/DSCR/ctx_wrong] -> C (OK)
+    [Patient-054/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-054/TCM/ctx_wrong] -> D (OK)
+    [Patient-054/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-054/TCM/ctx_absent] -> A (wrong)
+    [Patient-054/TCM/flip_label] -> B (wrong)
+    [Patient-054/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 41/62: LUMIERE GBM Case (Patient-055)
+============================================================
+    [Patient-055/LIL/ctx_gold] -> B (wrong)
+    [Patient-055/DSCR/ctx_gold] -> D (OK)
+    [Patient-055/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-055/TCM/ctx_gold] -> A (OK)
+    [Patient-055/LIL/ctx_wrong] -> C (wrong)
+    [Patient-055/DSCR/ctx_wrong] -> D (OK)
+    [Patient-055/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-055/TCM/ctx_wrong] -> C (wrong)
+    [Patient-055/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-055/TCM/ctx_absent] -> A (OK)
+    [Patient-055/TCM/flip_label] -> C (wrong)
+    [Patient-055/TCM/flip_window] -> A (OK)
+
+============================================================
+Case 42/62: LUMIERE GBM Case (Patient-058)
+============================================================
+    [Patient-058/LIL/ctx_gold] -> D (wrong)
+    [Patient-058/DSCR/ctx_gold] -> A (wrong)
+    [Patient-058/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-058/TCM/ctx_gold] -> D (OK)
+    [Patient-058/LIL/ctx_wrong] -> D (wrong)
+    [Patient-058/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-058/PJRF/ctx_wrong] -> D (p=0.8)
+    [Patient-058/TCM/ctx_wrong] -> A (wrong)
+    [Patient-058/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-058/TCM/ctx_absent] -> A (wrong)
+    [Patient-058/TCM/flip_label] -> A (wrong)
+    [Patient-058/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 43/62: LUMIERE GBM Case (Patient-059)
+============================================================
+    [Patient-059/DSCR/ctx_gold] -> A (OK)
+    [Patient-059/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-059/TCM/ctx_gold] -> D (wrong)
+    [Patient-059/DSCR/ctx_wrong] -> A (OK)
+    [Patient-059/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-059/TCM/ctx_wrong] -> A (OK)
+    [Patient-059/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-059/TCM/ctx_absent] -> D (wrong)
+    [Patient-059/TCM/flip_label] -> A (OK)
+    [Patient-059/TCM/flip_window] -> D (wrong)
+
+============================================================
+Case 44/62: LUMIERE GBM Case (Patient-061)
+============================================================
+    [Patient-061/LIL/ctx_gold] -> B (OK)
+    [Patient-061/DSCR/ctx_gold] -> D (OK)
+    [Patient-061/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-061/TCM/ctx_gold] -> A (OK)
+    [Patient-061/LIL/ctx_wrong] -> B (OK)
+    [Patient-061/DSCR/ctx_wrong] -> D (OK)
+    [Patient-061/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-061/TCM/ctx_wrong] -> B (wrong)
+    [Patient-061/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-061/TCM/ctx_absent] -> A (OK)
+    [Patient-061/TCM/flip_label] -> B (wrong)
+    [Patient-061/TCM/flip_window] -> A (OK)
+
+============================================================
+Case 45/62: LUMIERE GBM Case (Patient-062)
+============================================================
+    [Patient-062/LIL/ctx_gold] -> D (wrong)
+    [Patient-062/DSCR/ctx_gold] -> D (wrong)
+    [Patient-062/PJRF/ctx_gold] -> A (p=0.1)
+    [Patient-062/TCM/ctx_gold] -> A (OK)
+    [Patient-062/LIL/ctx_wrong] -> B (wrong)
+    [Patient-062/DSCR/ctx_wrong] -> D (wrong)
+    [Patient-062/PJRF/ctx_wrong] -> D (p=0.8)
+    [Patient-062/TCM/ctx_wrong] -> C (wrong)
+    [Patient-062/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-062/TCM/ctx_absent] -> C (wrong)
+    [Patient-062/TCM/flip_label] -> C (wrong)
+    [Patient-062/TCM/flip_window] -> A (OK)
+
+============================================================
+Case 46/62: LUMIERE GBM Case (Patient-063)
+============================================================
+    [Patient-063/LIL/ctx_gold] -> D (wrong)
+    [Patient-063/DSCR/ctx_gold] -> B (OK)
+    [Patient-063/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-063/TCM/ctx_gold] -> D (OK)
+    [Patient-063/LIL/ctx_wrong] -> D (wrong)
+    [Patient-063/DSCR/ctx_wrong] -> B (OK)
+    [Patient-063/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-063/TCM/ctx_wrong] -> C (wrong)
+    [Patient-063/PJRF/ctx_absent] -> A (p=0.1)
+    [Patient-063/TCM/ctx_absent] -> D (OK)
+    [Patient-063/TCM/flip_label] -> C (wrong)
+    [Patient-063/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 47/62: LUMIERE GBM Case (Patient-064)
+============================================================
+    [Patient-064/LIL/ctx_gold] -> B (wrong)
+    [Patient-064/DSCR/ctx_gold] -> C (OK)
+    [Patient-064/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-064/TCM/ctx_gold] -> B (OK)
+    [Patient-064/LIL/ctx_wrong] -> B (wrong)
+    [Patient-064/DSCR/ctx_wrong] -> C (OK)
+    [Patient-064/PJRF/ctx_wrong] -> B (p=0.3)
+    [Patient-064/TCM/ctx_wrong] -> A (wrong)
+    [Patient-064/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-064/TCM/ctx_absent] -> B (OK)
+    [Patient-064/TCM/flip_label] -> C (wrong)
+    [Patient-064/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 48/62: LUMIERE GBM Case (Patient-065)
+============================================================
+    [Patient-065/LIL/ctx_gold] -> A (wrong)
+    [Patient-065/DSCR/ctx_gold] -> A (wrong)
+    [Patient-065/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-065/TCM/ctx_gold] -> A (wrong)
+    [Patient-065/LIL/ctx_wrong] -> B (wrong)
+    [Patient-065/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-065/PJRF/ctx_wrong] -> D (p=0.8)
+    [Patient-065/TCM/ctx_wrong] -> D (wrong)
+    [Patient-065/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-065/TCM/ctx_absent] -> D (wrong)
+    [Patient-065/TCM/flip_label] -> D (wrong)
+    [Patient-065/TCM/flip_window] -> C (OK)
+
+============================================================
+Case 49/62: LUMIERE GBM Case (Patient-066)
+============================================================
+    [Patient-066/DSCR/ctx_gold] -> B (OK)
+    [Patient-066/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-066/TCM/ctx_gold] -> D (OK)
+    [Patient-066/DSCR/ctx_wrong] -> B (OK)
+    [Patient-066/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-066/TCM/ctx_wrong] -> C (wrong)
+    [Patient-066/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-066/TCM/ctx_absent] -> D (OK)
+    [Patient-066/TCM/flip_label] -> C (wrong)
+    [Patient-066/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 50/62: LUMIERE GBM Case (Patient-067)
+============================================================
+    [Patient-067/LIL/ctx_gold] -> A (wrong)
+    [Patient-067/DSCR/ctx_gold] -> D (wrong)
+    [Patient-067/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-067/TCM/ctx_gold] -> B (OK)
+    [Patient-067/LIL/ctx_wrong] -> A (wrong)
+    [Patient-067/DSCR/ctx_wrong] -> D (wrong)
+    [Patient-067/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-067/TCM/ctx_wrong] -> B (OK)
+    [Patient-067/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-067/TCM/ctx_absent] -> D (wrong)
+    [Patient-067/TCM/flip_label] -> D (wrong)
+    [Patient-067/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 51/62: LUMIERE GBM Case (Patient-070)
+============================================================
+    [Patient-070/LIL/ctx_gold] -> B (wrong)
+    [Patient-070/DSCR/ctx_gold] -> B (OK)
+    [Patient-070/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-070/TCM/ctx_gold] -> B (OK)
+    [Patient-070/LIL/ctx_wrong] -> B (wrong)
+    [Patient-070/DSCR/ctx_wrong] -> B (OK)
+    [Patient-070/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-070/TCM/ctx_wrong] -> D (wrong)
+    [Patient-070/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-070/TCM/ctx_absent] -> B (OK)
+    [Patient-070/TCM/flip_label] -> C (wrong)
+    [Patient-070/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 52/62: LUMIERE GBM Case (Patient-071)
+============================================================
+    [Patient-071/LIL/ctx_gold] -> B (OK)
+    [Patient-071/DSCR/ctx_gold] -> D (wrong)
+    [Patient-071/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-071/TCM/ctx_gold] -> B (OK)
+    [Patient-071/LIL/ctx_wrong] -> B (OK)
+    [Patient-071/DSCR/ctx_wrong] -> D (wrong)
+    [Patient-071/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-071/TCM/ctx_wrong] -> D (wrong)
+    [Patient-071/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-071/TCM/ctx_absent] -> B (OK)
+    [Patient-071/TCM/flip_label] -> D (wrong)
+    [Patient-071/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 53/62: LUMIERE GBM Case (Patient-072)
+============================================================
+    [Patient-072/LIL/ctx_gold] -> B (wrong)
+    [Patient-072/DSCR/ctx_gold] -> C (wrong)
+    [Patient-072/PJRF/ctx_gold] -> B (p=0.3)
+    [Patient-072/TCM/ctx_gold] -> C (wrong)
+    [Patient-072/LIL/ctx_wrong] -> C (OK)
+    [Patient-072/DSCR/ctx_wrong] -> C (wrong)
+    [Patient-072/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-072/TCM/ctx_wrong] -> A (wrong)
+    [Patient-072/PJRF/ctx_absent] -> B (p=0.3)
+    [Patient-072/TCM/ctx_absent] -> D (wrong)
+    [Patient-072/TCM/flip_label] -> D (wrong)
+    [Patient-072/TCM/flip_window] -> C (wrong)
+
+============================================================
+Case 54/62: LUMIERE GBM Case (Patient-073)
+============================================================
+    [Patient-073/LIL/ctx_gold] -> C (wrong)
+    [Patient-073/DSCR/ctx_gold] -> C (wrong)
+    [Patient-073/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-073/TCM/ctx_gold] -> D (OK)
+    [Patient-073/LIL/ctx_wrong] -> C (wrong)
+    [Patient-073/DSCR/ctx_wrong] -> C (wrong)
+    [Patient-073/PJRF/ctx_wrong] -> D (p=0.8)
+    [Patient-073/TCM/ctx_wrong] -> C (wrong)
+    [Patient-073/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-073/TCM/ctx_absent] -> C (wrong)
+    [Patient-073/TCM/flip_label] -> C (wrong)
+    [Patient-073/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 55/62: LUMIERE GBM Case (Patient-074)
+============================================================
+    [Patient-074/LIL/ctx_gold] -> B (OK)
+    [Patient-074/DSCR/ctx_gold] -> A (wrong)
+    [Patient-074/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-074/TCM/ctx_gold] -> A (OK)
+    [Patient-074/LIL/ctx_wrong] -> B (OK)
+    [Patient-074/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-074/PJRF/ctx_wrong] -> A (p=0.1)
+    [Patient-074/TCM/ctx_wrong] -> A (OK)
+    [Patient-074/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-074/TCM/ctx_absent] -> C (wrong)
+    [Patient-074/TCM/flip_label] -> C (wrong)
+    [Patient-074/TCM/flip_window] -> A (OK)
+
+============================================================
+Case 56/62: LUMIERE GBM Case (Patient-075)
+============================================================
+    [Patient-075/LIL/ctx_gold] -> A (wrong)
+    [Patient-075/DSCR/ctx_gold] -> B (wrong)
+    [Patient-075/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-075/TCM/ctx_gold] -> D (wrong)
+    [Patient-075/LIL/ctx_wrong] -> B (OK)
+    [Patient-075/DSCR/ctx_wrong] -> C (wrong)
+    [Patient-075/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-075/TCM/ctx_wrong] -> B (OK)
+    [Patient-075/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-075/TCM/ctx_absent] -> C (wrong)
+    [Patient-075/TCM/flip_label] -> C (wrong)
+    [Patient-075/TCM/flip_window] -> D (wrong)
+
+============================================================
+Case 57/62: LUMIERE GBM Case (Patient-077)
+============================================================
+    [Patient-077/LIL/ctx_gold] -> B (wrong)
+    [Patient-077/DSCR/ctx_gold] -> A (wrong)
+    [Patient-077/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-077/TCM/ctx_gold] -> A (wrong)
+    [Patient-077/LIL/ctx_wrong] -> D (wrong)
+    [Patient-077/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-077/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-077/TCM/ctx_wrong] -> C (OK)
+    [Patient-077/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-077/TCM/ctx_absent] -> B (wrong)
+    [Patient-077/TCM/flip_label] -> B (wrong)
+    [Patient-077/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 58/62: LUMIERE GBM Case (Patient-078)
+============================================================
+    [Patient-078/DSCR/ctx_gold] -> B (wrong)
+    [Patient-078/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-078/TCM/ctx_gold] -> B (OK)
+    [Patient-078/DSCR/ctx_wrong] -> B (wrong)
+    [Patient-078/PJRF/ctx_wrong] -> B (p=0.3)
+    [Patient-078/TCM/ctx_wrong] -> B (OK)
+    [Patient-078/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-078/TCM/ctx_absent] -> D (wrong)
+    [Patient-078/TCM/flip_label] -> D (wrong)
+    [Patient-078/TCM/flip_window] -> B (OK)
+
+============================================================
+Case 59/62: LUMIERE GBM Case (Patient-080)
+============================================================
+    [Patient-080/LIL/ctx_gold] -> C (wrong)
+    [Patient-080/DSCR/ctx_gold] -> B (OK)
+    [Patient-080/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-080/TCM/ctx_gold] -> A (wrong)
+    [Patient-080/LIL/ctx_wrong] -> C (wrong)
+    [Patient-080/DSCR/ctx_wrong] -> B (OK)
+    [Patient-080/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-080/TCM/ctx_wrong] -> C (wrong)
+    [Patient-080/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-080/TCM/ctx_absent] -> A (wrong)
+    [Patient-080/TCM/flip_label] -> C (wrong)
+    [Patient-080/TCM/flip_window] -> A (wrong)
+
+============================================================
+Case 60/62: LUMIERE GBM Case (Patient-084)
+============================================================
+    [Patient-084/LIL/ctx_gold] -> B (wrong)
+    [Patient-084/DSCR/ctx_gold] -> A (OK)
+    [Patient-084/PJRF/ctx_gold] -> D (p=0.8)
+    [Patient-084/TCM/ctx_gold] -> D (wrong)
+    [Patient-084/LIL/ctx_wrong] -> B (wrong)
+    [Patient-084/DSCR/ctx_wrong] -> A (OK)
+    [Patient-084/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-084/TCM/ctx_wrong] -> C (wrong)
+    [Patient-084/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-084/TCM/ctx_absent] -> D (wrong)
+    [Patient-084/TCM/flip_label] -> B (OK)
+    [Patient-084/TCM/flip_window] -> D (wrong)
+
+============================================================
+Case 61/62: LUMIERE GBM Case (Patient-089)
+============================================================
+    [Patient-089/LIL/ctx_gold] -> B (wrong)
+    [Patient-089/DSCR/ctx_gold] -> C (OK)
+    [Patient-089/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-089/TCM/ctx_gold] -> D (OK)
+    [Patient-089/LIL/ctx_wrong] -> B (wrong)
+    [Patient-089/DSCR/ctx_wrong] -> C (OK)
+    [Patient-089/PJRF/ctx_wrong] -> B (p=0.3)
+    [Patient-089/TCM/ctx_wrong] -> C (wrong)
+    [Patient-089/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-089/TCM/ctx_absent] -> D (OK)
+    [Patient-089/TCM/flip_label] -> C (wrong)
+    [Patient-089/TCM/flip_window] -> D (OK)
+
+============================================================
+Case 62/62: LUMIERE GBM Case (Patient-090)
+============================================================
+    [Patient-090/LIL/ctx_gold] -> A (wrong)
+    [Patient-090/DSCR/ctx_gold] -> A (wrong)
+    [Patient-090/PJRF/ctx_gold] -> C (p=0.5)
+    [Patient-090/TCM/ctx_gold] -> A (OK)
+    [Patient-090/LIL/ctx_wrong] -> B (wrong)
+    [Patient-090/DSCR/ctx_wrong] -> A (wrong)
+    [Patient-090/PJRF/ctx_wrong] -> C (p=0.5)
+    [Patient-090/TCM/ctx_wrong] -> A (OK)
+    [Patient-090/PJRF/ctx_absent] -> C (p=0.5)
+    [Patient-090/TCM/ctx_absent] -> C (wrong)
+    [Patient-090/TCM/flip_label] -> C (wrong)
+    [Patient-090/TCM/flip_window] -> A (OK)
+
+Saved -> results/lumiere_v4_Gemma-3-27B_context_20260924_184425
+  LIL: ctx_gold: 0.216; ctx_wrong: 0.255
+  DSCR: ctx_gold: 0.548; ctx_wrong: 0.548
+  PJRF: ctx_gold: 0.2505; ctx_wrong: 0.2992; ctx_absent: 0.2657
+  TCM: ctx_gold: 0.548; ctx_wrong: 0.387; ctx_absent: 0.258; flip_label: 0.145; flip_window: 0.581

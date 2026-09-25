@@ -35,6 +35,8 @@ import numpy as np
 from tools.lumiere_gating_stats import latest, mcnemar_exact, wilson
 
 MODELS = ["MedGemma-4B", "Gemma-3-12B", "Gemma-3-27B", "Llama-4-Scout"]
+# Positive-control model(s) added 2026-09-25 (preregistration change log): E1 and E2 only, reported separately, outside the Holm family.
+CONTROLS = ["Gemini-3.6-Flash"]
 MARGIN = 10.0            # percentage points; fixed in paper/preregistration_v4.md before any v4 model run
 N_BOOT = 10_000
 SEED = 20260925
@@ -264,7 +266,10 @@ def main() -> None:
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--models", default=",".join(MODELS))
-    models = ap.parse_args().models.split(",")
+    ap.add_argument("--controls", default=",".join(CONTROLS))
+    args = ap.parse_args()
+    models = args.models.split(",")
+    controls = [c for c in args.controls.split(",") if c]
     rng = np.random.default_rng(SEED)
     flags = item_flags()
     res: dict = {"margin_pp": MARGIN, "models": {}}
@@ -322,6 +327,27 @@ def main() -> None:
     for m, r in res["models"].items():
         for ph, v in r["E6"].items():
             md.append(f"| {m} | {ph} | {v['n']} | {v['acc_a']:.1f} | {v['acc_b']:.1f} | {v['diff']:+.1f} [{v['ci'][0]:+.1f}, {v['ci'][1]:+.1f}] | {v['p']:.3f} |")
+    # Control model(s): computed after the four-model loop so the registered results above are unchanged by this addition.
+    res["controls"] = {}
+    for m in controls:
+        recs = load_records(m)
+        if not recs:
+            continue
+        empty = sum(1 for r in recs.values() if r.get("parse_error") and not r.get("raw"))
+        res["controls"][m] = {"n_records": len(recs), "empty_responses": empty, "E1": e1(recs, flags, rng), "E2": e2(recs, rng)}
+    if res["controls"]:
+        md += ["", "## Control model (positive control; outside the Holm family; see the preregistration change log, 2026-09-25)", "",
+               "| Model | Phase | n | own | text-only | diff [95% CI] | only-own / only-text | p | verdict |", "|---|---|---|---|---|---|---|---|---|"]
+        for m, r in res["controls"].items():
+            for ph, v in r["E1"].items():
+                md.append(f"| {m} | {ph} | {v['n']} | {v['acc_a']:.1f} | {v['acc_b']:.1f} | {v['diff']:+.1f} [{v['ci'][0]:+.1f}, {v['ci'][1]:+.1f}] | "
+                          f"{v['only_a']}/{v['only_b']} | {v['p']:.3f} | {v['verdict']} |")
+        md += ["", "| Model | Phase | n | own-image correct | swap answers donor key | text answers donor key | gain [95% CI] | swap keeps own key | answer changes vs own |", "|---|---|---|---|---|---|---|---|---|"]
+        for m, r in res["controls"].items():
+            for ph, v in r["E2"].items():
+                md.append(f"| {m} | {ph} | {v['n']} | {v['own_image_correct']:.1f} | {v['swap_answers_donor_key']:.1f} | {v['text_answers_donor_key']:.1f} | "
+                          f"{v['gain']:+.1f} [{v['gain_ci'][0]:+.1f}, {v['gain_ci'][1]:+.1f}] | {v['swap_keeps_own_key']:.1f} | {v['swap_flips_answer_vs_own']:.1f} |")
+            md.append(f"\n{m}: {r['empty_responses']} empty API responses among {r['n_records']} records (must be 0 before these rows are read).")
     text = "\n".join(md)
     Path("results/lumiere_v4_stats.md").write_text(text)
     Path("results/lumiere_v4_stats.json").write_text(json.dumps(res, indent=2, default=float))

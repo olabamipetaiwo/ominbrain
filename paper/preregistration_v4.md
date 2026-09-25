@@ -95,7 +95,19 @@ the intervals; this one is not). The KAB vocabulary and consistency metrics are 
 
 Any deviation after the first v4 run is entered here with its date and reason, and in `paper/update.md`.
 
-- (none yet)
+- 2026-09-25. **Positive-control model added (before any control run beyond a 2-patient smoke test).** Reason: two of the four open models (Gemma-3-12B, Gemma-3-27B)
+  did not pass the AIA positive control in E1, so the test has not been shown to detect image use for them. Model: Gemini-3.6-Flash (`gemini-3.6-flash`, Google API, run date 2026-09-25), chosen because
+  `gemini-2.5-pro` returns 404 for the account (no longer available to new users) and `gemini-3.1-pro-preview` had no free-tier quota; a Flash model was tried first as the cheaper control, with
+  `gemini-3.1-pro-preview` as the fallback if Flash does not pass the AIA control. Conditions: `own`, `text`, `swap` on AIA, LIL and DSCR (E1 and E2 only), same prompts, temperature 0, same decision rules. Two
+  differences from the open-model runs, both forced by the API: the output cap is 16,384 tokens instead of 800 (the model's hidden thinking tokens count against the cap), and the route is Google's OpenAI-compatible endpoint.
+  The control is reported separately and is NOT added to the four-model Holm family (the 12 E1 tests are unchanged). Patients 1 and 2 come from the smoke run (`results/lumiere_v4_Gemini-3.6-Flash_part1_*`, identical
+  code and settings); the smoke output for those two patients was seen before the full run (own-image 4 of 6 correct, text-only and swap 1 of 12). Empty API responses (errors, rate limits) are counted in
+  `empty_responses.json`; any such item is rerun before results are read, and is not scored as a model failure. This supersedes "No proprietary models" under "Not done here" for this one control model.
+- 2026-09-25. **Precision control added (before any run).** The four open models ran at 4-bit (Q4_K_M) through Ollama, so a gap to the API control model in E1/E2 could reflect quantization instead of model quality.
+  One model, Gemma-3-27B, is rerun in bf16 (`google/gemma-3-27b-it`, Google's release, vLLM, one RTX PRO 6000) on `own`, `text`, `swap` for AIA, LIL and DSCR, same prompts, temperature 0 and 800-token cap; run name `Gemma-3-27B-bf16`.
+  Chosen because it failed the AIA positive control and is the largest of the four whose bf16 weights fit one GPU (Llama-4-Scout in bf16 does not). It is reported apart from the four-model Holm family and is NOT a fifth model in E1 to E6.
+  The serving stack differs (vLLM against Ollama), so a difference conflates precision with the stack; a 4-bit run through vLLM is not planned. Reading rule, fixed now: if its AIA interval lies above 0 and clearly above the 4-bit model's, the gap is at least partly quantization;
+  if it stays near chance, quantization does not explain the gap; anything between is reported as inconclusive.
 
 ## Exclusions and missing data
 
