@@ -28,7 +28,7 @@ from src.lumiere_labels import canonical_answer_text
 
 OUT = Path("paper/latex/generated")
 MODELS = ["MedGemma-4B", "Gemma-3-12B", "Gemma-3-27B", "Llama-4-Scout"]
-TAG = {"Gemini-3.6-Flash": "Gemini", "MedGemma-4B": "MedGemma", "Gemma-3-12B": "GemmaTwelve", "Gemma-3-27B": "GemmaTwentySeven", "Llama-4-Scout": "Scout"}
+TAG = {"Gemini-3.6-Flash": "Gemini", "Gemma-3-27B-bf16": "GemmaTwentySevenBf","MedGemma-4B": "MedGemma", "Gemma-3-12B": "GemmaTwelve", "Gemma-3-27B": "GemmaTwentySeven", "Llama-4-Scout": "Scout"}
 SHORT = {"Gemini-3.6-Flash": "Gemini-3.6-Flash", "MedGemma-4B": "MedGemma-4B", "Gemma-3-12B": "Gemma-3-12B", "Gemma-3-27B": "Gemma-3-27B", "Llama-4-Scout": "Llama-4-Scout"}
 PHASES = ["AIA", "LIL", "DSCR", "PJRF", "TCM"]
 STALE = [r"63\.5", r"33 of 33", r"(?<!which gave )50 of 52", r"48 and 52", r"33 progressive", r"14\\%\)"]   # figures that came from the label-spelling bug or typos

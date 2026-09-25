@@ -36,7 +36,7 @@ from tools.lumiere_gating_stats import latest, mcnemar_exact, wilson
 
 MODELS = ["MedGemma-4B", "Gemma-3-12B", "Gemma-3-27B", "Llama-4-Scout"]
 # Positive-control model(s) added 2026-09-25 (preregistration change log): E1 and E2 only, reported separately, outside the Holm family.
-CONTROLS = ["Gemini-3.6-Flash"]
+CONTROLS = ["Gemini-3.6-Flash", "Gemma-3-27B-bf16"]   # the second is the precision control (bf16 vs the 4-bit Gemma-3-27B), E1/E2 only
 MARGIN = 10.0            # percentage points; fixed in paper/preregistration_v4.md before any v4 model run
 N_BOOT = 10_000
 SEED = 20260925
@@ -336,7 +336,7 @@ def main() -> None:
         empty = sum(1 for r in recs.values() if r.get("parse_error") and not r.get("raw"))
         res["controls"][m] = {"n_records": len(recs), "empty_responses": empty, "E1": e1(recs, flags, rng), "E2": e2(recs, rng)}
     if res["controls"]:
-        md += ["", "## Control model (positive control; outside the Holm family; see the preregistration change log, 2026-09-25)", "",
+        md += ["", "## Control models (Gemini-3.6-Flash: positive control; Gemma-3-27B-bf16: precision control; outside the Holm family; see the preregistration change log, 2026-09-25)", "",
                "| Model | Phase | n | own | text-only | diff [95% CI] | only-own / only-text | p | verdict |", "|---|---|---|---|---|---|---|---|---|"]
         for m, r in res["controls"].items():
             for ph, v in r["E1"].items():
