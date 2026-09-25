@@ -15,6 +15,7 @@ Nothing here is typed by hand: the paper cites macros and \\input's tables. Run 
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import re
 from collections import Counter
@@ -160,6 +161,69 @@ def v3_tables(mc: Macros) -> None:
     mc.add("permDscrN", perm["by_phase"]["DSCR"]["n"])
     mc.add("permDscrMean", f1(perm["by_phase"]["DSCR"]["perm_mean"]))
     mc.add("permDscrP", f"{perm['by_phase']['DSCR']['p_ge']:.2f}")
+
+
+def rng(mc: Macros, name: str, vals, fmt=lambda x: f"{x:.0f}") -> None:
+    """<name>Lo and <name>Hi macros: the range endpoints of a per-model quantity."""
+    mc.add(f"{name}Lo", fmt(min(vals)))
+    mc.add(f"{name}Hi", fmt(max(vals)))
+
+
+def v3_appendix(mc: Macros) -> None:
+    """Range and count macros for the v3 appendix prose (text-only agreement, repeats, evidence audit, flips, options-only)."""
+    import csv
+    rv = load("results/lumiere_reviewer_stats.json")
+    gs = load("results/lumiere_gating_stats.json")
+    cf = load("results/lumiere_counterfactual_summary.json")
+    M4 = ["MedGemma-4B", "Gemma-3-12B", "Gemma-3-27B", "Llama-4-Scout"]
+    mc.add("vthreeMaxAbsDiff", f1(max(abs(100 * rv["accuracy"][m]["diff"]) for m in M4)))
+    # answers identical with and without the image (non-gated v3 run vs its text-only twin)
+    same = []
+    for m in M4:
+        a, b = (sorted(glob.glob(f"results/lumiere_{m}{t}_v3_nogate_*"))[-1] for t in ("", "_textonly"))
+        ans = lambda d: {(c["case_id"], ph): v["questions"][0].get("model_answer") for c in json.loads(Path(d, "raw_results.json").read_text())
+                         for ph, v in c["phases"].items() if v.get("questions")}
+        x, y = ans(a), ans(b)
+        ks = [k for k in x if k in y]
+        same.append(100 * sum(x[k] == y[k] for k in ks) / len(ks))
+    rng(mc, "vthreeSame", same)
+    rep = gs["repeat"]
+    mc.add("vthreeRepeatN", rep[M4[0]]["n"])
+    mc.add("vthreeRepeatIdentical", min(rep[m]["identical_answer"] for m in M4))
+    assert all(rep[m]["identical_answer"] == rep[m]["n"] for m in M4), "repeat runs are no longer identical; reword the appendix"
+    # flip rates between own and donor image
+    for ph in ("AIA", "LIL", "DSCR"):
+        rng(mc, f"vthreeFlip{ph}", [100 * cf[m]["per_phase"][ph]["flipped"] / cf[m]["per_phase"][ph]["n"] for m in M4])
+    perm = rv["counterfactual"]["pooled"]["donor_permutation"]
+    mc.add("permObservedPct", f1(100 * perm["observed"] / perm["n"]))
+    # evidence audit, non-gated v3 runs: availability x record status; "contradict" = contradicted or matching no fact value
+    rows = list(csv.DictReader(open("results/lumiere_reasoning_facts.csv")))
+    per = {k: [] for k in ("noclaim", "claims", "inok", "inbad", "newok", "newbad")}
+    for m in M4:
+        rs = [r for r in rows if r["model"] == f"{m}_v3"]
+        cell = lambda a, b: sum(int(r[f"cell_{a}|{b}"]) for r in rs)
+        tot = sum(int(v) for r in rs for k, v in r.items() if k.startswith("cell_"))
+        per["noclaim"].append(100 * sum(r["label"] == "no_claims" for r in rs) / len(rs))
+        per["claims"].append(tot)
+        per["inok"].append(100 * cell("in_text", "supported") / tot)
+        per["inbad"].append(100 * (cell("in_text", "contradicted") + cell("in_text", "unmatched")) / tot)
+        per["newok"].append(100 * cell("not_in_text", "supported") / tot)
+        per["newbad"].append(100 * (cell("not_in_text", "contradicted") + cell("not_in_text", "unmatched")) / tot)
+    for k, name in (("noclaim", "Noclaim"), ("claims", "Claims"), ("inok", "InOk"), ("inbad", "InBad"), ("newok", "NewOk"), ("newbad", "NewBad")):
+        rng(mc, f"vthreeEv{name}", per[k])
+    # options-only: cells with many unparseable responses are excluded from the range (the appendix says they are not interpreted)
+    for ph in PHASES:
+        keep = [100 * gs["options"][m]["phases"][ph]["acc_options_only"] for m in M4 if not gs["options"][m]["phases"][ph].get("flagged_parse_errors")]
+        rng(mc, f"vthreeOpt{ph}", keep)
+    bad = [100 * gs["options"]["MedGemma-4B"]["phases"][ph]["parse_errors"] / gs["options"]["MedGemma-4B"]["phases"][ph]["n"]
+           for ph in PHASES if gs["options"]["MedGemma-4B"]["phases"][ph].get("flagged_parse_errors")]
+    mc.add("vthreeMedGemmaUnparsedN", len(bad))
+    rng(mc, "vthreeMedGemmaUnparsed", bad)
+    # option-only heuristics on the v3 items
+    bl = rv["baselines"]
+    for ph in ("AIA", "LIL", "DSCR", "PJRF", "TCM"):
+        mc.add(f"vthreeLongest{ph}", f"{100 * bl[ph]['longest'] / bl[ph]['n']:.0f}")
+    rng(mc, "vthreeLetterPrior", [100 * bl[ph]["letter_prior"] / bl[ph]["n"] for ph in bl])
 
 
 def v4(mc: Macros) -> None:
@@ -315,6 +379,7 @@ def main() -> None:
     mc = Macros()
     cohort(mc)
     v3_tables(mc)
+    v3_appendix(mc)
     v4(mc)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numbers.tex").write_text(mc.tex())
