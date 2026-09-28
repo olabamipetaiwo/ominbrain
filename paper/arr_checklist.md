@@ -21,14 +21,15 @@ patient-identifying data are added. Compute/environmental cost is reported in Ap
 
 **B1. Cited the creators?** Yes for data and tools: LUMIERE (Suter et al. 2022), OmniBrainBench (Peng et al. 2026), RANO (Wen et al. 2010),
 DeepBraTumIA/HD-GLIO-AUTO (Kickingereder et al. 2019), HD-BET (Isensee et al. 2019), RadLex, NCI Thesaurus. For the models, no: the reference list is
-limited to peer-reviewed publications (project rule), so MedGemma, Gemma 3, Llama 4 and Gemini are identified by name, tag, digest and quantization (Appendix E,
-Table 11) instead of by technical report. If ARR objects, cite the technical reports as arXiv/tech reports or drop the rule for models only.
+limited to peer-reviewed publications (standing project rule), so MedGemma, Gemma 3, Llama 4 and Gemini are identified by name, tag, digest and quantization
+(Appendix E, Table 11) instead of by technical report. Settled: keep the rule as-is; not revisited per submission.
 
-**B2. Discussed the license or terms?** Yes, Appendix E. LUMIERE: "may only be used for non-commercial purposes" (dataset terms; a named license was NOT
-verified: the Figshare page returned 403, and the paper's CC BY 4.0 statement is about the article). OmniBrainBench: CC BY-SA 3.0 (dataset card). MedGemma: Health AI
-Developer Foundations terms of use. Gemma-3: Gemma Terms of Use and Prohibited Use Policy. Llama-4-Scout: Llama 4 Community License Agreement and Acceptable Use Policy.
-Gemini: Google's Gemini API terms. We release no LUMIERE images. Not verified: RadLex and NCIt licence names (KAB appendix only), and whether the Llama 4 acceptable-use
-policy has a geographic clause for multimodal models (we are US-based; check before submission if the authors are elsewhere).
+**B2. Discussed the license or terms?** Yes, Appendix E. LUMIERE: Figshare's license metadata lists CC0 for all five hosted articles (readme, RANO ratings,
+demographics, completeness, imaging — verified via the Figshare API, 2026-09-28), but the readme PDF itself separately states "This dataset is provided for
+non-commercial use." We treat the stated restriction as binding and use the data for non-commercial research only. OmniBrainBench: CC BY-SA 3.0 (dataset card).
+MedGemma: Health AI Developer Foundations terms of use. Gemma-3: Gemma Terms of Use and Prohibited Use Policy. Llama-4-Scout: Llama 4 Community License Agreement
+and Acceptable Use Policy. Gemini: Google's Gemini API terms. We release no LUMIERE images. Not verified: RadLex and NCIt licence names (KAB appendix only), and
+whether the Llama 4 acceptable-use policy has a geographic clause for multimodal models (we are US-based; check before submission if the authors are elsewhere).
 
 **B3. Use consistent with intended use?** Yes, Appendix E: non-commercial research evaluation, matching LUMIERE's terms; models used for research evaluation only.
 MedGemma's card says outputs are not for clinical decisions; we do not use them clinically.
@@ -64,14 +65,13 @@ pandas 3.0.5, Pillow 12.3.0. Model tags and digests in Table 11. LiteLLM was use
 We recruited no annotators or participants. The expert RANO ratings are part of the released LUMIERE data (one neuroradiologist, per its authors); items were drafted by an LLM (v3) or computed by rules (v4).
 - **D1, D2, D5:** not applicable (no annotators recruited).
 - **D3:** not applicable to us; the LUMIERE authors report a consent waiver by the Bern cantonal ethics committee (Ethics Statement).
-- **D4:** we did not seek an ethics review: secondary use of a public, de-identified dataset. **Decision for the authors:** confirm with UCF (IRB/research office) whether a formal "not human subjects research" determination is needed, and answer accordingly.
+- **D4:** Not applicable. Secondary analysis of a public, de-identified dataset collected and ethics-approved by the original institution (Bern cantonal ethics committee, consent waiver, disclosed in the Ethics Statement); no new interaction with human subjects, no identifiable data obtained.
 
 ## E. Did you use AI assistants? Yes.
 
 **E1.** Yes, Ethics Statement: Claude 4.5 Sonnet drafted the v3 items (Appendix A); Claude Code helped write and run analysis code and edit the text; the authors are responsible for all content.
 
-## Open items for the authors (not resolvable from the repo)
-1. Code/data release plan: the paper says we do not release LUMIERE images and that derived items would carry non-commercial terms. Change if the plan differs.
-2. IRB determination (D4).
-3. Whether to cite model technical reports (B1).
-4. Named license for LUMIERE (B2) if a stricter statement is wanted.
+## Open items for the authors
+1. Code/data release plan: deferred, not urgent now — revisit at camera-ready. Current text says we do not release LUMIERE images and that derived items would carry non-commercial terms.
+
+Resolved (2026-09-28): IRB determination (D4, not applicable), model technical-report citations (B1, standing rule kept as-is), named LUMIERE license (B2, CC0 metadata vs. stated non-commercial restriction, both now recorded).

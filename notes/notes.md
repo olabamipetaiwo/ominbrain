@@ -1,25 +1,19 @@
-Shared/administrative (needed regardless, but relevant now)
+Tsks
 
-2. Close the 4 open ARR checklist items: code/data release plan, IRB determination, whether to cite arXiv-only model reports, a named LUMIERE license.
-3. Decide PJRF: keep as secondary appendix result, or drop it entirely — this decision shapes how much of the rewrite touches PJRF.
-4. Confirm ARR 2026-10-12 deadline mechanics (submission portal, anonymization/double-blind requirements, whether Limitations/appendices count toward the page limit).
+Pending:
 
-The narrowing itself
+1. ARR submission mechanics, unconfirmed part: submission-portal specifics (double-blind anonymization already fixed 2026-09-28 — see done list).
+2. Code/data release plan — deferred to camera-ready, not urgent now.
 
-5. Identify exactly which results are solid enough to be load-bearing:
-   - Gemini control's E1 (AIA/LIL image effect) and E2 (donor tracking) — both reported outside the Holm family, so not weakened by multiple-comparison correction.
-   - Llama-4-Scout's donor-tracking result (LIL +23.5, AIA +12.9) — the one open-model result whose CI clears 0.
-   - Everything else (the other 3 open models' E1/E2, all of E3/E4/E6, PJRF) gets explicitly downgraded to "inconclusive" or "secondary," not reframed as weak-positive findings.
-6. Rewrite the Abstract around that narrower claim: the method (positive control + donor-swap design) works and detects real image-use when it's present (Gemini); applied to open models, it mostly could not detect reliable image-dependence, with one exception (Scout).
-7. Rewrite the Results section paragraph-by-paragraph, removing any sentence whose evidence doesn't clear the bar from step 5 — this is the biggest chunk of work, since several paragraphs currently describe "weak but present" effects for models that fail their own positive control.
-8. Rewrite the Introduction/contributions bullets to match — drop any framing that implies a substantive finding about the 3 non-Scout open models beyond "no evidence detected."
-9. Rewrite the Conclusion to state the narrowed claim plainly, without hedging language that implies more than the data support.
-10. Tighten Limitations to foreground: small n (51–62), 2 of 4 open models fail their own positive control (so nothing can be claimed about them at all under the preregistered rule), nothing survives Holm among the open models, no clinician validation of the audit.
-11. Sweep the rest of the paper (worked example, appendix tables, any remaining hand-written sentences) for leftover claims that assume the results being cut in step 5 — this is exactly the kind of drift a claim-audit pass would catch, so probably worth one more full audit pass over acl_latex.tex before calling it done.
-12. Recompile and recheck the page count (cutting weak claims may shrink it, which could free up room for the input-handling / reviewer-point-7 detail that's currently thin).
-13. Update paper/update.md with a change-log entry describing the narrowing and why.
+Done (2026-09-28):
+- PJRF moved to appendix; second claim audit of Abstract/Results/Conclusion found no remaining overclaims; ARR checklist's IRB/model-citation/LUMIERE-license items resolved. See paper/update.md 2026-09-28 entry for detail.
+- Anonymization fixed: acl_latex.tex's \author{} hardcoded a real name; replaced with "Anonymous ACL submission" per double-blind (review-mode) convention. Checked no other identity leaks in the text (name, UCF) elsewhere in the paper.
+- Limitations tightened: "Power and scope" now explicitly states no E1 test survives Holm correction and that Gemma-3-12B/27B fail their own AIA positive-control gate (previously only in Results). Recompiled clean both times (0 errors, 0 undefined refs, 19 pages).
 
 
+
+
+---DO NOT TOUCH THIS -------
 
 ------MAIN------
 
@@ -35,3 +29,6 @@ So really there are just two paths from here:
 
 1. Do the extra work — pull more timepoints per patient, rerun everything, try to get stronger/more conclusive numbers before submitting.
 2. Don't — keep the data as-is, and just be more modest about what the paper claims, sticking to the results that are already solid (like the Gemini control clearly using the image, or Scout's donor-tracking result) instead of leaning on the results that are weak/inconclusive.
+
+---
+Paper submission Link - https://2027.naacl.org/calls/main_conference_papers/
