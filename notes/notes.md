@@ -5,11 +5,6 @@ Pending:
 1. ARR submission mechanics, unconfirmed part: submission-portal specifics (double-blind anonymization already fixed 2026-09-28 — see done list).
 2. Code/data release plan — deferred to camera-ready, not urgent now.
 
-Done (2026-09-28):
-- PJRF moved to appendix; second claim audit of Abstract/Results/Conclusion found no remaining overclaims; ARR checklist's IRB/model-citation/LUMIERE-license items resolved. See paper/update.md 2026-09-28 entry for detail.
-- Anonymization fixed: acl_latex.tex's \author{} hardcoded a real name; replaced with "Anonymous ACL submission" per double-blind (review-mode) convention. Checked no other identity leaks in the text (name, UCF) elsewhere in the paper.
-- Limitations tightened: "Power and scope" now explicitly states no E1 test survives Holm correction and that Gemma-3-12B/27B fail their own AIA positive-control gate (previously only in Results). Recompiled clean both times (0 errors, 0 undefined refs, 19 pages).
-
 
 
 
