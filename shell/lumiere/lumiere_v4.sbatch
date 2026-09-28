@@ -11,7 +11,7 @@
 #SBATCH --error=/blue/so589980.ucf/ta117847.ucf/ominbrain/logs/%x_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=Olacoderpad@gmail.com
-# v4 (answerable-by-construction) item set. One job = one model x one MODE, so the 2-GPU cap can be met by chaining jobs
+# v4 item set (keys with a stated origin per phase). One job = one model x one MODE, so the 2-GPU cap can be met by chaining jobs
 # with --dependency=afterany (never by giving a job fewer GPUs). Registered analysis: paper/preregistration_v4.md.
 #   MODE=image    own,text,swap          AIA LIL DSCR (isolated: no upstream context)          run_lumiere_v4.py
 #   MODE=context  ctx_gold,ctx_wrong,ctx_absent,flip_label,flip_window   LIL DSCR PJRF TCM       run_lumiere_v4.py

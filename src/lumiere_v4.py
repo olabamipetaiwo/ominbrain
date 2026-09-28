@@ -1,9 +1,9 @@
 """
-LUMIERE v4 item set: answerable from the model-visible inputs by construction (paper/review.md, concern 1).
+LUMIERE v4 item set: keys with a stated origin per phase (paper/review.md, concern 1; wording revised after the 2026-09-25 external review).
 
 v3 asked questions the supplied evidence cannot answer (whole-lesion volume change from one slice, expert RANO
 ratings that rest on T2/FLAIR progression, an AIA question with one fixed answer, PJRF scored against realised
-survival, TCM without a defined rule). v4 replaces every key with one that is a stated function of the inputs:
+survival, TCM without a defined rule). v4 replaces every key with one whose origin is stated (acquisition, segmentation-derived, recorded outcome, or a stipulated rule); LIL and DSCR depend on masks the model does not see:
 
   AIA   Which MRI sequence is shown?                   key = the sequence rendered (balanced 4-way, image only).
   LIL   Which hemisphere / anterior-posterior half     key = position of the largest tumour-core component on the
@@ -467,7 +467,7 @@ def build(render: bool = True) -> None:
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(description="Build the LUMIERE v4 (answerable-by-construction) item set")
+    ap = argparse.ArgumentParser(description="Build the LUMIERE v4 item set (keys with a stated origin per phase)")
     ap.add_argument("--measure", action="store_true", help="measure every needed timepoint from the remote archive, then exit")
     ap.add_argument("--explore", action="store_true", help="print candidate/concordance counts and exit")
     ap.add_argument("--no-render", action="store_true", help="build items and pairs without rendering slices")

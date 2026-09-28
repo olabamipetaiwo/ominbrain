@@ -295,7 +295,8 @@ def main() -> None:
         md.append(f"| {m} | {ph} | {v['n']} | {v['acc_a']:.1f} | {v['acc_b']:.1f} | {v['diff']:+.1f} [{v['ci'][0]:+.1f}, {v['ci'][1]:+.1f}] | "
                   f"{v['only_a']}/{v['only_b']} | {v['p']:.3f} ({v['p_holm']:.3f}) | {v['verdict']} |")
     md += ["", "AIA is the positive control: its answer is visible only in the image, so a model with no AIA gain has not shown that this "
-           "test can detect image use, and its LIL and DSCR rows say nothing about image use.", ""]
+           "test can detect image use, and its LIL and DSCR rows say nothing about image use. 'image helps' is an unadjusted interval reading "
+           "(the paper labels it 'CI above 0'); it is not a confirmatory result unless the Holm-adjusted p is small.", ""]
     md += ["## E2. Donor tracking (image swapped for a donor whose key differs; no upstream context)", "",
            "| Model | Phase | n | own-image correct | swap answers donor key | text answers donor key | gain [95% CI] | swap keeps own key | answer changes vs own |", "|---|---|---|---|---|---|---|---|---|"]
     for m, r in res["models"].items():

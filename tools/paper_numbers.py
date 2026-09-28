@@ -226,10 +226,134 @@ def v3_appendix(mc: Macros) -> None:
     rng(mc, "vthreeLetterPrior", [100 * bl[ph]["letter_prior"] / bl[ph]["n"] for ph in bl])
 
 
+def _moved(sm: dict, key: str) -> str:
+    """'moved / informative' (items whose answer moved to the rule's new answer, over items whose original answer was not already it)."""
+    v = sm.get("transitions", {}).get(key)
+    return f"{v['moved_to_new']}/{v['informative_n']}" if v else "--"
+
+
+def v4_supplement(mc: Macros) -> None:
+    """Macros and tables from results/lumiere_v4_supplement.json (descriptive, added after the runs)."""
+    sp = load("results/lumiere_v4_supplement.json")
+    if not sp:
+        return
+    a = sp["audit"]
+    mc.add("vfourDeterminate", a["determinate"])
+    mc.add("vfourConcordantDetPct", f"{a['pct_of_determinate']:.0f}")
+    mc.add("vfourConcordantDetLo", f"{a['wilson_determinate'][0]:.0f}")
+    mc.add("vfourConcordantDetHi", f"{a['wilson_determinate'][1]:.0f}")
+    mc.add("vfourDisagree", a["disagreements"])
+    for lab, short in (("complete response", "CR"), ("progressive disease", "PD"), ("stable disease", "SD"), ("partial response", "PR")):
+        mc.add(f"vfourDisRule{short}", a["disagreements_by_rule_label"].get(lab, 0))
+    conf = a["confusion_expert_by_rule"]
+    mc.add("vfourConfSDasPD", conf.get("stable disease|progressive disease", 0))
+    mc.add("vfourConfPDasCR", conf.get("progressive disease|complete response", 0))
+    mc.add("vfourConfSDasCR", conf.get("stable disease|complete response", 0))
+    rows_h, rows_t = [], []
+    for m, r in sp["models"].items():
+        t = TAG[m]
+        h = r["handling"]
+        mc.add(f"vfourParseInvalid{t}", h["ALL"]["parse_error"])
+        mc.add(f"vfourParseNoLetter{t}", h["ALL"]["no_answer"])
+        mc.add(f"vfourParseN{t}", h["ALL"]["n"])
+        dv = r.get("dscr_valid_json")
+        if dv:
+            mc.add(f"vfourDscrAccAll{t}", f1(dv["acc_all"]))
+            mc.add(f"vfourDscrAccValid{t}", f1(dv["acc_valid"]))
+        for ph, v in r["outcomes"].items():
+            mc.add(f"vfourSensOwnText{ph}{t}", f1(v["own_vs_text_answer_differs"]))
+            mc.add(f"vfourSensSwap{ph}{t}", f1(v["swap_vs_own_answer_differs"]))
+        rows_h.append(f"{SHORT.get(m, m)} & {h['ALL']['n']} & {h['ALL']['parse_error']} & {h['ALL']['no_answer']} \\\\")
+        for k, v in r.get("transitions", {}).items():
+            cond, sub = k.split("|")
+            if (cond, sub) not in (("flip_label", "all"), ("flip_window", "pd")):
+                continue
+            nm = "Label" if cond == "flip_label" else "Timing"
+            mc.add(f"vfourTrans{nm}Moved{t}", v["moved_to_new"])
+            mc.add(f"vfourTrans{nm}Already{t}", v["already_at_new"])
+            mc.add(f"vfourTrans{nm}Inf{t}", v["informative_n"])
+            mc.add(f"vfourTrans{nm}N{t}", v["n"])
+            mc.add(f"vfourTrans{nm}Pct{t}", f"{v['moved_of_informative']:.0f}")
+            rows_t.append(f"{SHORT.get(m, m)} & {'label (all)' if cond == 'flip_label' else 'timing (PD)'} & {v['n']} & {v['moved_to_new']} & {v['already_at_new']} & "
+                          f"{v['unchanged_elsewhere']} & {v['changed_to_other']} & {v['moved_to_new']}/{v['informative_n']} \\\\")
+        p = r.get("pjrf")
+        if p:
+            mc.add(f"vfourEfiveDiff{t}", f"{p['diff_to_base']:+.3f}".replace("-", "$-$"))
+            mc.add(f"vfourEfiveDiffLo{t}", f"{p['diff_ci'][0]:+.3f}".replace("-", "$-$"))
+            mc.add(f"vfourEfiveDiffHi{t}", f"{p['diff_ci'][1]:+.3f}".replace("-", "$-$"))
+            mc.add(f"vfourEfiveNoForecast{t}", p["no_forecast"])
+    z = sp["audit_size"]
+    k = z["ratio_0.67_1.5"]
+    mc.add("vfourSizeN", z["n"])
+    mc.add("vfourSizeExpertPD", z["expert_counts"].get("progressive disease", 0))
+    mc.add("vfourSizeCloseAgree", k["close_agree"])
+    mc.add("vfourSizeCloseN", k["close_n"])
+    mc.add("vfourSizeOtherAgree", k["other_agree"])
+    mc.add("vfourSizeOtherN", k["other_n"])
+    o = sp["pjrf_origin"]
+    mc.add("vfourPjrfOsN", o["with_survival"])
+    mc.add("vfourPjrfOsNA", o["without_survival"])
+    mc.add("vfourPjrfOsShort", o["survival_before_last_imaging"])
+    mc.add("vfourPjrfOsShortCohort", len(o["in_v4_cohort"]))
+    mc.add("vfourPjrfFlipFour", o["labels_that_flip_under_origin_shift"]["4"])
+    mc.add("vfourPjrfFlipEight", o["labels_that_flip_under_origin_shift"]["8"])
+    aia = sp["aia"]
+    mc.add("vfourRefErrAIA", sum(e["phase"] == "AIA" for e in aia["reference_errors"]))
+    mc.add("vfourRefErrLIL", sum(e["phase"] == "LIL" for e in aia["reference_errors"]))
+    shares = [aia["modal_answer_share"][m]["share"] for m in MODELS if m in aia["modal_answer_share"]]
+    rng(mc, "vfourAiaModalShare", shares)
+    for ph in ("AIA", "LIL", "DSCR"):
+        for key, nm in (("own_vs_text_answer_differs", "OwnText"), ("swap_vs_own_answer_differs", "Swap")):
+            vals = [sp["models"][m]["outcomes"][ph][key] for m in MODELS if m in sp["models"] and ph in sp["models"][m]["outcomes"]]
+            if vals:
+                rng(mc, f"vfourSensRange{nm}{ph}", vals)
+    (OUT / "tab_v4_e3trans.tex").write_text(tabular("llrrrrrr", ["Model & Flip & Items & Moved & Already there & Unchanged & Other & Moved / informative \\\\"], rows_t))
+    (OUT / "tab_v4_handling.tex").write_text(tabular("lrrr", ["Model & Records & Invalid JSON & No answer letter \\\\"], rows_h))
+
+
+def v4_inputcheck(mc: Macros) -> None:
+    """Macros and a table from the latest results/lumiere_v4_inputcheck_<model>_* report of each pipeline (tools/lumiere_v4_input_check.py)."""
+    rows = []
+    for m in MODELS + ["Gemma-3-27B-bf16"]:
+        reps = sorted(glob.glob(f"results/lumiere_v4_inputcheck_{m}_2*"))
+        rep = load(f"{reps[-1]}/report.json") if reps else None
+        if not rep:
+            continue
+        t = TAG[m]
+        incs = [i for v in rep["tokens"]["phases"].values() for i in v["increment_per_added_image"] if i is not None]
+        text_only = [v["text_only_tokens"] for v in rep["tokens"]["phases"].values()]
+        passed = sum(p["pass"] for p in rep["probes"])
+        mc.add(f"vfourIcTokMin{t}", min(incs))
+        mc.add(f"vfourIcTokMax{t}", max(incs))
+        mc.add(f"vfourIcTokMean{t}", f"{sum(incs) / len(incs):.0f}")
+        mc.add(f"vfourIcTextOnly{t}", f"{sum(text_only) / len(text_only):.0f}")
+        mc.add(f"vfourIcProbePass{t}", passed)
+        mc.add(f"vfourIcProbeN{t}", len(rep["probes"]))
+        sv = rep.get("serving", {})
+        det = sv.get("details") or {}
+        lst = sv.get("listing") or {}
+        digest = (lst.get("digest") or "")[:12]
+        if sv.get("backend") == "vllm":       # vLLM serves the Hugging Face weights unquantized: no digest, dtype fixed by the serve command
+            det = {"quantization_level": "bf16 (vLLM)"}
+        if det.get("parameter_size"):
+            mc.add(f"vfourParams{t}", str(det["parameter_size"]).replace("B", ""))
+        rows.append(f"{SHORT.get(m, m)} & {sv.get('model_tag', '')} & {digest or '--'} & {str(det.get('quantization_level', '--')).replace('_', chr(92) + '_')} & "
+                    f"{min(incs)}--{max(incs)} & {passed}/{len(rep['probes'])} \\\\")
+    cb = load("results/compute_budget.json")
+    if cb:
+        mc.add("vfourGpuHoursAll", f"{cb['gpu_hours_all']:.0f}")
+        mc.add("vfourGpuHoursVfour", f"{cb['gpu_hours_v4_family']:.0f}")
+        mc.add("vfourApiCalls", cb["gemini_api"]["calls"])
+        mc.add("vfourApiTokensM", f"{cb['gemini_api']['total_tokens'] / 1e6:.1f}")
+    if rows:
+        (OUT / "tab_v4_inputcheck.tex").write_text(tabular("llllrr", ["Model & Tag & Digest & Quantization & Tokens per image & Probes passed \\\\"], rows))
+
+
 def v4(mc: Macros) -> None:
     b = load("results/lumiere_v4_baselines.json")
     sel = load("data/lumiere/v4/selection_report.json")
     st = load("results/lumiere_v4_stats.json")
+    sup = (load("results/lumiere_v4_supplement.json") or {}).get("models", {})   # post-review descriptive supplement
     if sel:
         for ph, n in sel["phase_counts"].items():
             mc.add(f"vfourN{ph}", n)
@@ -270,22 +394,25 @@ def v4(mc: Macros) -> None:
     if st and st.get("models"):
         for m, r in st["models"].items():
             for ph, v in r.get("E1", {}).items():
+                differ = sup.get(m, {}).get("outcomes", {}).get(ph, {}).get("own_vs_text_answer_differs")
+                verdict_tex = v['verdict'].replace('image helps', 'CI above 0').replace('+/-', '$\\pm$').replace('pp', ' pp')
                 e1.append(f"{SHORT.get(m, m)} & {ph} & {v['n']} & {f1(v['acc_a'])} & {f1(v['acc_b'])} & "
-                          f"{signed(v['diff'])} [{signed(v['ci'][0])}, {signed(v['ci'][1])}] & {v['verdict'].replace('+/-', '$\\pm$').replace('pp', ' pp')} \\\\")
+                          f"{signed(v['diff'])} [{signed(v['ci'][0])}, {signed(v['ci'][1])}] & {f1(differ) if differ is not None else '--'} & {verdict_tex} \\\\")
             for ph, v in r.get("E2", {}).items():
                 e2.append(f"{SHORT.get(m, m)} & {ph} & {v['n']} & {f1(v['own_image_correct'])} & {f1(v['swap_answers_donor_key'])} & "
-                          f"{f1(v['text_answers_donor_key'])} & {signed(v['gain'])} [{signed(v['gain_ci'][0])}, {signed(v['gain_ci'][1])}] \\\\")
+                          f"{f1(v['text_answers_donor_key'])} & {signed(v['gain'])} [{signed(v['gain_ci'][0])}, {signed(v['gain_ci'][1])}] & {f1(v['swap_flips_answer_vs_own'])} \\\\")
             e = r.get("E3", {})
             g = e.get("ctx_gold", {})
             fw = e.get("flip_window", {})
             pdw = fw.get("progressive_disease_items")
             e3.append(f"{SHORT.get(m, m)} & {f1(g['acc']) if g else '--'} & {f1(e['ctx_wrong']['acc']) if 'ctx_wrong' in e else '--'} & "
                       f"{f1(e['ctx_absent']['acc']) if 'ctx_absent' in e else '--'} & "
-                      f"{f1(e['flip_label']['follows_rule_after_flip']) if 'flip_label' in e else '--'} & "
-                      f"{f1(pdw['follows']) if pdw else '--'} \\\\")
+                      f"{_moved(sup.get(m, {}), 'flip_label|all')} & {_moved(sup.get(m, {}), 'flip_window|pd')} \\\\")
             for cond, v in r.get("E5", {}).items():
                 if cond == "ctx_gold":
-                    e5.append(f"{SHORT.get(m, m)} & {v['n']} & {v['brier']:.3f} & {v['brier_base_rate_loo']:.3f} & {v['skill']:+.3f} & {v['auc']:.2f} \\\\")
+                    pj = sup.get(m, {}).get("pjrf")
+                    dtx = f"{pj['diff_to_base']:+.3f} [{pj['diff_ci'][0]:+.3f}, {pj['diff_ci'][1]:+.3f}]".replace("-", "$-$") if pj else "--"
+                    e5.append(f"{SHORT.get(m, m)} & {v['n']} & {v['brier']:.3f} & {v['brier_base_rate_loo']:.3f} & {v['skill']:+.3f} & {dtx} & {v['auc']:.2f} \\\\")
     else:
         for m in MODELS:
             e1.append(f"{SHORT[m]} & AIA / LIL / DSCR & -- & -- & -- & -- & -- \\\\")
@@ -356,11 +483,11 @@ def v4(mc: Macros) -> None:
             mc.add("vfourCtrlEmpty", ctrl["empty_responses"])
             mc.add("vfourCtrlRecords", ctrl["n_records"])
     heads = {
-        "e1": ("llrrrll", ["Model & Phase & $n$ & Image & Text-only & $\\Delta$ [95\\% CI] & Verdict \\\\"]),
-        "e2": ("llrrrrl", ["Model & Phase & $n$ & Own image & Swap: donor key & Text: donor key & Gain [95\\% CI] \\\\"]),
-        "e3": ("lccccc", [" & \\multicolumn{3}{c}{TCM acc.\\ (\\%)} & \\multicolumn{2}{c}{Follows rule (\\%)} \\\\",
-                         "\\cmidrule(lr){2-4}\\cmidrule(lr){5-6}", " & true & wrong & none & label & timing (PD) \\\\"]),
-        "e5": ("lccccc", ["Model & $n$ & Brier & Base rate & Skill & AUC \\\\"]),
+        "e1": ("llrrrlrl", ["Model & Phase & $n$ & Image & Text-only & $\\Delta$ [95\\% CI] & Answers differ & Interval \\\\"]),
+        "e2": ("llrrrrlr", ["Model & Phase & $n$ & Own image & Swap: donor key & Text: donor key & Gain [95\\% CI] & Swap changes answer \\\\"]),
+        "e3": ("lccccc", [" & \\multicolumn{3}{c}{TCM acc.\\ (\\%)} & \\multicolumn{2}{c}{Moved / informative} \\\\",
+                         "\\cmidrule(lr){2-4}\\cmidrule(lr){5-6}", " & true & wrong & none & label (all) & timing (PD) \\\\"]),
+        "e5": ("lcccccc", ["Model & $n$ & Brier & Base rate & Skill & $\\Delta$ Brier [95\\% CI] & AUC \\\\"]),
     }
     for name, rows in (("e1", e1), ("e2", e2), ("e3", e3), ("e5", e5)):
         cs, hd = heads[name]
@@ -381,6 +508,8 @@ def main() -> None:
     v3_tables(mc)
     v3_appendix(mc)
     v4(mc)
+    v4_supplement(mc)
+    v4_inputcheck(mc)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numbers.tex").write_text(mc.tex())
     (OUT / "numbers.json").write_text(json.dumps(mc.d, indent=1, sort_keys=True))

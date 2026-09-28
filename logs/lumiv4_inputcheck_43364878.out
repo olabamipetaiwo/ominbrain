@@ -1,0 +1,121 @@
+Session ready: ollama serving (pid 2144839), venv active (ominbrain), models -> /blue, HF/pip caches -> /blue
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-720efb67-9782-4adc-8c1a-9ae814cb4b24)
+ollama version is 0.33.0
+NAME                   ID              SIZE      MODIFIED    
+llama4:scout           bf31604e25c2    67 GB     4 days ago     
+llama3.2-vision:11b    6f2f9757ae97    7.8 GB    4 days ago     
+gemma3:27b             a418f5838eaf    17 GB     4 days ago     
+gemma3:12b             f4031aab637d    8.1 GB    4 days ago     
+medgemma:4b            9fe4e9a6c9bd    3.3 GB    5 weeks ago    
+=== input check: MedGemma-4B ===
+Built 62 LUMIERE cases | phase coverage: AIA:62 | LIL:51 | DSCR:62 | PJRF:61 | TCM:62
+# Input check: MedGemma-4B (medgemma:4b)
+
+## Do all images reach the model? (prompt tokens; real v4 items)
+
+| phase | images | image size | text only | tokens by images added | increment per added image |
+|---|---|---|---|---|---|
+| AIA | 1 | (728, 872) | 360 | {0: 360, 1: 651} | [291] |
+| LIL | 1 | (728, 872) | 405 | {0: 405, 1: 702} | [297] |
+| DSCR | 3 | (728, 872) | 516 | {0: 516, 1: 811, 2: 1092, 3: 1402} | [295, 281, 310] |
+
+## Perception probes (same message format)
+
+| probe | expected | answer | pass |
+|---|---|---|---|
+| colour_red | red | Red | yes |
+| colour_green | green | Green | yes |
+| colour_blue | blue | Blue | yes |
+| number_742 | 742 | 742 | yes |
+| number_1905 | 1905 | 1905 | yes |
+| three_images_order | red, green, blue | red, green, blue | yes |
+| two_images_second | blue | Blue | yes |
+| real_slice_background | black | Black | yes |
+
+8 of 8 probes passed.
+
+Saved -> results/lumiere_v4_inputcheck_MedGemma-4B_20260925_191706
+=== input check: Gemma-3-12B ===
+Built 62 LUMIERE cases | phase coverage: AIA:62 | LIL:51 | DSCR:62 | PJRF:61 | TCM:62
+# Input check: Gemma-3-12B (gemma3:12b)
+
+## Do all images reach the model? (prompt tokens; real v4 items)
+
+| phase | images | image size | text only | tokens by images added | increment per added image |
+|---|---|---|---|---|---|
+| AIA | 1 | (728, 872) | 362 | {0: 362, 1: 658} | [296] |
+| LIL | 1 | (728, 872) | 411 | {0: 411, 1: 706} | [295] |
+| DSCR | 3 | (728, 872) | 524 | {0: 524, 1: 817, 2: 1104, 3: 1404} | [293, 287, 300] |
+
+## Perception probes (same message format)
+
+| probe | expected | answer | pass |
+|---|---|---|---|
+| colour_red | red | Red | yes |
+| colour_green | green | Green | yes |
+| colour_blue | blue | Blue | yes |
+| number_742 | 742 | 742 | yes |
+| number_1905 | 1905 | 1905 | yes |
+| three_images_order | red, green, blue | red, green, blue | yes |
+| two_images_second | blue | Blue | yes |
+| real_slice_background | black | Black | yes |
+
+8 of 8 probes passed.
+
+Saved -> results/lumiere_v4_inputcheck_Gemma-3-12B_20260925_191806
+=== input check: Gemma-3-27B ===
+Built 62 LUMIERE cases | phase coverage: AIA:62 | LIL:51 | DSCR:62 | PJRF:61 | TCM:62
+# Input check: Gemma-3-27B (gemma3:27b)
+
+## Do all images reach the model? (prompt tokens; real v4 items)
+
+| phase | images | image size | text only | tokens by images added | increment per added image |
+|---|---|---|---|---|---|
+| AIA | 1 | (728, 872) | 364 | {0: 364, 1: 654} | [290] |
+| LIL | 1 | (728, 872) | 411 | {0: 411, 1: 706} | [295] |
+| DSCR | 3 | (728, 872) | 522 | {0: 522, 1: 817, 2: 1099, 3: 1405} | [295, 282, 306] |
+
+## Perception probes (same message format)
+
+| probe | expected | answer | pass |
+|---|---|---|---|
+| colour_red | red | Red. | yes |
+| colour_green | green | Green. | yes |
+| colour_blue | blue | Blue. | yes |
+| number_742 | 742 | 742 | yes |
+| number_1905 | 1905 | 1905 | yes |
+| three_images_order | red, green, blue | Red, Green, Blue | yes |
+| two_images_second | blue | Blue | yes |
+| real_slice_background | black | Black | yes |
+
+8 of 8 probes passed.
+
+Saved -> results/lumiere_v4_inputcheck_Gemma-3-27B_20260925_191931
+=== input check: Llama-4-Scout ===
+Built 62 LUMIERE cases | phase coverage: AIA:62 | LIL:51 | DSCR:62 | PJRF:61 | TCM:62
+# Input check: Llama-4-Scout (llama4:scout)
+
+## Do all images reach the model? (prompt tokens; real v4 items)
+
+| phase | images | image size | text only | tokens by images added | increment per added image |
+|---|---|---|---|---|---|
+| AIA | 1 | (728, 872) | 369 | {0: 369, 1: 1836} | [1467] |
+| LIL | 1 | (728, 872) | 420 | {0: 420, 1: 1887} | [1467] |
+| DSCR | 3 | (728, 872) | 526 | {0: 526, 1: 1988, 2: 3443, 3: 4925} | [1462, 1455, 1482] |
+
+## Perception probes (same message format)
+
+| probe | expected | answer | pass |
+|---|---|---|---|
+| colour_red | red | Red. | yes |
+| colour_green | green | Green. | yes |
+| colour_blue | blue | Blue. | yes |
+| number_742 | 742 | 742 | yes |
+| number_1905 | 1905 | 1905 | yes |
+| three_images_order | red, green, blue | red, green, blue | yes |
+| two_images_second | blue | Blue. | yes |
+| real_slice_background | black | Black. | yes |
+
+8 of 8 probes passed.
+
+Saved -> results/lumiere_v4_inputcheck_Llama-4-Scout_20260925_192033

@@ -1,0 +1,45 @@
+The patient is Patient-007, the first in id order with all five phases and a three-image DSCR item (a rule fixed before any answer was inspected). Figure~\ref{fig:v4example} shows the images the models see, and the donor images used in the swap.
+
+\paragraph{AIA (positive control).} The image is a single axial slice from a brain MRI examination of a patient with glioblastoma (skull-stripped and registered to a standard template). Which MRI sequence does this image show? \emph{Options as shown:} A) FLAIR (fluid-attenuated inversion recovery); B) T2-weighted; C) T1-weighted, before contrast; D) T1-weighted, after gadolinium contrast. \emph{Key:} B) T2-weighted.
+
+\paragraph{LIL.} The image is an axial slice of a post-contrast T1-weighted brain MRI in radiological convention (the patient's right side is on the left of the image; anterior is at the top). Where is the main tumor region (enhancing tumor, necrosis or resection cavity, not the surrounding edema) on this slice? Divide the brain on this slice into right and left hemispheres at the midline and into anterior and posterior halves at the midpoint of its front-to-back extent. \emph{Options as shown:} A) Right hemisphere, posterior half; B) Left hemisphere, anterior half; C) Right hemisphere, anterior half; D) Left hemisphere, posterior half. \emph{Key:} A) Right hemisphere, posterior half.
+
+\paragraph{DSCR.} Three post-contrast T1-weighted axial slices of the same patient are shown, each at the level of the largest contrast-enhancing lesion on that scan, in time order: the post-operative baseline scan (image 1), the earlier scan with the smallest enhancing lesion (the nadir, image 2) and the follow-up scan (image 3). Pixels are 1 mm in the original scan, and a 20 mm scale bar is drawn on each image. Apply the RANO enhancement criteria to the enhancing lesion. Measurable means at least 10 mm by 10 mm. Progression is a 25\% or greater increase in the product of the two largest perpendicular diameters relative to the nadir, or a new measurable enhancing lesion. Response is judged against the post-operative baseline: partial response is a 50\% or greater decrease, complete response is no remaining measurable enhancing disease, otherwise stable disease. T2/FLAIR changes, steroid dose and clinical status are not provided. What is the response category at follow-up? \emph{Options as shown:} A) Partial response; B) Progressive disease; C) Complete response; D) Stable disease. \emph{Key:} B) Progressive disease.
+
+The key is computed from the bidimensional products of the largest enhancing component on the three displayed slices: 9\,mm$^2$ at the post-operative baseline, 0\,mm$^2$ at the nadir and 385\,mm$^2$ at follow-up; there is no measurable enhancing disease at the nadir and a measurable lesion at follow-up (a new measurable lesion), which the stated rule calls progressive disease. The expert rating for this follow-up is PD (rationale: ``Target L.: 1, 16mm x 19mm''), the same category as the key, so it is not one of the disagreements counted by the audit. The rating is recorded for every item and is never the key.
+
+\paragraph{TCM.} A 47-year-old male with glioblastoma (MGMT status not available; IDH status not available) had a complete resection of the enhancing tumor and then standard chemoradiotherapy (radiotherapy with concurrent temozolomide), followed by adjuvant temozolomide. No second surgery or second-line treatment has been given. This MRI is 63 weeks after surgery; chemoradiotherapy ended about 53 weeks before this scan. Using your earlier assessment of this patient, what is the most appropriate next step? \emph{Options as shown:} A) Continue adjuvant temozolomide unchanged and plan the next surveillance MRI in 8 to 12 weeks; B) Stop tumor-directed treatment and move to best supportive care with no further imaging plan; C) Change therapy now: bring re-resection, second-line treatment or a clinical trial to tumor board; D) Continue adjuvant temozolomide for now and repeat the MRI in 4 to 8 weeks before changing therapy. \emph{Key:} C) Change therapy now: bring re-resection, second-line treatment or a clinical trial to tumor board. The rule is: non-PD $\rightarrow$ continue; PD and $\le$ 12 weeks after radiotherapy $\rightarrow$ repeat MRI first; PD and later $\rightarrow$ change therapy (RANO 2010; Stupp schedule assumed). Here the category is progressive disease and chemoradiotherapy ended 53 weeks before the scan, so the class is escalate. Changing the stated timing across the 12-week window, or replacing the stated category, changes the rule's answer (the fact flips of E3).
+
+\paragraph{PJRF (secondary).} A 47-year-old male with glioblastoma (MGMT status not available; IDH status not available) had a complete resection of the enhancing tumor and then standard chemoradiotherapy (radiotherapy with concurrent temozolomide), followed by adjuvant temozolomide. No second surgery or second-line treatment has been given. The follow-up MRI is 63 weeks after surgery and the patient is alive at this time. Using only the information above and your earlier assessment of this patient, estimate the probability that the patient will die within 52 weeks after this scan. The recorded outcome is death within 52 weeks; the forecast is scored by the Brier score.
+
+\paragraph{Donor swap.} For the swap condition the AIA image is replaced by the one from Patient-041 (key FLAIR (fluid-attenuated inversion recovery) instead of T2-weighted), the LIL image by the one from Patient-077 (key Left hemisphere, posterior half instead of Right hemisphere, posterior half), and the DSCR images by those of Patient-072 (key Partial response instead of Progressive disease); the stem and options are unchanged, so the donor's answer is always an option.
+
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+ & AIA & LIL & DSCR \\
+\midrule
+Key / donor key & T2 / FLAIR & R post / L post & PD / PR \\
+\midrule
+Gemini-3.6-Flash (reference) & T2 / T1c / T1c & R post / R ant / L post & PD / PD / CR \\
+Llama-4-Scout & T1c / T1c / T1 & L post / L post / L post & PD / PD / CR \\
+Gemma-3-27B & FLAIR / T1c / T1 & L ant / L ant / L ant & PD / PD / PD \\
+Gemma-3-12B & T2 / T2 / T2 & L post / R ant / R ant & PD / PD / PD \\
+MedGemma-4B & T1 / T1 / T1 & R ant / R ant / R ant & CR / CR / CR \\
+\bottomrule
+\end{tabular}
+\caption{Answers for Patient-007 under the own-image / text-only / swapped-image conditions (same order in every cell), and the key and donor key. Labels: T1c is T1 after contrast; L/R hemisphere, ant/post half; PD, SD, PR, CR are the RANO categories.}
+\label{tab:v4example}
+\end{table*}
+
+
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/v4_example}
+\caption{Images for Patient-007. Top: the AIA slice and its donor, the LIL slice and its donor. Bottom: the three DSCR slices (baseline, nadir, follow-up). Slices are atlas-space, skull-stripped, magnified 4$\times$, with a 20\,mm scale bar.}
+\label{fig:v4example}
+\end{figure*}

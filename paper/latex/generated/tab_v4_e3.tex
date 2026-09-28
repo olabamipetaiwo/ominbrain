@@ -1,12 +1,12 @@
 \begin{tabular}{lccccc}
 \toprule
- & \multicolumn{3}{c}{TCM acc.\ (\%)} & \multicolumn{2}{c}{Follows rule (\%)} \\
+ & \multicolumn{3}{c}{TCM acc.\ (\%)} & \multicolumn{2}{c}{Moved / informative} \\
 \cmidrule(lr){2-4}\cmidrule(lr){5-6}
- & true & wrong & none & label & timing (PD) \\
+ & true & wrong & none & label (all) & timing (PD) \\
 \midrule
-MedGemma-4B & 46.8 & 41.9 & 41.9 & 64.5 & 5.7 \\
-Gemma-3-12B & 62.9 & 35.5 & 41.9 & 53.2 & 60.0 \\
-Gemma-3-27B & 54.8 & 38.7 & 25.8 & 58.1 & 54.3 \\
-Llama-4-Scout & 45.2 & 45.2 & 33.9 & 38.7 & 68.6 \\
+MedGemma-4B & 46.8 & 41.9 & 41.9 & 10/32 & 1/34 \\
+Gemma-3-12B & 62.9 & 35.5 & 41.9 & 25/54 & 10/24 \\
+Gemma-3-27B & 54.8 & 38.7 & 25.8 & 35/61 & 0/16 \\
+Llama-4-Scout & 45.2 & 45.2 & 33.9 & 12/50 & 10/21 \\
 \bottomrule
 \end{tabular}
