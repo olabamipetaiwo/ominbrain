@@ -81,13 +81,27 @@ def boot_ci(x: np.ndarray, rng) -> tuple[float, float]:
     return (float(np.percentile(m, 2.5)), float(np.percentile(m, 97.5)))
 
 
+def sparse_ci(a: np.ndarray, b: np.ndarray) -> list[float]:
+    """Agresti-Min add-half interval (percentage points) for a paired difference of two binary outcomes.
+    The percentile bootstrap resamples observed paired differences only, so it collapses to [0, 0] when every pair is
+    concordant and is too narrow when discordant pairs are few; adding 0.5 to each of the four paired cells keeps the
+    interval from collapsing (sensitivity analysis, post hoc; the registered interval is the bootstrap one)."""
+    n = len(a)
+    b_ = float(((a == 1) & (b == 0)).sum()) + 0.5
+    c_ = float(((a == 0) & (b == 1)).sum()) + 0.5
+    N = n + 2.0
+    d = (b_ - c_) / N
+    se = float(np.sqrt(max((b_ + c_) - (b_ - c_) ** 2 / N, 0.0)) / N)
+    return [(d - 1.96 * se) * 100, (d + 1.96 * se) * 100]
+
+
 def paired(a: np.ndarray, b: np.ndarray, rng) -> dict:
     """Paired difference a - b in percentage points with a patient-bootstrap CI and exact McNemar p."""
     d = a - b
     lo, hi = boot_ci(d, rng)
     bb, cc = int(((a == 1) & (b == 0)).sum()), int(((a == 0) & (b == 1)).sum())
     return {"n": int(len(a)), "acc_a": float(a.mean() * 100), "acc_b": float(b.mean() * 100), "diff": float(d.mean() * 100),
-            "ci": [lo * 100, hi * 100], "only_a": bb, "only_b": cc, "p": mcnemar_exact(bb, cc)}
+            "ci": [lo * 100, hi * 100], "ci_sparse": sparse_ci(a, b), "only_a": bb, "only_b": cc, "p": mcnemar_exact(bb, cc)}
 
 
 def verdict(ci: list[float]) -> str:
@@ -150,7 +164,9 @@ def e2(recs, rng) -> dict:
         keep_own = np.array([1.0 if s["model_answer"] and s["model_answer"] == s["correct_answer"] else 0.0 for s in swap])
         out[ph] = {"n": len(cases), "own_image_correct": float(own_ok.mean() * 100),
                    "swap_answers_donor_key": float(sw_hit.mean() * 100), "text_answers_donor_key": float(tx_hit.mean() * 100),
-                   "gain": float(g.mean() * 100), "gain_ci": [lo * 100, hi * 100],
+                   "gain": float(g.mean() * 100), "gain_ci": [lo * 100, hi * 100], "gain_ci_sparse": sparse_ci(sw_hit, tx_hit),
+                   "gain_only_swap": int(((sw_hit == 1) & (tx_hit == 0)).sum()), "gain_only_text": int(((sw_hit == 0) & (tx_hit == 1)).sum()),
+                   "gain_p": mcnemar_exact(int(((sw_hit == 1) & (tx_hit == 0)).sum()), int(((sw_hit == 0) & (tx_hit == 1)).sum())),
                    "swap_keeps_own_key": float(keep_own.mean() * 100),
                    "swap_flips_answer_vs_own": float(np.mean([s["model_answer"] != o["model_answer"] for s, o in zip(swap, own)]) * 100)}
     return out
@@ -290,20 +306,24 @@ def main() -> None:
     adj = holm([v["p"] for _, _, v in e1_rows]) if e1_rows else []
     for (m, ph, v), a in zip(e1_rows, adj):
         v["p_holm"] = a
+    e2_rows = [(m, ph, v) for m, r in res["models"].items() for ph, v in r["E2"].items()]
+    for (m, ph, v), a_ in zip(e2_rows, holm([v["gain_p"] for _, _, v in e2_rows]) if e2_rows else []):
+        v["gain_p_holm"] = a_          # exploratory: E2 is outside the registered Holm family (E1 only)
     md += ["## E1. Image effect (own image minus text only; no upstream context)", "",
-           "| Model | Phase | n | own | text-only | diff [95% CI] | only-own / only-text | p (Holm) | verdict |", "|---|---|---|---|---|---|---|---|---|"]
+           "| Model | Phase | n | own | text-only | diff [95% CI] | sparse-data CI | only-own / only-text | p (Holm) | verdict |", "|---|---|---|---|---|---|---|---|---|---|"]
     for m, ph, v in e1_rows:
         md.append(f"| {m} | {ph} | {v['n']} | {v['acc_a']:.1f} | {v['acc_b']:.1f} | {v['diff']:+.1f} [{v['ci'][0]:+.1f}, {v['ci'][1]:+.1f}] | "
-                  f"{v['only_a']}/{v['only_b']} | {v['p']:.3f} ({v['p_holm']:.3f}) | {v['verdict']} |")
+                  f"[{v['ci_sparse'][0]:+.1f}, {v['ci_sparse'][1]:+.1f}] | {v['only_a']}/{v['only_b']} | {v['p']:.3f} ({v['p_holm']:.3f}) | {v['verdict']} |")
     md += ["", "AIA is the positive control: its answer is visible only in the image, so a model with no AIA gain has not shown that this "
            "test can detect image use, and its LIL and DSCR rows say nothing about image use. 'image helps' is an unadjusted interval reading "
            "(the paper labels it 'CI above 0'); it is not a confirmatory result unless the Holm-adjusted p is small.", ""]
     md += ["## E2. Donor tracking (image swapped for a donor whose key differs; no upstream context)", "",
-           "| Model | Phase | n | own-image correct | swap answers donor key | text answers donor key | gain [95% CI] | swap keeps own key | answer changes vs own |", "|---|---|---|---|---|---|---|---|---|"]
+           "| Model | Phase | n | own-image correct | swap answers donor key | text answers donor key | gain [95% CI] | sparse-data CI | only-swap / only-text | exact p (exploratory Holm over the 12 E2 cells) | swap keeps own key | answer changes vs own |", "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for m, r in res["models"].items():
         for ph, v in r["E2"].items():
             md.append(f"| {m} | {ph} | {v['n']} | {v['own_image_correct']:.1f} | {v['swap_answers_donor_key']:.1f} | {v['text_answers_donor_key']:.1f} | "
-                      f"{v['gain']:+.1f} [{v['gain_ci'][0]:+.1f}, {v['gain_ci'][1]:+.1f}] | {v['swap_keeps_own_key']:.1f} | {v['swap_flips_answer_vs_own']:.1f} |")
+                      f"{v['gain']:+.1f} [{v['gain_ci'][0]:+.1f}, {v['gain_ci'][1]:+.1f}] | "
+                      f"[{v['gain_ci_sparse'][0]:+.1f}, {v['gain_ci_sparse'][1]:+.1f}] | {v['gain_only_swap']}/{v['gain_only_text']} | {v['gain_p']:.3f} ({v.get('gain_p_holm', float('nan')):.3f}) | {v['swap_keeps_own_key']:.1f} | {v['swap_flips_answer_vs_own']:.1f} |")
     md += ["", "## E3. TCM: use of the stated facts", "",
            "| Model | gold ctx acc (continue / confirm / escalate) | wrong ctx acc | absent ctx acc | follows rule after label flip | follows rule after timing flip (PD items) |", "|---|---|---|---|---|---|"]
     for m, r in res["models"].items():
@@ -344,11 +364,12 @@ def main() -> None:
             for ph, v in r["E1"].items():
                 md.append(f"| {m} | {ph} | {v['n']} | {v['acc_a']:.1f} | {v['acc_b']:.1f} | {v['diff']:+.1f} [{v['ci'][0]:+.1f}, {v['ci'][1]:+.1f}] | "
                           f"{v['only_a']}/{v['only_b']} | {v['p']:.3f} | {v['verdict']} |")
-        md += ["", "| Model | Phase | n | own-image correct | swap answers donor key | text answers donor key | gain [95% CI] | swap keeps own key | answer changes vs own |", "|---|---|---|---|---|---|---|---|---|"]
+        md += ["", "| Model | Phase | n | own-image correct | swap answers donor key | text answers donor key | gain [95% CI] | sparse-data CI | only-swap / only-text | exact p | swap keeps own key | answer changes vs own |", "|---|---|---|---|---|---|---|---|---|---|---|---|"]
         for m, r in res["controls"].items():
             for ph, v in r["E2"].items():
                 md.append(f"| {m} | {ph} | {v['n']} | {v['own_image_correct']:.1f} | {v['swap_answers_donor_key']:.1f} | {v['text_answers_donor_key']:.1f} | "
-                          f"{v['gain']:+.1f} [{v['gain_ci'][0]:+.1f}, {v['gain_ci'][1]:+.1f}] | {v['swap_keeps_own_key']:.1f} | {v['swap_flips_answer_vs_own']:.1f} |")
+                          f"{v['gain']:+.1f} [{v['gain_ci'][0]:+.1f}, {v['gain_ci'][1]:+.1f}] | "
+                      f"[{v['gain_ci_sparse'][0]:+.1f}, {v['gain_ci_sparse'][1]:+.1f}] | {v['gain_only_swap']}/{v['gain_only_text']} | {v['gain_p']:.3f} | {v['swap_keeps_own_key']:.1f} | {v['swap_flips_answer_vs_own']:.1f} |")
             md.append(f"\n{m}: {r['empty_responses']} empty API responses among {r['n_records']} records (must be 0 before these rows are read).")
     text = "\n".join(md)
     Path("results/lumiere_v4_stats.md").write_text(text)

@@ -32,6 +32,8 @@ data/
 results/
 .scratch/
 tmp/
+logs/
+
 
 
 # Claude Code local settings (per-machine)

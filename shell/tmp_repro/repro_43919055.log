@@ -1,0 +1,24 @@
+    out += run_case(case, swap_by_case.get(case["id"]), own_by_id, client, conditions, phases)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/blue/so589980.ucf/ta117847.ucf/ominbrain/release/anon_artifact/src/v4_conditions.py", line 203, in run_case
+    res = ask(question, case, phase, ctx, client, text_only=text_only, image_override=img_override,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/blue/so589980.ucf/ta117847.ucf/ominbrain/release/anon_artifact/src/v4_conditions.py", line 107, in ask
+    raise FileNotFoundError(f"image(s) missing for {question['id']}: {src.get('_image_path')}")
+FileNotFoundError: image(s) missing for Patient-002_AIA: ['week-021_t2.png']
+## Measurement check
+
+Our automated bidimensional product of the largest enhancing component at the follow-up slice versus the product of the two diameters the rater recorded for the target lesion (LUMIERE rationale, 81 follow-ups with both): Spearman 0.39 (p = 3.4e-04); ours is a median 1.32 times the rater's (IQR 0.38 to 1.68).
+wrote 847 macros and tables to generated
+lumiere_v4_stats.json identical
+lumiere_v4_supplement.json identical
+lumiere_v4_baselines.json identical
+847 v4 macros compared, 0 differ []
+tab_v4_ctrl.tex identical
+tab_v4_e1.tex identical
+tab_v4_e2.tex identical
+tab_v4_e3.tex identical
+tab_v4_e3trans.tex identical
+tab_v4_e5.tex identical
+tab_v4_handling.tex identical
+tab_v4_inputcheck.tex identical

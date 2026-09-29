@@ -53,6 +53,10 @@ def signed(x: float) -> str:
     return f"{x:+.1f}".replace("-", "$-$")
 
 
+def pfmt(p: float) -> str:
+    return "$<$.001" if p < 0.001 else f"{p:.3f}".lstrip("0") if p < 1 else "1.00"
+
+
 def tabular(colspec: str, header: list[str], rows: list[str], size: str = "") -> str:
     """A complete tabular (an \\input inside a tabular breaks booktabs rules, so the whole environment is generated)."""
     return (f"{size}\\begin{{tabular}}{{{colspec}}}\n\\toprule\n" + "\n".join(header) + "\n\\midrule\n"
@@ -242,6 +246,26 @@ def v4_supplement(mc: Macros) -> None:
     mc.add("vfourConcordantDetPct", f"{a['pct_of_determinate']:.0f}")
     mc.add("vfourConcordantDetLo", f"{a['wilson_determinate'][0]:.0f}")
     mc.add("vfourConcordantDetHi", f"{a['wilson_determinate'][1]:.0f}")
+    sr = json.loads(Path("data/lumiere/v4/selection_report.json").read_text())      # dataset summary
+    mc.add("vfourCandPatients", sr["n_patients_with_first_line_candidates"])
+    for key, nm in (("t1", "TOne"), ("ct1", "TOneC"), ("t2", "TTwo"), ("flair", "Flair")):
+        mc.add(f"vfourAiaCount{nm}", sr["aia_sequence_counts"][key])
+    for lab, nm in (("Left hemisphere, posterior half", "LP"), ("Right hemisphere, posterior half", "RP"),
+                    ("Right hemisphere, anterior half", "RA"), ("Left hemisphere, anterior half", "LA")):
+        mc.add(f"vfourLilCount{nm}", sr["lil_key_counts"][lab])
+    for lab, nm in (("Complete response", "CR"), ("Progressive disease", "PD"), ("Partial response", "PR"), ("Stable disease", "SD")):
+        mc.add(f"vfourDscrCount{nm}", sr["dscr_key_counts"][lab])
+    for ph in ("AIA", "LIL", "DSCR"):
+        mc.add(f"vfourPairs{ph}", sr["pairs_built"][ph])
+    mc.add("vfourSelExpertAgrees", sr["selected_expert_agrees"])
+    ac = sp.get("audit_clustered")
+    if ac:
+        mc.add("vfourAuditPatients", ac["patients"])
+        mc.add("vfourAuditPerPatientMax", ac["followups_by_patient_max"])
+        mc.add("vfourAuditClusterLo", f"{ac['cluster_ci_determinate'][0]:.0f}")
+        mc.add("vfourAuditClusterHi", f"{ac['cluster_ci_determinate'][1]:.0f}")
+        mc.add("vfourAuditClusterAllLo", f"{ac['cluster_ci_all'][0]:.0f}")
+        mc.add("vfourAuditClusterAllHi", f"{ac['cluster_ci_all'][1]:.0f}")
     mc.add("vfourDisagree", a["disagreements"])
     for lab, short in (("complete response", "CR"), ("progressive disease", "PD"), ("stable disease", "SD"), ("partial response", "PR")):
         mc.add(f"vfourDisRule{short}", a["disagreements_by_rule_label"].get(lab, 0))
@@ -290,7 +314,8 @@ def v4_supplement(mc: Macros) -> None:
             mc.add(f"vfourTrans{nm}N{t}", v["n"])
             mc.add(f"vfourTrans{nm}Pct{t}", f"{v['moved_of_informative']:.0f}")
             rows_t.append(f"{SHORT.get(m, m)} & {'label (all)' if cond == 'flip_label' else 'timing (PD)'} & {v['n']} & {v['moved_to_new']} & {v['already_at_new']} & "
-                          f"{v['unchanged_elsewhere']} & {v['changed_to_other']} & {v['moved_to_new']}/{v['informative_n']} \\\\")
+                          f"{v['unchanged_elsewhere']} & {v['changed_to_other']} & {v['moved_to_new']}/{v['informative_n']} & "
+                          f"{f1(100 * (v['moved_to_new'] + v['already_at_new']) / v['n'])} \\\\")
         p = r.get("pjrf")
         if p:
             mc.add(f"vfourEfiveDiff{t}", f"{p['diff_to_base']:+.3f}".replace("-", "$-$"))
@@ -322,7 +347,7 @@ def v4_supplement(mc: Macros) -> None:
             vals = [sp["models"][m]["outcomes"][ph][key] for m in MODELS if m in sp["models"] and ph in sp["models"][m]["outcomes"]]
             if vals:
                 rng(mc, f"vfourSensRange{nm}{ph}", vals)
-    (OUT / "tab_v4_e3trans.tex").write_text(tabular("llrrrrrr", ["Model & Flip & Items & Moved & Already there & Unchanged & Other & Moved / informative \\\\"], rows_t))
+    (OUT / "tab_v4_e3trans.tex").write_text(tabular("llrrrrrrr", ["Model & Flip & Items & Moved & Already there & Unchanged & Other & Moved / informative & Registered share (\\%) \\\\"], rows_t))
     (OUT / "tab_v4_handling.tex").write_text(tabular("lrrr", ["Model & Records & Invalid JSON & No answer letter \\\\"], rows_h))
 
 
@@ -412,10 +437,12 @@ def v4(mc: Macros) -> None:
                 differ = sup.get(m, {}).get("outcomes", {}).get(ph, {}).get("own_vs_text_answer_differs")
                 verdict_tex = v['verdict'].replace('image helps', 'CI above 0').replace('+/-', '$\\pm$').replace('pp', ' pp')
                 e1.append(f"{SHORT.get(m, m)} & {ph} & {v['n']} & {f1(v['acc_a'])} & {f1(v['acc_b'])} & "
-                          f"{signed(v['diff'])} [{signed(v['ci'][0])}, {signed(v['ci'][1])}] & {f1(differ) if differ is not None else '--'} & {verdict_tex} \\\\")
+                          f"{signed(v['diff'])} [{signed(v['ci'][0])}, {signed(v['ci'][1])}] & [{signed(v['ci_sparse'][0])}, {signed(v['ci_sparse'][1])}] & {pfmt(v['p'])} & "
+                          f"{f1(differ) if differ is not None else '--'} & {verdict_tex} \\\\")
             for ph, v in r.get("E2", {}).items():
                 e2.append(f"{SHORT.get(m, m)} & {ph} & {v['n']} & {f1(v['own_image_correct'])} & {f1(v['swap_answers_donor_key'])} & "
-                          f"{f1(v['text_answers_donor_key'])} & {signed(v['gain'])} [{signed(v['gain_ci'][0])}, {signed(v['gain_ci'][1])}] & {f1(v['swap_flips_answer_vs_own'])} \\\\")
+                          f"{f1(v['text_answers_donor_key'])} & {signed(v['gain'])} [{signed(v['gain_ci'][0])}, {signed(v['gain_ci'][1])}] & "
+                          f"[{signed(v['gain_ci_sparse'][0])}, {signed(v['gain_ci_sparse'][1])}] & {pfmt(v['gain_p'])} & {f1(v['swap_flips_answer_vs_own'])} \\\\")
             e = r.get("E3", {})
             g = e.get("ctx_gold", {})
             fw = e.get("flip_window", {})
@@ -447,14 +474,31 @@ def v4(mc: Macros) -> None:
                 put("Eone", "Hi", ph, m, v["ci"][1], signed)
                 if "p_holm" in v:
                     mc.add(f"vfourEoneHolm{ph}{TAG[m]}", f"{v['p_holm']:.2f}")
+                put("Eone", "SLo", ph, m, v["ci_sparse"][0], signed)
+                put("Eone", "SHi", ph, m, v["ci_sparse"][1], signed)
+                mc.add(f"vfourEoneP{ph}{TAG[m]}", pfmt(v["p"]))
                 mc.add(f"vfourEoneOnlyOwn{ph}{TAG[m]}", v["only_a"])
                 mc.add(f"vfourEoneOnlyText{ph}{TAG[m]}", v["only_b"])
             for ph, v in r.get("E2", {}).items():
                 put("Etwo", "Gain", ph, m, v["gain"], signed)
                 put("Etwo", "Lo", ph, m, v["gain_ci"][0], signed)
                 put("Etwo", "Hi", ph, m, v["gain_ci"][1], signed)
+                put("Etwo", "SLo", ph, m, v["gain_ci_sparse"][0], signed)
+                put("Etwo", "SHi", ph, m, v["gain_ci_sparse"][1], signed)
+                mc.add(f"vfourEtwoP{ph}{TAG[m]}", pfmt(v["gain_p"]))
+                if "gain_p_holm" in v:
+                    mc.add(f"vfourEtwoHolm{ph}{TAG[m]}", pfmt(v["gain_p_holm"]))
                 put("Etwo", "Swap", ph, m, v["swap_answers_donor_key"])
                 put("Etwo", "Changes", ph, m, v["swap_flips_answer_vs_own"])
+        for m, r in sup.items():          # donor dependence of E2 (post hoc)
+            for ph, v in r.get("donor_dependence", {}).items():
+                mc.add(f"vfourDonorLo{ph}{TAG[m]}", signed(v["cluster_ci"][0]))
+                mc.add(f"vfourDonorHi{ph}{TAG[m]}", signed(v["cluster_ci"][1]))
+                mc.add(f"vfourDonorLooLo{ph}{TAG[m]}", signed(v["loo_donor_min"]))
+                mc.add(f"vfourDonorLooHi{ph}{TAG[m]}", signed(v["loo_donor_max"]))
+                mc.add(f"vfourDonorPerm{ph}{TAG[m]}", pfmt(v["perm_p"]))
+                mc.add(f"vfourDonorN{ph}{TAG[m]}", v["distinct_donors"])
+                mc.add(f"vfourDonorMax{ph}{TAG[m]}", v["max_uses"])
         for m, r in st["models"].items():
             e = r.get("E3", {})
             t = TAG[m]
@@ -498,8 +542,8 @@ def v4(mc: Macros) -> None:
             mc.add("vfourCtrlEmpty", ctrl["empty_responses"])
             mc.add("vfourCtrlRecords", ctrl["n_records"])
     heads = {
-        "e1": ("llrrrlrl", ["Model & Phase & $n$ & Image & Text-only & $\\Delta$ [95\\% CI] & Answers differ & Interval \\\\"]),
-        "e2": ("llrrrrlr", ["Model & Phase & $n$ & Own image & Swap: donor key & Text: donor key & Gain [95\\% CI] & Swap changes answer \\\\"]),
+        "e1": ("llrrrllrrl", ["Model & Phase & $n$ & Image & Text-only & $\\Delta$ [95\\% CI] & Add-half CI & Exact $p$ & Answers differ & Interval \\\\"]),
+        "e2": ("llrrrrllrr", ["Model & Phase & $n$ & Own & Swap: donor & Text: donor & Gain [95\\% CI] & Add-half CI & Exact $p$ & Swap changes \\\\"]),
         "e3": ("lccccc", [" & \\multicolumn{3}{c}{TCM acc.\\ (\\%)} & \\multicolumn{2}{c}{Moved / informative} \\\\",
                          "\\cmidrule(lr){2-4}\\cmidrule(lr){5-6}", " & true & wrong & none & label (all) & timing (PD) \\\\"]),
         "e5": ("lcccccc", ["Model & $n$ & Brier & Base rate & Skill & $\\Delta$ Brier [95\\% CI] & AUC \\\\"]),
@@ -517,11 +561,17 @@ def check_stale() -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--v4-only", action="store_true", help="regenerate only the tables and macros of the intervention study (what the anonymous artifact ships)")
+    ap.add_argument("--out", default=None, help="output directory (default paper/latex/generated)")
     args = ap.parse_args()
+    if args.out:
+        global OUT
+        OUT = Path(args.out)
     mc = Macros()
-    cohort(mc)
-    v3_tables(mc)
-    v3_appendix(mc)
+    if not args.v4_only:
+        cohort(mc)
+        v3_tables(mc)
+        v3_appendix(mc)
     v4(mc)
     v4_supplement(mc)
     v4_inputcheck(mc)

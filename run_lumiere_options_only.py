@@ -1,5 +1,5 @@
 """
-LLM options-only baseline (paper/review.md TODO, reviewer round 2 item 9).
+LLM options-only baseline 
 
 Each of the 5 phase questions is asked with NO image, NO question stem, and NO chain context: the model sees
 only the four answer options (plus the case's phase header and the standard answer-format instructions) and must

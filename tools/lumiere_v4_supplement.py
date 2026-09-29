@@ -51,6 +51,35 @@ def audit() -> dict:
             "undetermined_by_expert": s["undetermined_by_expert"]}
 
 
+def audit_clustered() -> dict:
+    """Patient-clustered uncertainty for the audit. The follow-ups are repeated visits of the same patients, so the Wilson interval
+    (which treats them as independent) is too narrow if agreement is patient-specific; resample patients instead."""
+    from src.lumiere_v4 import enumerate_candidates
+    rng = np.random.default_rng(SEED + 7)
+    per = {}
+    for pid, r in enumerate_candidates().items():
+        per[pid] = ([bool(c["concordant"]) for c in r["candidates"]], len(r["undetermined"]))
+    # patients with only undetermined follow-ups are not returned by enumerate_candidates; the counts are reconciled with the selection report
+    pids = sorted(per)
+    det = np.array([len(per[p][0]) for p in pids], float)
+    agree = np.array([sum(per[p][0]) for p in pids], float)
+    und = np.array([per[p][1] for p in pids], float)
+    idx = rng.integers(0, len(pids), size=(N_BOOT, len(pids)))
+    b_det = agree[idx].sum(axis=1) / np.maximum(det[idx].sum(axis=1), 1)
+    b_all = agree[idx].sum(axis=1) / np.maximum((det + und)[idx].sum(axis=1), 1)
+    sr = json.loads(Path("data/lumiere/v4/selection_report.json").read_text())
+    return {"patients": len(pids), "followups_by_patient_min": int((det + und).min()), "followups_by_patient_max": int((det + und).max()),
+            "followups_by_patient_median": float(np.median(det + und)),
+            "determinate": int(det.sum()), "concordant": int(agree.sum()), "undetermined": int(und.sum()),
+            "matches_selection_report": bool(int(det.sum()) == sr["rule_vs_expert_concordance"]["n"]
+                                              and int(agree.sum()) == sr["rule_vs_expert_concordance"]["concordant"]
+                                              and int(und.sum()) == sr["n_undetermined_followups"]),
+            "pct_determinate": float(agree.sum() / det.sum() * 100),
+            "cluster_ci_determinate": [float(np.percentile(b_det, 2.5)) * 100, float(np.percentile(b_det, 97.5)) * 100],
+            "pct_all": float(agree.sum() / (det + und).sum() * 100),
+            "cluster_ci_all": [float(np.percentile(b_all, 2.5)) * 100, float(np.percentile(b_all, 97.5)) * 100]}
+
+
 def audit_size_sensitivity() -> dict:
     """Does agreement with the expert depend on how close our measured enhancing product is to the product of the diameters the rater
     recorded for the target lesion (LUMIERE rationale text)? Only follow-ups where the rater recorded both diameters can be used."""
@@ -189,6 +218,77 @@ def explicit_rule(recs, rng) -> dict:
             "parse_error_gold": sum(bool(recs[(c, "TCM", "ctx_gold")].get("parse_error")) for c in cs)}
 
 
+def donor_dependence(recs, rng, n_perm: int = 5000) -> dict:
+    """E2 sensitivity to the donor assignment (post hoc; the registered interval resamples recipients only).
+
+    Each patient can donate to up to two recipients, and a patient is both a recipient and a donor, so recipients that share
+    a donor (or are each other's donor) are not independent. Two checks per phase:
+      * donor-cluster bootstrap and leave-one-donor-out: recipients that share a donor image are one cluster and whole
+        clusters are resampled or dropped (the estimand stays conditional on the fixed assignment but respects shared donors);
+      * assignment permutation: the donor key text is permuted among recipients (never onto the recipient's own key), and
+        the gain recomputed with the observed answers; p is the share of permutations with a gain at least as large.
+        This asks whether answers follow their own donor's key more than a random other donor's key, i.e. whether
+        the result depends on this particular assignment."""
+    out = {}
+    for ph in IMG_PHASES:
+        cs = [c for c in sorted({k[0] for k in recs if k[1] == ph and k[2] == "swap"})
+              if (c, ph, "text") in recs and (c, ph, "own") in recs]
+        if len(cs) < 5:
+            continue
+        # the runner shows each question's options in a fixed shuffled order (src.lumiere_loader._shuffle_options, seeded by id);
+        # rebuild it to translate answer letters back to option texts
+        from src.lumiere_loader import _shuffle_options
+        opts = {}
+        for c in cs:
+            it = next(x for x in json.loads(Path(f"data/lumiere/v4/reviewed/{c}.json").read_text()) if x["id"].endswith("_" + ph))
+            opts[c] = it["options"] if it.get("ordered_options") else _shuffle_options(it["options"], it["correct_answer"], it["id"])[0]
+        sw = [recs[(c, ph, "swap")] for c in cs]
+        tx = [recs[(c, ph, "text")] for c in cs]
+        donor = [r["donor"] for r in sw]
+        dkey = [r["donor_key_text"] for r in sw]
+        okey = [r["own_key_text"] for r in sw]
+        sw_txt = [opts[c].get(r["model_answer"]) for c, r in zip(cs, sw)]
+        tx_txt = [opts[c].get(r["model_answer"]) for c, r in zip(cs, tx)]
+        g = np.array([float(s_ == d) - float(t_ == d) for s_, t_, d in zip(sw_txt, tx_txt, dkey)])
+        # cluster = recipients that share a donor image (each recipient has exactly one donor); connected components of the
+        # recipient-donor graph are useless here because every patient is both a donor and a recipient (2-4 components)
+        comp: dict = {}
+        for i, d in enumerate(donor):
+            comp.setdefault(d, []).append(i)
+        groups = list(comp.values())
+        sums = np.array([g[idx].sum() for idx in groups])
+        sizes = np.array([len(idx) for idx in groups])
+        pick = rng.integers(0, len(groups), size=(N_BOOT, len(groups)))
+        boot = sums[pick].sum(axis=1) / sizes[pick].sum(axis=1)
+        # leave-one-donor-out: gain after dropping every recipient of one donor
+        loo = [float((g.sum() - sums[k]) / (len(g) - sizes[k])) * 100 for k in range(len(groups))]
+        # assignment permutation
+        obs = float(g.mean())
+        n = len(cs)
+        ge = 0
+        done = 0
+        for _ in range(n_perm):
+            perm = list(rng.permutation(n))
+            for _fix in range(20):
+                bad = [i for i in range(n) if dkey[perm[i]] == okey[i]]
+                if not bad:
+                    break
+                for i in bad:
+                    j = int(rng.integers(0, n))
+                    perm[i], perm[j] = perm[j], perm[i]
+            else:
+                continue
+            gp = np.mean([float(s_ == dkey[perm[i]]) - float(t_ == dkey[perm[i]]) for i, (s_, t_) in enumerate(zip(sw_txt, tx_txt))])
+            done += 1
+            ge += gp >= obs - 1e-12
+        uses = Counter(donor)
+        out[ph] = {"n": n, "distinct_donors": len(uses), "max_uses": max(uses.values()), "donors_used_twice": sum(v > 1 for v in uses.values()),
+                   "loo_donor_min": min(loo), "loo_donor_max": max(loo),
+                   "gain": obs * 100, "cluster_ci": [float(np.percentile(boot, 2.5)) * 100, float(np.percentile(boot, 97.5)) * 100],
+                   "perm_p": (1 + ge) / (1 + done), "n_perm": done}
+    return out
+
+
 def pjrf(recs, rng) -> dict:
     rs = [r for (c, p, k), r in sorted(recs.items()) if p == "PJRF" and k == "ctx_gold"]
     if not rs:
@@ -281,7 +381,7 @@ def aia_confusions(models_recs) -> dict:
 def main() -> None:
     rng = np.random.default_rng(SEED)
     flags = item_flags()
-    res: dict = {"audit": audit(), "audit_size": audit_size_sensitivity(), "audit_new_lesion": audit_new_lesion_pattern(),
+    res: dict = {"audit": audit(), "audit_clustered": audit_clustered(), "audit_size": audit_size_sensitivity(), "audit_new_lesion": audit_new_lesion_pattern(),
                  "pjrf_origin": pjrf_origin_check(), "models": {}}
     all_recs = {}
     for m in MODELS + CONTROLS:
@@ -294,6 +394,8 @@ def main() -> None:
             r["transitions"] = transitions(recs, flags)
             r["explicit_rule"] = explicit_rule(recs, rng)
             r["pjrf"] = pjrf(recs, rng)
+        if m in MODELS:
+            r["donor_dependence"] = donor_dependence(recs, rng)
         res["models"][m] = r
     res["aia"] = aia_confusions(all_recs)
     a = res["audit"]
@@ -349,6 +451,18 @@ def main() -> None:
             ans = (f"{v['answered_n']} | {v['answered_diff_to_base']:+.3f} [{v['answered_diff_ci'][0]:+.3f}, {v['answered_diff_ci'][1]:+.3f}]"
                    if "answered_n" in v else "- | -")
             md.append(f"| {m} | {v['n']} | {v['no_forecast']} | {v['diff_to_base']:+.3f} [{v['diff_ci'][0]:+.3f}, {v['diff_ci'][1]:+.3f}] | {ans} |")
+    md += ["", "## I. E2 donor dependence (post hoc): donor-cluster bootstrap, leave-one-donor-out and assignment permutation", "",
+           "| Model | Phase | n | distinct donors | max uses | gain | donor-cluster bootstrap 95% CI | leave-one-donor-out range | permutation p |", "|---|---|---|---|---|---|---|---|---|"]
+    for m, r in res["models"].items():
+        for ph, v in r.get("donor_dependence", {}).items():
+            md.append(f"| {m} | {ph} | {v['n']} | {v['distinct_donors']} | {v['max_uses']} | {v['gain']:+.1f} | "
+                      f"[{v['cluster_ci'][0]:+.1f}, {v['cluster_ci'][1]:+.1f}] | [{v['loo_donor_min']:+.1f}, {v['loo_donor_max']:+.1f}] | {v['perm_p']:.3f} |")
+    ac = res["audit_clustered"]
+    md += ["", "## A2. Audit with patient-clustered uncertainty", "",
+           f"{ac['determinate'] + ac['undetermined']} follow-ups from {ac['patients']} patients ({ac['followups_by_patient_min']} to {ac['followups_by_patient_max']} per patient, "
+           f"median {ac['followups_by_patient_median']:.0f}); reconciles with the selection report: {ac['matches_selection_report']}. Agreement among determinate follow-ups "
+           f"{ac['pct_determinate']:.1f}% (patient-bootstrap 95% [{ac['cluster_ci_determinate'][0]:.1f}, {ac['cluster_ci_determinate'][1]:.1f}]); among all follow-ups "
+           f"{ac['pct_all']:.1f}% ([{ac['cluster_ci_all'][0]:.1f}, {ac['cluster_ci_all'][1]:.1f}])."]
     z = res["audit_size"]
     k = z["ratio_0.67_1.5"]
     md += ["", "## H. Audit: agreement by closeness of our lesion size to the rater's recorded target-lesion size", "",
