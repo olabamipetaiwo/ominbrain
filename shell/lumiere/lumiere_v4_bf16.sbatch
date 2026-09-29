@@ -28,5 +28,5 @@ for i in $(seq 1 180); do
   kill -0 $VPID 2>/dev/null || { echo "vllm died"; tail -30 ".scratch/vllm_bf16_${SLURM_JOB_ID}.log"; exit 1; }
   sleep 10
 done
-if [ -n "${N:-}" ]; then ARGS="--n-cases $N --tag smoke"; else ARGS="--tag image"; fi
-python run_lumiere_v4.py --model Gemma-3-27B-bf16 --conditions own,text,swap --phases AIA,LIL,DSCR $ARGS
+if [ -n "${N:-}" ]; then ARGS="--n-cases $N --tag smoke"; else ARGS="--tag ${TAG:-image}"; fi
+python run_lumiere_v4.py --model Gemma-3-27B-bf16 --conditions own,text,swap --phases ${PHASES:-AIA,LIL,DSCR} $ARGS

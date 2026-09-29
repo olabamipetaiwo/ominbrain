@@ -36,11 +36,13 @@ from scipy.spatial import ConvexHull
 import config.lumiere as lcfg
 
 ENH, NEC, EDEMA = 1, 2, 3  # DeepBraTumIA label ids (Enhancing_Core, Necrotic_NonEnhancing, Edema)
-MEASURABLE_BP_MM2 = 100.0  # RANO: measurable enhancing disease is at least 10 mm x 10 mm
+MEASURABLE_MIN_DIAMETER_MM = 10.0  # RANO: measurable enhancing disease is at least 10 mm BY 10 mm --
+                                    # both perpendicular diameters, not their product (a 20x6mm lesion
+                                    # has bp=120mm^2 but is not measurable; see paper/review.md concern 1)
 MIN_LESION_PX = 100        # LIL: smallest tumour-core component (mm^2) that is asked about
 MIDLINE_MARGIN_PX = 10     # LIL: lesions whose centroid is closer than this (mm) to a midline are dropped
 SIDE_FRACTION_MIN = 0.8    # LIL: share of the component's pixels on the centroid's side of the midline
-MEASURE_VERSION = 1
+MEASURE_VERSION = 2  # v2 (2026-09-28, paper/review.md concern 1): enh_components + 3D correspondence tracking
 
 
 def _largest_component(slice_mask: np.ndarray) -> np.ndarray:
@@ -49,6 +51,44 @@ def _largest_component(slice_mask: np.ndarray) -> np.ndarray:
         return np.zeros_like(slice_mask, dtype=bool)
     sizes = ndimage.sum(slice_mask, lab, index=range(1, n + 1))
     return lab == (1 + int(np.argmax(sizes)))
+
+
+def _enh_components(enh: np.ndarray) -> list[dict]:
+    """Every 3D-connected enhancing component, each measured on its OWN largest axial cross-section
+    (not the slice with the most enhancement overall, which may belong to a different component).
+
+    This lets a caller track ONE lesion across timepoints by nearest 3D centroid instead of always
+    taking whichever component happens to be largest at each timepoint independently -- the two are
+    frequently different lesions (paper/review.md concern 1: audited on the selected v4 cohort, median
+    reference->follow-up centroid displacement of the naive largest-per-timepoint pick was 21mm, with
+    64% of patients showing a jump of >30mm or >10 slices)."""
+    lab, n = ndimage.label(enh, structure=np.ones((3, 3, 3)))
+    comps = []
+    for i in range(1, n + 1):
+        mask3d = lab == i
+        voxels = int(mask3d.sum())
+        if voxels == 0:
+            continue
+        centroid = np.argwhere(mask3d).mean(axis=0)
+        area_per_z = mask3d.sum(axis=(0, 1))
+        z = int(np.argmax(area_per_z))
+        d1, d2, bp = bidimensional_product(mask3d[:, :, z])
+        comps.append({"z": z, "voxels": voxels, "centroid_xyz": [round(float(c), 1) for c in centroid],
+                      "d1_mm": round(d1, 1), "d2_mm": round(d2, 1), "bp_mm2": round(bp, 1)})
+    comps.sort(key=lambda c: -c["voxels"])
+    return comps
+
+
+def nearest_component(anchor_xyz: list[float] | None, components: list[dict]) -> dict | None:
+    """The component in `components` closest (3D centroid, mm) to `anchor_xyz` -- the lesion-correspondence
+    rule. Falls back to the largest component when there is no anchor (no baseline target to track, e.g.
+    the reference scan itself had no measurable disease)."""
+    if not components:
+        return None
+    if anchor_xyz is None:
+        return components[0]
+    anchor = np.array(anchor_xyz)
+    return min(components, key=lambda c: float(np.linalg.norm(np.array(c["centroid_xyz"]) - anchor)))
 
 
 def bidimensional_product(component: np.ndarray) -> tuple[float, float, float]:
@@ -90,15 +130,11 @@ def measure_timepoint(seg: np.ndarray, affine: np.ndarray, brain: np.ndarray | N
     enh = seg == ENH
     core = (seg == ENH) | (seg == NEC)
 
-    enh_area = enh.sum(axis=(0, 1))
     out["enh_voxels"] = int(enh.sum())
     out["core_voxels"] = int(core.sum())
-    if enh_area.max() > 0:
-        z_e = int(np.argmax(enh_area))
-        comp = _largest_component(enh[:, :, z_e])
-        d1, d2, bp = bidimensional_product(comp)
-        out["enh"] = {"z": z_e, "area_px": int(enh[:, :, z_e].sum()), "largest_component_px": int(comp.sum()),
-                      "d1_mm": round(d1, 1), "d2_mm": round(d2, 1), "bp_mm2": round(bp, 1)}
+    out["enh_components"] = _enh_components(enh)
+    if out["enh_components"]:
+        out["enh"] = out["enh_components"][0]   # largest component, kept for backward-compatible callers
     else:
         out["enh"] = None
 
@@ -148,18 +184,31 @@ def lil_eligible(m: dict) -> tuple[bool, str]:
     return True, "ok"
 
 
-def imaging_rano_label(bp_ref: float, bp_fu: float, bp_nadir: float | None = None) -> str | None:
-    """Enhancement-based RANO category from bidimensional products (mm^2), or None when the enhancement
-    criteria cannot decide.
+def measurable(d1: float, d2: float) -> bool:
+    """RANO measurability: both perpendicular diameters at least 10mm -- NOT the same as their
+    product being at least 100mm^2 (a 20x6mm lesion has bp=120mm^2 but is not measurable)."""
+    return d1 >= MEASURABLE_MIN_DIAMETER_MM and d2 >= MEASURABLE_MIN_DIAMETER_MM
+
+
+def imaging_rano_label(bp_ref: float, bp_fu: float, d_ref: tuple[float, float], d_fu: tuple[float, float],
+                        bp_nadir: float | None = None, d_nadir: tuple[float, float] | None = None) -> str | None:
+    """Enhancement-based RANO category, or None when the enhancement criteria cannot decide.
+
+    Progression/response magnitude (the 25% increase / 50% decrease thresholds) are judged on the
+    bidimensional product (bp, mm^2), the quantity RANO's percentage rule applies to. Measurability
+    itself is RANO's two-diameter rule (see `measurable`), judged on each scan's own (d1, d2).
 
     RANO judges progression against the NADIR (smallest earlier measurement) and response against the
     post-operative BASELINE. When neither scan has measurable enhancing disease, stable disease and complete
     response cannot be told apart from enhancement (the distinction rests on duration, T2/FLAIR and steroids),
     so the rule abstains and the item is not built. T2/FLAIR progression, clinical status and steroid dose are
     not represented."""
-    nadir = bp_ref if bp_nadir is None else min(bp_ref, bp_nadir)
-    m_ref, m_fu, m_nad = bp_ref >= MEASURABLE_BP_MM2, bp_fu >= MEASURABLE_BP_MM2, nadir >= MEASURABLE_BP_MM2
-    if m_fu and (not m_nad or bp_fu >= 1.25 * nadir):
+    if bp_nadir is None or d_nadir is None:
+        bp_nadir, d_nadir = bp_ref, d_ref
+    elif bp_nadir > bp_ref:  # nadir is defined as the smallest-so-far scan, never larger than the reference
+        bp_nadir, d_nadir = bp_ref, d_ref
+    m_ref, m_fu, m_nad = measurable(*d_ref), measurable(*d_fu), measurable(*d_nadir)
+    if m_fu and (not m_nad or bp_fu >= 1.25 * bp_nadir):
         return "progressive disease"    # new measurable lesion, or >=25% above the nadir
     if not m_ref:
         return None                     # nothing measurable to compare against: enhancement cannot decide
@@ -177,7 +226,9 @@ def load_or_measure(zf, patient_id: str, timepoint: str, root: Path | None = Non
     from src.lumiere_facts import _load_nifti_bytes, _read_member
     path = cache_path(patient_id, timepoint, root)
     if path.exists() and not force:
-        return json.loads(path.read_text())
+        cached = json.loads(path.read_text())
+        if cached.get("version") == MEASURE_VERSION:
+            return cached
     base = f"{lcfg.ZIP_ROOT}/{patient_id}/{timepoint}/DeepBraTumIA-segmentation/atlas"
     seg_bytes = _read_member(zf, f"{base}/segmentation/seg_mask.nii.gz")
     brain_bytes = _read_member(zf, f"{base}/skull_strip/brain_mask.nii.gz")

@@ -73,6 +73,41 @@ def audit_size_sensitivity() -> dict:
     return out
 
 
+def audit_new_lesion_pattern(min_dist_mm: float = 15.0, similar_frac: float = 0.5) -> dict:
+    """Of the follow-ups where the rule says complete response but the expert rated progressive disease,
+    how many show a plausible 'new lesion elsewhere' pattern that our tracked-lesion rule cannot see (it
+    has no RANO new-lesion criterion; paper/review.md concern 1 follow-up, 2026-09-28)? For each such
+    follow-up: is there another enhancing component, at least `min_dist_mm` from the tracked lesion, that
+    is itself measurable and either absent or under `similar_frac` of its own size at the nadir?"""
+    from src.lumiere_measure import measurable, nearest_component
+    from src.lumiere_v4 import enumerate_candidates, load_measure
+
+    def others(anchor, comps):
+        if anchor is None:
+            return comps
+        a = np.array(anchor)
+        return [c for c in comps if float(np.linalg.norm(np.array(c["centroid_xyz"]) - a)) > min_dist_mm]
+
+    counts = Counter()
+    for pid, rec in enumerate_candidates().items():
+        for c in rec["candidates"]:
+            if not (c["expert"] == "progressive disease" and c["rule"] == "complete response"):
+                continue
+            m_ref, m_fu, m_nad = load_measure(pid, rec["ref"]), load_measure(pid, c["tp"]), load_measure(pid, c["nadir_tp"])
+            anchor = m_ref["enh"]["centroid_xyz"] if (m_ref or {}).get("enh") else None
+            fu_others = [o for o in others(anchor, (m_fu or {}).get("enh_components") or [])
+                         if measurable(o["d1_mm"], o["d2_mm"])]
+            if not fu_others:
+                counts["no_distinct_measurable_component_elsewhere"] += 1
+                continue
+            biggest = max(fu_others, key=lambda o: o["bp_mm2"])
+            match = nearest_component(biggest["centroid_xyz"], others(anchor, (m_nad or {}).get("enh_components") or []))
+            preexisting = match is not None and measurable(match["d1_mm"], match["d2_mm"]) and match["bp_mm2"] >= similar_frac * biggest["bp_mm2"]
+            counts["preexisting_secondary_lesion" if preexisting else "plausible_new_lesion"] += 1
+    n = sum(counts.values())
+    return {"n": n, **dict(counts)}
+
+
 def handling(recs) -> dict:
     cells: dict = {}
     for (c, ph, cond), r in recs.items():
@@ -137,6 +172,21 @@ def transitions(recs, flags) -> dict:
                                        "informative_n": informative,
                                        "moved_of_informative": 100 * cnt["moved_to_new"] / informative if informative else float("nan")}
     return out
+
+
+def explicit_rule(recs, rng) -> dict:
+    """TCM with the management rule stated in the prompt versus the same items under the true context without it (paired by patient)."""
+    cs = sorted(c for (c, p, k) in recs if p == "TCM" and k == "explicit_rule" and (c, "TCM", "ctx_gold") in recs)
+    if not cs:
+        return {}
+    a = np.array([1.0 if recs[(c, "TCM", "explicit_rule")].get("correct") else 0.0 for c in cs])
+    b = np.array([1.0 if recs[(c, "TCM", "ctx_gold")].get("correct") else 0.0 for c in cs])
+    lo, hi = boot_ci(a - b, rng)
+    return {"n": len(cs), "acc_explicit": float(a.mean() * 100), "acc_gold": float(b.mean() * 100),
+            "diff": float((a - b).mean() * 100), "diff_ci": [lo * 100, hi * 100],
+            "only_explicit": int(((a == 1) & (b == 0)).sum()), "only_gold": int(((a == 0) & (b == 1)).sum()),
+            "parse_error_explicit": sum(bool(recs[(c, "TCM", "explicit_rule")].get("parse_error")) for c in cs),
+            "parse_error_gold": sum(bool(recs[(c, "TCM", "ctx_gold")].get("parse_error")) for c in cs)}
 
 
 def pjrf(recs, rng) -> dict:
@@ -231,7 +281,8 @@ def aia_confusions(models_recs) -> dict:
 def main() -> None:
     rng = np.random.default_rng(SEED)
     flags = item_flags()
-    res: dict = {"audit": audit(), "audit_size": audit_size_sensitivity(), "pjrf_origin": pjrf_origin_check(), "models": {}}
+    res: dict = {"audit": audit(), "audit_size": audit_size_sensitivity(), "audit_new_lesion": audit_new_lesion_pattern(),
+                 "pjrf_origin": pjrf_origin_check(), "models": {}}
     all_recs = {}
     for m in MODELS + CONTROLS:
         recs = load_records(m)
@@ -241,6 +292,7 @@ def main() -> None:
         r = {"handling": handling(recs), "outcomes": outcomes(recs), "dscr_valid_json": dscr_valid_json(recs)}
         if m in MODELS:
             r["transitions"] = transitions(recs, flags)
+            r["explicit_rule"] = explicit_rule(recs, rng)
             r["pjrf"] = pjrf(recs, rng)
         res["models"][m] = r
     res["aia"] = aia_confusions(all_recs)
@@ -282,6 +334,13 @@ def main() -> None:
         for k, v in r.get("transitions", {}).items():
             md.append(f"| {m} | {k} | {v['n']} | {v['moved_to_new']} | {v['already_at_new']} | {v['unchanged_elsewhere']} | "
                       f"{v['changed_to_other']} | {v['no_answer']} | {v['moved_of_informative']:.1f}% of {v['informative_n']} |")
+    md += ["", "## D2. TCM with the management rule stated in the prompt (explicit_rule) versus the true context without it, paired by patient", "",
+           "| Model | n | true context | rule stated | diff [95% CI] | only rule / only context | parse errors (context / rule) |", "|---|---|---|---|---|---|---|"]
+    for m, r in res["models"].items():
+        v = r.get("explicit_rule")
+        if v:
+            md.append(f"| {m} | {v['n']} | {v['acc_gold']:.1f} | {v['acc_explicit']:.1f} | {v['diff']:+.1f} [{v['diff_ci'][0]:+.1f}, {v['diff_ci'][1]:+.1f}] | "
+                      f"{v['only_explicit']} / {v['only_gold']} | {v['parse_error_gold']} / {v['parse_error_explicit']} |")
     md += ["", "## E. PJRF (true context): Brier difference to the leave-one-out base rate (negative = better than the constant)", "",
            "| Model | n | no forecast | diff [95% CI], no forecast = 0.5 | answered n | diff [95% CI], answered only |", "|---|---|---|---|---|---|"]
     for m, r in res["models"].items():

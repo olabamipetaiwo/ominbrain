@@ -1,0 +1,596 @@
+Session ready: ollama serving (pid 1383019), venv active (ominbrain), models -> /blue, HF/pip caches -> /blue
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-b4499a48-71c0-dd00-b176-be72f337c960)
+NAME                   ID              SIZE      MODIFIED    
+llama4:scout           bf31604e25c2    67 GB     6 days ago     
+llama3.2-vision:11b    6f2f9757ae97    7.8 GB    6 days ago     
+gemma3:27b             a418f5838eaf    17 GB     6 days ago     
+gemma3:12b             f4031aab637d    8.1 GB    6 days ago     
+medgemma:4b            9fe4e9a6c9bd    3.3 GB    5 weeks ago    
+=== v4 image conditions: Gemma-3-27B ===
+Built 46 LUMIERE cases | phase coverage: AIA:46 | LIL:38 | DSCR:46 | PJRF:45 | TCM:46
+WARNING: no counterfactual partner image for Patient-008/Diagnostic Synthesis and Causal Reasoning — using own image.
+WARNING: no counterfactual partner image for Patient-028/Diagnostic Synthesis and Causal Reasoning — using own image.
+WARNING: no counterfactual partner image for Patient-055/Diagnostic Synthesis and Causal Reasoning — using own image.
+WARNING: no counterfactual partner image for Patient-089/Diagnostic Synthesis and Causal Reasoning — using own image.
+Built 46 LUMIERE cases | phase coverage: AIA:46 | LIL:38 | DSCR:46 | PJRF:45 | TCM:46
+
+############################################################
+  Model: Gemma-3-27B  [v4 conditions: own, text, swap]  cases: 46
+############################################################
+
+============================================================
+Case 1/46: LUMIERE GBM Case (Patient-002)
+============================================================
+    [Patient-002/AIA/own] -> B (OK)
+    [Patient-002/LIL/own] -> B (wrong)
+    [Patient-002/DSCR/own] -> A (wrong)
+    [Patient-002/AIA/text] -> A (wrong)
+    [Patient-002/LIL/text] -> B (wrong)
+    [Patient-002/DSCR/text] -> A (wrong)
+    [Patient-002/AIA/swap] -> D (wrong)
+    [Patient-002/LIL/swap] -> B (wrong)
+    [Patient-002/DSCR/swap] -> A (wrong)
+
+============================================================
+Case 2/46: LUMIERE GBM Case (Patient-003)
+============================================================
+    [Patient-003/AIA/own] -> D (wrong)
+    [Patient-003/LIL/own] -> C (wrong)
+    [Patient-003/DSCR/own] -> C (wrong)
+    [Patient-003/AIA/text] -> D (wrong)
+    [Patient-003/LIL/text] -> C (wrong)
+    [Patient-003/DSCR/text] -> C (wrong)
+    [Patient-003/AIA/swap] -> D (wrong)
+    [Patient-003/LIL/swap] -> C (wrong)
+    [Patient-003/DSCR/swap] -> C (wrong)
+
+============================================================
+Case 3/46: LUMIERE GBM Case (Patient-006)
+============================================================
+    [Patient-006/AIA/own] -> D (wrong)
+    [Patient-006/LIL/own] -> D (wrong)
+    [Patient-006/DSCR/own] -> A (OK)
+    [Patient-006/AIA/text] -> D (wrong)
+    [Patient-006/LIL/text] -> B (wrong)
+    [Patient-006/DSCR/text] -> A (OK)
+    [Patient-006/AIA/swap] -> D (wrong)
+    [Patient-006/LIL/swap] -> B (wrong)
+    [Patient-006/DSCR/swap] -> A (OK)
+
+============================================================
+Case 4/46: LUMIERE GBM Case (Patient-007)
+============================================================
+    [Patient-007/AIA/own] -> B (wrong)
+    [Patient-007/LIL/own] -> B (wrong)
+    [Patient-007/DSCR/own] -> B (OK)
+    [Patient-007/AIA/text] -> D (OK)
+    [Patient-007/LIL/text] -> B (wrong)
+    [Patient-007/DSCR/text] -> B (OK)
+    [Patient-007/AIA/swap] -> A (wrong)
+    [Patient-007/LIL/swap] -> D (wrong)
+    [Patient-007/DSCR/swap] -> B (OK)
+
+============================================================
+Case 5/46: LUMIERE GBM Case (Patient-008)
+============================================================
+    [Patient-008/AIA/own] -> C (OK)
+    [Patient-008/DSCR/own] -> C (OK)
+    [Patient-008/AIA/text] -> C (OK)
+    [Patient-008/DSCR/text] -> C (OK)
+    [Patient-008/AIA/swap] -> C (OK)
+
+============================================================
+Case 6/46: LUMIERE GBM Case (Patient-011)
+============================================================
+    [Patient-011/AIA/own] -> B (wrong)
+    [Patient-011/LIL/own] -> D (wrong)
+    [Patient-011/DSCR/own] -> C (OK)
+    [Patient-011/AIA/text] -> B (wrong)
+    [Patient-011/LIL/text] -> B (wrong)
+    [Patient-011/DSCR/text] -> C (OK)
+    [Patient-011/AIA/swap] -> B (wrong)
+    [Patient-011/LIL/swap] -> B (wrong)
+    [Patient-011/DSCR/swap] -> C (OK)
+
+============================================================
+Case 7/46: LUMIERE GBM Case (Patient-012)
+============================================================
+    [Patient-012/AIA/own] -> D (wrong)
+    [Patient-012/LIL/own] -> C (wrong)
+    [Patient-012/DSCR/own] -> A (OK)
+    [Patient-012/AIA/text] -> D (wrong)
+    [Patient-012/LIL/text] -> C (wrong)
+    [Patient-012/DSCR/text] -> A (OK)
+    [Patient-012/AIA/swap] -> D (wrong)
+    [Patient-012/LIL/swap] -> C (wrong)
+    [Patient-012/DSCR/swap] -> A (OK)
+
+============================================================
+Case 8/46: LUMIERE GBM Case (Patient-018)
+============================================================
+    [Patient-018/AIA/own] -> A (OK)
+    [Patient-018/LIL/own] -> A (wrong)
+    [Patient-018/DSCR/own] -> C (wrong)
+    [Patient-018/AIA/text] -> A (OK)
+    [Patient-018/LIL/text] -> B (wrong)
+    [Patient-018/DSCR/text] -> C (wrong)
+    [Patient-018/AIA/swap] -> A (OK)
+    [Patient-018/LIL/swap] -> A (wrong)
+    [Patient-018/DSCR/swap] -> C (wrong)
+
+============================================================
+Case 9/46: LUMIERE GBM Case (Patient-019)
+============================================================
+    [Patient-019/AIA/own] -> C (wrong)
+    [Patient-019/LIL/own] -> B (wrong)
+    [Patient-019/DSCR/own] -> D (wrong)
+    [Patient-019/AIA/text] -> C (wrong)
+    [Patient-019/LIL/text] -> B (wrong)
+    [Patient-019/DSCR/text] -> D (wrong)
+    [Patient-019/AIA/swap] -> C (wrong)
+    [Patient-019/LIL/swap] -> B (wrong)
+    [Patient-019/DSCR/swap] -> D (wrong)
+
+============================================================
+Case 10/46: LUMIERE GBM Case (Patient-021)
+============================================================
+    [Patient-021/AIA/own] -> D (wrong)
+    [Patient-021/LIL/own] -> C (wrong)
+    [Patient-021/DSCR/own] -> D (wrong)
+    [Patient-021/AIA/text] -> D (wrong)
+    [Patient-021/LIL/text] -> B (wrong)
+    [Patient-021/DSCR/text] -> D (wrong)
+    [Patient-021/AIA/swap] -> D (wrong)
+    [Patient-021/LIL/swap] -> B (wrong)
+    [Patient-021/DSCR/swap] -> D (wrong)
+
+============================================================
+Case 11/46: LUMIERE GBM Case (Patient-022)
+============================================================
+    [Patient-022/AIA/own] -> C (wrong)
+    [Patient-022/DSCR/own] -> D (OK)
+    [Patient-022/AIA/text] -> C (wrong)
+    [Patient-022/DSCR/text] -> D (OK)
+    [Patient-022/AIA/swap] -> C (wrong)
+    [Patient-022/DSCR/swap] -> D (OK)
+
+============================================================
+Case 12/46: LUMIERE GBM Case (Patient-023)
+============================================================
+    [Patient-023/AIA/own] -> D (wrong)
+    [Patient-023/LIL/own] -> D (wrong)
+    [Patient-023/DSCR/own] -> A (OK)
+    [Patient-023/AIA/text] -> D (wrong)
+    [Patient-023/LIL/text] -> C (wrong)
+    [Patient-023/DSCR/text] -> A (OK)
+    [Patient-023/AIA/swap] -> D (wrong)
+    [Patient-023/LIL/swap] -> B (OK)
+    [Patient-023/DSCR/swap] -> A (OK)
+
+============================================================
+Case 13/46: LUMIERE GBM Case (Patient-024)
+============================================================
+    [Patient-024/AIA/own] -> B (OK)
+    [Patient-024/LIL/own] -> B (wrong)
+    [Patient-024/DSCR/own] -> A (OK)
+    [Patient-024/AIA/text] -> B (OK)
+    [Patient-024/LIL/text] -> B (wrong)
+    [Patient-024/DSCR/text] -> A (OK)
+    [Patient-024/AIA/swap] -> B (OK)
+    [Patient-024/LIL/swap] -> B (wrong)
+    [Patient-024/DSCR/swap] -> A (OK)
+
+============================================================
+Case 14/46: LUMIERE GBM Case (Patient-028)
+============================================================
+    [Patient-028/AIA/own] -> A (OK)
+    [Patient-028/LIL/own] -> B (wrong)
+    [Patient-028/DSCR/own] -> A (OK)
+    [Patient-028/AIA/text] -> C (wrong)
+    [Patient-028/LIL/text] -> B (wrong)
+    [Patient-028/DSCR/text] -> A (OK)
+    [Patient-028/AIA/swap] -> A (OK)
+    [Patient-028/LIL/swap] -> B (wrong)
+
+============================================================
+Case 15/46: LUMIERE GBM Case (Patient-029)
+============================================================
+    [Patient-029/AIA/own] -> C (OK)
+    [Patient-029/LIL/own] -> C (wrong)
+    [Patient-029/DSCR/own] -> B (wrong)
+    [Patient-029/AIA/text] -> C (OK)
+    [Patient-029/LIL/text] -> C (wrong)
+    [Patient-029/DSCR/text] -> B (wrong)
+    [Patient-029/AIA/swap] -> C (OK)
+    [Patient-029/LIL/swap] -> C (wrong)
+    [Patient-029/DSCR/swap] -> B (wrong)
+
+============================================================
+Case 16/46: LUMIERE GBM Case (Patient-031)
+============================================================
+    [Patient-031/AIA/own] -> D (wrong)
+    [Patient-031/LIL/own] -> C (wrong)
+    [Patient-031/DSCR/own] -> A (wrong)
+    [Patient-031/AIA/text] -> D (wrong)
+    [Patient-031/LIL/text] -> A (wrong)
+    [Patient-031/DSCR/text] -> A (wrong)
+    [Patient-031/AIA/swap] -> D (wrong)
+    [Patient-031/LIL/swap] -> D (wrong)
+    [Patient-031/DSCR/swap] -> A (wrong)
+
+============================================================
+Case 17/46: LUMIERE GBM Case (Patient-032)
+============================================================
+    [Patient-032/AIA/own] -> C (wrong)
+    [Patient-032/LIL/own] -> B (OK)
+    [Patient-032/DSCR/own] -> B (wrong)
+    [Patient-032/AIA/text] -> C (wrong)
+    [Patient-032/LIL/text] -> B (OK)
+    [Patient-032/DSCR/text] -> B (wrong)
+    [Patient-032/AIA/swap] -> C (wrong)
+    [Patient-032/LIL/swap] -> B (OK)
+    [Patient-032/DSCR/swap] -> B (wrong)
+
+============================================================
+Case 18/46: LUMIERE GBM Case (Patient-033)
+============================================================
+    [Patient-033/AIA/own] -> D (OK)
+    [Patient-033/LIL/own] -> B (wrong)
+    [Patient-033/DSCR/own] -> D (OK)
+    [Patient-033/AIA/text] -> D (OK)
+    [Patient-033/LIL/text] -> B (wrong)
+    [Patient-033/DSCR/text] -> D (OK)
+    [Patient-033/AIA/swap] -> D (OK)
+    [Patient-033/LIL/swap] -> A (wrong)
+    [Patient-033/DSCR/swap] -> D (OK)
+
+============================================================
+Case 19/46: LUMIERE GBM Case (Patient-035)
+============================================================
+    [Patient-035/AIA/own] -> B (wrong)
+    [Patient-035/LIL/own] -> B (wrong)
+    [Patient-035/DSCR/own] -> C (OK)
+    [Patient-035/AIA/text] -> B (wrong)
+    [Patient-035/LIL/text] -> B (wrong)
+    [Patient-035/DSCR/text] -> C (OK)
+    [Patient-035/AIA/swap] -> B (wrong)
+    [Patient-035/LIL/swap] -> B (wrong)
+    [Patient-035/DSCR/swap] -> C (OK)
+
+============================================================
+Case 20/46: LUMIERE GBM Case (Patient-037)
+============================================================
+    [Patient-037/AIA/own] -> B (wrong)
+    [Patient-037/LIL/own] -> A (wrong)
+    [Patient-037/DSCR/own] -> D (OK)
+    [Patient-037/AIA/text] -> C (wrong)
+    [Patient-037/LIL/text] -> B (wrong)
+    [Patient-037/DSCR/text] -> D (OK)
+    [Patient-037/AIA/swap] -> C (wrong)
+    [Patient-037/LIL/swap] -> D (wrong)
+    [Patient-037/DSCR/swap] -> D (OK)
+
+============================================================
+Case 21/46: LUMIERE GBM Case (Patient-038)
+============================================================
+    [Patient-038/AIA/own] -> B (wrong)
+    [Patient-038/DSCR/own] -> A (wrong)
+    [Patient-038/AIA/text] -> B (wrong)
+    [Patient-038/DSCR/text] -> A (wrong)
+    [Patient-038/AIA/swap] -> B (wrong)
+    [Patient-038/DSCR/swap] -> A (wrong)
+
+============================================================
+Case 22/46: LUMIERE GBM Case (Patient-039)
+============================================================
+    [Patient-039/AIA/own] -> B (wrong)
+    [Patient-039/DSCR/own] -> A (OK)
+    [Patient-039/AIA/text] -> B (wrong)
+    [Patient-039/DSCR/text] -> A (OK)
+    [Patient-039/AIA/swap] -> B (wrong)
+    [Patient-039/DSCR/swap] -> A (OK)
+
+============================================================
+Case 23/46: LUMIERE GBM Case (Patient-040)
+============================================================
+    [Patient-040/AIA/own] -> C (wrong)
+    [Patient-040/LIL/own] -> B (wrong)
+    [Patient-040/DSCR/own] -> D (OK)
+    [Patient-040/AIA/text] -> C (wrong)
+    [Patient-040/LIL/text] -> B (wrong)
+    [Patient-040/DSCR/text] -> D (OK)
+    [Patient-040/AIA/swap] -> C (wrong)
+    [Patient-040/LIL/swap] -> B (wrong)
+    [Patient-040/DSCR/swap] -> D (OK)
+
+============================================================
+Case 24/46: LUMIERE GBM Case (Patient-045)
+============================================================
+    [Patient-045/AIA/own] -> D (wrong)
+    [Patient-045/LIL/own] -> B (OK)
+    [Patient-045/DSCR/own] -> A (wrong)
+    [Patient-045/AIA/text] -> B (wrong)
+    [Patient-045/LIL/text] -> B (OK)
+    [Patient-045/DSCR/text] -> A (wrong)
+    [Patient-045/AIA/swap] -> B (wrong)
+    [Patient-045/LIL/swap] -> B (OK)
+    [Patient-045/DSCR/swap] -> A (wrong)
+
+============================================================
+Case 25/46: LUMIERE GBM Case (Patient-046)
+============================================================
+    [Patient-046/AIA/own] -> A (OK)
+    [Patient-046/LIL/own] -> B (wrong)
+    [Patient-046/DSCR/own] -> C (wrong)
+    [Patient-046/AIA/text] -> A (OK)
+    [Patient-046/LIL/text] -> B (wrong)
+    [Patient-046/DSCR/text] -> C (wrong)
+    [Patient-046/AIA/swap] -> C (wrong)
+    [Patient-046/LIL/swap] -> B (wrong)
+    [Patient-046/DSCR/swap] -> C (wrong)
+
+============================================================
+Case 26/46: LUMIERE GBM Case (Patient-048)
+============================================================
+    [Patient-048/AIA/own] -> D (wrong)
+    [Patient-048/LIL/own] -> B (OK)
+    [Patient-048/DSCR/own] -> A (OK)
+    [Patient-048/AIA/text] -> A (wrong)
+    [Patient-048/LIL/text] -> B (OK)
+    [Patient-048/DSCR/text] -> A (OK)
+    [Patient-048/AIA/swap] -> A (wrong)
+    [Patient-048/LIL/swap] -> B (OK)
+    [Patient-048/DSCR/swap] -> A (OK)
+
+============================================================
+Case 27/46: LUMIERE GBM Case (Patient-050)
+============================================================
+    [Patient-050/AIA/own] -> C (wrong)
+    [Patient-050/LIL/own] -> B (wrong)
+    [Patient-050/DSCR/own] -> C (OK)
+    [Patient-050/AIA/text] -> C (wrong)
+    [Patient-050/LIL/text] -> B (wrong)
+    [Patient-050/DSCR/text] -> C (OK)
+    [Patient-050/AIA/swap] -> C (wrong)
+    [Patient-050/LIL/swap] -> B (wrong)
+    [Patient-050/DSCR/swap] -> C (OK)
+
+============================================================
+Case 28/46: LUMIERE GBM Case (Patient-051)
+============================================================
+    [Patient-051/AIA/own] -> C (wrong)
+    [Patient-051/LIL/own] -> B (wrong)
+    [Patient-051/DSCR/own] -> D (OK)
+    [Patient-051/AIA/text] -> C (wrong)
+    [Patient-051/LIL/text] -> B (wrong)
+    [Patient-051/DSCR/text] -> D (OK)
+    [Patient-051/AIA/swap] -> C (wrong)
+    [Patient-051/LIL/swap] -> B (wrong)
+    [Patient-051/DSCR/swap] -> D (OK)
+
+============================================================
+Case 29/46: LUMIERE GBM Case (Patient-052)
+============================================================
+    [Patient-052/AIA/own] -> C (wrong)
+    [Patient-052/DSCR/own] -> B (wrong)
+    [Patient-052/AIA/text] -> A (wrong)
+    [Patient-052/DSCR/text] -> B (wrong)
+    [Patient-052/AIA/swap] -> C (wrong)
+    [Patient-052/DSCR/swap] -> B (wrong)
+
+============================================================
+Case 30/46: LUMIERE GBM Case (Patient-054)
+============================================================
+    [Patient-054/AIA/own] -> B (OK)
+    [Patient-054/LIL/own] -> C (OK)
+    [Patient-054/DSCR/own] -> C (OK)
+    [Patient-054/AIA/text] -> D (wrong)
+    [Patient-054/LIL/text] -> D (wrong)
+    [Patient-054/DSCR/text] -> C (OK)
+    [Patient-054/AIA/swap] -> D (wrong)
+    [Patient-054/LIL/swap] -> D (wrong)
+    [Patient-054/DSCR/swap] -> C (OK)
+
+============================================================
+Case 31/46: LUMIERE GBM Case (Patient-055)
+============================================================
+    [Patient-055/AIA/own] -> D (wrong)
+    [Patient-055/DSCR/own] -> D (OK)
+    [Patient-055/AIA/text] -> D (wrong)
+    [Patient-055/DSCR/text] -> D (OK)
+    [Patient-055/AIA/swap] -> D (wrong)
+
+============================================================
+Case 32/46: LUMIERE GBM Case (Patient-058)
+============================================================
+    [Patient-058/AIA/own] -> D (OK)
+    [Patient-058/LIL/own] -> D (wrong)
+    [Patient-058/DSCR/own] -> A (wrong)
+    [Patient-058/AIA/text] -> A (wrong)
+    [Patient-058/LIL/text] -> B (OK)
+    [Patient-058/DSCR/text] -> A (wrong)
+    [Patient-058/AIA/swap] -> A (wrong)
+    [Patient-058/LIL/swap] -> B (OK)
+    [Patient-058/DSCR/swap] -> A (wrong)
+
+============================================================
+Case 33/46: LUMIERE GBM Case (Patient-059)
+============================================================
+    [Patient-059/AIA/own] -> C (wrong)
+    [Patient-059/DSCR/own] -> A (OK)
+    [Patient-059/AIA/text] -> C (wrong)
+    [Patient-059/DSCR/text] -> A (OK)
+    [Patient-059/AIA/swap] -> C (wrong)
+    [Patient-059/DSCR/swap] -> A (OK)
+
+============================================================
+Case 34/46: LUMIERE GBM Case (Patient-061)
+============================================================
+    [Patient-061/AIA/own] -> B (wrong)
+    [Patient-061/LIL/own] -> B (OK)
+    [Patient-061/DSCR/own] -> D (OK)
+    [Patient-061/AIA/text] -> A (wrong)
+    [Patient-061/LIL/text] -> B (OK)
+    [Patient-061/DSCR/text] -> D (OK)
+    [Patient-061/AIA/swap] -> A (wrong)
+    [Patient-061/LIL/swap] -> B (OK)
+    [Patient-061/DSCR/swap] -> D (OK)
+
+============================================================
+Case 35/46: LUMIERE GBM Case (Patient-062)
+============================================================
+    [Patient-062/AIA/own] -> C (OK)
+    [Patient-062/LIL/own] -> D (wrong)
+    [Patient-062/DSCR/own] -> D (wrong)
+    [Patient-062/AIA/text] -> C (OK)
+    [Patient-062/LIL/text] -> B (wrong)
+    [Patient-062/DSCR/text] -> D (wrong)
+    [Patient-062/AIA/swap] -> D (wrong)
+    [Patient-062/LIL/swap] -> B (wrong)
+    [Patient-062/DSCR/swap] -> D (wrong)
+
+============================================================
+Case 36/46: LUMIERE GBM Case (Patient-063)
+============================================================
+    [Patient-063/AIA/own] -> B (OK)
+    [Patient-063/LIL/own] -> B (OK)
+    [Patient-063/DSCR/own] -> B (OK)
+    [Patient-063/AIA/text] -> B (OK)
+    [Patient-063/LIL/text] -> C (wrong)
+    [Patient-063/DSCR/text] -> B (OK)
+    [Patient-063/AIA/swap] -> D (wrong)
+    [Patient-063/LIL/swap] -> A (wrong)
+    [Patient-063/DSCR/swap] -> B (OK)
+
+============================================================
+Case 37/46: LUMIERE GBM Case (Patient-065)
+============================================================
+    [Patient-065/AIA/own] -> C (wrong)
+    [Patient-065/LIL/own] -> B (wrong)
+    [Patient-065/DSCR/own] -> A (wrong)
+    [Patient-065/AIA/text] -> D (wrong)
+    [Patient-065/LIL/text] -> B (wrong)
+    [Patient-065/DSCR/text] -> A (wrong)
+    [Patient-065/AIA/swap] -> D (wrong)
+    [Patient-065/LIL/swap] -> C (OK)
+    [Patient-065/DSCR/swap] -> A (wrong)
+
+============================================================
+Case 38/46: LUMIERE GBM Case (Patient-071)
+============================================================
+    [Patient-071/AIA/own] -> B (wrong)
+    [Patient-071/LIL/own] -> B (OK)
+    [Patient-071/DSCR/own] -> C (wrong)
+    [Patient-071/AIA/text] -> B (wrong)
+    [Patient-071/LIL/text] -> B (OK)
+    [Patient-071/DSCR/text] -> C (wrong)
+    [Patient-071/AIA/swap] -> B (wrong)
+    [Patient-071/LIL/swap] -> B (OK)
+    [Patient-071/DSCR/swap] -> C (wrong)
+
+============================================================
+Case 39/46: LUMIERE GBM Case (Patient-072)
+============================================================
+    [Patient-072/AIA/own] -> D (wrong)
+    [Patient-072/LIL/own] -> D (wrong)
+    [Patient-072/DSCR/own] -> C (wrong)
+    [Patient-072/AIA/text] -> D (wrong)
+    [Patient-072/LIL/text] -> D (wrong)
+    [Patient-072/DSCR/text] -> C (wrong)
+    [Patient-072/AIA/swap] -> D (wrong)
+    [Patient-072/LIL/swap] -> B (wrong)
+    [Patient-072/DSCR/swap] -> C (wrong)
+
+============================================================
+Case 40/46: LUMIERE GBM Case (Patient-073)
+============================================================
+    [Patient-073/AIA/own] -> B (wrong)
+    [Patient-073/LIL/own] -> A (OK)
+    [Patient-073/DSCR/own] -> C (OK)
+    [Patient-073/AIA/text] -> B (wrong)
+    [Patient-073/LIL/text] -> B (wrong)
+    [Patient-073/DSCR/text] -> C (OK)
+    [Patient-073/AIA/swap] -> A (wrong)
+    [Patient-073/LIL/swap] -> B (wrong)
+    [Patient-073/DSCR/swap] -> C (OK)
+
+============================================================
+Case 41/46: LUMIERE GBM Case (Patient-074)
+============================================================
+    [Patient-074/AIA/own] -> C (wrong)
+    [Patient-074/LIL/own] -> B (OK)
+    [Patient-074/DSCR/own] -> A (wrong)
+    [Patient-074/AIA/text] -> C (wrong)
+    [Patient-074/LIL/text] -> B (OK)
+    [Patient-074/DSCR/text] -> A (wrong)
+    [Patient-074/AIA/swap] -> C (wrong)
+    [Patient-074/LIL/swap] -> B (OK)
+    [Patient-074/DSCR/swap] -> A (wrong)
+
+============================================================
+Case 42/46: LUMIERE GBM Case (Patient-075)
+============================================================
+    [Patient-075/AIA/own] -> B (OK)
+    [Patient-075/LIL/own] -> C (wrong)
+    [Patient-075/DSCR/own] -> B (OK)
+    [Patient-075/AIA/text] -> B (OK)
+    [Patient-075/LIL/text] -> D (wrong)
+    [Patient-075/DSCR/text] -> B (OK)
+    [Patient-075/AIA/swap] -> C (wrong)
+    [Patient-075/LIL/swap] -> D (wrong)
+    [Patient-075/DSCR/swap] -> B (OK)
+
+============================================================
+Case 43/46: LUMIERE GBM Case (Patient-077)
+============================================================
+    [Patient-077/AIA/own] -> C (wrong)
+    [Patient-077/LIL/own] -> D (wrong)
+    [Patient-077/DSCR/own] -> A (OK)
+    [Patient-077/AIA/text] -> B (wrong)
+    [Patient-077/LIL/text] -> D (wrong)
+    [Patient-077/DSCR/text] -> A (OK)
+    [Patient-077/AIA/swap] -> B (wrong)
+    [Patient-077/LIL/swap] -> B (wrong)
+    [Patient-077/DSCR/swap] -> A (OK)
+
+============================================================
+Case 44/46: LUMIERE GBM Case (Patient-078)
+============================================================
+    [Patient-078/AIA/own] -> B (OK)
+    [Patient-078/DSCR/own] -> B (wrong)
+    [Patient-078/AIA/text] -> B (OK)
+    [Patient-078/DSCR/text] -> B (wrong)
+    [Patient-078/AIA/swap] -> B (OK)
+    [Patient-078/DSCR/swap] -> B (wrong)
+
+============================================================
+Case 45/46: LUMIERE GBM Case (Patient-080)
+============================================================
+    [Patient-080/AIA/own] -> C (wrong)
+    [Patient-080/LIL/own] -> C (wrong)
+    [Patient-080/DSCR/own] -> B (OK)
+    [Patient-080/AIA/text] -> C (wrong)
+    [Patient-080/LIL/text] -> C (wrong)
+    [Patient-080/DSCR/text] -> B (OK)
+    [Patient-080/AIA/swap] -> C (wrong)
+    [Patient-080/LIL/swap] -> C (wrong)
+    [Patient-080/DSCR/swap] -> B (OK)
+
+============================================================
+Case 46/46: LUMIERE GBM Case (Patient-089)
+============================================================
+    [Patient-089/AIA/own] -> B (OK)
+    [Patient-089/LIL/own] -> B (wrong)
+    [Patient-089/DSCR/own] -> C (OK)
+    [Patient-089/AIA/text] -> B (OK)
+    [Patient-089/LIL/text] -> B (wrong)
+    [Patient-089/DSCR/text] -> C (OK)
+    [Patient-089/AIA/swap] -> B (OK)
+    [Patient-089/LIL/swap] -> B (wrong)
+
+API usage (successful calls): {'calls': 386, 'prompt_tokens': 274832, 'total_tokens': 343060}  (total_tokens includes hidden thinking tokens)
+
+Saved -> results/lumiere_v4_Gemma-3-27B_image_20260928_103714
+  AIA: own: 0.326; text: 0.261; swap: 0.174
+  LIL: own: 0.237; text: 0.184; swap: 0.237
+  DSCR: own: 0.587; text: 0.587; swap: 0.548

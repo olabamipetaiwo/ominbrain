@@ -40,6 +40,7 @@ CONTROLS = ["Gemini-3.6-Flash", "Gemma-3-27B-bf16"]   # the second is the precis
 MARGIN = 10.0            # percentage points; fixed in paper/preregistration_v4.md before any v4 model run
 N_BOOT = 10_000
 SEED = 20260925
+MIN_STAMP = "20260928"   # only job folders from the rebuilt 46-patient item set; earlier folders ran on different items
 IMG_PHASES = ["AIA", "LIL", "DSCR"]
 TCM_CLASSES = ["continue", "confirm", "escalate"]
 
@@ -51,7 +52,7 @@ def load_records(model: str, results_dir: Path = Path("results")) -> dict[tuple,
     merged: dict[tuple, dict] = {}
     for d in sorted(glob.glob(str(results_dir / f"lumiere_v4_{model}_*"))):
         p = Path(d) / "raw_results.json"
-        if not p.exists():
+        if not p.exists() or Path(d).name.split("_")[-2] < MIN_STAMP:
             continue
         for r in json.loads(p.read_text()):
             merged[(r["case_id"], r["phase"], r["condition"])] = r

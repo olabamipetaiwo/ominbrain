@@ -20,9 +20,8 @@ patient-identifying data are added. Compute/environmental cost is reported in Ap
 ## B. Did you use or create scientific artifacts? Yes.
 
 **B1. Cited the creators?** Yes for data and tools: LUMIERE (Suter et al. 2022), OmniBrainBench (Peng et al. 2026), RANO (Wen et al. 2010),
-DeepBraTumIA/HD-GLIO-AUTO (Kickingereder et al. 2019), HD-BET (Isensee et al. 2019), RadLex, NCI Thesaurus. For the models, no: the reference list is
-limited to peer-reviewed publications (standing project rule), so MedGemma, Gemma 3, Llama 4 and Gemini are identified by name, tag, digest and quantization
-(Appendix E, Table 11) instead of by technical report. Settled: keep the rule as-is; not revisited per submission.
+DeepBraTumIA/HD-GLIO-AUTO (Kickingereder et al. 2019), HD-BET (Isensee et al. 2019), RadLex, NCI Thesaurus. For the models, partly: the MedGemma and Gemma 3 technical reports (arXiv only, not peer-reviewed) are cited for model identification only, by the authors' decision (2026-09-28; exception to the project's peer-reviewed-only rule); Llama 4 has no report and Gemini is an API model, so Llama 4 and Gemini are identified by name, tag, digest and quantization
+(Appendix E, Table 11) where no report is cited. Revised 2026-09-28: the rule was relaxed for this one purpose, and the professor has been informed.
 
 **B2. Discussed the license or terms?** Yes, Appendix E. LUMIERE: Figshare's license metadata lists CC0 for all five hosted articles (readme, RANO ratings,
 demographics, completeness, imaging — verified via the Figshare API, 2026-09-28), but the readme PDF itself separately states "This dataset is provided for
@@ -74,4 +73,4 @@ We recruited no annotators or participants. The expert RANO ratings are part of 
 ## Open items for the authors
 1. Code/data release plan: deferred, not urgent now — revisit at camera-ready. Current text says we do not release LUMIERE images and that derived items would carry non-commercial terms.
 
-Resolved (2026-09-28): IRB determination (D4, not applicable), model technical-report citations (B1, standing rule kept as-is), named LUMIERE license (B2, CC0 metadata vs. stated non-commercial restriction, both now recorded).
+Resolved (2026-09-28): IRB determination (D4, not applicable), model technical-report citations (B1, superseded 2026-09-28: MedGemma and Gemma 3 reports cited for model identification only), named LUMIERE license (B2, CC0 metadata vs. stated non-commercial restriction, both now recorded).

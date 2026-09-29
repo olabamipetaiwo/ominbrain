@@ -1,0 +1,32 @@
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-05e1fdf2-0cf6-0979-0625-cff00086b22b)
+torch                                    2.13.0
+transformers                             5.15.1
+vllm                                     0.27.1
+{"object":"list","data":[{"id":"google/gemma-3-27b-it","object":"model","created":1790644422,"owned_by":"vllm","root":"google/gemma-3-27b-it","parent":null,"max_model_len":8192,"permission":[{"id":"modelperm-abf202d36d0d68d7","object":"model_permission","created":1790644422,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}
+Built 46 LUMIERE cases | phase coverage: AIA:46 | LIL:38 | DSCR:46 | PJRF:45 | TCM:46
+# Input check: Gemma-3-27B-bf16 (google/gemma-3-27b-it)
+
+## Do all images reach the model? (prompt tokens; real v4 items)
+
+| phase | images | image size | text only | tokens by images added | increment per added image |
+|---|---|---|---|---|---|
+| AIA | 1 | (728, 872) | 378 | {0: 378, 1: 656} | [278] |
+| LIL | 1 | (728, 872) | 425 | {0: 425, 1: 708} | [283] |
+| DSCR | 3 | (728, 872) | 540 | {0: 540, 1: 818, 2: 1089, 3: 1377} | [278, 271, 288] |
+
+## Perception probes (same message format)
+
+| probe | expected | answer | pass |
+|---|---|---|---|
+| colour_red | red | Red. | yes |
+| colour_green | green | Green. | yes |
+| colour_blue | blue | Blue. | yes |
+| number_742 | 742 | 742 | yes |
+| number_1905 | 1905 | 1905 | yes |
+| three_images_order | red, green, blue | Red, green, blue | yes |
+| two_images_second | blue | Blue | yes |
+| real_slice_background | black | Black | yes |
+
+8 of 8 probes passed.
+
+Saved -> results/lumiere_v4_inputcheck_Gemma-3-27B-bf16_20260928_211343

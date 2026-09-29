@@ -38,7 +38,7 @@ import pandas as pd
 
 import config.lumiere as lcfg
 from src import lumiere_facts as lf
-from src.lumiere_measure import cache_path, imaging_rano_label, lil_eligible
+from src.lumiere_measure import cache_path, imaging_rano_label, lil_eligible, nearest_component
 
 V4_DIR = Path(lcfg.LUMIERE_DATA_DIR) / "v4"
 SEED = 20260925
@@ -62,6 +62,15 @@ TCM_OPTIONS = {
     "escalate": "Change therapy now: bring re-resection, second-line treatment or a clinical trial to tumor board.",
     "stop": "Stop tumor-directed treatment and move to best supportive care with no further imaging plan.",
 }
+# Stated verbatim to the model only under the "explicit_rule" TCM condition (paper/review.md concern 2):
+# elsewhere the same rule exists only as the item's own answer key, which the model is never shown.
+TCM_RULE_STATEMENT = (
+    "Apply this management rule exactly. If the response category is not progressive disease, continue the "
+    "current therapy. If the response category is progressive disease and this scan is 12 weeks or less after "
+    "chemoradiotherapy ended, confirm progression with a repeat MRI before making any change. If the response "
+    "category is progressive disease and this scan is more than 12 weeks after chemoradiotherapy ended, change "
+    "therapy now."
+)
 
 
 def _w(tp: str) -> int:
@@ -108,29 +117,41 @@ def enumerate_candidates() -> dict[str, dict]:
         cands, undetermined = [], []
         rated = sorted([r["timepoint_id"] for r in rows if r["is_response_rating"] and r["timepoint_id"] in imaged
                         and _w(ref) < _w(r["timepoint_id"]) < limit], key=lambda t: (_w(t), t))
-        bp = lambda m: (m["enh"]["bp_mm2"] if m.get("enh") else 0.0)
+        m_ref = load_measure(pid, ref)
+        if m_ref is None:
+            continue
+        # the lesion tracked across timepoints is the component nearest the reference scan's own largest
+        # enhancing component -- NOT each timepoint's own independently-largest component, which is
+        # frequently a different lesion (paper/review.md concern 1; see nearest_component's docstring)
+        anchor = m_ref["enh"]["centroid_xyz"] if m_ref.get("enh") else None
+        corr = lambda m: nearest_component(anchor, (m or {}).get("enh_components") or [])
+        bp = lambda m: (corr(m)["bp_mm2"] if corr(m) else 0.0)
+        diam = lambda m: (corr(m)["d1_mm"], corr(m)["d2_mm"]) if corr(m) else (0.0, 0.0)
+        z_of = lambda m: (corr(m)["z"] if corr(m) else None)
         for r in rows:
             tp = r["timepoint_id"]
             if tp not in rated or not r["is_response_rating"]:
                 continue
             x = (_w(tp) - _w(ref)) - CRT_END_WEEK
-            m_ref, m_fu = load_measure(pid, ref), load_measure(pid, tp)
+            m_fu = load_measure(pid, tp)
             earlier = [t for t in rated if _w(t) < _w(tp)]
             ms = {t: load_measure(pid, t) for t in earlier}
-            if m_ref is None or m_fu is None or any(m is None for m in ms.values()):
+            if m_fu is None or any(m is None for m in ms.values()):
                 continue
-            # nadir: the earlier scan (post-operative reference included) with the smallest enhancing product
+            # nadir: the earlier scan (post-operative reference included) with the smallest PRODUCT
+            # OF THE TRACKED LESION (not each candidate scan's own independently-largest component)
             nadir_tp = min([ref] + earlier, key=lambda t: (bp(m_ref if t == ref else ms[t]), _w(t)))
             m_nad = m_ref if nadir_tp == ref else ms[nadir_tp]
-            rule = imaging_rano_label(bp(m_ref), bp(m_fu), bp(m_nad))
+            rule = imaging_rano_label(bp(m_ref), bp(m_fu), diam(m_ref), diam(m_fu), bp(m_nad), diam(m_nad))
             expert = RANO_TEXT[r["rating_code"]]
             if rule is None:                # enhancement cannot decide: no DSCR item, so no candidate
                 undetermined.append({"expert": expert, "x": x})
                 continue
             cands.append({"tp": tp, "code": r["rating_code"], "expert": expert, "rule": rule,
-                          "nadir_tp": nadir_tp, "bp_nadir": bp(m_nad),
+                          "nadir_tp": nadir_tp, "bp_nadir": bp(m_nad), "d_nadir": diam(m_nad), "z_nadir": z_of(m_nad),
                           "concordant": rule == expert, "x": x, "weeks_since_surgery": _w(tp) - _w(ref),
                           "cls": tcm_class(rule == "progressive disease", x), "bp_ref": bp(m_ref), "bp_fu": bp(m_fu),
+                          "d_ref": diam(m_ref), "d_fu": diam(m_fu), "z_ref": z_of(m_ref), "z_fu": z_of(m_fu),
                           "lil_ok": lil_eligible(m_fu)[0], "rationale": r["rationale"]})
         if cands:
             out[pid] = {"patient_id": pid, "ref": ref, "extent": RESECTION.get(rationale),
@@ -303,7 +324,8 @@ def make_items(rec: dict, ch: dict, aia_seq: str) -> list[dict]:
     items.append({**base, "id": f"{pid}_DSCR", "clinical_phase": "Diagnostic Synthesis and Causal Reasoning",
                   "task_label": "Disease Diagnosis Reasoning", "timepoint": fu,
                   "question": (f"{'Three' if n_img == 3 else 'Two'} post-contrast T1-weighted axial slices of the same patient are shown, each at "
-                               "the level of the largest contrast-enhancing lesion on that scan, in time order: "
+                               "the largest cross-section of the same enhancing lesion (the enhancing lesion nearest the largest enhancing region on the "
+                               "post-operative baseline scan, followed across scans), in time order: "
                                + ("the post-operative baseline scan (image 1), the earlier scan with the smallest enhancing lesion "
                                   "(the nadir, image 2) and the follow-up scan (image 3)" if n_img == 3 else
                                   "the post-operative baseline scan, which is also the nadir (image 1), and the follow-up scan (image 2)")
@@ -318,6 +340,7 @@ def make_items(rec: dict, ch: dict, aia_seq: str) -> list[dict]:
                   "image_files": dscr_files, "image_labels": dscr_labels,
                   "facts_used": {"expert_rating": ch["code"], "rule_label": ch["rule"], "concordant": ch["concordant"],
                                  "bp_ref_mm2": ch["bp_ref"], "bp_nadir_mm2": ch["bp_nadir"], "bp_followup_mm2": ch["bp_fu"],
+                                 "d_ref_mm": ch["d_ref"], "d_nadir_mm": ch["d_nadir"], "d_followup_mm": ch["d_fu"],
                                  "reference_tp": ref, "nadir_tp": nadir, "followup_tp": fu,
                                  "expert_rationale": ch["rationale"],
                                  "key_rule": "image-derived RANO-style enhancement category (bidimensional products on the "
@@ -371,17 +394,21 @@ def render_patient(zf, rec: dict, ch: dict, aia_seq: str, force: bool = False) -
     m_ref, m_fu = load_measure(pid, ref), load_measure(pid, fu)
     out = V4_DIR / "slices" / pid
 
-    def z_enh(m, other):
-        if m.get("enh"):
-            return m["enh"]["z"]
-        if other.get("enh"):
-            return other["enh"]["z"]
+    # z_ref/z_fu/z_nadir on `ch` are the TRACKED lesion's own slice (nearest_component correspondence,
+    # computed once during selection) -- rendering MUST use the same slice that was actually measured,
+    # not recompute independently (that mismatch was itself part of paper/review.md concern 1).
+    def z_pick(z, other_z, m, other):
+        if z is not None:
+            return z
+        if other_z is not None:
+            return other_z
         return (m.get("core") or other.get("core") or {"z": 90})["z"]
 
-    jobs = [(ref, "ct1", z_enh(m_ref, m_fu), f"{ref}_enh.png"), (fu, "ct1", z_enh(m_fu, m_ref), f"{fu}_enh.png")]
+    jobs = [(ref, "ct1", z_pick(ch["z_ref"], ch["z_fu"], m_ref, m_fu), f"{ref}_enh.png"),
+            (fu, "ct1", z_pick(ch["z_fu"], ch["z_ref"], m_fu, m_ref), f"{fu}_enh.png")]
     if ch["nadir_tp"] != ref:
         m_nad = load_measure(pid, ch["nadir_tp"])
-        jobs.append((ch["nadir_tp"], "ct1", z_enh(m_nad, m_fu), f"{ch['nadir_tp']}_enh.png"))
+        jobs.append((ch["nadir_tp"], "ct1", z_pick(ch["z_nadir"], ch["z_fu"], m_nad, m_fu), f"{ch['nadir_tp']}_enh.png"))
     if m_fu.get("core"):
         jobs.append((fu, "ct1", m_fu["core"]["z"], f"{fu}_core.png"))
     z_aia = (m_fu.get("core") or m_ref.get("core") or {"z": 90})["z"]

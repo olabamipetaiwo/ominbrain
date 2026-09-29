@@ -1,0 +1,2365 @@
+Session ready: ollama serving (pid 2286483), venv active (ominbrain), models -> /blue, HF/pip caches -> /blue
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition (UUID: GPU-8c563a21-db23-5422-1acc-72fd0059b10e)
+NAME                   ID              SIZE      MODIFIED    
+llama4:scout           bf31604e25c2    67 GB     6 days ago     
+llama3.2-vision:11b    6f2f9757ae97    7.8 GB    6 days ago     
+gemma3:27b             a418f5838eaf    17 GB     6 days ago     
+gemma3:12b             f4031aab637d    8.1 GB    6 days ago     
+medgemma:4b            9fe4e9a6c9bd    3.3 GB    5 weeks ago    
+=== v4 chain runs: MedGemma-4B ===
+Built 46 LUMIERE cases | phase coverage: AIA:46 | LIL:38 | DSCR:46 | PJRF:45 | TCM:46
+
+############################################################
+  Model: MedGemma-4B  (medical)  [LUMIERE]
+  Cases: 46   Gating: False   Adaptation: False   Text-only: False   Counterfactual-images: False
+############################################################
+
+============================================================
+Case 1/46: LUMIERE GBM Case (Patient-002)  [Patient-002]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-002_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-002_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-002_DSCR] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-002_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-002_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 2/46: LUMIERE GBM Case (Patient-003)  [Patient-003]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-003_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-003_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-003_DSCR] main call… → A (✓) | probe… pred C → UNFAITHFUL 
+  → score: 100% [PASS]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-003_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-003_TCM] main call… [no image] → C (✓) | probe… pred D → UNFAITHFUL 
+  → score: 100% [PASS]  local faithful: 0%
+
+============================================================
+Case 3/46: LUMIERE GBM Case (Patient-006)  [Patient-006]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-006_AIA] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-006_LIL] main call… → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-006_DSCR] main call… → C (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-006_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-006_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 4/46: LUMIERE GBM Case (Patient-007)  [Patient-007]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-007_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-007_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-007_DSCR] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-007_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-007_TCM] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 5/46: LUMIERE GBM Case (Patient-008)  [Patient-008]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-008_AIA] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-008_DSCR] main call… → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-008_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-008_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 6/46: LUMIERE GBM Case (Patient-011)  [Patient-011]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-011_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-011_LIL] main call… → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-011_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-011_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-011_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 7/46: LUMIERE GBM Case (Patient-012)  [Patient-012]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-012_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-012_LIL] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-012_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-012_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-012_TCM] main call… [no image] → B (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+============================================================
+Case 8/46: LUMIERE GBM Case (Patient-018)  [Patient-018]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-018_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-018_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-018_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-018_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-018_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 9/46: LUMIERE GBM Case (Patient-019)  [Patient-019]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-019_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-019_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-019_DSCR] main call… → B (✓) | probe… pred D → UNFAITHFUL 
+  → score: 100% [PASS]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-019_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-019_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 10/46: LUMIERE GBM Case (Patient-021)  [Patient-021]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-021_AIA] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-021_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-021_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-021_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-021_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 11/46: LUMIERE GBM Case (Patient-022)  [Patient-022]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-022_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-022_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-022_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-022_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 12/46: LUMIERE GBM Case (Patient-023)  [Patient-023]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-023_AIA] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-023_LIL] main call… → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-023_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-023_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-023_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 13/46: LUMIERE GBM Case (Patient-024)  [Patient-024]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-024_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-024_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-024_DSCR] main call… → B (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-024_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-024_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 14/46: LUMIERE GBM Case (Patient-028)  [Patient-028]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-028_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-028_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-028_DSCR] main call… → C (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-028_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-028_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 15/46: LUMIERE GBM Case (Patient-029)  [Patient-029]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-029_AIA] main call… → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-029_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-029_DSCR] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-029_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 16/46: LUMIERE GBM Case (Patient-031)  [Patient-031]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-031_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-031_LIL] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-031_DSCR] main call… → B (✓) | probe… pred A → UNFAITHFUL 
+  → score: 100% [PASS]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-031_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-031_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 17/46: LUMIERE GBM Case (Patient-032)  [Patient-032]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-032_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-032_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-032_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-032_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-032_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 18/46: LUMIERE GBM Case (Patient-033)  [Patient-033]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-033_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-033_LIL] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-033_DSCR] main call… → B (✗) | probe… pred D → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-033_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-033_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 19/46: LUMIERE GBM Case (Patient-035)  [Patient-035]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-035_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-035_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-035_DSCR] main call… → B (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-035_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-035_TCM] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 20/46: LUMIERE GBM Case (Patient-037)  [Patient-037]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-037_AIA] main call… → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-037_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-037_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-037_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-037_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 21/46: LUMIERE GBM Case (Patient-038)  [Patient-038]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-038_AIA] main call… → B (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-038_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-038_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-038_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 22/46: LUMIERE GBM Case (Patient-039)  [Patient-039]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-039_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-039_DSCR] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-039_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-039_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 23/46: LUMIERE GBM Case (Patient-040)  [Patient-040]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-040_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-040_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-040_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-040_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-040_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 24/46: LUMIERE GBM Case (Patient-045)  [Patient-045]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-045_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-045_LIL] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-045_DSCR] main call… parse failed — salvaged answer B from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-045_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-045_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 25/46: LUMIERE GBM Case (Patient-046)  [Patient-046]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-046_AIA] main call… → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-046_LIL] main call… → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-046_DSCR] main call… → A (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-046_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-046_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 26/46: LUMIERE GBM Case (Patient-048)  [Patient-048]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-048_AIA] main call… → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-048_LIL] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-048_DSCR] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-048_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-048_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 27/46: LUMIERE GBM Case (Patient-050)  [Patient-050]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-050_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-050_LIL] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-050_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-050_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-050_TCM] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 28/46: LUMIERE GBM Case (Patient-051)  [Patient-051]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-051_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-051_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-051_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-051_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-051_TCM] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 29/46: LUMIERE GBM Case (Patient-052)  [Patient-052]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-052_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-052_DSCR] main call… → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-052_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-052_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 30/46: LUMIERE GBM Case (Patient-054)  [Patient-054]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-054_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-054_LIL] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-054_DSCR] main call… → B (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-054_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-054_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 31/46: LUMIERE GBM Case (Patient-055)  [Patient-055]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-055_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-055_DSCR] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-055_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-055_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 32/46: LUMIERE GBM Case (Patient-058)  [Patient-058]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-058_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-058_LIL] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-058_DSCR] main call… → B (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-058_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-058_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 33/46: LUMIERE GBM Case (Patient-059)  [Patient-059]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-059_AIA] main call… → C (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-059_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-059_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-059_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 34/46: LUMIERE GBM Case (Patient-061)  [Patient-061]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-061_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-061_LIL] main call… → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-061_DSCR] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-061_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-061_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 35/46: LUMIERE GBM Case (Patient-062)  [Patient-062]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-062_AIA] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-062_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-062_DSCR] main call… → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-062_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-062_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 36/46: LUMIERE GBM Case (Patient-063)  [Patient-063]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-063_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-063_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-063_DSCR] main call… parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-063_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-063_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 37/46: LUMIERE GBM Case (Patient-065)  [Patient-065]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-065_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-065_LIL] main call… → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-065_DSCR] main call… → B (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-065_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-065_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 38/46: LUMIERE GBM Case (Patient-071)  [Patient-071]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-071_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-071_LIL] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-071_DSCR] main call… → A (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-071_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-071_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 39/46: LUMIERE GBM Case (Patient-072)  [Patient-072]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-072_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-072_LIL] main call… → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-072_DSCR] main call… → B (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-072_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-072_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 40/46: LUMIERE GBM Case (Patient-073)  [Patient-073]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-073_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-073_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-073_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-073_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-073_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 41/46: LUMIERE GBM Case (Patient-074)  [Patient-074]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-074_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-074_LIL] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-074_DSCR] main call… → B (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-074_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-074_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 42/46: LUMIERE GBM Case (Patient-075)  [Patient-075]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-075_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-075_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-075_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-075_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-075_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 43/46: LUMIERE GBM Case (Patient-077)  [Patient-077]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-077_AIA] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-077_LIL] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-077_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-077_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-077_TCM] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 44/46: LUMIERE GBM Case (Patient-078)  [Patient-078]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-078_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-078_DSCR] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-078_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-078_TCM] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 45/46: LUMIERE GBM Case (Patient-080)  [Patient-080]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-080_AIA] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-080_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-080_DSCR] main call… → C (✗) | probe… pred B → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-080_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-080_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 46/46: LUMIERE GBM Case (Patient-089)  [Patient-089]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-089_AIA] main call… → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-089_LIL] main call… → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-089_DSCR] main call… → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-089_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-089_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+======================================================================
+OmniBrainBench — Causal Chain Evaluation
+Model: MedGemma-4B   |   Cases: 46
+======================================================================
+
+Overall accuracy:   23.4%
+Chain completion:   0/46 (0%)
+
+── Phase Results 
+  MajBase = accuracy of always guessing this phase's most common correct answer (flags class imbalance, e.g. DSCR's 'progressive disease' skew — high MajBase means raw Acc alone overstates model skill; low/blank means answers are too varied for the baseline to mean much, e.g. PJRF/TCM's free-text estimates).
+Phase     Acc     95% CI    N  MajBase   LocalF  KBAlign  ConceptP   ChainF  GateBlk
+------------------------------------------------------------------------------------
+AIA       35%  [23%-49%]   46      26%      96%      36%       10%      —         0%
+LIL       32%  [19%-48%]   38      29%     100%      62%       37%      —         0%
+DSCR      13%   [9%-31%]   46      59%      58%      99%        5%      —         0%
+PJRF       0%    [0%-8%]   45      —       100%      95%        0%      —         0%
+TCM       39%  [26%-54%]   46      44%      96%      97%       28%      —         0%
+
+── Adaptation Loop 
+  Questions triggered:    0
+  Adaptation rate:          —  
+
+── Failure Taxonomy ─
+  Perception failures:          56
+  Reasoning failures:           38
+  Decision-making failures:     73
+  Correct-but-unfaithful:       4  ← clinically dangerous
+
+── Per-Task Accuracy 
+  Treatment Plan Selection                      acc=39%  n=46
+  Imaging Modality Identification               acc=35%  n=46
+  Lesion Localization                           acc=32%  n=38
+  Disease Diagnosis Reasoning                   acc=17%  n=46
+  Prognostic Factor Analysis                    acc=0%  n=45
+
+
+Saved → results/lumiere_MedGemma-4B_v4_nogate_noadapt_20260928_063827
+  raw_results.json
+  report.txt
+  total_results.json
+Built 46 LUMIERE cases | phase coverage: AIA:46 | LIL:38 | DSCR:46 | PJRF:45 | TCM:46
+
+############################################################
+  Model: MedGemma-4B  (medical)  [LUMIERE]
+  Cases: 46   Gating: False   Adaptation: False   Text-only: True   Counterfactual-images: False
+############################################################
+
+============================================================
+Case 1/46: LUMIERE GBM Case (Patient-002)  [Patient-002]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-002_AIA] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-002_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-002_DSCR] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-002_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-002_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 2/46: LUMIERE GBM Case (Patient-003)  [Patient-003]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-003_AIA] main call… [no image] → A (✗) | probe… pred D → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-003_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-003_DSCR] main call… [no image] → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-003_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-003_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 3/46: LUMIERE GBM Case (Patient-006)  [Patient-006]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-006_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-006_LIL] main call… [no image] → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-006_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-006_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-006_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 4/46: LUMIERE GBM Case (Patient-007)  [Patient-007]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-007_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-007_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-007_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-007_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-007_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 5/46: LUMIERE GBM Case (Patient-008)  [Patient-008]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-008_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-008_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-008_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-008_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 6/46: LUMIERE GBM Case (Patient-011)  [Patient-011]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-011_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-011_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-011_DSCR] main call… [no image] → B (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-011_PJRF] main call… [no image] → B (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-011_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 7/46: LUMIERE GBM Case (Patient-012)  [Patient-012]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-012_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-012_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-012_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-012_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-012_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 8/46: LUMIERE GBM Case (Patient-018)  [Patient-018]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-018_AIA] main call… [no image] → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-018_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-018_DSCR] main call… [no image] → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-018_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-018_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 9/46: LUMIERE GBM Case (Patient-019)  [Patient-019]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-019_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-019_LIL] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-019_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-019_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-019_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 10/46: LUMIERE GBM Case (Patient-021)  [Patient-021]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-021_AIA] main call… [no image] → A (✗) | probe… pred D → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-021_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-021_DSCR] main call… [no image] → C (✗) | probe… pred D → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-021_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-021_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 11/46: LUMIERE GBM Case (Patient-022)  [Patient-022]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-022_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-022_DSCR] main call… [no image] → C (✗) | probe… pred D → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-022_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-022_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 12/46: LUMIERE GBM Case (Patient-023)  [Patient-023]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-023_AIA] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-023_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-023_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-023_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-023_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 13/46: LUMIERE GBM Case (Patient-024)  [Patient-024]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-024_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-024_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-024_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-024_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-024_TCM] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 14/46: LUMIERE GBM Case (Patient-028)  [Patient-028]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-028_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-028_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-028_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-028_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-028_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 15/46: LUMIERE GBM Case (Patient-029)  [Patient-029]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-029_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-029_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-029_DSCR] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-029_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 16/46: LUMIERE GBM Case (Patient-031)  [Patient-031]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-031_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-031_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-031_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-031_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-031_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 17/46: LUMIERE GBM Case (Patient-032)  [Patient-032]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-032_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-032_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-032_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-032_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-032_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 18/46: LUMIERE GBM Case (Patient-033)  [Patient-033]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-033_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-033_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-033_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-033_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-033_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 19/46: LUMIERE GBM Case (Patient-035)  [Patient-035]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-035_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-035_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-035_DSCR] main call… [no image] → B (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-035_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-035_TCM] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 20/46: LUMIERE GBM Case (Patient-037)  [Patient-037]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-037_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-037_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-037_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-037_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-037_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 21/46: LUMIERE GBM Case (Patient-038)  [Patient-038]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-038_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-038_DSCR] main call… [no image] → C (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-038_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-038_TCM] main call… [no image] → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 22/46: LUMIERE GBM Case (Patient-039)  [Patient-039]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-039_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-039_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-039_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-039_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 23/46: LUMIERE GBM Case (Patient-040)  [Patient-040]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-040_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-040_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-040_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-040_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-040_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 24/46: LUMIERE GBM Case (Patient-045)  [Patient-045]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-045_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-045_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-045_DSCR] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-045_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-045_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 25/46: LUMIERE GBM Case (Patient-046)  [Patient-046]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-046_AIA] main call… [no image] → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-046_LIL] main call… [no image] → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-046_DSCR] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-046_PJRF] main call… [no image] parse failed — salvaged answer A from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-046_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 26/46: LUMIERE GBM Case (Patient-048)  [Patient-048]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-048_AIA] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-048_LIL] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-048_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-048_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-048_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 27/46: LUMIERE GBM Case (Patient-050)  [Patient-050]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-050_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-050_LIL] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-050_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-050_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-050_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 28/46: LUMIERE GBM Case (Patient-051)  [Patient-051]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-051_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-051_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-051_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-051_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-051_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 29/46: LUMIERE GBM Case (Patient-052)  [Patient-052]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-052_AIA] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-052_DSCR] main call… [no image] → A (✓) | probe… pred B → UNFAITHFUL 
+  → score: 100% [PASS]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-052_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-052_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 30/46: LUMIERE GBM Case (Patient-054)  [Patient-054]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-054_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-054_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-054_DSCR] main call… [no image] parse failed — salvaged answer A from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-054_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-054_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 31/46: LUMIERE GBM Case (Patient-055)  [Patient-055]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-055_AIA] main call… [no image] → B (✗) | probe… pred D → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-055_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-055_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-055_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 32/46: LUMIERE GBM Case (Patient-058)  [Patient-058]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-058_AIA] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-058_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-058_DSCR] main call… [no image] → B (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-058_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-058_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 33/46: LUMIERE GBM Case (Patient-059)  [Patient-059]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-059_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-059_DSCR] main call… [no image] → C (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-059_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-059_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 34/46: LUMIERE GBM Case (Patient-061)  [Patient-061]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-061_AIA] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-061_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-061_DSCR] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-061_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-061_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 35/46: LUMIERE GBM Case (Patient-062)  [Patient-062]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-062_AIA] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-062_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-062_DSCR] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-062_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-062_TCM] main call… [no image] → A (✓) | probe… pred A → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 36/46: LUMIERE GBM Case (Patient-063)  [Patient-063]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-063_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-063_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-063_DSCR] main call… [no image] parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-063_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-063_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 37/46: LUMIERE GBM Case (Patient-065)  [Patient-065]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-065_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-065_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-065_DSCR] main call… [no image] → B (✗) | probe… pred A → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-065_PJRF] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-065_TCM] main call… [no image] → C (✓) | probe… pred C → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 38/46: LUMIERE GBM Case (Patient-071)  [Patient-071]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-071_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-071_LIL] main call… [no image] parse failed — salvaged answer B from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-071_DSCR] main call… [no image] → B (✗) | probe… pred C → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-071_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-071_TCM] main call… [no image] → D (✓) | probe… pred D → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 39/46: LUMIERE GBM Case (Patient-072)  [Patient-072]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-072_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-072_LIL] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-072_DSCR] main call… [no image] parse failed — salvaged answer A from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-072_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-072_TCM] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 40/46: LUMIERE GBM Case (Patient-073)  [Patient-073]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-073_AIA] main call… [no image] parse failed — salvaged answer B from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-073_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-073_DSCR] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-073_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-073_TCM] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 41/46: LUMIERE GBM Case (Patient-074)  [Patient-074]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-074_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-074_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-074_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-074_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-074_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 42/46: LUMIERE GBM Case (Patient-075)  [Patient-075]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-075_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-075_LIL] main call… [no image] parse failed — salvaged answer C from truncated JSON.
+  → score: 0% [FAIL]  local faithful: —
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-075_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-075_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-075_TCM] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 43/46: LUMIERE GBM Case (Patient-077)  [Patient-077]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-077_AIA] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-077_LIL] main call… [no image] → B (✗) | probe… pred B → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-077_DSCR] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-077_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-077_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 44/46: LUMIERE GBM Case (Patient-078)  [Patient-078]
+============================================================
+  4 phase(s) | 4 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-078_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-078_DSCR] main call… [no image] → C (✗) | probe… pred B → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-078_PJRF] main call… [no image] → D (✗) | probe… pred D → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-078_TCM] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+============================================================
+Case 45/46: LUMIERE GBM Case (Patient-080)  [Patient-080]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-080_AIA] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-080_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-080_DSCR] main call… [no image] → C (✗) | probe… pred B → UNFAITHFUL 
+  → score: 0% [FAIL]  local faithful: 0%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-080_PJRF] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-080_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+============================================================
+Case 46/46: LUMIERE GBM Case (Patient-089)  [Patient-089]
+============================================================
+  5 phase(s) | 5 question(s)
+
+  Phase: AIA — Anatomical and Imaging Assessment
+    [Patient-089_AIA] main call… [no image] → B (✓) | probe… pred B → faithful 
+  → score: 100% [PASS]  local faithful: 100%
+
+  Phase: LIL — Lesion Identification and Localization
+    [Patient-089_LIL] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: DSCR — Diagnostic Synthesis and Causal Reasoning
+    [Patient-089_DSCR] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: PJRF — Prognostic Judgment and Risk Forecasting
+    [Patient-089_PJRF] main call… [no image] → A (✗) | probe… pred A → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+
+  Phase: TCM — Therapeutic Cycle Management
+    [Patient-089_TCM] main call… [no image] → C (✗) | probe… pred C → faithful 
+  → score: 0% [FAIL]  local faithful: 100%
+======================================================================
+OmniBrainBench — Causal Chain Evaluation
+Model: MedGemma-4B   |   Cases: 46
+======================================================================
+
+Overall accuracy:   20.4%
+Chain completion:   0/46 (0%)
+
+── Phase Results 
+  MajBase = accuracy of always guessing this phase's most common correct answer (flags class imbalance, e.g. DSCR's 'progressive disease' skew — high MajBase means raw Acc alone overstates model skill; low/blank means answers are too varied for the baseline to mean much, e.g. PJRF/TCM's free-text estimates).
+Phase     Acc     95% CI    N  MajBase   LocalF  KBAlign  ConceptP   ChainF  GateBlk
+------------------------------------------------------------------------------------
+AIA       26%  [16%-40%]   46      26%      93%      33%       11%      —         0%
+LIL       18%  [11%-36%]   38      29%     100%      52%       36%      —         0%
+DSCR      15%   [8%-28%]   46      59%      72%      99%        8%      —         0%
+PJRF       0%    [0%-8%]   45      —        98%      96%        0%      —         0%
+TCM       41%  [28%-56%]   46      44%     100%      98%       26%      —         0%
+
+── Adaptation Loop 
+  Questions triggered:    0
+  Adaptation rate:          —  
+
+── Failure Taxonomy ─
+  Perception failures:          64
+  Reasoning failures:           39
+  Decision-making failures:     72
+  Correct-but-unfaithful:       1  ← clinically dangerous
+
+── Per-Task Accuracy 
+  Treatment Plan Selection                      acc=41%  n=46
+  Imaging Modality Identification               acc=26%  n=46
+  Lesion Localization                           acc=21%  n=38
+  Disease Diagnosis Reasoning                   acc=15%  n=46
+  Prognostic Factor Analysis                    acc=0%  n=45
+
+
+Saved → results/lumiere_MedGemma-4B_textonly_v4_nogate_noadapt_20260928_073243
+  raw_results.json
+  report.txt
+  total_results.json

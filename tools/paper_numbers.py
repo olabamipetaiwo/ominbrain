@@ -249,10 +249,25 @@ def v4_supplement(mc: Macros) -> None:
     mc.add("vfourConfSDasPD", conf.get("stable disease|progressive disease", 0))
     mc.add("vfourConfPDasCR", conf.get("progressive disease|complete response", 0))
     mc.add("vfourConfSDasCR", conf.get("stable disease|complete response", 0))
+    nl = sp.get("audit_new_lesion")
+    if nl:
+        mc.add("vfourNewLesionN", nl["n"])
+        mc.add("vfourNewLesionPlausible", nl.get("plausible_new_lesion", 0))
+        mc.add("vfourNewLesionNone", nl.get("no_distinct_measurable_component_elsewhere", 0))
+        mc.add("vfourNewLesionPreexisting", nl.get("preexisting_secondary_lesion", 0))
     rows_h, rows_t = [], []
     for m, r in sp["models"].items():
         t = TAG[m]
         h = r["handling"]
+        er = r.get("explicit_rule")
+        if er:
+            mc.add(f"vfourExplGold{t}", f"{er['acc_gold']:.1f}")
+            mc.add(f"vfourExplAcc{t}", f"{er['acc_explicit']:.1f}")
+            mc.add(f"vfourExplDiff{t}", signed(er["diff"]))
+            mc.add(f"vfourExplLo{t}", signed(er["diff_ci"][0]))
+            mc.add(f"vfourExplHi{t}", signed(er["diff_ci"][1]))
+            mc.add(f"vfourExplParseGold{t}", er["parse_error_gold"])
+            mc.add(f"vfourExplParse{t}", er["parse_error_explicit"])
         mc.add(f"vfourParseInvalid{t}", h["ALL"]["parse_error"])
         mc.add(f"vfourParseNoLetter{t}", h["ALL"]["no_answer"])
         mc.add(f"vfourParseN{t}", h["ALL"]["n"])

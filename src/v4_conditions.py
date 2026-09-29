@@ -21,6 +21,10 @@ scoring are skipped because these conditions only need the answer.
                the rule maps to a different management class
   flip_window  TCM with the stated weeks since chemoradiotherapy      TCM
                moved to the other side of the 12-week window
+  explicit_rule  ctx_gold plus the management rule itself stated      TCM
+               verbatim in the prompt (paper/review.md concern 2: the
+               other TCM conditions never show the model the rule --
+               they only compare its answer against it after the fact)
 """
 
 from __future__ import annotations
@@ -39,12 +43,12 @@ from src.evaluator import _call_model, _load_question_image, _parse_json, _salva
 from src.gating_causality import _context_entry
 from src.prompts import build_main_prompt
 
-CONDITIONS = ("own", "text", "swap", "ctx_gold", "ctx_wrong", "ctx_absent", "flip_label", "flip_window")
+CONDITIONS = ("own", "text", "swap", "ctx_gold", "ctx_wrong", "ctx_absent", "flip_label", "flip_window", "explicit_rule")
 IMAGE_PHASES = ("AIA", "LIL", "DSCR")
 PHASES_BY_CONDITION = {
     "own": IMAGE_PHASES, "text": IMAGE_PHASES, "swap": IMAGE_PHASES,
     "ctx_gold": ("LIL", "DSCR", "PJRF", "TCM"), "ctx_wrong": ("LIL", "DSCR", "PJRF", "TCM"),
-    "ctx_absent": ("PJRF", "TCM"), "flip_label": ("TCM",), "flip_window": ("TCM",),
+    "ctx_absent": ("PJRF", "TCM"), "flip_label": ("TCM",), "flip_window": ("TCM",), "explicit_rule": ("TCM",),
 }
 WINDOW_FLIP_X = {"to_late": 20, "to_early": 4}          # stated weeks since chemoradiotherapy after the flip
 FLIP_LABEL = {"PD": "Stable disease", "nonPD": "Progressive disease"}
@@ -96,7 +100,7 @@ def _retext_window(question: dict, x_old: int, wss_old: int, x_new: int) -> dict
 
 
 def ask(question: dict, case: dict, phase: str, chain_context: list[dict], client, text_only: bool = False,
-        image_override: dict | None = None) -> dict:
+        image_override: dict | None = None, extra_instructions: str | None = None) -> dict:
     src = {**question, **(image_override or {})}
     imgs = [] if text_only else _load_question_image(src)
     if not text_only and src.get("_image_path") and not imgs:
@@ -104,7 +108,8 @@ def ask(question: dict, case: dict, phase: str, chain_context: list[dict], clien
     case_for_prompt = {**case, "image_bytes_list": imgs, "image_bytes": imgs[0] if imgs else None,
                        "image_labels": None if text_only else src.get("_image_labels"),
                        "image_note": None if text_only or not imgs else src.get("_image_note")}
-    raw = _call_model(client, build_main_prompt(question, case_for_prompt, phase, chain_context), label="v4")
+    raw = _call_model(client, build_main_prompt(question, case_for_prompt, phase, chain_context,
+                                                 extra_instructions=extra_instructions), label="v4")
     parsed = _parse_json(raw, ["answer", "visual_grounding", "reasoning"])
     if parsed is None:
         ans, parse_error, reasoning, grounding = _salvage_answer_letter(raw), True, "", ""
@@ -143,7 +148,7 @@ def run_case(case: dict, swap_case: dict | None, own_by_id: dict[str, dict], cli
                 continue
             q = qs[0]
             extra: dict = {}
-            question, ctx, text_only, img_override = q, [], False, None
+            question, ctx, text_only, img_override, extra_instructions = q, [], False, None, None
             if cond == "own":
                 pass
             elif cond == "text":
@@ -181,6 +186,10 @@ def run_case(case: dict, swap_case: dict | None, own_by_id: dict[str, dict], cli
                 from src.lumiere_v4 import TCM_OPTIONS
                 exp_letter = _letter_for(q, TCM_OPTIONS[expected])
                 extra = {"original_class": rule["class"], "expected_class": expected, "expected_letter": exp_letter}
+            elif cond == "explicit_rule":
+                ctx = build_context(case, phase, "gold")
+                from src.lumiere_v4 import TCM_RULE_STATEMENT
+                extra_instructions = TCM_RULE_STATEMENT
             injected = next((e["model_answer_text"] for e in ctx if e["phase"] == "DSCR"), None)
             if injected is not None:
                 extra["injected_dscr_text"] = injected
@@ -191,7 +200,8 @@ def run_case(case: dict, swap_case: dict | None, own_by_id: dict[str, dict], cli
                     if stated:
                         extra["stated_rule_class"] = stated
                         extra["stated_rule_letter"] = _letter_for(q, TCM_OPTIONS[stated])
-            res = ask(question, case, phase, ctx, client, text_only=text_only, image_override=img_override)
+            res = ask(question, case, phase, ctx, client, text_only=text_only, image_override=img_override,
+                      extra_instructions=extra_instructions)
             rec = _record(case, phase, cond, question, res, extra)
             if cond in ("flip_label", "flip_window"):
                 rec["follows_flip"] = bool(rec["model_answer"] and rec["model_answer"] == extra["expected_letter"])

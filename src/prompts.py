@@ -13,8 +13,9 @@ import config
 
 SYSTEM_PROMPT = (
     "You are a clinical neuroimaging AI being evaluated on your diagnostic reasoning. "
-    "You will be shown a real brain imaging scan and asked a multiple-choice question. "
-    "Base your answer on what you can directly observe in the image. "
+    "You will be given a multiple-choice question about a real patient, which may include a brain imaging "
+    "scan. Base your answer on the image when one is shown, and on the clinical facts and any instructions "
+    "stated in the question when it is not. "
     "Always respond with valid JSON only — no markdown, no extra text."
 )
 
@@ -106,6 +107,7 @@ def build_main_prompt(
     case: dict,
     phase: str,
     chain_context: list[dict],
+    extra_instructions: str | None = None,
 ) -> list[dict]:
     phase_name = config.PHASE_NAMES[phase]
     options_text = "\n".join(
@@ -124,12 +126,15 @@ def build_main_prompt(
             )
         chain_block += "--- END PRIOR CHAIN ---"
 
+    rule_block = f"\n\n{extra_instructions}" if extra_instructions else ""
+
     text = (
         f"Case: {case['title']}  |  Modality: {case['modality'].upper()}"
         f"{chain_block}"
         f"\n\n--- CURRENT PHASE: {phase_name} ---\n\n"
         f"Question: {question['question']}\n\n"
-        f"Options:\n{options_text}\n\n"
+        f"Options:\n{options_text}"
+        f"{rule_block}\n\n"
         "Instructions:\n"
         "1. Identify specific visual features in the image(s) relevant to this question — "
         "if two images are shown, compare them explicitly (e.g. size/extent change) using "

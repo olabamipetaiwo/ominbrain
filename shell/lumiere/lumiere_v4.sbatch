@@ -14,7 +14,10 @@
 # v4 item set (keys with a stated origin per phase). One job = one model x one MODE, so the 2-GPU cap can be met by chaining jobs
 # with --dependency=afterany (never by giving a job fewer GPUs). Registered analysis: paper/preregistration_v4.md.
 #   MODE=image    own,text,swap          AIA LIL DSCR (isolated: no upstream context)          run_lumiere_v4.py
-#   MODE=context  ctx_gold,ctx_wrong,ctx_absent,flip_label,flip_window   LIL DSCR PJRF TCM       run_lumiere_v4.py
+#   MODE=context  ctx_gold,ctx_wrong,ctx_absent,flip_label,flip_window,   LIL DSCR PJRF TCM      run_lumiere_v4.py
+#                 explicit_rule (TCM only; states the management rule verbatim in the prompt,
+#                 paper/review.md concern 2 -- added 2026-09-28)
+#   MODE=image_dscr / context_dscr  reruns after the DSCR stem rewording: only the phases whose prompts contain the DSCR stem
 #   MODE=chain    ordinary 5-phase chain, image then text-only (own answers as context, no gating, no adaptation)
 # Submit: sbatch --job-name=lumiv4_<MODE>_<Model> --export=ALL,MODELS=<Model>,MODE=<mode> shell/lumiere/lumiere_v4.sbatch
 set -e
@@ -30,7 +33,11 @@ for M in ${MODELS:-MedGemma-4B}; do
     image)   echo "=== v4 image conditions: $M ==="
              python run_lumiere_v4.py --model "$M" --conditions own,text,swap --tag image ;;
     context) echo "=== v4 context conditions: $M ==="
-             python run_lumiere_v4.py --model "$M" --conditions ctx_gold,ctx_wrong,ctx_absent,flip_label,flip_window --tag context ;;
+             python run_lumiere_v4.py --model "$M" --conditions ctx_gold,ctx_wrong,ctx_absent,flip_label,flip_window,explicit_rule --tag context ;;
+    image_dscr) echo "=== DSCR-only image conditions (reworded DSCR stem): $M ==="
+             python run_lumiere_v4.py --model "$M" --conditions own,text,swap --phases DSCR --tag imagedscr ;;
+    context_dscr) echo "=== DSCR/PJRF/TCM context conditions (reworded DSCR stem): $M ==="
+             python run_lumiere_v4.py --model "$M" --conditions ctx_gold,ctx_wrong,flip_label,flip_window,explicit_rule --phases DSCR,PJRF,TCM --tag contextdscr ;;
     chain)   echo "=== v4 chain runs: $M ==="
              python run_lumiere.py --model "$M" --item-set v4 --include-unreviewed --no-gating --no-adaptation --n-cases 100
              python run_lumiere.py --model "$M" --item-set v4 --include-unreviewed --no-gating --no-adaptation --n-cases 100 --text-only ;;

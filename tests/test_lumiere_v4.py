@@ -2,9 +2,11 @@
 import numpy as np
 
 from src.lumiere_labels import canonical_answer_text
-from src.lumiere_measure import bidimensional_product, imaging_rano_label, lil_eligible, measure_timepoint
-from src.lumiere_v4 import EARLY_MAX_X, LATE_MIN_X, tcm_class
-from src.v4_conditions import _retext_window, tcm_rule_class
+from src.lumiere_measure import (bidimensional_product, imaging_rano_label, lil_eligible, measure_timepoint,
+                                  nearest_component)
+from src.lumiere_v4 import EARLY_MAX_X, LATE_MIN_X, TCM_RULE_STATEMENT, tcm_class
+from src.prompts import build_main_prompt
+from src.v4_conditions import CONDITIONS, PHASES_BY_CONDITION, _retext_window, tcm_rule_class
 
 
 def test_bidimensional_product():
@@ -21,13 +23,24 @@ def test_bidimensional_product():
 
 
 def test_rano_rule():
-    assert imaging_rano_label(400, 600, 400) == "progressive disease"        # +50% over the nadir
-    assert imaging_rano_label(400, 480, 400) == "stable disease"             # +20%
-    assert imaging_rano_label(400, 150, 400) == "partial response"           # -62%
-    assert imaging_rano_label(400, 20, 400) == "complete response"           # nothing measurable left
-    assert imaging_rano_label(20, 20, 20) is None                            # nothing to compare: undetermined
-    assert imaging_rano_label(20, 400, 20) == "progressive disease"          # new measurable lesion
-    assert imaging_rano_label(600, 700, 300) == "progressive disease"        # +133% over the nadir although +17% over baseline
+    big, small = (20.0, 20.0), (4.0, 5.0)   # measurable (both >=10mm) vs. not
+    assert imaging_rano_label(400, 600, big, big, 400, big) == "progressive disease"     # +50% over the nadir
+    assert imaging_rano_label(400, 480, big, big, 400, big) == "stable disease"          # +20%
+    assert imaging_rano_label(400, 150, big, (15.0, 10.0), 400, big) == "partial response"  # -62%
+    assert imaging_rano_label(400, 20, big, small, 400, big) == "complete response"      # nothing measurable left
+    assert imaging_rano_label(20, 20, small, small, 20, small) is None                   # nothing to compare: undetermined
+    assert imaging_rano_label(20, 400, small, big, 20, small) == "progressive disease"   # new measurable lesion
+    assert imaging_rano_label(600, 700, (20.0, 30.0), (20.0, 35.0), 300, (15.0, 20.0)) == "progressive disease"  # +133% over the nadir although +17% over baseline
+
+
+def test_rano_rule_measurability_is_not_just_the_product():
+    # 20x6mm: product is 120mm^2 (>=100, old buggy threshold) but the short axis is <10mm, so RANO
+    # would not call this measurable disease. paper/review.md concern 1.
+    thin = (20.0, 6.0)
+    assert imaging_rano_label(120, 120, thin, thin, 120, thin) is None
+    # same product, but both axes >=10mm: genuinely measurable, and unchanged (stable) at follow-up.
+    square = (11.0, 11.0)  # product 121mm^2
+    assert imaging_rano_label(121, 121, square, square, 121, square) == "stable disease"
 
 
 def test_measure_orientation_and_localisation():
@@ -88,6 +101,45 @@ def test_v4_items_if_built():
             for q in qs:
                 for f in q["_image_path"]:
                     assert (Path(q["_image_dir"]) / f).exists(), (q["id"], f)
+
+
+def test_lesion_correspondence_tracks_nearest_not_largest():
+    # paper/review.md concern 1: at follow-up, a NEW larger lesion appears far from the reference site,
+    # while a smaller lesion persists near the reference site. Naive "largest component" would silently
+    # switch lesions; nearest_component must follow the one near the reference instead.
+    seg = np.zeros((80, 80, 5), np.int16)
+    seg[10:14, 10:14, 2] = 1     # small lesion near (12,12,2): 4x4 = 16 voxels
+    seg[50:66, 50:66, 2] = 1     # large, DISTANT lesion near (58,58,2): 16x16 = 256 voxels
+    m = measure_timepoint(seg, np.eye(4), None)
+    assert len(m["enh_components"]) == 2
+    assert m["enh"]["voxels"] == 256          # the naive "largest" pick (what the old code always used)
+    anchor = [12.0, 12.0, 2.0]                # the reference scan's lesion was here
+    near = nearest_component(anchor, m["enh_components"])
+    assert near["voxels"] == 16, "must track the lesion near the reference, not whichever is largest"
+    # no anchor (reference itself had no measurable disease): falls back to the largest component
+    assert nearest_component(None, m["enh_components"])["voxels"] == 256
+    assert nearest_component(anchor, []) is None
+
+
+def test_explicit_rule_condition_states_the_rule_in_the_prompt():
+    # paper/review.md concern 2: every other TCM condition only compares the model's answer against the
+    # rule after the fact; explicit_rule must be the one place the rule text actually reaches the model.
+    assert "explicit_rule" in CONDITIONS
+    assert PHASES_BY_CONDITION["explicit_rule"] == ("TCM",)
+    q = {"question": "What next?", "options": {"A": "x", "B": "y"}}
+    case = {"title": "t", "modality": "mri"}
+    msgs = build_main_prompt(q, case, "TCM", [], extra_instructions=TCM_RULE_STATEMENT)
+    user_text = msgs[1]["content"] if isinstance(msgs[1]["content"], str) else msgs[1]["content"][-1]["text"]
+    assert TCM_RULE_STATEMENT in user_text
+    # without extra_instructions (every other condition), the rule text must NOT leak in
+    msgs_plain = build_main_prompt(q, case, "TCM", [])
+    plain_text = msgs_plain[1]["content"] if isinstance(msgs_plain[1]["content"], str) else msgs_plain[1]["content"][-1]["text"]
+    assert TCM_RULE_STATEMENT not in plain_text
+
+
+def test_system_prompt_does_not_assume_an_image():
+    from src.prompts import SYSTEM_PROMPT
+    assert "you will be shown a real brain imaging scan" not in SYSTEM_PROMPT.lower()
 
 
 if __name__ == "__main__":
