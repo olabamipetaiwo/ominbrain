@@ -12,6 +12,10 @@ STATE: analysis, paper text and the reproducibility artifact are current with th
 - GPU cap: standing cap is 2 concurrent GPUs; 3 was authorized only for the T-18/T-19 runs.
 
 ---
+## IN PROGRESS
+ - [ ] Compile Paper
+ - [ ] Read Through Paper
+
 
 ## PENDING, in order of importance
 
