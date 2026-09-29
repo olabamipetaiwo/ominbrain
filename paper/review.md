@@ -110,4 +110,3 @@ Five issues need attention:
 **My submission advice:** prioritize correcting the label/prompt mismatches and obtaining independent item validation before adding more models. Then shorten the narrative around the strongest supported finding. The full review includes specific code locations, statistical repairs, writing changes, and a September 28–October 12 schedule.
 
 
-
