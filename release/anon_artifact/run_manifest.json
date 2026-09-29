@@ -1,0 +1,403 @@
+{
+ "loader_rule": "tools.lumiere_v4_stats.load_records: job folders of a model sorted by name (= by timestamp); a later record with the same (case_id, phase, condition) silently replaces the earlier one. Folders with a stamp before min_stamp ran on different items and are ignored.",
+ "min_stamp": "20260928",
+ "single_question_runs": {
+  "MedGemma-4B": {
+   "folders_oldest_first": [
+    {
+     "folder": "lumiere_v4_MedGemma-4B_context_20260928_071552",
+     "stamp": "20260928",
+     "n_records": 579,
+     "conditions": {
+      "ctx_absent": 91,
+      "ctx_gold": 175,
+      "ctx_wrong": 175,
+      "explicit_rule": 46,
+      "flip_label": 46,
+      "flip_window": 46
+     },
+     "n_used": 167,
+     "n_replaced_by_later_folder": 412
+    },
+    {
+     "folder": "lumiere_v4_MedGemma-4B_contextdscr_20260929_005925",
+     "stamp": "20260929",
+     "n_records": 412,
+     "conditions": {
+      "ctx_gold": 137,
+      "ctx_wrong": 137,
+      "explicit_rule": 46,
+      "flip_label": 46,
+      "flip_window": 46
+     },
+     "n_used": 412,
+     "n_replaced_by_later_folder": 0
+    },
+    {
+     "folder": "lumiere_v4_MedGemma-4B_image_20260928_064056",
+     "stamp": "20260928",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 252,
+     "n_replaced_by_later_folder": 134
+    },
+    {
+     "folder": "lumiere_v4_MedGemma-4B_imagedscr_20260928_230309",
+     "stamp": "20260928",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    }
+   ],
+   "n_keys": 965,
+   "n_replaced": 546
+  },
+  "Gemma-3-12B": {
+   "folders_oldest_first": [
+    {
+     "folder": "lumiere_v4_Gemma-3-12B_context_20260928_103752",
+     "stamp": "20260928",
+     "n_records": 579,
+     "conditions": {
+      "ctx_absent": 91,
+      "ctx_gold": 175,
+      "ctx_wrong": 175,
+      "explicit_rule": 46,
+      "flip_label": 46,
+      "flip_window": 46
+     },
+     "n_used": 167,
+     "n_replaced_by_later_folder": 412
+    },
+    {
+     "folder": "lumiere_v4_Gemma-3-12B_contextdscr_20260929_074000",
+     "stamp": "20260929",
+     "n_records": 412,
+     "conditions": {
+      "ctx_gold": 137,
+      "ctx_wrong": 137,
+      "explicit_rule": 46,
+      "flip_label": 46,
+      "flip_window": 46
+     },
+     "n_used": 412,
+     "n_replaced_by_later_folder": 0
+    },
+    {
+     "folder": "lumiere_v4_Gemma-3-12B_image_20260928_082905",
+     "stamp": "20260928",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 252,
+     "n_replaced_by_later_folder": 134
+    },
+    {
+     "folder": "lumiere_v4_Gemma-3-12B_imagedscr_20260929_093224",
+     "stamp": "20260929",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    }
+   ],
+   "n_keys": 965,
+   "n_replaced": 546
+  },
+  "Gemma-3-27B": {
+   "folders_oldest_first": [
+    {
+     "folder": "lumiere_v4_Gemma-3-27B_context_20260928_142658",
+     "stamp": "20260928",
+     "n_records": 579,
+     "conditions": {
+      "ctx_absent": 91,
+      "ctx_gold": 175,
+      "ctx_wrong": 175,
+      "explicit_rule": 46,
+      "flip_label": 46,
+      "flip_window": 46
+     },
+     "n_used": 167,
+     "n_replaced_by_later_folder": 412
+    },
+    {
+     "folder": "lumiere_v4_Gemma-3-27B_contextdscr_20260929_015332",
+     "stamp": "20260929",
+     "n_records": 412,
+     "conditions": {
+      "ctx_gold": 137,
+      "ctx_wrong": 137,
+      "explicit_rule": 46,
+      "flip_label": 46,
+      "flip_window": 46
+     },
+     "n_used": 412,
+     "n_replaced_by_later_folder": 0
+    },
+    {
+     "folder": "lumiere_v4_Gemma-3-27B_image_20260928_103714",
+     "stamp": "20260928",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 252,
+     "n_replaced_by_later_folder": 134
+    },
+    {
+     "folder": "lumiere_v4_Gemma-3-27B_imagedscr_20260928_231443",
+     "stamp": "20260928",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    }
+   ],
+   "n_keys": 965,
+   "n_replaced": 546
+  },
+  "Llama-4-Scout": {
+   "folders_oldest_first": [
+    {
+     "folder": "lumiere_v4_Llama-4-Scout_context_20260928_175146",
+     "stamp": "20260928",
+     "n_records": 579,
+     "conditions": {
+      "ctx_absent": 91,
+      "ctx_gold": 175,
+      "ctx_wrong": 175,
+      "explicit_rule": 46,
+      "flip_label": 46,
+      "flip_window": 46
+     },
+     "n_used": 167,
+     "n_replaced_by_later_folder": 412
+    },
+    {
+     "folder": "lumiere_v4_Llama-4-Scout_contextdscr_20260929_014528",
+     "stamp": "20260929",
+     "n_records": 412,
+     "conditions": {
+      "ctx_gold": 137,
+      "ctx_wrong": 137,
+      "explicit_rule": 46,
+      "flip_label": 46,
+      "flip_window": 46
+     },
+     "n_used": 412,
+     "n_replaced_by_later_folder": 0
+    },
+    {
+     "folder": "lumiere_v4_Llama-4-Scout_image_20260928_134837",
+     "stamp": "20260928",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 252,
+     "n_replaced_by_later_folder": 134
+    },
+    {
+     "folder": "lumiere_v4_Llama-4-Scout_imagedscr_20260928_232730",
+     "stamp": "20260928",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    }
+   ],
+   "n_keys": 965,
+   "n_replaced": 546
+  },
+  "Gemini-3.6-Flash": {
+   "folders_oldest_first": [
+    {
+     "folder": "lumiere_v4_Gemini-3.6-Flash_image_20260928_050318",
+     "stamp": "20260928",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 252,
+     "n_replaced_by_later_folder": 134
+    },
+    {
+     "folder": "lumiere_v4_Gemini-3.6-Flash_imagedscr_20260928_220314",
+     "stamp": "20260928",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    }
+   ],
+   "n_keys": 386,
+   "n_replaced": 134
+  },
+  "Gemma-3-27B-bf16": {
+   "folders_oldest_first": [
+    {
+     "folder": "lumiere_v4_Gemma-3-27B-bf16_image_20260928_143619",
+     "stamp": "20260928",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 252,
+     "n_replaced_by_later_folder": 134
+    },
+    {
+     "folder": "lumiere_v4_Gemma-3-27B-bf16_imagedscr_20260929_083834",
+     "stamp": "20260929",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    }
+   ],
+   "n_keys": 386,
+   "n_replaced": 134
+  }
+ },
+ "chain_runs": {
+  "MedGemma-4B/image": {
+   "used": "lumiere_MedGemma-4B_v4_nogate_noadapt_20260929_020226",
+   "superseded": [
+    "lumiere_MedGemma-4B_v4_nogate_noadapt_20260924_175912",
+    "lumiere_MedGemma-4B_v4_nogate_noadapt_20260928_063827"
+   ]
+  },
+  "MedGemma-4B/text_only": {
+   "used": "lumiere_MedGemma-4B_textonly_v4_nogate_noadapt_20260929_025731",
+   "superseded": [
+    "lumiere_MedGemma-4B_textonly_v4_nogate_noadapt_20260924_190658",
+    "lumiere_MedGemma-4B_textonly_v4_nogate_noadapt_20260928_073243"
+   ]
+  },
+  "Gemma-3-12B/image": {
+   "used": "lumiere_Gemma-3-12B_v4_nogate_noadapt_20260929_044732",
+   "superseded": [
+    "lumiere_Gemma-3-12B_v4_nogate_noadapt_20260924_211049",
+    "lumiere_Gemma-3-12B_v4_nogate_noadapt_20260928_091836"
+   ]
+  },
+  "Gemma-3-12B/text_only": {
+   "used": "lumiere_Gemma-3-12B_textonly_v4_nogate_noadapt_20260929_061701",
+   "superseded": [
+    "lumiere_Gemma-3-12B_textonly_v4_nogate_noadapt_20260924_230742",
+    "lumiere_Gemma-3-12B_textonly_v4_nogate_noadapt_20260928_104856"
+   ]
+  },
+  "Gemma-3-27B/image": {
+   "used": "lumiere_Gemma-3-27B_v4_nogate_noadapt_20260929_034546",
+   "superseded": [
+    "lumiere_Gemma-3-27B_v4_nogate_noadapt_20260924_210559",
+    "lumiere_Gemma-3-27B_v4_nogate_noadapt_20260928_125136"
+   ]
+  },
+  "Gemma-3-27B/text_only": {
+   "used": "lumiere_Gemma-3-27B_textonly_v4_nogate_noadapt_20260929_053110",
+   "superseded": [
+    "lumiere_Gemma-3-27B_textonly_v4_nogate_noadapt_20260924_232508",
+    "lumiere_Gemma-3-27B_textonly_v4_nogate_noadapt_20260928_143800"
+   ]
+  },
+  "Llama-4-Scout/image": {
+   "used": "lumiere_Llama-4-Scout_v4_nogate_noadapt_20260929_033753",
+   "superseded": [
+    "lumiere_Llama-4-Scout_v4_nogate_noadapt_20260925_034927",
+    "lumiere_Llama-4-Scout_v4_nogate_noadapt_20260928_163424"
+   ]
+  },
+  "Llama-4-Scout/text_only": {
+   "used": "lumiere_Llama-4-Scout_textonly_v4_nogate_noadapt_20260929_051107",
+   "superseded": [
+    "lumiere_Llama-4-Scout_textonly_v4_nogate_noadapt_20260925_054424",
+    "lumiere_Llama-4-Scout_textonly_v4_nogate_noadapt_20260928_181500"
+   ]
+  }
+ },
+ "shipped_folders": [
+  "lumiere_Gemma-3-12B_textonly_v4_nogate_noadapt_20260928_104856",
+  "lumiere_Gemma-3-12B_textonly_v4_nogate_noadapt_20260929_061701",
+  "lumiere_Gemma-3-12B_v4_nogate_noadapt_20260928_091836",
+  "lumiere_Gemma-3-12B_v4_nogate_noadapt_20260929_044732",
+  "lumiere_Gemma-3-27B_textonly_v4_nogate_noadapt_20260928_143800",
+  "lumiere_Gemma-3-27B_textonly_v4_nogate_noadapt_20260929_053110",
+  "lumiere_Gemma-3-27B_v4_nogate_noadapt_20260928_125136",
+  "lumiere_Gemma-3-27B_v4_nogate_noadapt_20260929_034546",
+  "lumiere_Llama-4-Scout_textonly_v4_nogate_noadapt_20260928_181500",
+  "lumiere_Llama-4-Scout_textonly_v4_nogate_noadapt_20260929_051107",
+  "lumiere_Llama-4-Scout_v4_nogate_noadapt_20260928_163424",
+  "lumiere_Llama-4-Scout_v4_nogate_noadapt_20260929_033753",
+  "lumiere_MedGemma-4B_textonly_v4_nogate_noadapt_20260928_073243",
+  "lumiere_MedGemma-4B_textonly_v4_nogate_noadapt_20260929_025731",
+  "lumiere_MedGemma-4B_v4_nogate_noadapt_20260928_063827",
+  "lumiere_MedGemma-4B_v4_nogate_noadapt_20260929_020226",
+  "lumiere_v4_Gemini-3.6-Flash_image_20260928_050318",
+  "lumiere_v4_Gemini-3.6-Flash_imagedscr_20260928_220314",
+  "lumiere_v4_Gemma-3-12B_context_20260928_103752",
+  "lumiere_v4_Gemma-3-12B_contextdscr_20260929_074000",
+  "lumiere_v4_Gemma-3-12B_image_20260928_082905",
+  "lumiere_v4_Gemma-3-12B_imagedscr_20260929_093224",
+  "lumiere_v4_Gemma-3-27B-bf16_image_20260928_143619",
+  "lumiere_v4_Gemma-3-27B-bf16_imagedscr_20260929_083834",
+  "lumiere_v4_Gemma-3-27B_context_20260928_142658",
+  "lumiere_v4_Gemma-3-27B_contextdscr_20260929_015332",
+  "lumiere_v4_Gemma-3-27B_image_20260928_103714",
+  "lumiere_v4_Gemma-3-27B_imagedscr_20260928_231443",
+  "lumiere_v4_Llama-4-Scout_context_20260928_175146",
+  "lumiere_v4_Llama-4-Scout_contextdscr_20260929_014528",
+  "lumiere_v4_Llama-4-Scout_image_20260928_134837",
+  "lumiere_v4_Llama-4-Scout_imagedscr_20260928_232730",
+  "lumiere_v4_MedGemma-4B_context_20260928_071552",
+  "lumiere_v4_MedGemma-4B_contextdscr_20260929_005925",
+  "lumiere_v4_MedGemma-4B_image_20260928_064056",
+  "lumiere_v4_MedGemma-4B_imagedscr_20260928_230309",
+  "lumiere_v4_inputcheck_Gemma-3-12B_20260928_211548",
+  "lumiere_v4_inputcheck_Gemma-3-27B-bf16_20260928_211343",
+  "lumiere_v4_inputcheck_Gemma-3-27B_20260928_211756",
+  "lumiere_v4_inputcheck_Llama-4-Scout_20260928_211856",
+  "lumiere_v4_inputcheck_MedGemma-4B_20260928_211456"
+ ]
+}
