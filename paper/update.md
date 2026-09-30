@@ -1,5 +1,23 @@
 #Project Update
 
+## 2026-09-30 (4) — worked example de-verbosed
+
+User: the worked example is too wordy. In `tools/paper_v4_example.py`, abbreviated each phase to its actual question + key (data-driven) instead of the full verbatim stem: dropped the descriptive preambles (skull-stripping/registration, radiological-convention and LIL division instructions), the whole RANO-criteria recitation in the DSCR stem, the TCM patient-facts paragraph, and the four sentence-long option lists — all of which duplicate the Methods section; the intro now says each item is four-way MCQ with full stems/options in the artifact. Kept the DSCR key derivation (10/0/385 mm^2 -> PD), the TCM rule and worked classification, the PJRF one-liner, the images (figure) and the answers table; tightened the donor-swap line to short labels (FLAIR not T1c, L post not R post, PR not PD). Nothing quantitative is hand-typed; the docstring now states stems are abbreviated. Recompile clean: 16 pages, 0 undefined. (Page count unchanged from the (3) pass since the section's full-width figure float dominates its page use; this pass was about wordiness, not length.)
+
+## 2026-09-30 (3) — declarative title; abstract/title de-dup; appendix trim (17->16 pp)
+
+**Title (user, 2026-09-30).** Switched to a declarative title: "Measuring Image Dependence, Not Just Response Sensitivity: Controlled Ablation Tests on Brain-MRI Question Answering". Old question title kept as a dated comment. Reason: "visual tracking" reads as the CV object-tracking task and overstated the body's careful "image-dependent behavior" wording.
+
+**Abstract/title de-dup.** The T-R5 rewrite had made the abstract's first sentence the same question as the (then) question title. Reopened the abstract with the tension ("An accuracy drop ... is often read as ... but it can also be response sensitivity alone") and stated the method question as a clause, so it no longer echoes the title.
+
+**Appendix trim (why it was 17 pp, and getting to 16).** The appendix length is driven by full-width floats, not prose: 5 `table*` + 1 `figure*`. Text cuts alone don't cross a page boundary when floats dominate. Actions:
+- Worked-example per-model answers table (`tools/paper_v4_example.py`): full-width `table*` -> single-column `table` (short model names, tighter `/`-joined cells, scriptsize). No data lost. This is what dropped 17->16.
+- Worked example also: PJRF block no longer repeats the whole TCM patient summary (references it + the forecast task only); key-derivation sentence tightened; redundant "rating is recorded ... never the key" line dropped (stated in methods).
+- Appendix prose: PJRF construction + E5 results paragraphs merged into one; parse-error accounting compressed from a per-model enumeration to the three models that had any (MedGemma 105, Scout 46, Gemma-27B 1), keeping the Pixtral DSCR-exclusion note and the "parsing doesn't explain MedGemma's below-chance" check.
+- Tried converting `tab_v4_ctrl` and `tab_v4_inputcheck` to single-column too: both overflowed (105pt/57pt) and pushed back to 17 pp, so reverted. `tab_v4_e2` (10 cols) and `tab_v4_e3trans` (9 cols, long headers) also need full width. 16 pp is the floor without cutting evidence or the MRI figure.
+
+Verified: scratch compile 16 pages, 0 undefined refs/citations, max overfull 9.6pt (pre-existing, minor); `paper_numbers --check` no stale numbers; fixed one hand-typed "one" -> `\vfourParseInvalidGemmaTwentySeven{}` in the parse trim.
+
 ## 2026-09-30 (2) — T-R5 (abstract) and T-R6 (E1 trim) done; review-2026-09-29 lane closed
 
 **T-R6.** Trimmed the "Open models: image effect (E1)" paragraph to interpretation only: cut the per-model diff+CI+exact-p re-narration that duplicated Table~3 (the AIA diffs and brackets for MedGemma/Gemma-12B/Gemma-27B, the DSCR per-model diffs/CIs/p, the add-half interval, the below-chance/equals-share specifics), keeping the interpretive claims (AIA gate met only by Scout; the one Holm-surviving test does not show category reading because own accuracy stays below the majority-key share; non-survival is not evidence of no effect; modal-answer concentration; sensitivity ranges) and a single pointer to the table.
