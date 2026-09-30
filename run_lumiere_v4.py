@@ -65,6 +65,9 @@ def run_model(model_cfg: dict, conditions: tuple, phases, n_cases, tag: str, moc
         print(f"\n!! {len(empty)} of {len(records)} responses were EMPTY (API error / rate limit / all tokens spent on "
               f"thinking); they score as failures. Rerun before reading any result.")
     ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    # Guard: if EVERY response was empty the run is a serving failure, not a result. Exit non-zero after saving so
+    # an --dependency=afterok chained full run cannot auto-launch on a false pass (see the Pixtral chat-template bug).
+    all_empty = bool(records) and len(empty) == len(records)
     name = f"lumiere_v4_{model_cfg['name']}{'_' + tag if tag else ''}_{ts}"
     out = Path("results") / name
     out.mkdir(parents=True, exist_ok=True)
@@ -77,6 +80,9 @@ def run_model(model_cfg: dict, conditions: tuple, phases, n_cases, tag: str, moc
     print(f"\nSaved -> {out}")
     for phase, conds in summary.items():
         print(f"  {phase}: " + "; ".join(f"{c}: {d.get('acc', d.get('brier'))}" for c, d in conds.items()))
+    if all_empty:
+        sys.exit(f"\n!! ALL {len(records)} responses empty for {model_cfg['name']} — serving failure, not a result. "
+                 f"Fix serving and rerun; a chained full run will not launch.")
 
 
 def main():

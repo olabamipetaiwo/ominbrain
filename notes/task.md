@@ -1,21 +1,18 @@
 # Tasks
 
-Only in-progress (`[~]`) and not-started (`[ ]`) items live here. When a task is confirmed finished, delete it from this file (history goes in `paper/update.md`).
-
-## RESUME HERE 
-
-STATE: analysis, paper text and the reproducibility artifact are current with the DSCR-stem reruns; numbers and history are in the top entries of `paper/update.md`.
+Only in-progress (`[~]`) and not-started (`[ ]`) items live here. 
+When a task is confirmed finished, delete it from this file (history goes in `paper/update.md`).
 
 ## Standing rules
 - PAPER RULE (user, 2026-09-28): the paper reports only the final design and results; no version history (rebuilt, earlier round, superseded). History lives in `paper/update.md` and the preregistration change log.
 - Do not cite results from folders dated before 20260928; they used the old 62-patient items.
-- GPU cap: standing cap is 2 concurrent GPUs; 3 was authorized only for the T-18/T-19 runs.
+- GPU cap: standing cap is 3 concurrent GPUs;
+- It's an evaluation paper, not benchmark
 
 ---
-## IN PROGRESS
- - [ ] Compile Paper
- - [ ] Read Through Paper
+## NEW TASKS (delete each when done)
 
+All review-2026-09-29 tasks (T-R1..R8) are done (see update.md 2026-09-30). Pixtral is integrated as a second precision/stack control (AIA+LIL). No open review tasks remain.
 
 ## PENDING, in order of importance
 
@@ -27,3 +24,10 @@ STATE: analysis, paper text and the reproducibility artifact are current with th
     - [ ] **T-3e** — Fallback if clinician review cannot happen in time: narrow the benchmark-validity claim and reduce DSCR's prominence in the abstract/contributions (the concordance statistic is agreement with our rule, not proof the expert labels are wrong).
 
     <!-- cd release/anon_artifact -->
+    <!-- artifact update -->
+
+    <!-- Task
+    When you're back (reconnect however you normally do, any node), restart Claude and just say something like "check the Pixtral run." I'll:
+<!-- 1. Check 43944162 finished cleanly and eyeball the Pixtral results.
+2. Regenerate numbers → integrate Pixtral into E1/E2/E3 + prereg log.
+3. Do T-R5 (abstract) and T-R6 (E1 trim) against the fresh numbers, recompil -->

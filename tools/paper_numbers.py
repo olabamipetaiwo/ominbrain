@@ -29,8 +29,8 @@ from src.lumiere_labels import canonical_answer_text
 
 OUT = Path("paper/latex/generated")
 MODELS = ["MedGemma-4B", "Gemma-3-12B", "Gemma-3-27B", "Llama-4-Scout"]
-TAG = {"Gemini-3.6-Flash": "Gemini", "Gemma-3-27B-bf16": "GemmaTwentySevenBf","MedGemma-4B": "MedGemma", "Gemma-3-12B": "GemmaTwelve", "Gemma-3-27B": "GemmaTwentySeven", "Llama-4-Scout": "Scout"}
-SHORT = {"Gemini-3.6-Flash": "Gemini-3.6-Flash", "MedGemma-4B": "MedGemma-4B", "Gemma-3-12B": "Gemma-3-12B", "Gemma-3-27B": "Gemma-3-27B", "Llama-4-Scout": "Llama-4-Scout"}
+TAG = {"Gemini-3.6-Flash": "Gemini", "Gemma-3-27B-bf16": "GemmaTwentySevenBf", "Pixtral-12B-bf16": "Pixtral", "MedGemma-4B": "MedGemma", "Gemma-3-12B": "GemmaTwelve", "Gemma-3-27B": "GemmaTwentySeven", "Llama-4-Scout": "Scout"}
+SHORT = {"Gemini-3.6-Flash": "Gemini-3.6-Flash", "Gemma-3-27B-bf16": "Gemma-3-27B (bf16)", "Pixtral-12B-bf16": "Pixtral-12B", "MedGemma-4B": "MedGemma-4B", "Gemma-3-12B": "Gemma-3-12B", "Gemma-3-27B": "Gemma-3-27B", "Llama-4-Scout": "Llama-4-Scout"}
 PHASES = ["AIA", "LIL", "DSCR", "PJRF", "TCM"]
 STALE = [r"63\.5", r"33 of 33", r"(?<!which gave )50 of 52", r"48 and 52", r"33 progressive", r"14\\%\)"]   # figures that came from the label-spelling bug or typos
 
@@ -394,6 +394,16 @@ def v4(mc: Macros) -> None:
     sel = load("data/lumiere/v4/selection_report.json")
     st = load("results/lumiere_v4_stats.json")
     sup = (load("results/lumiere_v4_supplement.json") or {}).get("models", {})   # post-review descriptive supplement
+    # Pixtral-12B-bf16 (second precision/stack control): its DSCR image conditions returned empty output on the 3-image
+    # prompt and are excluded; these counts back the exclusion note in the results and appendix.
+    _pix = sorted(glob.glob("results/lumiere_v4_Pixtral-12B-bf16_image_*"))
+    if _pix:
+        _er = load(str(Path(_pix[-1]) / "empty_responses.json")) or []
+        _ps = load(str(Path(_pix[-1]) / "summary.json")) or {}
+        _dscr = [e for e in _er if e[1] == "DSCR"]
+        mc.add("vfourPixtralDscrEmptyOwn", sum(1 for e in _dscr if e[2] == "own"))
+        mc.add("vfourPixtralDscrEmptySwap", sum(1 for e in _dscr if e[2] == "swap"))
+        mc.add("vfourPixtralDscrSwapN", _ps.get("DSCR", {}).get("swap", {}).get("n", ""))
     if sel:
         for ph, n in sel["phase_counts"].items():
             mc.add(f"vfourN{ph}", n)

@@ -1,5 +1,52 @@
 #Project Update
 
+## 2026-09-30 (2) — T-R5 (abstract) and T-R6 (E1 trim) done; review-2026-09-29 lane closed
+
+**T-R6.** Trimmed the "Open models: image effect (E1)" paragraph to interpretation only: cut the per-model diff+CI+exact-p re-narration that duplicated Table~3 (the AIA diffs and brackets for MedGemma/Gemma-12B/Gemma-27B, the DSCR per-model diffs/CIs/p, the add-half interval, the below-chance/equals-share specifics), keeping the interpretive claims (AIA gate met only by Scout; the one Holm-surviving test does not show category reading because own accuracy stays below the majority-key share; non-survival is not evidence of no effect; modal-answer concentration; sensitivity ranges) and a single pointer to the table.
+
+**T-R5.** Rewrote the abstract to lead with the method question ("When does removing or swapping an image show that a multimodal LLM reads it?"), state the honest-negative result early ("For current open models the result is negative"), and add the R2 clause (two bf16 reruns, one non-Gemma, stay near chance on the control → not merely a 4-bit serving artifact). Acronyms held to LUMIERE, RANO, MRI, LLM (no AIA/LIL/DSCR); the reference model is not called "reproducible" (it is the API positive control).
+
+Both reuse existing macros (no regeneration). Verified: scratch compile clean (17 pages, 0 undefined refs/citations/control sequences), `paper_numbers --check` no stale numbers, abstract acronym audit shows only LLM/LUMIERE/MRI/RANO. All review-2026-09-29 tasks (T-R1..R8) now closed.
+
+## 2026-09-30 — Pixtral run integrated as a second precision/stack control (T-R1+R2 closed)
+
+The Pixtral-12B reference run finished (the `--dependency=afterok` chain from the launch session, `43944162`, had CANCELLED at ~6 min; a manual resubmit `43951124` COMPLETED and produced `results/lumiere_v4_Pixtral-12B-bf16_image_20260929_181720/`, all three image phases, own/text/swap). Regenerated numbers and folded Pixtral into the paper.
+
+**Key finding on the run.** Pixtral is **near chance on AIA** (own 30.4% vs text 26.1%, E1 +4.3 [$-$4.3, +13.0], inconclusive) and on LIL (18.4% vs 21.1%), with donor tracking null. It does **not** read the image, so it is **not** a positive/feasibility reference (R1 feasibility still rests on Gemini). Its value is R2: a reproducible, **non-Gemma, bf16/vLLM** model that also sits near chance on AIA — so the open models' near-chance sequence identification is not specific to 4-bit Ollama serving (though scale/training still differ, so quantization is not isolated).
+
+**DSCR excluded (post hoc), user-approved.** The DSCR **image** arms failed badly: empty output with no recoverable letter on 22 of 46 own-image and 18 of 42 swapped-image records (the 3-image prompt through the custom Pixtral chat template / 16k context; the raw text was not saved so the failure can't be diagnosed further). The DSCR **text** arm (no image) had 0 errors. DSCR own "23.9%" was therefore mostly empties-scored-wrong, not a genuine score. Decision (user, 2026-09-30): scope Pixtral to **AIA+LIL only**, note the DSCR exclusion, **no rerun** — DSCR is class-prior-confounded for every model and not central to a precision/stack control. The stats tool's own guard ("46 empty responses ... must be 0") is what surfaced this; the API-shaped `parse_error and not raw` heuristic over-counts for local models, but here it correctly flagged real empties.
+
+**Framing (user, 2026-09-30): second precision/stack control**, alongside Gemma-3-27B-bf16 — not a reference model.
+
+**Changes.**
+- `config/models.py`: `Pixtral-12B-bf16` already registered (2026-09-29).
+- `tools/lumiere_v4_stats.py`: added `Pixtral-12B-bf16` to `CONTROLS` (E1/E2 only, outside the Holm family); reworded the control-section header to name it as the reproducible non-Gemma reference.
+- `tools/paper_numbers.py`: `TAG`/`SHORT` gained a `Pixtral` entry (so E1/E2 macros generate via the controls loop); added `vfourPixtralDscrEmptyOwn` (22), `vfourPixtralDscrEmptySwap` (18), `vfourPixtralDscrSwapN` (42) for the exclusion note. 1027 macros total.
+- Manuscript (`paper/latex/acl_latex.tex`): methods "Reference model" paragraph adds Pixtral as the third post hoc control with the DSCR exclusion; results "Precision control" paragraph adds Pixtral's AIA/LIL numbers and the "not specific to 4-bit Ollama" reading, and "Only one model was rerun" → "Two models were rerun ... both stay near chance on AIA"; limitations bf16-rerun sentence now covers both models; appendix output-handling adds the Pixtral DSCR-empty note; software/compute "the bf16 run" → "the two bf16 runs".
+- `paper/preregistration_v4.md`: new 2026-09-29 change-log entry for the second (non-Gemma) precision/stack control, with the preregistered AIA reading and the post hoc DSCR exclusion.
+
+**Verification.** Scratch compile clean: 17 pages, 0 undefined references, 0 undefined control sequences, 0 errors. `paper_numbers --check`: no stale numbers. `tests.test_lumiere_v4`: all pass. DSCR-Pixtral macros exist but are deliberately uncited in prose.
+
+**Remaining (Lane 3, now unblocked).** T-R6 (trim E1 paragraph to interpretation), T-R5 (rewrite abstract lead) — both now have Pixtral's numbers available.
+
+## 2026-09-29 (late night, 5) — review-2026-09-29 tasks: Pixtral reference run launched; T-R3/R4/R7/R8 done
+
+New reviewer pass (`paper/review.md`, borderline): two structural concerns it says cannot be hedged away — feasibility rests on one irreproducible API model (Gemini-3.6-Flash), and open-model near-chance AIA is confounded with 4-bit Ollama serving. Both are addressed by one experiment. Tasks T-R1..R8 queued in `notes/task.md` in three lanes.
+
+**T-R1+R2 (Lane 1, running).** Added a reproducible bf16/vLLM reference model that is not Gemma-family: **Pixtral-12B** (`mistral-community/pixtral-12b`, HF format, standard vLLM load — no mistral-tokenizer flags), chosen for non-China policy + fits one RTX PRO 6000. Registered as `Pixtral-12B-bf16` (`category: reference`, `backend: vllm`) in `config/models.py`; weights cached (24G) on the login node; `shell/lumiere/lumiere_v4_pixtral.sbatch` runs `MODE=image` (`own,text,swap`, phases AIA,LIL,DSCR). Smoke job (N=2) is `43939230`; group QOS memory (1000G cap) was saturated by labmates' jobs so `--mem` lowered 96→48gb (Pixtral's 24G loads to GPU VRAM, host RAM only stages), which cleared the `QOSGrpMemLimit` hold. Made the chain cluster-autonomous (session runs under VS Code Remote-SSH, not tmux, so it dies on laptop disconnect): submitted the full run `43944162` (all patients, same `MODE=image`) held by `--dependency=afterok:43939230`, so the scheduler auto-runs it iff smoke exits 0 — no live Claude/laptop needed. On resume: confirm `43944162` COMPLETED, then regenerate numbers and integrate Pixtral into E1/E2/E3 and the prereg change log. Purpose: reproducible image-reading feasibility point (R1) and AIA serving-vs-genuine (R2). AIA outcome interpretation preregistered either way (clears chance → serving; stays at chance → strengthens genuine).
+
+**T-R4 (done).** Retitled from the yes/no "Do Medical MLLMs Use the Image?" (promised an internal-mechanism verdict the paper declines to give) to the method question: "When Does an Image Ablation Measure Visual Tracking? Controlled Image-Dependence Tests on Brain-MRI Question Answering." Old title kept as a dated comment.
+
+**T-R3 (done).** Worked example (Results, "ablation without tracking") now states the protocol delta explicitly rather than asserting it: a method scoring image reliance by the ablation accuracy drop (HEAL-MedVQA, `nguyen2025localizing`) or by whether the answer changes under image replacement (balanced-VQA pairing, `goyal2017making`) would score the Llama-4-Scout DSCR case as image use (largest drop, survives correction, answer changes under swap); our reading does not, because the image arm stays below the majority-key share, the drop is driven by the text-only arm falling below the prior, and the donor gain is not separable from a random assignment.
+
+**T-R7 (done).** Provenance-wording audit: kept keys strictly as an evaluation-methods claim. Intro sentence "motivates a benchmark with explicit key provenance" → "motivates an evaluation with explicit key provenance" (only drift found). Abstract, contributions, conclusion, ethics already say keys are unvalidated automated targets / "not a clinical benchmark"; DSCR "expert rating is recorded but is not the key" wording consistent throughout.
+
+**T-R8 (done).** Archived stale `paper/latex/body_main.tex` → `paper/archive/body_main.tex` (not `\input` anywhere; removes accidental-submission risk). Audited "tracks"/"tracking" for open models: every occurrence is the reference model, the audit rule tracking a lesion, the E2 metric name, or explicitly hedged ("cannot tell donor-specific tracking", "ablation without tracking") — no unqualified open-model claim.
+
+Scratch compile after all four edits: 0 errors, 0 undefined citations, 17 pages. Remaining: T-R5 (abstract) and T-R6 (E1 trim) wait on Lane 1's Pixtral numbers.
+
+Side (non-paper): Chinese-model cleanup on the cluster — weights were already purged in the 2026-09-21 roster decision; only 112K of empty HF lock stubs + an InternVL code-module dir remained in our own cache, now removed. Labmates' Qwen/InternVL caches left untouched. Also deleted (user-approved) the 15G LLaVA-Med copy in `$HOME` (`chaoyinshe/llava-med-v1.5-mistral-7b-hf`, downloaded 2026-08-21) — dropped from the roster 2026-09-21, not referenced by any live code path, and against the home-quota rule; reclaimed ~15G of the 40G home quota.
+
 ## 2026-09-29 (late night, 4) — appendix condensed
 
 Wording-only trim of the appendix, no result or number changed and every macro and reference kept: compatibility section (one paragraph, same finding), Data / Reproducibility artifact / Models and terms / Software and compute / Intended use, item-set summary, audit size check, donor-dependence method, output-handling and input-check text, fact-flip table text, PJRF outcome construction and E5 (dropped the OpenAI-client version, the model-card clinical-use remark, and repeated explanations). Pre-trim copy kept in the session scratchpad only. Recompile not yet run after this edit (shell check was down); run the scratch compile and confirm 0 undefined refs before the read-through.
