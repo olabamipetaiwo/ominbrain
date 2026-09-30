@@ -12,7 +12,9 @@ When a task is confirmed finished, delete it from this file (history goes in `pa
 ---
 ## NEW TASKS (delete each when done)
 
-All review-2026-09-29 tasks (T-R1..R8) are done (see update.md 2026-09-30). Pixtral is integrated as a second precision/stack control (AIA+LIL). No open review tasks remain.
+All review-2026-09-29 tasks (T-R1..R8) are done (see update.md 2026-09-30). Pixtral is integrated as a second precision/stack control (AIA+LIL).
+
+- [ ] **T-R9 — Rebuild the anonymous reproducibility artifact.** `release/anon_artifact/` was built before Pixtral, so its `numbers.tex`, `expected/` statistics and raw model records don't include the Pixtral run or the 1027-macro regeneration — it no longer matches the committed paper. Rebuild via `tools/build_anon_artifact.py` (include the `Pixtral-12B-bf16_image_20260929_181720` records), verify `reproduce.sh` regenerates statistics/macros/tables identically and the anonymity scrub is 0 hits, then re-upload to the anonymous repo (anonymous.4open.science) whose link is in the submission.
 
 ## PENDING, in order of importance
 
