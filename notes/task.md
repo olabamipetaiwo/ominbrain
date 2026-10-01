@@ -33,3 +33,9 @@ All review-2026-09-29 tasks (T-R1..R8) are done (see update.md 2026-09-30). Pixt
 <!-- 1. Check 43944162 finished cleanly and eyeball the Pixtral results.
 2. Regenerate numbers → integrate Pixtral into E1/E2/E3 + prereg log.
 3. Do T-R5 (abstract) and T-R6 (E1 trim) against the fresh numbers, recompil -->
+
+
+## Submission prep (2026-10-01)
+- [x] Overview figure (Fig 1, TikZ) + experimental-results figure (Fig 2) added per professor feedback.
+- [x] Main body trimmed to the 8-page ARR content limit (Option A: kept both figures, trimmed redundant prose). Conclusion ends p.8; Limitations p.9. See update.md 2026-10-01 (2).
+- [ ] T-R9 — rebuild the anonymous reproducibility artifact (release/anon_artifact/) to include Pixtral + the 1027-macro regeneration, verify reproduce.sh + anonymity scrub, re-upload to anonymous.4open.science. (Note: the figures/trim changed numbers.tex usage but NOT the numbers; re-check the artifact's numbers.tex still matches.)
