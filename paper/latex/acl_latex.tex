@@ -34,6 +34,7 @@
 \usepackage{amsmath}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,decorations.pathreplacing,calc}
+\usepackage{colortbl} % \rowcolor/\cellcolor for table shading (works on top of xcolor)
 \usepackage{enumitem}
 
 % --- Figure 1 (overview) styling: colour palette + inline TikZ icons ---
@@ -83,11 +84,39 @@
     \draw[white, line width=0.32pt, line cap=round, -{Latex[length=0.7mm]}] (-0.14,0.06) -- (0.14,0.06);
     \draw[white, line width=0.32pt, line cap=round, -{Latex[length=0.7mm]}] (0.14,-0.06) -- (-0.14,-0.06);
   },
+  crossic/.pic={
+    \draw[white, line width=0.45pt, line cap=round] (-0.1,-0.1) -- (0.1,0.1);
+    \draw[white, line width=0.45pt, line cap=round] (-0.1,0.1) -- (0.1,-0.1);
+  },
+  bangic/.pic={
+    \draw[white, line width=0.5pt, line cap=round] (0,0.13) -- (0,-0.03);
+    \fill[white] (0,-0.1) circle (0.028);
+  },
 }
 \newcommand{\ovbadgeat}[3]{%
   \node[ovbadge, fill=#2] at (#1) {};
   \pic at (#1) {#3};
 }
+
+% --- Table styling: header shade, zebra bands, key-row highlight, phase tags, interval glyphs ---
+\definecolor{tblhdr}{HTML}{E8EDF4}  % header row shade
+\definecolor{tblband}{HTML}{F3F5F9} % zebra / model-block band
+\definecolor{tblhi}{HTML}{FFF1D6}   % highlight for the key (survives-correction) row
+\definecolor{nocol}{HTML}{DC2626}   % "fails the control" marker
+\newcommand{\hdrrow}{\rowcolor{tblhdr}}
+\newcommand{\bandrow}{\rowcolor{tblband}}
+\newcommand{\hirow}{\rowcolor{tblhi}}
+% colored square + phase name (color still reads as a gray chip in B/W; name stays legible)
+\newcommand{\ptag}[2]{\textcolor{#1}{\rule[0.02em]{0.72em}{0.72em}}\,#2}
+\newcommand{\ptagAIA}{\ptag{aiacol}{AIA}}
+\newcommand{\ptagLIL}{\ptag{lilcol}{LIL}}
+\newcommand{\ptagDSCR}{\ptag{dscrcol}{DSCR}}
+\newcommand{\ptagPJRF}{\ptag{pjrfcol}{PJRF}}
+\newcommand{\ptagTCM}{\ptag{tcmcol}{TCM}}
+% interval-reading glyphs (filled vs hollow distinguishes them without color)
+\newcommand{\ivok}{{\textcolor{goodcol}{\textbullet}}\,CI above 0}
+\newcommand{\ivinc}{{\textcolor{neutralcol}{$\circ$}}\,inconclusive}
+\newcommand{\ivmargin}{{\textcolor{aiacol}{\rule[0.02em]{0.6em}{0.6em}}}\,within $\pm$10 pp}
 
 \input{generated/numbers}
 
@@ -287,7 +316,7 @@ The paper makes three contributions:
 % Row 2: text only
 \node[rowbox, draw=neutralcol, line width=0.7pt, fill=neutralcol!7, below=4.4mm of own] (text) {image removed (text only)};
 \node[vlm, right=13mm of text] (vlm2) {VLM};
-\node[refbox, draw=neutralcol!60, fill=neutralcol!5, right=13mm of vlm2] (ref2) {---};
+\node[refbox, draw=neutralcol!60, fill=neutralcol!5, right=13mm of vlm2] (ref2) {none};
 \node[measure, draw=neutralcol, fill=neutralcol!8, right=13mm of ref2] (m2) {sensitivity baseline};
 
 % Row 3: donor image
@@ -347,21 +376,21 @@ The natural key for a diagnosis-category question is the expert RANO rating, but
 \subsection{The item set}
 \label{sec:v4}
 
-The keys have four different origins (Table~\ref{tab:phases}), and we make no uniform claim that each is a function of what the model sees: AIA is the sequence rendered; LIL and DSCR are derived from automated segmentation masks the model does not see (recoverable from the slices only if the segmentation is right---segmentation-derived targets reviewers have not validated); PJRF is the recorded outcome, scored probabilistically since a future outcome is not a function of the stated facts; and TCM is the output of a stated management rule, testing adherence rather than clinical correctness. All random choices use fixed seeds and never look at model output.
+The keys have four different origins (Table~\ref{tab:phases}), and we make no uniform claim that each is a function of what the model sees: AIA is the sequence rendered; LIL and DSCR are derived from automated segmentation masks the model does not see (recoverable from the slices only if the segmentation is right; these are segmentation-derived targets reviewers have not validated); PJRF is the recorded outcome, scored probabilistically since a future outcome is not a function of the stated facts; and TCM is the output of a stated management rule, testing adherence rather than clinical correctness. All random choices use fixed seeds and never look at model output.
 
 \begin{table*}[t]
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{p{0.7cm}p{4.6cm}p{4.4cm}p{4.4cm}r}
+\begin{tabular}{p{1.3cm}p{4.1cm}p{4.4cm}p{4.4cm}r}
 \toprule
-Phase & Question & Model-visible inputs & Key & $n$ \\
+\hdrrow Phase & Question & Model-visible inputs & Key & $n$ \\
 \midrule
-AIA & Which MRI sequence is shown? & one axial slice (T1, T1 after contrast, T2 or FLAIR) & the sequence rendered (balanced) & \vfourNAIA{} \\
-LIL & Hemisphere and anterior/posterior half of the main tumor region & follow-up contrast-enhanced T1 slice at the level of the largest tumor region & position of the largest tumor-core component on that slice, relative to the midline and the brain's front-to-back midpoint & \vfourNLIL{} \\
-DSCR & RANO enhancement category at follow-up & baseline, follow-up and (when different from the baseline) nadir slices at the largest cross-section of the tracked enhancing lesion; the RANO thresholds are stated & category from the bidimensional products on those slices & \vfourNDSCR{} \\
-PJRF & Probability of death within 52 weeks of this scan & age, sex, MGMT, IDH, extent of resection, weeks since surgery; alive at the scan & recorded outcome; scored by Brier score, not accuracy & \vfourNPJRF{} \\
-TCM & Next management step & the same clinical facts plus weeks since chemoradiotherapy; the category comes from the chain & rule: non-PD continue; PD within 12 weeks of radiotherapy repeat MRI first; PD later change therapy & \vfourNTCM{} \\
+\ptagAIA & Which MRI sequence is shown? & one axial slice (T1, T1 after contrast, T2 or FLAIR) & the sequence rendered (balanced) & \vfourNAIA{} \\
+\bandrow \ptagLIL & Hemisphere and anterior/posterior half of the main tumor region & follow-up contrast-enhanced T1 slice at the level of the largest tumor region & position of the largest tumor-core component on that slice, relative to the midline and the brain's front-to-back midpoint & \vfourNLIL{} \\
+\ptagDSCR & RANO enhancement category at follow-up & baseline, follow-up and (when different from the baseline) nadir slices at the largest cross-section of the tracked enhancing lesion; the RANO thresholds are stated & category from the bidimensional products on those slices & \vfourNDSCR{} \\
+\bandrow \ptagPJRF & Probability of death within 52 weeks of this scan & age, sex, MGMT, IDH, extent of resection, weeks since surgery; alive at the scan & recorded outcome; scored by Brier score, not accuracy & \vfourNPJRF{} \\
+\ptagTCM & Next management step & the same clinical facts plus weeks since chemoradiotherapy; the category comes from the chain & rule: non-PD continue; PD within 12 weeks of radiotherapy repeat MRI first; PD later change therapy & \vfourNTCM{} \\
 \bottomrule
 \end{tabular}
 \caption{The phases. Stems for AIA, LIL and DSCR contain no patient-specific fact and every option set contains every possible answer, so a swapped image never conflicts with the text and the donor's answer is always available. DSCR shows two images, or three when the nadir differs from the baseline.}
@@ -412,13 +441,13 @@ Table~\ref{tab:baselines} gives what constants and lookups reach. AIA is close t
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{lrrl}
 \toprule
-Phase & $n$ & Chance & Most common key \\
+\hdrrow Phase & $n$ & Chance & Most common key \\
 \midrule
-AIA & \vfourNAIA{} & 25.0 & \vfourMajorityAIA{}\% \\
-LIL & \vfourNLIL{} & 25.0 & \vfourMajorityLIL{}\% \\
-DSCR & \vfourNDSCR{} & 25.0 & \vfourMajorityDSCR{}\% \\
-TCM & \vfourNTCM{} & 25.0 & \vfourMajorityTCM{}\% (lookup $\le$ \vfourTcmLookupEsc{}\%) \\
-PJRF & \vfourNPJRF{} & (Brier) & base rate \vfourPjrfBase{}\% \\
+\ptagAIA & \vfourNAIA{} & 25.0 & \vfourMajorityAIA{}\% \\
+\bandrow \ptagLIL & \vfourNLIL{} & 25.0 & \vfourMajorityLIL{}\% \\
+\ptagDSCR & \vfourNDSCR{} & 25.0 & \vfourMajorityDSCR{}\% \\
+\bandrow \ptagTCM & \vfourNTCM{} & 25.0 & \vfourMajorityTCM{}\% (lookup $\le$ \vfourTcmLookupEsc{}\%) \\
+\ptagPJRF & \vfourNPJRF{} & (Brier) & base rate \vfourPjrfBase{}\% \\
 \bottomrule
 \end{tabular}
 \caption{Non-model references on the items: chance, share of the most common key, the ceiling of a category-only TCM lookup, and the PJRF base rate.}
@@ -453,7 +482,7 @@ PJRF & \vfourNPJRF{} & (Brier) & base rate \vfourPjrfBase{}\% \\
 \end{figure}
 
 
-\paragraph{The reference model reads the image.} Gemini-3.6-Flash identifies the sequence for \vfourEoneOwnAIAGemini{}\% of patients with the image and \vfourEoneTextAIAGemini{}\% without it (difference \vfourEoneDiffAIAGemini{} points, 95\% CI [\vfourEoneLoAIAGemini{}, \vfourEoneHiAIAGemini{}]), and it places the lesion for \vfourEoneOwnLILGemini{}\% against \vfourEoneTextLILGemini{}\%. With the image swapped for a donor's it gives the donor's answer for \vfourEtwoSwapAIAGemini{}\% (AIA) and \vfourEtwoSwapLILGemini{}\% (LIL) of patients (Table~\ref{tab:ctrl}). A model that reads the slices can therefore answer these items, which shows the tasks are feasible; it does not show that every item is valid, nor why a weaker model fails (perception, input handling or training). DSCR is different: the reference model scores \vfourEoneOwnDSCRGemini{}\% with the image and \vfourEoneTextDSCRGemini{}\% without, where the most common key covers \vfourMajorityDSCR{}\% of items, so most of its text-only accuracy is the class prior, and it recovers the key for only \vfourEoneOwnDSCRGemini{}\% of items. DSCR is therefore only partly answerable from the slices---whether from perception, segmentation-derived keys the model does not see, or key error, which we cannot separate---so a null DSCR effect for another model cannot be read as a failure to use the image.
+\paragraph{The reference model reads the image.} Gemini-3.6-Flash identifies the sequence for \vfourEoneOwnAIAGemini{}\% of patients with the image and \vfourEoneTextAIAGemini{}\% without it (difference \vfourEoneDiffAIAGemini{} points, 95\% CI [\vfourEoneLoAIAGemini{}, \vfourEoneHiAIAGemini{}]), and it places the lesion for \vfourEoneOwnLILGemini{}\% against \vfourEoneTextLILGemini{}\%. With the image swapped for a donor's it gives the donor's answer for \vfourEtwoSwapAIAGemini{}\% (AIA) and \vfourEtwoSwapLILGemini{}\% (LIL) of patients (Table~\ref{tab:ctrl}). A model that reads the slices can therefore answer these items, which shows the tasks are feasible; it does not show that every item is valid, nor why a weaker model fails (perception, input handling or training). DSCR is different: the reference model scores \vfourEoneOwnDSCRGemini{}\% with the image and \vfourEoneTextDSCRGemini{}\% without, where the most common key covers \vfourMajorityDSCR{}\% of items, so most of its text-only accuracy is the class prior, and it recovers the key for only \vfourEoneOwnDSCRGemini{}\% of items. DSCR is therefore only partly answerable from the slices (whether from perception, segmentation-derived keys the model does not see, or key error, which we cannot separate), so a null DSCR effect for another model cannot be read as a failure to use the image.
 
 \paragraph{Open models: image effect (E1).} Sequence identification stays between \vfourEoneOwnAIAGemmaTwelve{} and \vfourEoneOwnAIAScout{}\% (chance 25\%), and Table~\ref{tab:e1} gives every cell; Figure~\ref{fig:e1effect} plots the per-model effect with its interval. The operational AIA gate (an unadjusted interval above zero) is met only by Llama-4-Scout, whose gain is small beside the reference model's; MedGemma-4B, Gemma-3-12B and Gemma-3-27B fall below it, so under the plan's reading rule their LIL and DSCR effects support no conclusion. One image-effect test survives Holm correction, Llama-4-Scout on DSCR, but it does not show that the model reads the category from the slices: its accuracy with the image stays below the most common key's share (\vfourMajorityDSCR{}\%), and the gain arises only because its text-only accuracy falls far below that share. The DSCR intervals above zero for MedGemma-4B and Gemma-3-12B do not survive correction and, under the reading rule, cannot be interpreted; on LIL every interval includes zero. A test that does not survive correction is not evidence of no effect: every open-model AIA and LIL interval is wide and none lies inside the $\pm10$-point margin. Each open model's AIA answers concentrate on one sequence (its most frequent answer covers \vfourAiaModalShareLo{} to \vfourAiaModalShareHi{}\% of the \vfourNAIA{} items), the pattern a fixed default with weak image use would produce; we cannot separate that from a failure to perceive the sequence, though every image reaches the model in each pipeline (Appendix~\ref{sec:app-handling}). Accuracy benefit is small, but answers are not insensitive to the image: the image and text-only arms differ for a substantial share of items in every phase (Table~\ref{tab:e1}).
 
@@ -461,7 +490,41 @@ PJRF & \vfourNPJRF{} & (Brier) & base rate \vfourPjrfBase{}\% \\
 
 \paragraph{Open models: donor tracking (E2).} Swapping the image changes a substantial share of AIA and LIL answers (Table~\ref{tab:e2}), but the new answer follows the donor's key with an interval above zero in only two cells: MedGemma-4B on AIA (gain \vfourEtwoGainAIAMedGemma{}; exact $p=\vfourEtwoPAIAMedGemma{}$) and Llama-4-Scout on DSCR (\vfourEtwoGainDSCRScout{}; $p=\vfourEtwoPDSCRScout{}$), the phase in which its accuracy gain also survives correction; under an exploratory Holm correction over the twelve E2 cells (outside the registered family) the two become \vfourEtwoHolmAIAMedGemma{} and \vfourEtwoHolmDSCRScout{}. Both survive resampling by donor and dropping any one donor, but neither is separable from a random assignment of donor keys (permutation $p=\vfourDonorPermAIAMedGemma{}$ and $\vfourDonorPermDSCRScout{}$; Appendix~\ref{sec:app-summary}), so for DSCR we cannot tell donor-specific tracking from a shift that any swapped image would produce. Every other interval includes zero, including both larger models on sequence and all four on lesion side. On sequence and lesion side the open-model gains are far below the reference model's (\vfourEtwoGainAIAGemini{} and \vfourEtwoGainLILGemini{}; Table~\ref{tab:ctrl}).
 
-\paragraph{Worked example: ablation without tracking.} Llama-4-Scout on DSCR is the case in which reading the ablation alone would credit image use. Its image-minus-text difference is the largest and the only one that survives correction (\vfourEoneDiffDSCRScout{} [\vfourEoneLoDSCRScout{}, \vfourEoneHiDSCRScout{}], adjusted $p<.01$). Three further readings, each added by this protocol, change the conclusion. First, its accuracy with the image (\vfourEoneOwnDSCRScout{}\%) stays below the share of the most common key (\vfourMajorityDSCR{}\%), so the image arm does not beat a constant answer. Second, its text-only accuracy is \vfourEoneTextDSCRScout{}\%, far below both the 25\% chance level and the most common key's share, so the difference arises chiefly because the no-image arm scores far below the prior, not because the image arm exceeds it. Third, when the image is swapped for a donor's, its answer follows the donor's key with a gain of \vfourEtwoGainDSCRScout{} [\vfourEtwoLoDSCRScout{}, \vfourEtwoHiDSCRScout{}] over the text-only prior, but a permutation of the donor assignment does not separate that gain from a random assignment ($p=\vfourDonorPermDSCRScout{}$). A method that scored image reliance by the ablation drop, as HEAL-MedVQA does \citep{nguyen2025localizing}, or by whether the answer changes under replacement, as balanced-VQA pairing does \citep{goyal2017making}, would call this image use---the drop is the largest in the study and the answer does change---but reading the drop against the answer prior and the swap against the donor's key does not. The ablation shows response sensitivity to the image, not that the category is read from the slices; the additions are what prevent that reading.
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\scriptsize,
+  card/.style={draw, rounded corners=2pt, text width=0.80\columnwidth, align=left, inner xsep=5pt, inner ysep=3.5pt},
+  conn/.style={-{Latex[length=1.3mm]}, black!55, semithick},
+]
+% The tempting reading
+\node[card, draw=goodcol, fill=goodcol!8] (temp)
+  {\textbf{Ablation alone.} Image$-$text drop $\Delta=$ \textbf{\vfourEoneDiffDSCRScout{} pp}: the largest in the study and the only one that survives correction. Read alone, this looks like image use.};
+\node[below=1.6mm of temp.south, font=\scriptsize\itshape, text=black!60] (but)
+  {but three prespecified controls overturn it:};
+% Three failing controls
+\node[card, draw=nocol, fill=nocol!5, below=1.4mm of but] (c1)
+  {\textbf{Accuracy benefit.} With the image \vfourEoneOwnDSCRScout{}\% $<$ most-common key \vfourMajorityDSCR{}\%: no gain over a constant answer.};
+\node[card, draw=nocol, fill=nocol!5, below=1.7mm of c1] (c2)
+  {\textbf{Answer prior.} Text-only \vfourEoneTextDSCRScout{}\% $\ll$ 25\% chance: the drop is the no-image arm collapsing, not the image exceeding the prior.};
+\node[card, draw=nocol, fill=nocol!5, below=1.7mm of c2] (c3)
+  {\textbf{Donor tracking.} Swap gain \vfourEtwoGainDSCRScout{} pp, but not separable from a random donor ($p=\vfourDonorPermDSCRScout{}$).};
+% Verdict
+\node[card, draw=dscrcol, fill=dscrcol!12, below=1.9mm of c3, align=center, text width=0.80\columnwidth] (v)
+  {\textbf{Verdict:} response sensitivity to the image, not reading the RANO category from the slice.};
+\draw[conn] (temp.south) -- (but.north);
+\draw[conn] (c3.south) -- (v.north);
+% Badges
+\ovbadgeat{temp.north west}{pjrfcol}{bangic}
+\ovbadgeat{c1.north west}{nocol}{crossic}
+\ovbadgeat{c2.north west}{nocol}{crossic}
+\ovbadgeat{c3.north west}{nocol}{crossic}
+\end{tikzpicture}
+\caption{Worked example (Llama-4-Scout, DSCR): the ablation drop is the largest in the study and survives correction, so reading it alone would credit image use, but the three prespecified additions (accuracy benefit over the answer prior, the prior itself, and donor tracking) do not support that reading.}
+\label{fig:worked}
+\end{figure}
+
+\paragraph{Worked example: ablation without tracking.} Llama-4-Scout on DSCR (Figure~\ref{fig:worked}) is the case in which reading the ablation alone would credit image use: its image-minus-text difference is the largest in the study and the only one that survives correction (\vfourEoneDiffDSCRScout{} [\vfourEoneLoDSCRScout{}, \vfourEoneHiDSCRScout{}], adjusted $p<.01$). The three additions the protocol adds overturn that reading: the image arm does not beat the most common key, the text-only arm scores far below the answer prior, and the donor gain is not separable from a random assignment ($p=\vfourDonorPermDSCRScout{}$). Scoring image reliance by the ablation drop, as HEAL-MedVQA does \citep{nguyen2025localizing}, or by whether the answer changes under replacement, as balanced-VQA pairing does \citep{goyal2017making}, would call this image use; reading the drop against the answer prior and the swap against the donor's key does not. The ablation shows response sensitivity to the image, not that the category is read from the slices.
 
 \paragraph{Stated facts and context (E3, E4).} With the true context, TCM accuracy is below the best category-only lookup (\vfourTcmLookupEsc{}\%) for all four open models, though Gemma-3-12B and Gemma-3-27B exceed the confirm-first lookup (\vfourTcmLookupConf{}\%). Accuracy alone does not show which facts a model uses, so we compare each item with itself under the true context (Tables~\ref{tab:e3} and~\ref{tab:e3trans}). Replacing the stated category moves the answer to the rule's new answer for only a minority of informative items in every model (Table~\ref{tab:e3trans}); MedGemma-4B answers the most common class almost regardless, so many of its answers already equalled the new rule answer before the flip, and counting those as following the rule would overstate its use of the stated label. Crossing the 12-week timing window moves the answer most often for Llama-4-Scout, less for Gemma-3-12B, rarely for MedGemma-4B and never for Gemma-3-27B. True upstream context beats no context (interval excluding zero) for MedGemma-4B, Gemma-3-12B and Gemma-3-27B and beats random wrong context on TCM for all four (unadjusted; Table~\ref{tab:e3}); for LIL and DSCR it does not help in any model, and the one interval excluding zero is a loss (Gemma-3-12B on LIL). Stating the management rule in the prompt (post hoc) raises TCM accuracy for Gemma-3-12B, Gemma-3-27B and Llama-4-Scout and leaves MedGemma-4B unchanged, bringing Gemma-3-12B and Gemma-3-27B close to the best lookup but not above it; part of Llama-4-Scout's gain is better-formed output, as it and MedGemma-4B emit invalid JSON for some items (Appendix~\ref{sec:app-handling}).
 
