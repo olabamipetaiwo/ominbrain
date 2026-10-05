@@ -14,7 +14,8 @@ When a task is confirmed finished, delete it from this file (history goes in `pa
 
 All review-2026-09-29 tasks (T-R1..R8) are done (see update.md 2026-09-30). Pixtral is integrated as a second precision/stack control (AIA+LIL).
 
-- [ ] **T-R9 — Rebuild the anonymous reproducibility artifact.** `release/anon_artifact/` was built before Pixtral, so its `numbers.tex`, `expected/` statistics and raw model records don't include the Pixtral run or the 1027-macro regeneration — it no longer matches the committed paper. Rebuild via `tools/build_anon_artifact.py` (include the `Pixtral-12B-bf16_image_20260929_181720` records), verify `reproduce.sh` regenerates statistics/macros/tables identically and the anonymity scrub is 0 hits, then re-upload to the anonymous repo (anonymous.4open.science) whose link is in the submission.
+- [~] **T-R9 — Rebuild the anonymous reproducibility artifact.** BUILT + VERIFIED 2026-10-05 at `release/anon_artifact_new/` (1025 files, Pixtral included). First reproduce run exposed that the repo's `results/lumiere_v4_supplement.json` and `tab_v4_handling.tex` were stale (pre-Pixtral); regenerated both (`lumiere_v4_supplement` + `paper_numbers`) — purely additive (11 new `vfour…Pixtral` macros, 0 existing values changed; `tab_v4_handling` is not `\input` in the paper, so manuscript numbers are untouched). After that, `reproduce.sh` is all-`identical` (915 v4 macros, 0 differ; every `tab_v4_*.tex` identical; stats/supplement/baselines identical; exit 0) and the anonymity scrub is 0 hits.
+  DEPLOY STATUS: verified build swapped into `release/anon_artifact/` (`.git` preserved) and committed locally (`c635f1c dev(chore)::rebuild artifact with Pixtral control`, anonymous identity, 1 ahead of origin/main). Pre-push review done: anonymity scan clean (no author/cluster/GitHub-name leaks; only benign API-env-var *names* in code); removed reproduce.sh outputs + `__pycache__` that my verification run had left in the tree and regenerated `SHA256SUMS` (now 0 unlisted files, prompts.jsonl included); reproduce.sh re-confirmed all-identical on the cleaned tree; Pixtral records spot-checked (386 recs, 46 empty = handling row). REMAINING (user): `cd release/anon_artifact && git push origin main`, then confirm anonymous.4open.science reflects the update.
 
 ## PENDING, in order of importance
 
@@ -47,3 +48,4 @@ All review-2026-09-29 tasks (T-R1..R8) are done (see update.md 2026-09-30). Pixt
 - Check figures/tables for consistency and caption quality
 - Review references/BibTeX for completeness
 - Draft the submission cover letter or abstract tweaks
+<!-- ! cd release/anon_artifact && git push origin main -->

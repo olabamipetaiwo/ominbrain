@@ -2210,6 +2210,145 @@
           "swap_flips_answer_vs_own": 2.380952380952381
         }
       }
+    },
+    "Pixtral-12B-bf16": {
+      "n_records": 386,
+      "empty_responses": 46,
+      "E1": {
+        "AIA": {
+          "n": 46,
+          "acc_a": 30.434782608695656,
+          "acc_b": 26.08695652173913,
+          "diff": 4.3478260869565215,
+          "ci": [
+            -4.3478260869565215,
+            13.043478260869565
+          ],
+          "ci_sparse": [
+            -4.8875361123174095,
+            13.220869445650743
+          ],
+          "only_a": 3,
+          "only_b": 1,
+          "p": 0.625,
+          "verdict": "inconclusive",
+          "parse_errors_own": 1,
+          "parse_errors_text": 0
+        },
+        "LIL": {
+          "n": 38,
+          "acc_a": 18.421052631578945,
+          "acc_b": 21.052631578947366,
+          "diff": -2.631578947368421,
+          "ci": [
+            -10.526315789473683,
+            5.263157894736842
+          ],
+          "ci_sparse": [
+            -12.269326998314675,
+            7.269326998314673
+          ],
+          "only_a": 1,
+          "only_b": 2,
+          "p": 1.0,
+          "verdict": "inconclusive",
+          "parse_errors_own": 2,
+          "parse_errors_text": 0
+        },
+        "DSCR": {
+          "n": 46,
+          "acc_a": 23.91304347826087,
+          "acc_b": 39.130434782608695,
+          "diff": -15.217391304347828,
+          "ci": [
+            -26.08695652173913,
+            -6.521739130434782
+          ],
+          "ci_sparse": [
+            -25.370729260044733,
+            -3.7959374066219382
+          ],
+          "only_a": 0,
+          "only_b": 7,
+          "p": 0.015625,
+          "verdict": "inconclusive",
+          "parse_errors_own": 22,
+          "parse_errors_text": 0,
+          "expert_agreeing_subset": {
+            "n": 26,
+            "acc_a": 19.230769230769234,
+            "acc_b": 42.30769230769231,
+            "diff": -23.076923076923077,
+            "ci": [
+              -42.30769230769231,
+              -7.6923076923076925
+            ],
+            "p": 0.03125
+          }
+        }
+      },
+      "E2": {
+        "AIA": {
+          "n": 46,
+          "own_image_correct": 30.434782608695656,
+          "swap_answers_donor_key": 26.08695652173913,
+          "text_answers_donor_key": 28.26086956521739,
+          "gain": -2.1739130434782608,
+          "gain_ci": [
+            -8.695652173913043,
+            4.3478260869565215
+          ],
+          "gain_ci_sparse": [
+            -10.228704874662574,
+            6.062038207995908
+          ],
+          "gain_only_swap": 1,
+          "gain_only_text": 2,
+          "gain_p": 1.0,
+          "swap_keeps_own_key": 28.26086956521739,
+          "swap_flips_answer_vs_own": 26.08695652173913
+        },
+        "LIL": {
+          "n": 38,
+          "own_image_correct": 18.421052631578945,
+          "swap_answers_donor_key": 23.684210526315788,
+          "text_answers_donor_key": 26.31578947368421,
+          "gain": -2.631578947368421,
+          "gain_ci": [
+            -18.421052631578945,
+            13.157894736842104
+          ],
+          "gain_ci_sparse": [
+            -17.97577946340668,
+            12.975779463406681
+          ],
+          "gain_only_swap": 4,
+          "gain_only_text": 5,
+          "gain_p": 1.0,
+          "swap_keeps_own_key": 36.84210526315789,
+          "swap_flips_answer_vs_own": 47.368421052631575
+        },
+        "DSCR": {
+          "n": 42,
+          "own_image_correct": 26.190476190476193,
+          "swap_answers_donor_key": 21.428571428571427,
+          "text_answers_donor_key": 26.190476190476193,
+          "gain": -4.761904761904762,
+          "gain_ci": [
+            -19.047619047619047,
+            7.142857142857142
+          ],
+          "gain_ci_sparse": [
+            -17.84142649272261,
+            8.750517401813521
+          ],
+          "gain_only_swap": 3,
+          "gain_only_text": 5,
+          "gain_p": 0.7265625,
+          "swap_keeps_own_key": 23.809523809523807,
+          "swap_flips_answer_vs_own": 14.285714285714285
+        }
+      }
     }
   }
 }

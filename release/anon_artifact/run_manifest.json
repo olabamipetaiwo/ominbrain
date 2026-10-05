@@ -297,6 +297,48 @@
    ],
    "n_keys": 386,
    "n_replaced": 134
+  },
+  "Pixtral-12B-bf16": {
+   "folders_oldest_first": [
+    {
+     "folder": "lumiere_v4_Pixtral-12B-bf16_image_20260929_181720",
+     "stamp": "20260929",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 368,
+     "n_replaced_by_later_folder": 18
+    },
+    {
+     "folder": "lumiere_v4_Pixtral-12B-bf16_smoke_20260929_155252",
+     "stamp": "20260929",
+     "n_records": 18,
+     "conditions": {
+      "own": 6,
+      "swap": 6,
+      "text": 6
+     },
+     "n_used": 0,
+     "n_replaced_by_later_folder": 18
+    },
+    {
+     "folder": "lumiere_v4_Pixtral-12B-bf16_smoke_20260929_162139",
+     "stamp": "20260929",
+     "n_records": 18,
+     "conditions": {
+      "own": 6,
+      "swap": 6,
+      "text": 6
+     },
+     "n_used": 18,
+     "n_replaced_by_later_folder": 0
+    }
+   ],
+   "n_keys": 386,
+   "n_replaced": 36
   }
  },
  "chain_runs": {
@@ -394,6 +436,9 @@
   "lumiere_v4_MedGemma-4B_contextdscr_20260929_005925",
   "lumiere_v4_MedGemma-4B_image_20260928_064056",
   "lumiere_v4_MedGemma-4B_imagedscr_20260928_230309",
+  "lumiere_v4_Pixtral-12B-bf16_image_20260929_181720",
+  "lumiere_v4_Pixtral-12B-bf16_smoke_20260929_155252",
+  "lumiere_v4_Pixtral-12B-bf16_smoke_20260929_162139",
   "lumiere_v4_inputcheck_Gemma-3-12B_20260928_211548",
   "lumiere_v4_inputcheck_Gemma-3-27B-bf16_20260928_211343",
   "lumiere_v4_inputcheck_Gemma-3-27B_20260928_211756",
