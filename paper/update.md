@@ -1,5 +1,14 @@
 #Project Update
 
+## 2026-10-05 (4) — T-R9: rebuilt + verified the anonymous reproducibility artifact (Pixtral included)
+
+The shipped `release/anon_artifact/` predated Pixtral (built 2026-09-29 13:43; Pixtral image run is 18:17). Rebuilt via `tools.build_anon_artifact --out release/anon_artifact_new` (1025 files, 2488 replaced records, 0 scrub hits) and regenerated `prompts.jsonl` (965 prompts).
+- **Stale-file fix found by reproduce.** Pixtral is already in `lumiere_v4_stats.CONTROLS`, so `reproduce.sh`'s fresh run produced Pixtral entries, but the repo's `results/lumiere_v4_supplement.json` (gitignored) and `paper/latex/generated/tab_v4_handling.tex` were pre-Pixtral, so the first reproduce showed `lumiere_v4_supplement.json DIFFERS` and `tab_v4_handling.tex DIFFERS` (additive only: one Pixtral handling row + 62 Pixtral supplement keys, no changed values). Regenerated both (`lumiere_v4_supplement`, then `paper_numbers`): numbers.json gained 11 `vfour…Pixtral` macros, **0 existing values changed, 0 removed**; `tab_v4_handling` is not `\input` in the manuscript (handling counts are cited via macros), so the paper's numbers/appearance are unchanged.
+- **Verified after the fix:** `reproduce.sh` is all-`identical` — stats/supplement/baselines JSON identical, 915 v4 macros compared 0 differ, every `tab_v4_*.tex` identical, exit 0; anonymity scrub 0 hits.
+- **Deploy:** per user choice (swap + commit, user pushes), moved the verified build into `release/anon_artifact/` (kept its `.git`, remote `github.com/olabamipetaiwo/image-dependence`, anonymous commit identity). Staging dir removed.
+- **Pre-push review (user asked).** (1) Anonymity: wider scan (added GitHub user / real name / repo / full-email patterns to the build's own scrub) over 700 shipped text files — no author/cluster/GitHub-name leaks; the only matches were benign env-var *names* (`OPENAI_API_KEY`/`ANTHROPIC_API_KEY`) in code/comments, no key values. (2) Checksum/cleanliness: found the committed tree carried 34 files not in `SHA256SUMS` — reproduce.sh outputs (`generated/*`, top-level `results/*stats/supplement/baselines*`) and `__pycache__/*.pyc` that my in-place verification run had left behind, plus `prompts.jsonl`. Removed the reproduce outputs + pycache (a reviewer regenerates those; the build deliberately excludes pycache), kept `prompts.jsonl`, and regenerated `SHA256SUMS` so 0 files are unlisted. (3) Re-ran reproduce.sh on the cleaned tree (throwaway copy): all-identical, 915 macros 0 differ, exit 0. (4) Pixtral spot-check: 386 records, 46 empty outputs = the `Pixtral-12B & 386 & 46 & 46` handling row. Final clean commit `c635f1c` (1026 files, 1 ahead of origin/main).
+- REMAINING (user): `cd release/anon_artifact && git push origin main`, then confirm anonymous.4open.science reflects the update.
+
 ## 2026-10-05 (3) — trimmed worked-example prose; removed em-dashes from prose and figures
 
 Two follow-ups to the (2) presentation pass.

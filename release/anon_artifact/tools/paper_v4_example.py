@@ -1,6 +1,7 @@
 """
-Worked v4 example for the paper appendix (paper/review.md concern 8; added 2026-09-25). Everything shown is read from the item files, the
-donor-pair file and the result records; nothing is typed by hand.
+Worked v4 example for the paper appendix (paper/review.md concern 8; added 2026-09-25). Keys, the DSCR measurements, the model answers and the
+donor pairs are read from the item files, the donor-pair file and the result records; nothing quantitative is typed by hand. Stems are abbreviated
+to the question itself (the descriptive preamble, the RANO recitation and the full option lists duplicate the methods and live in the artifact).
 
 The patient is the first, in id order, that has all five phases and a three-image DSCR item (a rule fixed before looking at any answer).
 Writes paper/latex/figures/v4_example.png and paper/latex/generated/v4_example.tex (input by the appendix).
@@ -92,14 +93,18 @@ def main() -> None:
     figure(pid, items, cf)
     lines = []
 
+    def ask(q: str) -> str:
+        """The question itself (last interrogative sentence); the descriptive preamble and the RANO recitation duplicate the methods and are dropped."""
+        m = re.findall(r"[^.?!]*\?", q)
+        return esc(m[-1].strip()) if m else esc(q)
+
     def block(ph: str, title: str) -> None:
         it = items[ph]
         o, c = shown_options(it)
-        opts = "; ".join(f"{k}) {esc(v)}" for k, v in o.items())
-        lines.append(r"\paragraph{%s.} %s \emph{Options as shown:} %s. \emph{Key:} %s) %s." % (title, esc(it["question"]), opts, c, esc(o[c])))
+        lines.append(r"\paragraph{%s.} %s \emph{Key:} %s) %s." % (title, ask(it["question"]), c, esc(o[c].rstrip("."))))
 
     lines.append(r"The patient is %s, the first in id order with all five phases and a three-image DSCR item (a rule fixed before any answer was inspected). "
-                 r"Figure~\ref{fig:v4example} shows the images the models see, and the donor images used in the swap." % esc(pid))
+                 r"Figure~\ref{fig:v4example} shows the images the models see and the donor images used in the swap; each item is four-way multiple choice, with the full stems and options in the reproducibility artifact." % esc(pid))
     block("AIA", "AIA (positive control)")
     block("LIL", "LIL")
     d = items["DSCR"]
@@ -113,46 +118,43 @@ def main() -> None:
         why = f"the follow-up product is {100 * bpf / bpr:.0f}\\% of the baseline's"
     else:
         why = "the change is between the response and progression thresholds"
-    agree = (r"The expert rating for this follow-up is %s (rationale: ``%s''), the same category as the key, so it is not one of the disagreements counted by the audit."
+    agree = (r"The expert rating is %s (``%s''), the same category, so this is not an audit disagreement."
              if fu["concordant"] else
-             r"The expert rating for this follow-up is %s (rationale: ``%s''), a different category from the key, so it is one of the disagreements counted by the audit.")
-    lines.append((r"The key is computed from the bidimensional products of the largest enhancing component on the three displayed slices: %.0f\,mm$^2$ at the post-operative baseline, "
-                  r"%.0f\,mm$^2$ at the nadir and %.0f\,mm$^2$ at follow-up; %s, which the stated rule calls %s. " + agree +
-                  r" The rating is recorded for every item and is never the key.")
+             r"The expert rating is %s (``%s''), a different category, so this is an audit disagreement.")
+    lines.append((r"The key comes from the bidimensional products of the tracked lesion on the three slices (%.0f, %.0f and %.0f\,mm$^2$ at baseline, nadir and follow-up); "
+                  r"%s, which the rule calls %s. " + agree)
                  % (bpr, bpn, bpf, why, esc(fu["rule_label"]), esc(fu["expert_rating"]), esc(fu["expert_rationale"])))
-    t = items["TCM"]
-    o, c = shown_options(t)
-    tr = t["tcm_rule"]
-    lines.append(r"\paragraph{TCM.} %s \emph{Options as shown:} %s. \emph{Key:} %s) %s. The rule is: %s. Here the category is %s and chemoradiotherapy ended %d weeks before the scan, so the class is %s. Changing the stated timing across the 12-week window, or replacing the stated category, changes the rule's answer (the fact flips of E3)."
-                 % (esc(t["question"]), "; ".join(f"{k}) {esc(v.rstrip('.'))}" for k, v in o.items()), c, esc(o[c].rstrip(".")), esc(tr["rule"]), esc(tr["rano"]),
-                    tr["weeks_since_chemoradiotherapy"], esc(tr["class"])))
-    p = items["PJRF"]
-    lines.append(r"\paragraph{PJRF (secondary).} %s The recorded outcome is %s within 52 weeks; the forecast is scored by the Brier score." % (
-        esc(p["question"]), "death" if p["forecast"]["outcome"] == 1 else "survival"))
-    lines.append(r"\paragraph{Donor swap.} For the swap condition the AIA image is replaced by the one from %s (key %s instead of %s), the LIL image by the one from %s (key %s instead of %s), "
-                 r"and the DSCR images by those of %s (key %s instead of %s); the stem and options are unchanged, so the donor's answer is always an option."
-                 % (cf["detail"]["AIA"]["partner"], esc(cf["detail"]["AIA"]["donor_key"]), esc(cf["detail"]["AIA"]["own_key"]),
-                    cf["detail"]["LIL"]["partner"], esc(cf["detail"]["LIL"]["donor_key"]), esc(cf["detail"]["LIL"]["own_key"]),
-                    cf["detail"]["DSCR"]["partner"], esc(cf["detail"]["DSCR"]["donor_key"]), esc(cf["detail"]["DSCR"]["own_key"])))
-    # answers table
+    block("TCM", "TCM")
+    tr = items["TCM"]["tcm_rule"]
+    lines.append(r"The stem states the patient facts (see the artifact) and the rule: %s. Here the category is %s and chemoradiotherapy ended %d weeks before the scan, so the class is %s; changing the stated timing across the 12-week window or the stated category changes the rule's answer (the fact flips of E3)."
+                 % (esc(tr["rule"]), esc(tr["rano"]), tr["weeks_since_chemoradiotherapy"], esc(tr["class"])))
+    outcome = "death" if items["PJRF"]["forecast"]["outcome"] == 1 else "survival"
+    lines.append(r"\paragraph{PJRF (secondary).} Same patient facts as TCM; the model forecasts the probability of death within 52 weeks of the scan (recorded outcome: %s), scored by the Brier score." % outcome)
+    d = cf["detail"]
+    def sl(txt):
+        return SHORT_LAB.get(txt, esc(txt))
+    lines.append(r"\paragraph{Donor swap.} Each image is replaced by a donor's whose key differs (AIA %s, %s not %s; LIL %s, %s not %s; DSCR %s, %s not %s); the stem and options are unchanged, so the donor's answer is always an option."
+                 % (esc(d["AIA"]["partner"]), sl(d["AIA"]["donor_key"]), sl(d["AIA"]["own_key"]),
+                    esc(d["LIL"]["partner"]), sl(d["LIL"]["donor_key"]), sl(d["LIL"]["own_key"]),
+                    esc(d["DSCR"]["partner"]), sl(d["DSCR"]["donor_key"]), sl(d["DSCR"]["own_key"])))
+    # answers (own/text/swap) per model -- single-column table, not a full-width float, to save appendix space
     def lab(ph, rec):
         o, _ = shown_options(items[ph])
         return SHORT_LAB.get(o.get(rec["model_answer"], "?"), "?") if rec else "--"
     keyrow = []
     for ph in ("AIA", "LIL", "DSCR"):
         o, c = shown_options(items[ph])
-        keyrow.append(f"{SHORT_LAB[o[c]]} / {SHORT_LAB[cf['detail'][ph]['donor_key']]}")
-    rows = [r"Key / donor key & " + " & ".join(keyrow) + r" \\", r"\midrule"]
+        keyrow.append(f"{SHORT_LAB[o[c]]}/{SHORT_LAB[cf['detail'][ph]['donor_key']]}")
+    rows = [r"Key/donor & " + " & ".join(keyrow) + r" \\", r"\midrule"]
     for m, nm in MODELS:
         recs = load_records(m)
-        cells = []
-        for ph in ("AIA", "LIL", "DSCR"):
-            cells.append(" / ".join(lab(ph, recs.get((pid, ph, k))) for k in ("own", "text", "swap")))
-        rows.append(f"{esc(nm)} & " + " & ".join(cells) + r" \\")
+        cells = ["/".join(lab(ph, recs.get((pid, ph, k))) for k in ("own", "text", "swap")) for ph in ("AIA", "LIL", "DSCR")]
+        rows.append(f"{esc(m)} & " + " & ".join(cells) + r" \\")
     lines.append(r"""
-\begin{table*}[t]
+\begin{table}[t]
 \centering
-\footnotesize
+\scriptsize
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{lccc}
 \toprule
  & AIA & LIL & DSCR \\
@@ -160,9 +162,9 @@ def main() -> None:
 %s
 \bottomrule
 \end{tabular}
-\caption{Answers for %s under the own-image / text-only / swapped-image conditions (same order in every cell), and the key and donor key. Labels: T1c is T1 after contrast; L/R hemisphere, ant/post half; PD, SD, PR, CR are the RANO categories.}
+\caption{Answers for %s (own/text/swap in each cell), with the key and donor key; Gemini-3.6-Flash is the reference model. Labels: T1c is T1 after contrast; L/R hemisphere, ant/post half; PD, SD, PR, CR are RANO categories.}
 \label{tab:v4example}
-\end{table*}
+\end{table}
 """ % ("\n".join(rows), esc(pid)))
     lines.append(r"""
 \begin{figure*}[t]

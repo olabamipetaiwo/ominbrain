@@ -56,6 +56,17 @@ API_MODELS = [  # optional — not run by --all-models
         "category": "precision-control",
         "backend": "vllm",
     },
+    {   # reference model (2026-09-29, review.md concerns 1+2): a strong non-Gemma open VLM read reproducibly in
+        # bf16 via vLLM, so the image-reading feasibility claim no longer rests only on the run-once Gemini API model,
+        # and AIA near-chance can be attributed to serving vs. genuine difficulty. HF-format repo (standard vLLM load,
+        # no mistral-tokenizer flags). Served by shell/lumiere/lumiere_v4_pixtral.sbatch. See preregistration change log.
+        "name": "Pixtral-12B-bf16",
+        "model": "mistral-community/pixtral-12b",
+        "base_url": os.environ.get("VLLM_BASE_URL", "http://localhost:8128/v1"),
+        "api_key": "local",
+        "category": "reference",
+        "backend": "vllm",
+    },
     {
         "name": "GPT-5",
         "model": "gpt-5",

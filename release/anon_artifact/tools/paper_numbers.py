@@ -29,8 +29,8 @@ from src.lumiere_labels import canonical_answer_text
 
 OUT = Path("paper/latex/generated")
 MODELS = ["MedGemma-4B", "Gemma-3-12B", "Gemma-3-27B", "Llama-4-Scout"]
-TAG = {"Gemini-3.6-Flash": "Gemini", "Gemma-3-27B-bf16": "GemmaTwentySevenBf","MedGemma-4B": "MedGemma", "Gemma-3-12B": "GemmaTwelve", "Gemma-3-27B": "GemmaTwentySeven", "Llama-4-Scout": "Scout"}
-SHORT = {"Gemini-3.6-Flash": "Gemini-3.6-Flash", "MedGemma-4B": "MedGemma-4B", "Gemma-3-12B": "Gemma-3-12B", "Gemma-3-27B": "Gemma-3-27B", "Llama-4-Scout": "Llama-4-Scout"}
+TAG = {"Gemini-3.6-Flash": "Gemini", "Gemma-3-27B-bf16": "GemmaTwentySevenBf", "Pixtral-12B-bf16": "Pixtral", "MedGemma-4B": "MedGemma", "Gemma-3-12B": "GemmaTwelve", "Gemma-3-27B": "GemmaTwentySeven", "Llama-4-Scout": "Scout"}
+SHORT = {"Gemini-3.6-Flash": "Gemini-3.6-Flash", "Gemma-3-27B-bf16": "Gemma-3-27B (bf16)", "Pixtral-12B-bf16": "Pixtral-12B", "MedGemma-4B": "MedGemma-4B", "Gemma-3-12B": "Gemma-3-12B", "Gemma-3-27B": "Gemma-3-27B", "Llama-4-Scout": "Llama-4-Scout"}
 PHASES = ["AIA", "LIL", "DSCR", "PJRF", "TCM"]
 STALE = [r"63\.5", r"33 of 33", r"(?<!which gave )50 of 52", r"48 and 52", r"33 progressive", r"14\\%\)"]   # figures that came from the label-spelling bug or typos
 
@@ -57,10 +57,31 @@ def pfmt(p: float) -> str:
     return "$<$.001" if p < 0.001 else f"{p:.3f}".lstrip("0") if p < 1 else "1.00"
 
 
-def tabular(colspec: str, header: list[str], rows: list[str], size: str = "") -> str:
-    """A complete tabular (an \\input inside a tabular breaks booktabs rules, so the whole environment is generated)."""
-    return (f"{size}\\begin{{tabular}}{{{colspec}}}\n\\toprule\n" + "\n".join(header) + "\n\\midrule\n"
-            + "\n".join(rows) + "\n\\bottomrule\n\\end{tabular}\n")
+# phase chips (macros defined in acl_latex.tex preamble); keep the look consistent across tables
+PTAG = {"AIA": "\\ptagAIA", "LIL": "\\ptagLIL", "DSCR": "\\ptagDSCR"}
+
+
+def _carries_color(row: str) -> bool:
+    return row.lstrip().startswith(("\\rowcolor", "\\hirow", "\\bandrow", "\\hdrrow"))
+
+
+def tabular(colspec: str, header: list[str], rows: list[str], size: str = "", zebra: bool = True) -> str:
+    """A complete tabular (an \\input inside a tabular breaks booktabs rules, so the whole environment is generated).
+
+    Shades the header row(s) and, when ``zebra``, bands alternate body rows. Rows that already
+    carry their own ``\\rowcolor`` (e.g. a highlighted key row) are left untouched.
+    """
+    hdr = [h if (h.strip().startswith("\\cmidrule") or "&" not in h or _carries_color(h))
+           else "\\hdrrow " + h for h in header]
+    body, bi = [], 0
+    for r in rows:
+        if _carries_color(r):
+            body.append(r)
+        else:
+            body.append(("\\bandrow " + r) if (zebra and bi % 2 == 1) else r)
+            bi += 1
+    return (f"{size}\\begin{{tabular}}{{{colspec}}}\n\\toprule\n" + "\n".join(hdr) + "\n\\midrule\n"
+            + "\n".join(body) + "\n\\bottomrule\n\\end{tabular}\n")
 
 
 class Macros:
@@ -394,6 +415,16 @@ def v4(mc: Macros) -> None:
     sel = load("data/lumiere/v4/selection_report.json")
     st = load("results/lumiere_v4_stats.json")
     sup = (load("results/lumiere_v4_supplement.json") or {}).get("models", {})   # post-review descriptive supplement
+    # Pixtral-12B-bf16 (second precision/stack control): its DSCR image conditions returned empty output on the 3-image
+    # prompt and are excluded; these counts back the exclusion note in the results and appendix.
+    _pix = sorted(glob.glob("results/lumiere_v4_Pixtral-12B-bf16_image_*"))
+    if _pix:
+        _er = load(str(Path(_pix[-1]) / "empty_responses.json")) or []
+        _ps = load(str(Path(_pix[-1]) / "summary.json")) or {}
+        _dscr = [e for e in _er if e[1] == "DSCR"]
+        mc.add("vfourPixtralDscrEmptyOwn", sum(1 for e in _dscr if e[2] == "own"))
+        mc.add("vfourPixtralDscrEmptySwap", sum(1 for e in _dscr if e[2] == "swap"))
+        mc.add("vfourPixtralDscrSwapN", _ps.get("DSCR", {}).get("swap", {}).get("n", ""))
     if sel:
         for ph, n in sel["phase_counts"].items():
             mc.add(f"vfourN{ph}", n)
@@ -431,16 +462,33 @@ def v4(mc: Macros) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     mc.add("vfourPending", "1" if not st or not st.get("models") else "0")
     e1, e2, e3, e5 = [], [], [], []
+    def _interval(verdict: str) -> str:
+        t = verdict.strip()
+        if t == "CI above 0":
+            return "\\ivok"
+        if t == "inconclusive":
+            return "\\ivinc"
+        if t.startswith("within"):
+            return "\\ivmargin"
+        return verdict
     if st and st.get("models"):
-        for m, r in st["models"].items():
+        for mi, (m, r) in enumerate(st["models"].items()):
             for ph, v in r.get("E1", {}).items():
                 differ = sup.get(m, {}).get("outcomes", {}).get(ph, {}).get("own_vs_text_answer_differs")
                 verdict_tex = v['verdict'].replace('image helps', 'CI above 0').replace('+/-', '$\\pm$').replace('pp', ' pp')
-                e1.append(f"{SHORT.get(m, m)} & {ph} & {v['n']} & {f1(v['acc_a'])} & {f1(v['acc_b'])} & "
-                          f"{signed(v['diff'])} [{signed(v['ci'][0])}, {signed(v['ci'][1])}] & [{signed(v['ci_sparse'][0])}, {signed(v['ci_sparse'][1])}] & {pfmt(v['p'])} & "
-                          f"{f1(differ) if differ is not None else '--'} & {verdict_tex} \\\\")
+                survives = v.get('p_holm') is not None and v['p_holm'] < 0.05
+                dcell = f"{signed(v['diff'])} [{signed(v['ci'][0])}, {signed(v['ci'][1])}]"
+                if survives:
+                    prefix, dcell = "\\hirow ", f"\\textbf{{{dcell}}}"
+                elif mi % 2 == 1:
+                    prefix = "\\bandrow "
+                else:
+                    prefix = ""
+                e1.append(f"{prefix}{SHORT.get(m, m)} & {PTAG.get(ph, ph)} & {v['n']} & {f1(v['acc_a'])} & {f1(v['acc_b'])} & "
+                          f"{dcell} & [{signed(v['ci_sparse'][0])}, {signed(v['ci_sparse'][1])}] & {pfmt(v['p'])} & "
+                          f"{f1(differ) if differ is not None else '--'} & {_interval(verdict_tex)} \\\\")
             for ph, v in r.get("E2", {}).items():
-                e2.append(f"{SHORT.get(m, m)} & {ph} & {v['n']} & {f1(v['own_image_correct'])} & {f1(v['swap_answers_donor_key'])} & "
+                e2.append(f"{SHORT.get(m, m)} & {PTAG.get(ph, ph)} & {v['n']} & {f1(v['own_image_correct'])} & {f1(v['swap_answers_donor_key'])} & "
                           f"{f1(v['text_answers_donor_key'])} & {signed(v['gain'])} [{signed(v['gain_ci'][0])}, {signed(v['gain_ci'][1])}] & "
                           f"[{signed(v['gain_ci_sparse'][0])}, {signed(v['gain_ci_sparse'][1])}] & {pfmt(v['gain_p'])} & {f1(v['swap_flips_answer_vs_own'])} \\\\")
             e = r.get("E3", {})
@@ -536,7 +584,7 @@ def v4(mc: Macros) -> None:
             crows = []
             for ph in ("AIA", "LIL", "DSCR"):
                 a, b = ctrl["E1"][ph], ctrl["E2"][ph]
-                crows.append(f"{ph} & {a['n']} & {f1(a['acc_a'])} & {f1(a['acc_b'])} & {signed(a['diff'])} [{signed(a['ci'][0])}, {signed(a['ci'][1])}] & "
+                crows.append(f"{PTAG.get(ph, ph)} & {a['n']} & {f1(a['acc_a'])} & {f1(a['acc_b'])} & {signed(a['diff'])} [{signed(a['ci'][0])}, {signed(a['ci'][1])}] & "
                              f"{f1(b['swap_answers_donor_key'])} & {signed(b['gain'])} [{signed(b['gain_ci'][0])}, {signed(b['gain_ci'][1])}] \\\\")
             (OUT / "tab_v4_ctrl.tex").write_text(tabular("lrrrlrl", ["Phase & $n$ & Image & Text-only & $\\Delta$ [95\\% CI] & Swap: donor key & Gain [95\\% CI] \\\\"], crows))
             mc.add("vfourCtrlEmpty", ctrl["empty_responses"])
@@ -550,7 +598,7 @@ def v4(mc: Macros) -> None:
     }
     for name, rows in (("e1", e1), ("e2", e2), ("e3", e3), ("e5", e5)):
         cs, hd = heads[name]
-        (OUT / f"tab_v4_{name}.tex").write_text(tabular(cs, hd, rows))
+        (OUT / f"tab_v4_{name}.tex").write_text(tabular(cs, hd, rows, zebra=(name != "e1")))
 
 
 def check_stale() -> list[str]:

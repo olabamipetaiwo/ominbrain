@@ -1382,6 +1382,90 @@
           "D": 10
         }
       }
+    },
+    "Pixtral-12B-bf16": {
+      "handling": {
+        "AIA|own": {
+          "n": 46,
+          "parse_error": 1,
+          "no_answer": 1
+        },
+        "AIA|swap": {
+          "n": 46,
+          "parse_error": 1,
+          "no_answer": 1
+        },
+        "AIA|text": {
+          "n": 46,
+          "parse_error": 0,
+          "no_answer": 0
+        },
+        "DSCR|own": {
+          "n": 46,
+          "parse_error": 22,
+          "no_answer": 22
+        },
+        "DSCR|swap": {
+          "n": 42,
+          "parse_error": 18,
+          "no_answer": 18
+        },
+        "DSCR|text": {
+          "n": 46,
+          "parse_error": 0,
+          "no_answer": 0
+        },
+        "LIL|own": {
+          "n": 38,
+          "parse_error": 2,
+          "no_answer": 2
+        },
+        "LIL|swap": {
+          "n": 38,
+          "parse_error": 2,
+          "no_answer": 2
+        },
+        "LIL|text": {
+          "n": 38,
+          "parse_error": 0,
+          "no_answer": 0
+        },
+        "ALL": {
+          "n": 386,
+          "parse_error": 46,
+          "no_answer": 46
+        }
+      },
+      "outcomes": {
+        "AIA": {
+          "n": 46,
+          "own_vs_text_answer_differs": 17.391304347826086,
+          "swap_vs_own_answer_differs": 26.08695652173913
+        },
+        "LIL": {
+          "n": 38,
+          "own_vs_text_answer_differs": 28.947368421052634,
+          "swap_vs_own_answer_differs": 47.368421052631575
+        },
+        "DSCR": {
+          "n": 42,
+          "own_vs_text_answer_differs": 45.23809523809524,
+          "swap_vs_own_answer_differs": 14.285714285714285
+        }
+      },
+      "dscr_valid_json": {
+        "n": 46,
+        "acc_all": 23.91304347826087,
+        "n_valid": 24,
+        "acc_valid": 45.833333333333336,
+        "letters": {
+          "A": 8,
+          "C": 8,
+          "null": 22,
+          "D": 6,
+          "B": 2
+        }
+      }
     }
   },
   "aia": {
@@ -1510,6 +1594,27 @@
           "T2": 2,
           "T1": 1
         }
+      },
+      "Pixtral-12B-bf16": {
+        "FLAIR": {
+          "T2": 2,
+          "T1c": 8,
+          "FLAIR": 1
+        },
+        "T1": {
+          "T1c": 9,
+          "FLAIR": 2,
+          "T2": 1
+        },
+        "T1c": {
+          "T1c": 11,
+          "none": 1
+        },
+        "T2": {
+          "T2": 2,
+          "FLAIR": 1,
+          "T1c": 8
+        }
       }
     },
     "reference_errors": [
@@ -1556,6 +1661,11 @@
         "sequence": "T1c",
         "n": 29,
         "share": 63.04347826086956
+      },
+      "Pixtral-12B-bf16": {
+        "sequence": "T1c",
+        "n": 36,
+        "share": 78.26086956521739
       }
     }
   }

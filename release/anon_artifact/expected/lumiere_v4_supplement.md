@@ -25,6 +25,7 @@ Disagreements (122) by the rule's label: {'progressive disease': 16, 'complete r
 | Llama-4-Scout | 138 / 0 / 0 | 190 / 0 / 0 | 226 / 1 / 0 | 135 / 1 / 0 | 276 / 44 / 0 | 965 / 46 / 0 |
 | Gemini-3.6-Flash | 138 / 0 / 0 | 114 / 0 / 0 | 134 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 386 / 0 / 0 |
 | Gemma-3-27B-bf16 | 138 / 0 / 0 | 114 / 0 / 0 | 134 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 386 / 0 / 0 |
+| Pixtral-12B-bf16 | 138 / 2 / 2 | 114 / 4 / 4 | 134 / 40 / 40 | 0 / 0 / 0 | 0 / 0 / 0 | 386 / 46 / 46 |
 
 ## C. Output sensitivity (percent of items whose answer letter differs)
 
@@ -48,6 +49,9 @@ Disagreements (122) by the rule's label: {'progressive disease': 16, 'complete r
 | Gemma-3-27B-bf16 | AIA | 37.0 | 45.7 |
 | Gemma-3-27B-bf16 | LIL | 47.4 | 57.9 |
 | Gemma-3-27B-bf16 | DSCR | 0.0 | 2.4 |
+| Pixtral-12B-bf16 | AIA | 17.4 | 26.1 |
+| Pixtral-12B-bf16 | LIL | 28.9 | 47.4 |
+| Pixtral-12B-bf16 | DSCR | 45.2 | 14.3 |
 
 ## D. TCM fact flips, paired against the same item under the true context
 
@@ -127,5 +131,6 @@ Disagreements (122) by the rule's label: {'progressive disease': 16, 'complete r
 | Llama-4-Scout | FLAIR: {'T1c': 9, 'T2': 1, 'T1': 1}; T1: {'T1c': 5, 'T1': 5, 'T2': 2}; T1c: {'T1c': 11, 'T1': 1}; T2: {'T1c': 10, 'T2': 1} |
 | Gemini-3.6-Flash | FLAIR: {'FLAIR': 11}; T1: {'T1': 11, 'FLAIR': 1}; T1c: {'T1c': 11, 'T1': 1}; T2: {'T2': 11} |
 | Gemma-3-27B-bf16 | FLAIR: {'T1c': 9, 'T2': 1, 'FLAIR': 1}; T1: {'T1c': 4, 'FLAIR': 7, 'T2': 1}; T1c: {'FLAIR': 2, 'T1c': 9, 'T2': 1}; T2: {'FLAIR': 1, 'T1c': 7, 'T2': 2, 'T1': 1} |
+| Pixtral-12B-bf16 | FLAIR: {'T2': 2, 'T1c': 8, 'FLAIR': 1}; T1: {'T1c': 9, 'FLAIR': 2, 'T2': 1}; T1c: {'T1c': 11, 'none': 1}; T2: {'T2': 2, 'FLAIR': 1, 'T1c': 8} |
 
 Reference-model errors: Patient-045 AIA key T1-weighted, before contrast answered FLAIR (fluid-attenuated inversion recovery); Patient-062 AIA key T1-weighted, after gadolinium contrast answered T1-weighted, before contrast
