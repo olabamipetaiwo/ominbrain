@@ -97,3 +97,7 @@ module load ufrc && slurmInfo so589980.ucf
 The account name is so589980.ucf, not so589980.
 
 Add -t RUNNING to squeue to hide pending jobs. Add -h | wc -l to count them.
+
+
+
+-----
