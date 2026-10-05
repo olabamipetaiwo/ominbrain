@@ -1,5 +1,28 @@
 #Project Update
 
+## 2026-10-05 (3) — trimmed worked-example prose; removed em-dashes from prose and figures
+
+Two follow-ups to the (2) presentation pass.
+- **Trim (intelligent).** The "Worked example: ablation without tracking" paragraph duplicated Figure 3's three-control walkthrough, so cut the First/Second/Third enumeration down to a one-line recap and kept what the figure does not carry: the headline stat, the HEAL-MedVQA / balanced-VQA comparison (the novel framing), and the response-sensitivity conclusion (~230→~115 words). This resolves the (2) space note: the main body (Intro–Conclusion) now ends at the bottom of p.8, within the ARR 8-page content limit (Limitations p.9, References p.10).
+- **Em-dashes.** User asked to cut the dash-heavy style in prose and figures. Replaced every rendered em-dash (`---`) with colons, parentheses or semicolons: Figure 3's three cards (`X --- Y` → `X: Y`) and its caption (parenthetical), the Figure 1 text-only Reference cell (`---` → "none"), and two prose spots (the key-origins sentence and the DSCR-partly-answerable sentence). Zero rendered em-dashes remain (the `% ---` comment banners are non-rendering and left alone). Numbers/claims unchanged.
+
+Recompiled in place, clean, 15 pp; refreshed repo-root `Imagedependence.pdf`.
+
+## 2026-10-05 (2) — table styling + worked-example figure (presentation pass, NAACL-style)
+
+Professor's "too plain" feedback plus three accepted NAACL'26 examples (OctoTools 2502.11271, NRLB 2605.28836, tabular-prep survey 2508.01556) motivated a presentation pass beyond Figure 1. Content/numbers unchanged; styling only.
+
+**(1) Tables.** Added `\usepackage{colortbl}` (the `\PassOptionsToPackage{table}{xcolor}` route failed — xcolor is pulled in before our line, so `\rowcolor` was undefined; explicit colortbl after tikz fixes it). New preamble helpers: `\hdrrow`/`\bandrow`/`\hirow` (header/zebra/highlight shades: tblhdr/tblband/tblhi), phase chips `\ptagAIA..\ptagTCM` (colored square + name, reusing the Figure-1 phase palette; still readable in B/W), and interval glyphs `\ivok`/`\ivinc`/`\ivmargin` (filled ● / hollow ○ / filled ■ so they differ without color).
+  - Generator (`tools/paper_numbers.py`): `tabular()` now shades header rows and bands alternate body rows (`zebra=` flag; rows that carry their own `\rowcolor` are left alone). E1 rows get model-block banding, phase chips, interval glyphs, and the one row that survives Holm (`p_holm<.05`, i.e. Llama-4-Scout/DSCR) is highlighted (`\hirow`) with a bold Δ. E2 and the reference-model (ctrl) tables get phase chips. All other generated tables inherit header shade + zebra via `tabular()`.
+  - Hand-written tables in the tex (`tab:phases`, `tab:baselines`) got header shade + chips + banding; `tab:phases` Phase column widened 0.8→1.3cm (Question 4.6→4.1cm, total width unchanged) because the chip+"DSCR" overflowed into the next column.
+  - **Regeneration-safe:** verified `python -m tools.paper_numbers` reproduces the pre-change tables byte-for-byte before editing, and that E1 data columns are identical after (only styling tokens added). Regenerated into `paper/latex/generated/` (tracked).
+
+**(2) Worked-example figure (Figure 3, `fig:worked`).** New single-column TikZ figure for the Llama-4-Scout/DSCR case: a green "Ablation alone" card (Δ +45.7 pp, amber ! badge) → three red-✗ control cards (accuracy benefit below the most-common key; text-only ≪ chance; donor gain not separable from random) → a violet "Verdict: response sensitivity, not image reading" banner. Numbers via existing `\vfour…` macros (no hard-coded values). Referenced from the worked-example paragraph. New icon pics `crossic`/`bangic`; color `nocol`.
+
+Verified: scratch `pdflatex`×2 + bibtex clean, no undefined refs/citations, 15 pp. Figures/tables render correctly (Table 3 highlight row pops; chips tie tables to Figure 1). Recompiled `paper/latex/` in place and refreshed repo-root `Imagedependence.pdf`.
+
+**Space note:** the worked-example figure pushed the main body (Intro–Conclusion) from ending on p.8 to spilling ~0.2 p onto p.9 (Conclusion starts p.8, Limitations now p.9), i.e. slightly over the ARR 8-page content limit. The worked-example *paragraph* is now largely redundant with Figure 3 and is the obvious trim to recover the space (left for the final page-limit pass per the standing rule).
+
 ## 2026-10-05 — overview figure (Figure 1): added color + icons per professor feedback
 
 Professor approved the results and the two-panel overview design (the `(a)` same-patient benchmark instance / `(b)` controlled image-dependence evaluation layout, which the user had reinstated into `acl_latex.tex`), but asked to make it less plain: "add some colors, with some icons." Styled the existing TikZ figure in place — layout, node text, brackets and column headers unchanged; only fills/borders/titles recolored and icons added.
