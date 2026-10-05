@@ -601,6 +601,42 @@ def v4(mc: Macros) -> None:
         (OUT / f"tab_v4_{name}.tex").write_text(tabular(cs, hd, rows, zebra=(name != "e1")))
 
 
+def donor_validation(mc: "Macros") -> None:
+    """Macros + table for the donor-protocol validation with known-behaviour predictors (Appendix)."""
+    dv = load("results/lumiere_v4_donor_validation.json")
+    if not dv or "DSCR" not in dv:
+        return
+    LABEL = {"constant": "Constant answer", "random": "Random answer",
+             "image_shift": "Generic image shift", "tracker_rho1": "Tracker ($\\rho=1$)",
+             "tracker_rho0.7": "Tracker ($\\rho=0.7$)", "tracker_rho0.4": "Tracker ($\\rho=0.4$)"}
+    TAGS = {"image_shift": "Shift", "tracker_rho1": "TrackFull", "tracker_rho0.7": "TrackMid",
+            "tracker_rho0.4": "TrackLow", "constant": "Const", "random": "Rand"}
+    d = dv["DSCR"]
+    pr = d.get("predictors", {})
+    mc.add("vfourDonorValN", d.get("n_recipients", ""))
+    mc.add("vfourDonorValSims", pr.get("tracker_rho1", {}).get("sims", ""))
+    for name, tag in TAGS.items():
+        p = pr.get(name, {})
+        if not p:
+            continue
+        mc.add(f"vfourDonorVal{tag}Gain", signed(p["gain_median"]))
+        mc.add(f"vfourDonorVal{tag}Detect", f"{100 * p['detection_rate']:.0f}")
+    # per-phase detection for AIA/LIL (to back the "same separation" claim with numbers)
+    for ph in ("AIA", "LIL"):
+        pp = dv.get(ph, {}).get("predictors", {})
+        for name, tag in (("image_shift", "Shift"), ("tracker_rho0.4", "TrackLow")):
+            p = pp.get(name, {})
+            if p:
+                mc.add(f"vfourDonorVal{tag}Detect{ph}", f"{100 * p['detection_rate']:.0f}")
+    rows = []
+    for name in ("constant", "random", "image_shift", "tracker_rho1", "tracker_rho0.7", "tracker_rho0.4"):
+        p = pr.get(name)
+        if not p:
+            continue
+        rows.append(f"{LABEL[name]} & {signed(p['gain_median'])} & {100 * p['detection_rate']:.0f}\\% \\\\")
+    (OUT / "tab_v4_donorval.tex").write_text(tabular("lrr", ["Synthetic predictor & Donor gain (pp) & Detected ($p<.05$) \\\\"], rows))
+
+
 def check_stale() -> list[str]:
     tex = Path("paper/latex/acl_latex.tex").read_text()
     return [pat for pat in STALE if re.search(pat, tex)]
@@ -623,6 +659,7 @@ def main() -> None:
     v4(mc)
     v4_supplement(mc)
     v4_inputcheck(mc)
+    donor_validation(mc)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numbers.tex").write_text(mc.tex())
     (OUT / "numbers.json").write_text(json.dumps(mc.d, indent=1, sort_keys=True))

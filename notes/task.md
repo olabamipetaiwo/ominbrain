@@ -19,6 +19,14 @@ All review-2026-09-29 tasks (T-R1..R8) are done (see update.md 2026-09-30). Pixt
 
 ## PENDING, in order of importance
 
+- **T-R10 — Codex review (weak reject) Bucket 2 (new analysis / professor's call).** Bucket-1 manuscript fixes are DONE (see update.md 2026-10-05 (5)); these need real work:
+    - [x] **T-R10a — DONE 2026-10-05** (see update.md (6)). `tools/lumiere_v4_donor_validation.py` runs the paper's own estimators on synthetic predictors (constant/random/generic-image-shift/tracker-ρ) over 50 sims + 20 re-drawn assignments. Result: the permutation separates genuine tracking (92–100% detection) from a generic image response (0%, even at a matched +19.0 gain) across AIA/LIL/DSCR. New Appendix para + Table 6; macros via `donor_validation()` in paper_numbers.
+    - [ ] **T-R10a-artifact** — The anon artifact (`c635f1c`, unpushed) is now out of sync with the revised paper (new `\vfourDonorVal*` macros, `tab_v4_donorval`, the new tool, `results/lumiere_v4_donor_validation.json`). Add `lumiere_v4_donor_validation` to `build_anon_artifact.TOOLS`, ship the results JSON, add its run to `reproduce.sh`, rebuild + re-verify, THEN push (else the reviewer's reproduce.sh mismatches on v4 macros).
+    - [x] **T-R10b — DONE 2026-10-05 (7).** Prior-work sentence rewritten accurately (Bucket 1); what the prior-subtracted donor statistic adds is now stated in the validation paragraph (isolates image-specific movement from a generic image response).
+    - [x] **T-R10c — DONE (light) 2026-10-05 (7).** Structure already foregrounds image interventions (OmniBrainBench details / PJRF / chain are secondary/appendix); labelled TCM as an extension and trimmed its E3/E4 paragraph. No teardown needed.
+    - [x] **T-R10d — DONE (framing) 2026-10-05 (7).** Gate framed as a conservative screen (not a universal prerequisite); reports that no open model passes under the exact test (answers reviewer Q1). Deeper per-task-gate redesign not pursued (framing suffices).
+    - [ ] **OUTSTANDING (need new inference / external expert, not reanalysis):** a second reference model, and independent clinician review of the keys. Paper's Conclusion already flags these.
+
 
 1. **Clinician review, T-3a–e** — OUT OF SCOPE by the professor's standing decision (2026-09-25); listed last because of its long external lead time, though it would matter most for the unvalidated keys. Sub-items:
     - [ ] **T-3a** — Recruit qualified clinician reader(s) to independently assess exactly the images/stems/options shown to models — blinded initially to model outputs and generated keys.
