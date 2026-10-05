@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  23 SEP 2026 10:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  5 OCT 2026 11:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -746,6 +746,7 @@ Package: enumitem 2019/06/20 v3.9 Customized lists
 \enit@count@id=\count331
 \enitdp@description=\count332
 )
+(./generated/numbers.tex)
 (/apps/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2023-11-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count333
@@ -754,24 +755,24 @@ File: l3backend-pdftex.def 2023-11-09 L3 backend support: PDF output (pdfTeX)
 (./acl_latex.aux)
 \openout1 = `acl_latex.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
 
 (/apps/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -832,24 +833,24 @@ e
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 74.
+Package hyperref Info: Link coloring ON on input line 121.
 (./acl_latex.out) (./acl_latex.out)
 \@outlinefile=\write4
 \openout4 = `acl_latex.out'.
 
-LaTeX Info: Redefining \microtypecontext on input line 74.
-Package microtype Info: Applying patch `item' on input line 74.
-Package microtype Info: Applying patch `toc' on input line 74.
-Package microtype Info: Applying patch `eqnum' on input line 74.
-Package microtype Info: Applying patch `footnote' on input line 74.
-Package microtype Info: Applying patch `verbatim' on input line 74.
+LaTeX Info: Redefining \microtypecontext on input line 121.
+Package microtype Info: Applying patch `item' on input line 121.
+Package microtype Info: Applying patch `toc' on input line 121.
+Package microtype Info: Applying patch `eqnum' on input line 121.
+Package microtype Info: Applying patch `footnote' on input line 121.
+Package microtype Info: Applying patch `verbatim' on input line 121.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 74.
+LaTeX Info: Redefining \showhyphens on input line 121.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -865,181 +866,163 @@ tim
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+lasy on input line 75
-.
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 12
+2.
 
 (/apps/texlive/2023/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+) [1{/apps/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/apps/tex
+live/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}
+
+
+
+]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
+40.
+
+(/apps/texlive/2023/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Underfull \hbox (badness 1527) in paragraph at lines 77--78
-\T1/ptm/m/n/10 (+20) adaptation, and threshold-gating mea-sures.
+Overfull \hbox (7.14568pt too wide) in paragraph at lines 316--317
+ [][] 
+ []
+
+[2]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3]
+Overfull \hbox (0.65993pt too wide) in paragraph at lines 358--358
+[]\T1/ptm/m/n/9 (-20) Phase| 
  []
 
 
-Underfull \hbox (badness 1796) in paragraph at lines 85--86
-\T1/ptm/m/n/10.95 (+20) ([][]Croskerry[][], [][]2009[][]): \T1/ptm/b/n/10.95 (+
-20) A\T1/ptm/m/n/10.95 (+20) natomical and \T1/ptm/b/n/10.95 (+20) I\T1/ptm/m/n
-/10.95 (+20) maging
+Underfull \hbox (badness 3009) in paragraph at lines 361--361
+[]\T1/ptm/m/n/9 (+20) follow-up contrast-enhanced T1
  []
 
 
-Underfull \hbox (badness 2181) in paragraph at lines 85--86
-\T1/ptm/b/n/10.95 (+20) A\T1/ptm/m/n/10.95 (+20) ssessment (AIA), \T1/ptm/b/n/1
-0.95 (+20) L\T1/ptm/m/n/10.95 (+20) esion \T1/ptm/b/n/10.95 (+20) I\T1/ptm/m/n/
-10.95 (+20) dentification and
+Overfull \hbox (3.12077pt too wide) in paragraph at lines 362--362
+[]\T1/ptm/m/n/9 (-20) DSCR| 
  []
 
 
-Underfull \hbox (badness 1648) in paragraph at lines 85--86
-\T1/ptm/b/n/10.95 (+20) L\T1/ptm/m/n/10.95 (+20) ocalization (LIL), \T1/ptm/b/n
-/10.95 (+20) D\T1/ptm/m/n/10.95 (+20) iagnostic \T1/ptm/b/n/10.95 (+20) S\T1/pt
-m/m/n/10.95 (+20) ynthesis and
+Underfull \hbox (badness 2343) in paragraph at lines 362--362
+[]\T1/ptm/m/n/9 (+20) RANO en-hance-ment cat-e-gory at
  []
 
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 14
-0.
-(/apps/texlive/2023/texmf-dist/tex/latex/inconsolata/t1zi4.fd
+
+Underfull \hbox (badness 1688) in paragraph at lines 362--362
+\T1/ptm/m/n/9 (+20) fer-ent from the base-line) nadir
+ []
+
+[4] [5] (./generated/tab_v4_e1.tex) (./generated/tab_v4_e3.tex)
+Overfull \hbox (9.63808pt too wide) in paragraph at lines 1--444
+ [][] 
+ []
+
+<figures/overview_results.pdf, id=229, 246.99026pt x 239.29399pt>
+File: figures/overview_results.pdf Graphic file (type pdf)
+<use figures/overview_results.pdf>
+Package pdftex.def Info: figures/overview_results.pdf  used on input line 450.
+(pdftex.def)             Requested size: 219.08614pt x 212.2626pt.
+
+Underfull \hbox (badness 2277) in paragraph at lines 458--459
+\T1/ptm/m/n/10.95 (+20) iden-ti-fi-ca-tion stays be-tween 26.1 and 37.0%
+ []
+
+[6 <./figures/overview_results.pdf>] [7] [8] [9] (./acl_latex.bbl
+Underfull \hbox (badness 1817) in paragraph at lines 93--100
+[]\T1/ptm/m/n/10 (+20) E. Mah-moud, J. Gass, Y. Dhemesh, J. Greaser,
+ []
+
+[10]
+Underfull \hbox (badness 1874) in paragraph at lines 165--170
+[]\T1/ptm/m/n/10 (+20) Miles Turpin, Ju-lian Michael, Ethan Perez, and
+ []
+
+)
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 51
+8.
+ (/apps/texlive/2023/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 140.
+(Font)              scaled to size 10.95pt on input line 518.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [1{/apps/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/apps/texl
-ive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}
-
-
-
-{/apps/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-43.
-
-(/apps/texlive/2023/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 199--200
- []\T1/ptm/b/n/10.95 (+20) Models.[] \T1/ptm/m/n/10.95 (+20) Four open-weight m
-od-els served
+ [11{/apps/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
+(./generated/v4_example.tex
+Underfull \hbox (badness 1314) in paragraph at lines 17--18
+ []\T1/ptm/b/n/10.95 (+20) Donor swap.[] \T1/ptm/m/n/10.95 (+20) Each im-age is
+ re-placed by a
  []
 
 
-Underfull \hbox (badness 5077) in paragraph at lines 199--200
-\T1/ptm/m/n/10.95 (+20) of-experts, 17B ac-tive); tags \T1/zi4/m/n/10.95 medgem
-ma:4b\T1/ptm/m/n/10.95 (+20) ,
+Underfull \hbox (badness 1997) in paragraph at lines 17--18
+\T1/ptm/m/n/10.95 (+20) donor's whose key dif-fers (AIA Patient-054,
  []
 
-[4]
-Underfull \hbox (badness 2111) in paragraph at lines 208--209
-\T1/ptm/m/n/10.95 (+20) The vo-cab-u-lary and con-sis-tency met-rics test
- []
+<figures/v4_example.png, id=452, 1355.0625pt x 847.165pt>
+File: figures/v4_example.png Graphic file (type png)
+<use figures/v4_example.png>
+Package pdftex.def Info: figures/v4_example.png  used on input line 45.
+(pdftex.def)             Requested size: 455.24411pt x 284.6067pt.
+) [12]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 214--215
- []\T1/ptm/b/n/10.95 (+20) Evidence fact-check.[] \T1/ptm/m/n/10.95 (+20) For e
-ach check-able
- []
+(./generated/tab_v4_e2.tex)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+(./generated/tab_v4_ctrl.tex)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[13 <./figures/v4_example.png (PNG copy)>] (./generated/tab_v4_inputcheck.tex)
+(./generated/tab_v4_e3trans.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Underfull \hbox (badness 1852) in paragraph at lines 214--215
-\T1/zi4/m/n/10.95 reasoning \T1/ptm/m/n/10.95 (+20) (hemi-sphere or re-gion sta
-te-ments,
- []
 
+Package lineno Warning: Line number reference failed, re-run to get it right.
 
-Underfull \hbox (badness 1558) in paragraph at lines 214--215
-\T1/ptm/m/n/10.95 (+20) prop-er-ties: \T1/ptm/m/it/10.95 (+20) avail-abil-ity \
-T1/ptm/m/n/10.95 (+20) (al-ready in the stem,
- []
-
-
-Underfull \hbox (badness 1668) in paragraph at lines 218--219
- []\T1/ptm/b/n/10.95 (+20) Repeated identical-input con-trol.[] \T1/ptm/m/n/10.
-95 (+20) For each
- []
-
-<figures/phase_effects.pdf, id=211, 235.90384pt x 248.36084pt>
-File: figures/phase_effects.pdf Graphic file (type pdf)
-<use figures/phase_effects.pdf>
-Package pdftex.def Info: figures/phase_effects.pdf  used on input line 249.
-(pdftex.def)             Requested size: 219.08614pt x 230.66621pt.
-[5]
-Underfull \vbox (badness 1902) has occurred while \output is active []
-
-
-Underfull \hbox (badness 1668) in paragraph at lines 276--277
- []\T1/ptm/b/n/10.95 (+20) Counterfactual-image sub-sti-tu-tion.[] \T1/ptm/m/n/
-10.95 (+20) Ta-ble [][]2[][]
- []
-
-[6 <./figures/phase_effects.pdf>] [7] (./acl_latex.bbl
-Underfull \hbox (badness 1655) in paragraph at lines 12--17
-\T1/ptm/m/n/10 (+20) Conmy. 2025.  [][]Chain-of-thought rea-son-ing in
- []
-
-[8]) [9]
-LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
-(Font)              scaled to size 9.0pt on input line 360.
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.0pt on input line 361.
-
-Underfull \hbox (badness 1824) in paragraph at lines 369--370
-\T1/ptm/m/n/10.95 (+20) wrote each phase's ques-tion stem as a self-
- []
-
-[10]
-LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
-(Font)              scaled to size 10.95pt on input line 374.
-
-Underfull \hbox (badness 1137) in paragraph at lines 379--380
-\T1/ptm/m/n/10.95 (+20) sub-stan-tially harder than \T1/zi4/m/n/10.95 v2 \T1/pt
-m/m/n/10.95 (+20) for ev-ery model
- []
-
-[11]
-Underfull \hbox (badness 1137) in paragraph at lines 389--390
-\T1/ptm/m/n/10.95 (+20) a model's \T1/zi4/m/n/10.95 visual_grounding \T1/ptm/m/
-n/10.95 (+20) and \T1/zi4/m/n/10.95 reasoning
- []
-
-[12] [13] [14] (./acl_latex.aux)
+[14] [15] (./acl_latex.aux)
  ***********
 LaTeX2e <2023-11-01>
 L3 programming layer <2023-12-11>
  ***********
 Package rerunfilecheck Info: File `acl_latex.out' has not changed.
-(rerunfilecheck)             Checksum: BDE436C8819F4B76550085204F5E027B;3495.
+(rerunfilecheck)             Checksum: 6ACE210461853FE8D401B9875CC4E5D7;3446.
  ) 
 Here is how much of TeX's memory you used:
- 26809 strings out of 474175
- 498606 string characters out of 5748183
- 1965457 words of memory out of 5000000
- 48107 multiletter control sequences out of 15000+600000
- 632450 words of font info for 391 fonts, out of 8000000 for 9000
+ 28137 strings out of 474175
+ 530061 string characters out of 5748183
+ 1971457 words of memory out of 5000000
+ 49421 multiletter control sequences out of 15000+600000
+ 627500 words of font info for 378 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,11n,87p,2543b,867s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,10n,87p,2963b,1030s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </apps/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4
-b.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata
--zi4r.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.
-pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></a
-pps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></apps/tex
-live/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></apps/texlive/20
-23/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></apps/texlive/2023/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></apps/texlive/2023/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr7.pfb></apps/texlive/2023/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmr8.pfb></apps/texlive/2023/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmr9.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmsy10.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsy7.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.
-pfb></apps/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></apps/t
-exlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></apps/texlive/2023/tex
-mf-dist/fonts/type1/urw/times/utmr8a.pfb></apps/texlive/2023/texmf-dist/fonts/t
-ype1/urw/times/utmri8a.pfb>
-Output written on acl_latex.pdf (14 pages, 297214 bytes).
+r.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+</apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></apps/
+texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></apps/texlive
+/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></apps/texlive/2023/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></apps/texlive/2023/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr8.pfb></apps/texlive/2023/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr9.pfb></apps/texlive/2023/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy10.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmsy7.pfb></apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmsy9.pfb></apps/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pf
+b></apps/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></apps/texliv
+e/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></apps/texlive/2023/texmf-di
+st/fonts/type1/urw/times/utmri8a.pfb>
+Output written on acl_latex.pdf (15 pages, 650451 bytes).
 PDF statistics:
- 537 PDF objects out of 1000 (max. 8388607)
- 432 compressed objects within 5 object streams
- 98 named destinations out of 1000 (max. 500000)
- 69794 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 579 PDF objects out of 1000 (max. 8388607)
+ 472 compressed objects within 5 object streams
+ 102 named destinations out of 1000 (max. 500000)
+ 64151 words of extra memory for PDF output out of 74296 (max. 10000000)
 

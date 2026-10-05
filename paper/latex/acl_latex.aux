@@ -5,10 +5,9 @@
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \citation{gururangan2018annotation}
 \citation{mccoy2019right}
-\citation{lanham2023measuring,arcuschin2025chainofthought,somov2026breaking}
-\citation{jung2026breaking}
+\citation{turpin2023language}
 \citation{nguyen2025localizing}
-\citation{croskerry2009clinical}
+\citation{nguyen2025localizing}
 \citation{peng2026omnibrainbench}
 \citation{suter2022lumiere}
 \@LN@col{1}
@@ -39,13 +38,13 @@
 \@LN{24}{0}
 \@LN{25}{0}
 \@LN{26}{0}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
-\newlabel{sec:introduction}{{1}{1}{Introduction}{section.1}{}}
 \@LN{27}{0}
 \@LN{28}{0}
 \@LN{29}{0}
 \@LN{30}{0}
 \@LN{31}{0}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:introduction}{{1}{1}{Introduction}{section.1}{}}
 \@LN{32}{0}
 \@LN{33}{0}
 \@LN{34}{0}
@@ -98,21 +97,21 @@
 \@LN{80}{0}
 \@LN{81}{0}
 \@LN{82}{0}
-\citation{gururangan2018annotation}
+\citation{poliak2018hypothesis,gururangan2018annotation}
 \citation{mccoy2019right}
-\citation{lanham2023measuring}
-\citation{arcuschin2025chainofthought}
-\citation{somov2026breaking}
-\citation{jung2026breaking}
+\citation{turpin2023language}
+\citation{goyal2017making}
+\citation{chen2024right}
+\citation{yan2025worse}
+\citation{jin2024hidden}
 \citation{nguyen2025localizing}
-\citation{croskerry2009clinical}
+\citation{gu2026unimod}
 \citation{peng2026omnibrainbench}
-\citation{abbasi2026neuroqa}
-\citation{ghosh2026ucsfpdgmvqa}
+\citation{suter2022lumiere}
 \citation{muglioma2025post}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The KAB framework: a brain-MRI case is evaluated as a five-phase sequential chain (bottom), with three metrics attached to it (top and below): vocabulary and consistency (ontology term validity + answer-reasoning self-consistency), feedback-adaptation (a targeted re-query on failure), and threshold gating (a phase counts only if its upstream phases cleared a score threshold).}}{2}{figure.caption.1}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:overview}{{1}{2}{The KAB framework: a brain-MRI case is evaluated as a five-phase sequential chain (bottom), with three metrics attached to it (top and below): vocabulary and consistency (ontology term validity + answer-reasoning self-consistency), feedback-adaptation (a targeted re-query on failure), and threshold gating (a phase counts only if its upstream phases cleared a score threshold)}{figure.caption.1}{}}
+\citation{suter2022lumiere}
+\citation{suter2022lumiere,kickingereder2019automated}
+\citation{wen2010updated}
 \@LN@col{1}
 \@LN{83}{1}
 \@LN{84}{1}
@@ -136,9 +135,6 @@
 \@LN{102}{1}
 \@LN{103}{1}
 \@LN{104}{1}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{2}{section.2}\protected@file@percent }
-\newlabel{sec:related-work}{{2}{2}{Related Work}{section.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{Shortcuts and reasoning faithfulness.}{2}{section*.2}\protected@file@percent }
 \@LN{105}{1}
 \@LN{106}{1}
 \@LN{107}{1}
@@ -151,30 +147,32 @@
 \@LN{114}{1}
 \@LN{115}{1}
 \@LN{116}{1}
-\@LN@col{2}
 \@LN{117}{1}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{2}{section.2}\protected@file@percent }
+\newlabel{sec:related-work}{{2}{2}{Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Shortcuts and faithfulness.}{2}{section*.2}\protected@file@percent }
 \@LN{118}{1}
 \@LN{119}{1}
 \@LN{120}{1}
 \@LN{121}{1}
 \@LN{122}{1}
-\@writefile{toc}{\contentsline {paragraph}{Cascading failure in medical reasoning.}{2}{section*.3}\protected@file@percent }
 \@LN{123}{1}
 \@LN{124}{1}
 \@LN{125}{1}
 \@LN{126}{1}
+\@writefile{toc}{\contentsline {paragraph}{Answering without the image.}{2}{section*.3}\protected@file@percent }
 \@LN{127}{1}
 \@LN{128}{1}
 \@LN{129}{1}
 \@LN{130}{1}
 \@LN{131}{1}
+\@LN@col{2}
 \@LN{132}{1}
 \@LN{133}{1}
 \@LN{134}{1}
 \@LN{135}{1}
 \@LN{136}{1}
 \@LN{137}{1}
-\@writefile{toc}{\contentsline {paragraph}{Brain MRI benchmarks and same-patient continuity.}{2}{section*.4}\protected@file@percent }
 \@LN{138}{1}
 \@LN{139}{1}
 \@LN{140}{1}
@@ -189,66 +187,65 @@
 \@LN{149}{1}
 \@LN{150}{1}
 \@LN{151}{1}
-\citation{suter2022lumiere}
-\citation{wen2010updated}
+\@writefile{toc}{\contentsline {paragraph}{Brain benchmarks and longitudinal data.}{2}{section*.4}\protected@file@percent }
+\@LN{152}{1}
+\@LN{153}{1}
+\@LN{154}{1}
+\@LN{155}{1}
+\@LN{156}{1}
+\@LN{157}{1}
+\@LN{158}{1}
+\@LN{159}{1}
+\@LN{160}{1}
+\@LN{161}{1}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Building Chains from LUMIERE}{2}{section.3}\protected@file@percent }
+\newlabel{sec:lumiere}{{3}{2}{Building Chains from LUMIERE}{section.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Why not OmniBrainBench.}{2}{section*.5}\protected@file@percent }
+\@LN{162}{1}
+\@LN{163}{1}
+\@LN{164}{1}
+\@LN{165}{1}
+\@LN{166}{1}
+\@LN{167}{1}
+\@LN{168}{1}
+\@LN{169}{1}
+\@LN{170}{1}
+\@LN{171}{1}
+\@LN{172}{1}
+\@LN{173}{1}
+\@LN{174}{1}
+\@writefile{toc}{\contentsline {paragraph}{LUMIERE.}{2}{section*.6}\protected@file@percent }
+\@LN{175}{1}
+\@LN{176}{1}
+\@LN{177}{1}
+\@LN{178}{1}
+\@LN{179}{1}
+\@LN{180}{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Evaluation overview. A stratified LUMIERE follow-up instantiates a five-phase same-patient benchmark chain. The image-dependent phases (AIA, LIL, DSCR) are each evaluated under three controlled input conditions: the patient's own image, text only, and a donor-image swap. AIA serves as the positive control.}}{3}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:overview}{{1}{3}{Evaluation overview. A stratified LUMIERE follow-up instantiates a five-phase same-patient benchmark chain. The image-dependent phases (AIA, LIL, DSCR) are each evaluated under three controlled input conditions: the patient's own image, text only, and a donor-image swap. AIA serves as the positive control}{figure.caption.1}{}}
 \@LN@col{1}
-\@LN{152}{2}
-\@LN{153}{2}
-\@LN{154}{2}
-\@LN{155}{2}
-\@LN{156}{2}
-\@writefile{toc}{\contentsline {section}{\numberline {3}The KAB Framework}{3}{section.3}\protected@file@percent }
-\newlabel{sec:kab}{{3}{3}{The KAB Framework}{section.3}{}}
-\@LN{157}{2}
-\@LN{158}{2}
-\@LN{159}{2}
-\@LN{160}{2}
-\@LN{161}{2}
-\@LN{162}{2}
-\@LN{163}{2}
-\@LN{164}{2}
-\@LN{165}{2}
-\@LN{166}{2}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Vocabulary and Consistency Metrics}{3}{subsection.3.1}\protected@file@percent }
-\newlabel{sec:faithfulness}{{3.1}{3}{Vocabulary and Consistency Metrics}{subsection.3.1}{}}
-\@LN{167}{2}
-\@LN{168}{2}
-\@LN{169}{2}
-\@LN{170}{2}
-\@LN{171}{2}
-\@LN{172}{2}
-\@LN{173}{2}
-\@LN{174}{2}
-\@LN{175}{2}
-\@LN{176}{2}
-\@LN{177}{2}
-\@LN{178}{2}
-\@LN{179}{2}
-\@LN{180}{2}
 \@LN{181}{2}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Feedback-Based Adaptation}{3}{subsection.3.2}\protected@file@percent }
-\newlabel{sec:adaptation}{{3.2}{3}{Feedback-Based Adaptation}{subsection.3.2}{}}
 \@LN{182}{2}
 \@LN{183}{2}
 \@LN{184}{2}
 \@LN{185}{2}
 \@LN{186}{2}
 \@LN{187}{2}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Motivating audit: can an automated rule reproduce the expert ratings from the displayed slices?}{3}{subsection.3.1}\protected@file@percent }
+\newlabel{sec:audit}{{3.1}{3}{Motivating audit: can an automated rule reproduce the expert ratings from the displayed slices?}{subsection.3.1}{}}
 \@LN{188}{2}
 \@LN{189}{2}
 \@LN{190}{2}
 \@LN{191}{2}
 \@LN{192}{2}
 \@LN{193}{2}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Threshold Gating}{3}{subsection.3.3}\protected@file@percent }
-\newlabel{sec:gating}{{3.3}{3}{Threshold Gating}{subsection.3.3}{}}
 \@LN{194}{2}
 \@LN{195}{2}
 \@LN{196}{2}
 \@LN{197}{2}
 \@LN{198}{2}
 \@LN{199}{2}
-\@LN@col{2}
 \@LN{200}{2}
 \@LN{201}{2}
 \@LN{202}{2}
@@ -257,6 +254,7 @@
 \@LN{205}{2}
 \@LN{206}{2}
 \@LN{207}{2}
+\@LN@col{2}
 \@LN{208}{2}
 \@LN{209}{2}
 \@LN{210}{2}
@@ -264,8 +262,6 @@
 \@LN{212}{2}
 \@LN{213}{2}
 \@LN{214}{2}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Compatibility of OmniBrainBench with Sequential Evaluation}{3}{section.4}\protected@file@percent }
-\newlabel{sec:chain-validity}{{4}{3}{Compatibility of OmniBrainBench with Sequential Evaluation}{section.4}{}}
 \@LN{215}{2}
 \@LN{216}{2}
 \@LN{217}{2}
@@ -287,22 +283,28 @@
 \@LN{233}{2}
 \@LN{234}{2}
 \@LN{235}{2}
-\@LN{236}{2}
-\@LN{237}{2}
-\@LN{238}{2}
-\@LN{239}{2}
-\@LN{240}{2}
-\@LN{241}{2}
-\@LN{242}{2}
-\@writefile{toc}{\contentsline {section}{\numberline {5}A Same-Patient Chain Dataset from LUMIERE}{3}{section.5}\protected@file@percent }
-\newlabel{sec:lumiere}{{5}{3}{A Same-Patient Chain Dataset from LUMIERE}{section.5}{}}
-\@LN{243}{2}
-\@LN{244}{2}
-\@LN{245}{2}
-\@LN{246}{2}
-\@LN{247}{2}
+\citation{isensee2019automated}
+\citation{wen2010updated}
+\citation{sellergren2025medgemma}
+\citation{gemmateam2025gemma3}
+\citation{mcnemar1947note}
+\citation{wilson1927probable}
+\citation{agresti2005simple}
 \@LN@col{1}
-\@writefile{toc}{\contentsline {paragraph}{Facts.}{4}{section*.5}\protected@file@percent }
+\@LN{236}{3}
+\@LN{237}{3}
+\@LN{238}{3}
+\@LN{239}{3}
+\@LN{240}{3}
+\@LN{241}{3}
+\@LN{242}{3}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}The item set}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:v4}{{3.2}{4}{The item set}{subsection.3.2}{}}
+\@LN{243}{3}
+\@LN{244}{3}
+\@LN{245}{3}
+\@LN{246}{3}
+\@LN{247}{3}
 \@LN{248}{3}
 \@LN{249}{3}
 \@LN{250}{3}
@@ -312,25 +314,26 @@
 \@LN{254}{3}
 \@LN{255}{3}
 \@LN{256}{3}
+\@writefile{toc}{\contentsline {paragraph}{Cohort.}{4}{section*.8}\protected@file@percent }
 \@LN{257}{3}
 \@LN{258}{3}
 \@LN{259}{3}
 \@LN{260}{3}
-\@writefile{toc}{\contentsline {paragraph}{Cohort and drafting.}{4}{section*.6}\protected@file@percent }
 \@LN{261}{3}
 \@LN{262}{3}
 \@LN{263}{3}
 \@LN{264}{3}
 \@LN{265}{3}
 \@LN{266}{3}
+\@writefile{toc}{\contentsline {paragraph}{Images.}{4}{section*.9}\protected@file@percent }
 \@LN{267}{3}
 \@LN{268}{3}
 \@LN{269}{3}
 \@LN{270}{3}
 \@LN{271}{3}
 \@LN{272}{3}
+\@writefile{toc}{\contentsline {paragraph}{AIA, LIL, DSCR.}{4}{section*.10}\protected@file@percent }
 \@LN{273}{3}
-\@writefile{toc}{\contentsline {paragraph}{Item construction.}{4}{section*.7}\protected@file@percent }
 \@LN{274}{3}
 \@LN{275}{3}
 \@LN{276}{3}
@@ -342,6 +345,8 @@
 \@LN{282}{3}
 \@LN{283}{3}
 \@LN{284}{3}
+\@LN@col{2}
+\@writefile{toc}{\contentsline {paragraph}{PJRF.}{4}{section*.11}\protected@file@percent }
 \@LN{285}{3}
 \@LN{286}{3}
 \@LN{287}{3}
@@ -353,16 +358,15 @@
 \@LN{293}{3}
 \@LN{294}{3}
 \@LN{295}{3}
+\@writefile{toc}{\contentsline {paragraph}{TCM.}{4}{section*.12}\protected@file@percent }
 \@LN{296}{3}
 \@LN{297}{3}
 \@LN{298}{3}
-\@LN@col{2}
 \@LN{299}{3}
 \@LN{300}{3}
 \@LN{301}{3}
 \@LN{302}{3}
 \@LN{303}{3}
-\@writefile{toc}{\contentsline {paragraph}{Image rendering.}{4}{section*.8}\protected@file@percent }
 \@LN{304}{3}
 \@LN{305}{3}
 \@LN{306}{3}
@@ -376,12 +380,11 @@
 \@LN{314}{3}
 \@LN{315}{3}
 \@LN{316}{3}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Controls and Pre-specified Analysis}{4}{section.4}\protected@file@percent }
+\newlabel{sec:controls}{{4}{4}{Controls and Pre-specified Analysis}{section.4}{}}
 \@LN{317}{3}
 \@LN{318}{3}
 \@LN{319}{3}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Experimental Setup}{4}{section.6}\protected@file@percent }
-\newlabel{sec:setup}{{6}{4}{Experimental Setup}{section.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{Models.}{4}{section*.9}\protected@file@percent }
 \@LN{320}{3}
 \@LN{321}{3}
 \@LN{322}{3}
@@ -396,30 +399,28 @@
 \@LN{331}{3}
 \@LN{332}{3}
 \@LN{333}{3}
-\@writefile{toc}{\contentsline {paragraph}{Failed responses.}{4}{section*.10}\protected@file@percent }
 \@LN{334}{3}
-\@LN{335}{3}
-\@LN{336}{3}
-\@LN{337}{3}
-\@LN{338}{3}
-\@LN{339}{3}
-\@LN{340}{3}
-\@LN{341}{3}
-\@LN{342}{3}
-\@LN{343}{3}
-\@LN{344}{3}
-\@LN{345}{3}
-\@LN{346}{3}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces The phases. Stems for AIA, LIL and DSCR contain no patient-specific fact and every option set contains every possible answer, so a swapped image never conflicts with the text and the donor's answer is always available. DSCR shows two images, or three when the nadir differs from the baseline.}}{5}{table.caption.7}\protected@file@percent }
+\newlabel{tab:phases}{{1}{5}{The phases. Stems for AIA, LIL and DSCR contain no patient-specific fact and every option set contains every possible answer, so a swapped image never conflicts with the text and the donor's answer is always available. DSCR shows two images, or three when the nadir differs from the baseline}{table.caption.7}{}}
 \@LN@col{1}
-\@writefile{toc}{\contentsline {paragraph}{Knowledge bases.}{5}{section*.11}\protected@file@percent }
+\@LN{335}{4}
+\@LN{336}{4}
+\@LN{337}{4}
+\@LN{338}{4}
+\@LN{339}{4}
+\@LN{340}{4}
+\@LN{341}{4}
+\@LN{342}{4}
+\@LN{343}{4}
+\@LN{344}{4}
+\@LN{345}{4}
+\@LN{346}{4}
 \@LN{347}{4}
 \@LN{348}{4}
 \@LN{349}{4}
 \@LN{350}{4}
 \@LN{351}{4}
 \@LN{352}{4}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Testing Whether Correct Answers Are Image-Grounded}{5}{section.7}\protected@file@percent }
-\newlabel{sec:grounding-test}{{7}{5}{Testing Whether Correct Answers Are Image-Grounded}{section.7}{}}
 \@LN{353}{4}
 \@LN{354}{4}
 \@LN{355}{4}
@@ -427,15 +428,14 @@
 \@LN{357}{4}
 \@LN{358}{4}
 \@LN{359}{4}
-\@writefile{toc}{\contentsline {paragraph}{Stem-leakage audit.}{5}{section*.12}\protected@file@percent }
 \@LN{360}{4}
 \@LN{361}{4}
 \@LN{362}{4}
 \@LN{363}{4}
 \@LN{364}{4}
-\@writefile{toc}{\contentsline {paragraph}{Text-only ablation.}{5}{section*.13}\protected@file@percent }
 \@LN{365}{4}
 \@LN{366}{4}
+\@LN@col{2}
 \@LN{367}{4}
 \@LN{368}{4}
 \@LN{369}{4}
@@ -445,7 +445,6 @@
 \@LN{373}{4}
 \@LN{374}{4}
 \@LN{375}{4}
-\@writefile{toc}{\contentsline {paragraph}{Evidence fact-check.}{5}{section*.14}\protected@file@percent }
 \@LN{376}{4}
 \@LN{377}{4}
 \@LN{378}{4}
@@ -457,77 +456,76 @@
 \@LN{384}{4}
 \@LN{385}{4}
 \@LN{386}{4}
-\@writefile{toc}{\contentsline {paragraph}{Counterfactual-image substitution.}{5}{section*.15}\protected@file@percent }
 \@LN{387}{4}
 \@LN{388}{4}
 \@LN{389}{4}
+\@writefile{toc}{\contentsline {paragraph}{Reference and precision controls.}{5}{section*.13}\protected@file@percent }
 \@LN{390}{4}
 \@LN{391}{4}
 \@LN{392}{4}
 \@LN{393}{4}
 \@LN{394}{4}
-\@LN@col{2}
 \@LN{395}{4}
 \@LN{396}{4}
 \@LN{397}{4}
-\@LN{398}{4}
-\@LN{399}{4}
-\@LN{400}{4}
-\@LN{401}{4}
-\@LN{402}{4}
-\@LN{403}{4}
-\@LN{404}{4}
-\@LN{405}{4}
-\@writefile{toc}{\contentsline {paragraph}{Repeated identical-input control.}{5}{section*.16}\protected@file@percent }
-\@LN{406}{4}
-\@LN{407}{4}
-\@LN{408}{4}
-\@LN{409}{4}
-\@LN{410}{4}
-\@LN{411}{4}
-\newlabel{sec:gating-causality}{{7}{5}{Gating-causality experiment}{section*.17}{}}
-\@writefile{toc}{\contentsline {paragraph}{Gating-causality experiment.}{5}{section*.17}\protected@file@percent }
-\@LN{412}{4}
-\@LN{413}{4}
-\@LN{414}{4}
-\@LN{415}{4}
-\@LN{416}{4}
-\@LN{417}{4}
-\@LN{418}{4}
-\@LN{419}{4}
-\@LN{420}{4}
-\@LN{421}{4}
-\@writefile{toc}{\contentsline {paragraph}{Analysis plan.}{5}{section*.18}\protected@file@percent }
-\@LN{422}{4}
-\@LN{423}{4}
-\@LN{424}{4}
-\@LN{425}{4}
-\@LN{426}{4}
-\@LN{427}{4}
-\@LN{428}{4}
-\@LN{429}{4}
-\@LN{430}{4}
-\@LN{431}{4}
-\@LN{432}{4}
-\@LN{433}{4}
-\@LN{434}{4}
-\@LN{435}{4}
-\@LN{436}{4}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Results}{5}{section.8}\protected@file@percent }
-\newlabel{sec:results}{{8}{5}{Results}{section.8}{}}
-\@LN{437}{4}
-\@LN{438}{4}
-\@LN{439}{4}
-\@LN{440}{4}
-\@LN{441}{4}
-\@LN{442}{4}
-\@LN{443}{4}
 \@LN@col{1}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Non-gated accuracy (\%) with images versus text-only, and the paired difference $\Delta $ = image $-$ text-only in percentage points with its patient-clustered 95\% bootstrap interval (52 patients, 10,000 resamples). Accuracy is per question (Section~\ref {sec:setup}).}}{6}{table.caption.19}\protected@file@percent }
-\newlabel{tab:textonly}{{1}{6}{Non-gated accuracy (\%) with images versus text-only, and the paired difference $\Delta $ = image $-$ text-only in percentage points with its patient-clustered 95\% bootstrap interval (52 patients, 10,000 resamples). Accuracy is per question (Section~\ref {sec:setup})}{table.caption.19}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Paired accuracy difference (image minus text-only, percentage points) by phase and model, with patient-clustered 95\% bootstrap intervals; right of zero means the image helped. Not adjusted for multiplicity across the 20 cells.}}{6}{figure.caption.20}\protected@file@percent }
-\newlabel{fig:phase-effects}{{2}{6}{Paired accuracy difference (image minus text-only, percentage points) by phase and model, with patient-clustered 95\% bootstrap intervals; right of zero means the image helped. Not adjusted for multiplicity across the 20 cells}{figure.caption.20}{}}
-\@writefile{toc}{\contentsline {paragraph}{Text-only ablation.}{6}{section*.21}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Non-model references on the items: chance, share of the most common key, the ceiling of a category-only TCM lookup, and the PJRF base rate.}}{6}{table.caption.14}\protected@file@percent }
+\newlabel{tab:baselines}{{2}{6}{Non-model references on the items: chance, share of the most common key, the ceiling of a category-only TCM lookup, and the PJRF base rate}{table.caption.14}{}}
+\@LN{398}{5}
+\@LN{399}{5}
+\@LN{400}{5}
+\@LN{401}{5}
+\@LN{402}{5}
+\@LN{403}{5}
+\@LN{404}{5}
+\@LN{405}{5}
+\@LN{406}{5}
+\@LN{407}{5}
+\@LN{408}{5}
+\@LN{409}{5}
+\@LN{410}{5}
+\@LN{411}{5}
+\@LN{412}{5}
+\@LN{413}{5}
+\@LN{414}{5}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{6}{section.5}\protected@file@percent }
+\newlabel{sec:results}{{5}{6}{Results}{section.5}{}}
+\@LN{415}{5}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Reference values without a model}{6}{subsection.5.1}\protected@file@percent }
+\@LN{416}{5}
+\@LN{417}{5}
+\@LN{418}{5}
+\@LN{419}{5}
+\@LN{420}{5}
+\@LN{421}{5}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Image controls and stated facts}{6}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The reference model reads the image.}{6}{section*.18}\protected@file@percent }
+\@LN{422}{5}
+\@LN{423}{5}
+\@LN{424}{5}
+\@LN{425}{5}
+\@LN{426}{5}
+\@LN{427}{5}
+\@LN{428}{5}
+\@LN{429}{5}
+\@LN{430}{5}
+\@LN{431}{5}
+\@LN{432}{5}
+\@LN{433}{5}
+\@LN{434}{5}
+\@LN{435}{5}
+\@LN{436}{5}
+\@LN@col{2}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces E1 image effect (image minus text-only accuracy, percentage points) per model by phase, with 95\% bootstrap intervals; the same values as Table~\ref {tab:e1} (reference model from Table~\ref {tab:ctrl}). The Gemini-3.6-Flash reference separates from the text-only arm on sequence and lesion side, whereas the four open models sit near zero, apart from Llama-4-Scout on the class-prior-confounded DSCR task. Precision/stack controls are omitted for legibility and reported in the tables.}}{6}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:e1effect}{{2}{6}{E1 image effect (image minus text-only accuracy, percentage points) per model by phase, with 95\% bootstrap intervals; the same values as Table~\ref {tab:e1} (reference model from Table~\ref {tab:ctrl}). The Gemini-3.6-Flash reference separates from the text-only arm on sequence and lesion side, whereas the four open models sit near zero, apart from Llama-4-Scout on the class-prior-confounded DSCR task. Precision/stack controls are omitted for legibility and reported in the tables}{figure.caption.17}{}}
+\@LN{437}{5}
+\@LN{438}{5}
+\@LN{439}{5}
+\@LN{440}{5}
+\@LN{441}{5}
+\@LN{442}{5}
+\@LN{443}{5}
+\@writefile{toc}{\contentsline {paragraph}{Open models: image effect (E1).}{6}{section*.19}\protected@file@percent }
 \@LN{444}{5}
 \@LN{445}{5}
 \@LN{446}{5}
@@ -545,52 +543,56 @@
 \@LN{458}{5}
 \@LN{459}{5}
 \@LN{460}{5}
-\@LN@col{2}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Flip rate (\%) between own-image and donor-image runs with patient-clustered 95\% bootstrap intervals ($n=52$ per cell). AIA's answer does not depend on the image.}}{6}{table.caption.23}\protected@file@percent }
-\newlabel{tab:flip}{{2}{6}{Flip rate (\%) between own-image and donor-image runs with patient-clustered 95\% bootstrap intervals ($n=52$ per cell). AIA's answer does not depend on the image}{table.caption.23}{}}
 \@LN{461}{5}
-\@LN{462}{5}
-\@LN{463}{5}
-\@LN{464}{5}
-\@LN{465}{5}
-\@LN{466}{5}
-\@LN{467}{5}
-\@LN{468}{5}
-\@writefile{toc}{\contentsline {paragraph}{Evidence fact-check.}{6}{section*.22}\protected@file@percent }
-\@LN{469}{5}
-\@LN{470}{5}
-\@LN{471}{5}
-\@LN{472}{5}
-\@LN{473}{5}
-\@LN{474}{5}
-\@LN{475}{5}
-\@LN{476}{5}
-\@LN{477}{5}
-\@LN{478}{5}
-\@LN{479}{5}
-\@LN{480}{5}
-\@LN{481}{5}
-\@LN{482}{5}
-\@LN{483}{5}
-\@LN{484}{5}
-\@LN{485}{5}
-\@LN{486}{5}
-\@LN{487}{5}
-\@LN{488}{5}
-\@LN{489}{5}
-\@LN{490}{5}
-\@writefile{toc}{\contentsline {paragraph}{Counterfactual-image substitution.}{6}{section*.24}\protected@file@percent }
-\@LN{491}{5}
-\@LN{492}{5}
-\@LN{493}{5}
-\@LN{494}{5}
-\@LN{495}{5}
-\@LN{496}{5}
-\@LN{497}{5}
-\@LN{498}{5}
-\@LN{499}{5}
-\@LN{500}{5}
+\citation{nguyen2025localizing}
+\citation{goyal2017making}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces E1: accuracy (\%) with the image and with text only, with no upstream context, the paired difference in percentage points with its bootstrap interval and an add-half sparse-data interval (Add-half CI), the exact McNemar $p$ (unadjusted), the share of items whose answer letter differs between the two arms (answers differ), and the interval reading (unadjusted; only Llama-4-Scout on DSCR survives Holm correction, and ``CI above 0'' is not otherwise a confirmatory result). AIA is the positive control.}}{7}{table.caption.15}\protected@file@percent }
+\newlabel{tab:e1}{{3}{7}{E1: accuracy (\%) with the image and with text only, with no upstream context, the paired difference in percentage points with its bootstrap interval and an add-half sparse-data interval (Add-half CI), the exact McNemar $p$ (unadjusted), the share of items whose answer letter differs between the two arms (answers differ), and the interval reading (unadjusted; only Llama-4-Scout on DSCR survives Holm correction, and ``CI above 0'' is not otherwise a confirmatory result). AIA is the positive control}{table.caption.15}{}}
 \@LN@col{1}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces E3: TCM accuracy (\%) under true, random wrong and absent upstream context, and the number of answers that move to the rule's new answer after the stated category is replaced (label, all items) or the stated timing crosses the 12-week window (timing, progressive-disease items), over the informative items, those whose true-context answer was not already the new answer.}}{7}{table.caption.16}\protected@file@percent }
+\newlabel{tab:e3}{{4}{7}{E3: TCM accuracy (\%) under true, random wrong and absent upstream context, and the number of answers that move to the rule's new answer after the stated category is replaced (label, all items) or the stated timing crosses the 12-week window (timing, progressive-disease items), over the informative items, those whose true-context answer was not already the new answer}{table.caption.16}{}}
+\@LN{462}{6}
+\@LN{463}{6}
+\@LN{464}{6}
+\@LN{465}{6}
+\@LN{466}{6}
+\@LN{467}{6}
+\@LN{468}{6}
+\@LN{469}{6}
+\@LN{470}{6}
+\@LN{471}{6}
+\@LN{472}{6}
+\@LN{473}{6}
+\@LN{474}{6}
+\@LN{475}{6}
+\@LN{476}{6}
+\@writefile{toc}{\contentsline {paragraph}{Precision control.}{7}{section*.20}\protected@file@percent }
+\@LN{477}{6}
+\@LN{478}{6}
+\@LN{479}{6}
+\@LN{480}{6}
+\@LN{481}{6}
+\@LN{482}{6}
+\@LN@col{2}
+\@LN{483}{6}
+\@LN{484}{6}
+\@LN{485}{6}
+\@LN{486}{6}
+\@LN{487}{6}
+\@LN{488}{6}
+\@LN{489}{6}
+\@LN{490}{6}
+\@LN{491}{6}
+\@LN{492}{6}
+\@LN{493}{6}
+\@LN{494}{6}
+\@LN{495}{6}
+\@writefile{toc}{\contentsline {paragraph}{Open models: donor tracking (E2).}{7}{section*.21}\protected@file@percent }
+\@LN{496}{6}
+\@LN{497}{6}
+\@LN{498}{6}
+\@LN{499}{6}
+\@LN{500}{6}
 \@LN{501}{6}
 \@LN{502}{6}
 \@LN{503}{6}
@@ -606,111 +608,99 @@
 \@LN{513}{6}
 \@LN{514}{6}
 \@LN{515}{6}
+\@writefile{toc}{\contentsline {paragraph}{Worked example: ablation without tracking.}{7}{section*.22}\protected@file@percent }
 \@LN{516}{6}
 \@LN{517}{6}
-\@LN{518}{6}
-\@LN{519}{6}
-\@LN{520}{6}
-\@LN{521}{6}
-\@LN{522}{6}
-\@LN{523}{6}
-\@LN{524}{6}
-\@LN{525}{6}
-\@LN{526}{6}
-\@writefile{toc}{\contentsline {paragraph}{Other measures.}{7}{section*.25}\protected@file@percent }
-\@LN{527}{6}
-\@LN{528}{6}
-\@LN{529}{6}
-\@LN{530}{6}
-\@LN{531}{6}
-\@LN{532}{6}
-\@LN{533}{6}
-\@LN{534}{6}
-\@LN{535}{6}
-\@LN{536}{6}
-\@LN{537}{6}
-\@LN{538}{6}
-\@LN{539}{6}
-\@LN{540}{6}
-\@LN{541}{6}
-\@LN{542}{6}
-\@LN{543}{6}
-\@LN{544}{6}
-\@LN{545}{6}
-\@LN{546}{6}
-\@LN{547}{6}
-\@LN{548}{6}
-\@LN{549}{6}
-\@writefile{toc}{\contentsline {paragraph}{Reading against the analysis plan.}{7}{section*.26}\protected@file@percent }
-\@LN{550}{6}
-\@LN{551}{6}
-\@LN@col{2}
-\@LN{552}{6}
-\@LN{553}{6}
-\@LN{554}{6}
-\@LN{555}{6}
-\@LN{556}{6}
-\@LN{557}{6}
-\@LN{558}{6}
-\@LN{559}{6}
-\@LN{560}{6}
-\@LN{561}{6}
-\@LN{562}{6}
-\@LN{563}{6}
-\@LN{564}{6}
-\@LN{565}{6}
-\@LN{566}{6}
-\@LN{567}{6}
-\@LN{568}{6}
-\@LN{569}{6}
-\newlabel{sec:limitations}{{8}{7}{Limitations}{section*.27}{}}
-\@LN{570}{6}
-\@LN{571}{6}
-\@LN{572}{6}
-\@LN{573}{6}
-\@LN{574}{6}
-\@LN{575}{6}
-\@LN{576}{6}
-\@LN{577}{6}
-\@LN{578}{6}
-\@LN{579}{6}
-\@LN{580}{6}
-\@LN{581}{6}
-\@LN{582}{6}
-\@LN{583}{6}
-\@LN{584}{6}
-\@LN{585}{6}
-\@LN{586}{6}
-\@LN{587}{6}
-\@LN{588}{6}
-\@LN{589}{6}
-\@LN{590}{6}
-\@LN{591}{6}
-\@LN{592}{6}
-\@LN{593}{6}
-\@LN{594}{6}
-\@LN{595}{6}
-\@LN{596}{6}
-\@LN{597}{6}
-\@LN{598}{6}
-\@LN{599}{6}
-\@LN{600}{6}
-\@LN{601}{6}
-\bibdata{custom}
-\bibcite{abbasi2026neuroqa}{{1}{2026}{{Abbasi et~al.}}{{}}}
-\bibcite{arcuschin2025chainofthought}{{2}{2025}{{Arcuschin et~al.}}{{Arcuschin, Janiak, Krzyzanowski, Rajamanoharan, Nanda, and Conmy}}}
-\bibcite{croskerry2009clinical}{{3}{2009}{{Croskerry}}{{}}}
-\bibcite{ghosh2026ucsfpdgmvqa}{{4}{2026}{{Ghosh et~al.}}{{Ghosh, Lateef, Liu, Yu, Rauschecker, and Sushil}}}
-\bibcite{gururangan2018annotation}{{5}{2018}{{Gururangan et~al.}}{{Gururangan, Swayamdipta, Levy, Schwartz, Bowman, and Smith}}}
-\bibcite{jung2026breaking}{{6}{2026}{{Jung et~al.}}{{Jung, Jeong, Lim, Jung, Yun, Roh, Sung, and Kang}}}
-\bibcite{rsna_radlex}{{7}{2006}{{Langlotz}}{{}}}
-\bibcite{lanham2023measuring}{{8}{2023}{{Lanham et~al.}}{{Lanham, Chen, Radhakrishnan, Steiner, Denison, Hernandez, Li, Durmus, Hubinger, Kernion, Luko{\v {s}}i{\= u}t{\.e}, Nguyen, Cheng, Joseph, Schiefer, Rausch, Larson, McCandlish, Kundu, Kadavath, Yang, and Henighan}}}
-\bibcite{mccoy2019right}{{9}{2019}{{McCoy et~al.}}{{McCoy, Pavlick, and Linzen}}}
-\bibcite{nguyen2025localizing}{{10}{2025}{{Nguyen et~al.}}{{Nguyen, Ho, Ta, Nguyen, Chen, Rav, Dang, Ramchandre, Phung, Liao, To, Verjans, Nguyen, and Phan}}}
-\bibcite{peng2026omnibrainbench}{{11}{2026}{{Peng et~al.}}{{}}}
-\bibcite{somov2026breaking}{{12}{2026}{{Somov et~al.}}{{Somov, Chaichuk, Seleznyov, Panchenko, and Tutubalina}}}
-\bibcite{suter2022lumiere}{{13}{2022}{{Suter et~al.}}{{Suter, Knecht, Valenzuela, Notter, Hewer, Schucht, Wiest, and Reyes}}}
 \@LN@col{1}
+\@LN{518}{7}
+\@LN{519}{7}
+\@LN{520}{7}
+\@LN{521}{7}
+\@LN{522}{7}
+\@LN{523}{7}
+\@LN{524}{7}
+\@LN{525}{7}
+\@LN{526}{7}
+\@LN{527}{7}
+\@LN{528}{7}
+\@LN{529}{7}
+\@LN{530}{7}
+\@LN{531}{7}
+\@LN{532}{7}
+\@LN{533}{7}
+\@LN{534}{7}
+\@LN{535}{7}
+\@LN{536}{7}
+\@LN{537}{7}
+\@LN{538}{7}
+\@LN{539}{7}
+\@LN{540}{7}
+\@LN{541}{7}
+\@LN{542}{7}
+\@LN{543}{7}
+\@LN{544}{7}
+\@LN{545}{7}
+\@LN{546}{7}
+\@writefile{toc}{\contentsline {paragraph}{Stated facts and context (E3, E4).}{8}{section*.23}\protected@file@percent }
+\@LN{547}{7}
+\@LN{548}{7}
+\@LN{549}{7}
+\@LN{550}{7}
+\@LN{551}{7}
+\@LN{552}{7}
+\@LN{553}{7}
+\@LN{554}{7}
+\@LN{555}{7}
+\@LN{556}{7}
+\@LN{557}{7}
+\@LN{558}{7}
+\@LN{559}{7}
+\@LN{560}{7}
+\@LN{561}{7}
+\@LN{562}{7}
+\@LN{563}{7}
+\@LN{564}{7}
+\@LN{565}{7}
+\@LN{566}{7}
+\@LN{567}{7}
+\@LN{568}{7}
+\@LN@col{2}
+\@LN{569}{7}
+\@LN{570}{7}
+\@LN{571}{7}
+\@LN{572}{7}
+\@LN{573}{7}
+\@LN{574}{7}
+\@LN{575}{7}
+\@LN{576}{7}
+\@LN{577}{7}
+\@LN{578}{7}
+\@LN{579}{7}
+\@writefile{toc}{\contentsline {paragraph}{Chain (secondary).}{8}{section*.24}\protected@file@percent }
+\@LN{580}{7}
+\@LN{581}{7}
+\@LN{582}{7}
+\@LN{583}{7}
+\@LN{584}{7}
+\@LN{585}{7}
+\@LN{586}{7}
+\@LN{587}{7}
+\@LN{588}{7}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{8}{section.6}\protected@file@percent }
+\newlabel{sec:conclusion}{{6}{8}{Conclusion}{section.6}{}}
+\@LN{589}{7}
+\@LN{590}{7}
+\@LN{591}{7}
+\@LN{592}{7}
+\@LN{593}{7}
+\@LN{594}{7}
+\@LN{595}{7}
+\@LN{596}{7}
+\@LN{597}{7}
+\@LN{598}{7}
+\@LN{599}{7}
+\@LN{600}{7}
+\@LN{601}{7}
 \@LN{602}{7}
 \@LN{603}{7}
 \@LN{604}{7}
@@ -721,106 +711,105 @@
 \@LN{609}{7}
 \@LN{610}{7}
 \@LN{611}{7}
+\newlabel{sec:limitations}{{6}{8}{Limitations}{section*.25}{}}
 \@LN{612}{7}
 \@LN{613}{7}
 \@LN{614}{7}
 \@LN{615}{7}
 \@LN{616}{7}
 \@LN{617}{7}
-\@LN{618}{7}
-\@LN{619}{7}
-\@LN{620}{7}
-\@LN{621}{7}
-\@LN{622}{7}
-\@LN{623}{7}
-\@LN{624}{7}
-\@LN{625}{7}
-\@LN{626}{7}
-\@LN{627}{7}
-\@LN{628}{7}
-\@LN{629}{7}
-\@LN{630}{7}
-\@LN{631}{7}
-\@LN{632}{7}
-\@LN{633}{7}
-\@LN{634}{7}
-\@LN{635}{7}
-\@LN{636}{7}
-\@LN{637}{7}
-\@LN{638}{7}
-\@LN{639}{7}
-\@LN{640}{7}
-\@LN{641}{7}
-\@LN{642}{7}
-\@LN{643}{7}
-\@LN{644}{7}
-\@LN{645}{7}
-\@LN{646}{7}
-\@LN{647}{7}
-\@LN{648}{7}
-\@LN{649}{7}
-\@LN{650}{7}
-\@LN@col{2}
-\@LN{651}{7}
-\@LN{652}{7}
-\@LN{653}{7}
-\@LN{654}{7}
-\@LN{655}{7}
-\@LN{656}{7}
-\@LN{657}{7}
-\@LN{658}{7}
-\@LN{659}{7}
-\@LN{660}{7}
-\@LN{661}{7}
-\@LN{662}{7}
-\@LN{663}{7}
-\@LN{664}{7}
-\@LN{665}{7}
-\@LN{666}{7}
-\@LN{667}{7}
-\@LN{668}{7}
-\@LN{669}{7}
-\@LN{670}{7}
-\@LN{671}{7}
-\@LN{672}{7}
-\@LN{673}{7}
-\@LN{674}{7}
-\@LN{675}{7}
-\@LN{676}{7}
-\@LN{677}{7}
-\@LN{678}{7}
-\@LN{679}{7}
-\@LN{680}{7}
-\@LN{681}{7}
-\@LN{682}{7}
-\@LN{683}{7}
-\@LN{684}{7}
-\@LN{685}{7}
-\@LN{686}{7}
-\@LN{687}{7}
-\@LN{688}{7}
-\@LN{689}{7}
-\@LN{690}{7}
-\@LN{691}{7}
-\@LN{692}{7}
-\@LN{693}{7}
-\@LN{694}{7}
-\@LN{695}{7}
-\@LN{696}{7}
-\@LN{697}{7}
-\@LN{698}{7}
-\@LN{699}{7}
-\@LN{700}{7}
-\@LN{701}{7}
-\@LN{702}{7}
-\@LN{703}{7}
-\@LN{704}{7}
-\@LN{705}{7}
-\@LN{706}{7}
-\@LN{707}{7}
-\bibcite{muglioma2025post}{{14}{2025}{{{Washington University School of Medicine} et~al.}}{{}}}
-\bibcite{wen2010updated}{{15}{2010}{{Wen et~al.}}{{Wen, Macdonald, Reardon, Cloughesy, Sorensen, Galanis, DeGroot, Wick, Gilbert, Lassman et~al.}}}
 \@LN@col{1}
+\@LN{618}{8}
+\@LN{619}{8}
+\@LN{620}{8}
+\@LN{621}{8}
+\@LN{622}{8}
+\@LN{623}{8}
+\@LN{624}{8}
+\@LN{625}{8}
+\@LN{626}{8}
+\@LN{627}{8}
+\@LN{628}{8}
+\@LN{629}{8}
+\@LN{630}{8}
+\@LN{631}{8}
+\@LN{632}{8}
+\@LN{633}{8}
+\@LN{634}{8}
+\@LN{635}{8}
+\@LN{636}{8}
+\@LN{637}{8}
+\@LN{638}{8}
+\@LN{639}{8}
+\@LN{640}{8}
+\@LN{641}{8}
+\@LN{642}{8}
+\@LN{643}{8}
+\@LN{644}{8}
+\@LN{645}{8}
+\@LN{646}{8}
+\@LN{647}{8}
+\@LN{648}{8}
+\@LN{649}{8}
+\@LN{650}{8}
+\@LN{651}{8}
+\@LN{652}{8}
+\@LN{653}{8}
+\@LN{654}{8}
+\@LN{655}{8}
+\@LN{656}{8}
+\@LN{657}{8}
+\@LN{658}{8}
+\@LN{659}{8}
+\@LN{660}{8}
+\@LN{661}{8}
+\@LN{662}{8}
+\@LN{663}{8}
+\@LN{664}{8}
+\@LN{665}{8}
+\@LN{666}{8}
+\@LN{667}{8}
+\@LN{668}{8}
+\@LN{669}{8}
+\@LN@col{2}
+\@LN{670}{8}
+\@LN{671}{8}
+\@LN{672}{8}
+\@LN{673}{8}
+\@LN{674}{8}
+\@LN{675}{8}
+\@LN{676}{8}
+\@LN{677}{8}
+\@LN{678}{8}
+\@LN{679}{8}
+\@LN{680}{8}
+\@LN{681}{8}
+\@LN{682}{8}
+\@LN{683}{8}
+\@LN{684}{8}
+\@LN{685}{8}
+\@LN{686}{8}
+\@LN{687}{8}
+\@LN{688}{8}
+\@LN{689}{8}
+\@LN{690}{8}
+\@LN{691}{8}
+\@LN{692}{8}
+\@LN{693}{8}
+\@LN{694}{8}
+\@LN{695}{8}
+\@LN{696}{8}
+\@LN{697}{8}
+\@LN{698}{8}
+\@LN{699}{8}
+\@LN{700}{8}
+\@LN{701}{8}
+\@LN{702}{8}
+\@LN{703}{8}
+\@LN{704}{8}
+\@LN{705}{8}
+\@LN{706}{8}
+\@LN{707}{8}
 \@LN{708}{8}
 \@LN{709}{8}
 \@LN{710}{8}
@@ -833,104 +822,113 @@
 \@LN{717}{8}
 \@LN{718}{8}
 \@LN{719}{8}
-\@LN{720}{8}
-\@LN{721}{8}
-\@LN{722}{8}
-\@LN{723}{8}
-\@LN{724}{8}
-\@LN{725}{8}
-\@writefile{toc}{\contentsline {section}{\numberline {A}A Worked Patient Example}{9}{appendix.A}\protected@file@percent }
-\newlabel{sec:worked-example}{{A}{9}{A Worked Patient Example}{appendix.A}{}}
-\@LN{726}{8}
-\@LN{727}{8}
-\@LN{728}{8}
-\@LN{729}{8}
-\@LN{730}{8}
-\@LN{731}{8}
-\@LN{732}{8}
-\@LN{733}{8}
-\@LN{734}{8}
-\@writefile{toc}{\contentsline {paragraph}{The patient.}{9}{section*.30}\protected@file@percent }
-\@LN{735}{8}
-\@LN{736}{8}
-\@LN{737}{8}
-\@LN{738}{8}
-\@LN{739}{8}
-\@LN{740}{8}
-\@LN{741}{8}
-\@LN{742}{8}
-\@LN{743}{8}
-\@LN{744}{8}
-\@LN{745}{8}
-\@LN{746}{8}
-\@LN{747}{8}
-\@LN{748}{8}
-\@writefile{toc}{\contentsline {paragraph}{AIA.}{9}{section*.31}\protected@file@percent }
-\@LN{749}{8}
-\@LN{750}{8}
-\@LN{751}{8}
-\@LN{752}{8}
-\@LN{753}{8}
-\@LN{754}{8}
-\@LN{755}{8}
-\@LN{756}{8}
-\@LN{757}{8}
-\@LN{758}{8}
-\@LN@col{2}
-\@LN{759}{8}
-\@LN{760}{8}
-\@LN{761}{8}
-\@LN{762}{8}
-\@LN{763}{8}
-\@LN{764}{8}
-\@LN{765}{8}
-\@LN{766}{8}
-\@LN{767}{8}
-\@LN{768}{8}
-\@LN{769}{8}
-\@writefile{toc}{\contentsline {paragraph}{LIL.}{9}{section*.32}\protected@file@percent }
-\@LN{770}{8}
-\@LN{771}{8}
-\@LN{772}{8}
-\@LN{773}{8}
-\@LN{774}{8}
-\@LN{775}{8}
-\@LN{776}{8}
-\@LN{777}{8}
-\@LN{778}{8}
-\@LN{779}{8}
-\@LN{780}{8}
-\@LN{781}{8}
-\@LN{782}{8}
-\@LN{783}{8}
-\@LN{784}{8}
-\@LN{785}{8}
-\@LN{786}{8}
-\@LN{787}{8}
-\@LN{788}{8}
-\@LN{789}{8}
-\@LN{790}{8}
-\@LN{791}{8}
-\@LN{792}{8}
-\@LN{793}{8}
-\@writefile{toc}{\contentsline {paragraph}{DSCR.}{9}{section*.33}\protected@file@percent }
-\@LN{794}{8}
-\@LN{795}{8}
-\@LN{796}{8}
-\@LN{797}{8}
-\@LN{798}{8}
-\@LN{799}{8}
-\@LN{800}{8}
-\@LN{801}{8}
-\@LN{802}{8}
-\@writefile{toc}{\contentsline {paragraph}{PJRF.}{9}{section*.34}\protected@file@percent }
-\@LN{803}{8}
-\@LN{804}{8}
-\@LN{805}{8}
-\@LN{806}{8}
-\@LN{807}{8}
-\@LN{808}{8}
+\bibdata{custom}
+\bibcite{agresti2005simple}{{1}{2005}{{Agresti and Min}}{{}}}
+\bibcite{chen2024right}{{2}{2024}{{Chen et~al.}}{{Chen, Li, Dong, Zhang, Zang, Chen, Duan, Wang, Qiao, Lin, and Zhao}}}
+\bibcite{gemmateam2025gemma3}{{3}{2025}{{Gemma Team}}{{}}}
+\bibcite{goyal2017making}{{4}{2017}{{Goyal et~al.}}{{Goyal, Khot, Summers-Stay, Batra, and Parikh}}}
+\bibcite{gu2026unimod}{{5}{2026}{{Gu et~al.}}{{Gu, Lin, Zhou, Chen, and Wang}}}
+\bibcite{gururangan2018annotation}{{6}{2018}{{Gururangan et~al.}}{{Gururangan, Swayamdipta, Levy, Schwartz, Bowman, and Smith}}}
+\bibcite{isensee2019automated}{{7}{2019}{{Isensee et~al.}}{{Isensee, Schell, Pflueger, Brugnara, Bonekamp, Neuberger, Wick, Schlemmer, Heiland, Wick, Bendszus, Maier-Hein, and Kickingereder}}}
+\bibcite{jin2024hidden}{{8}{2024}{{Jin et~al.}}{{Jin, Chen, Zhou, Xu, Cheung, Chen, Summers, Rousseau, Ni, Landsman, Baxter, Al'Aref, Li, Chen, Brejt, Chiang, Peng, and Lu}}}
+\bibcite{kickingereder2019automated}{{9}{2019}{{Kickingereder et~al.}}{{Kickingereder, Isensee, Tursunova, Petersen, Neuberger, Bonekamp, Brugnara, Schell, Kessler, Foltyn, Harting, Sahm, Prager, Nowosielski, Wick, Nolden, Radbruch, Debus, Schlemmer, Heiland, Platten, von Deimling, van~den Bent, Gorlia, Wick, Bendszus, and Maier-Hein}}}
+\bibcite{muglioma2025post}{{10}{2025}{{Mahmoud et~al.}}{{Mahmoud, Gass, Dhemesh, Greaser, Pogorzelski, Isufi, Garrett, Thacker, Tahon, Sinclair, Layfield, Altes, and Nada}}}
+\bibcite{mccoy2019right}{{11}{2019}{{McCoy et~al.}}{{McCoy, Pavlick, and Linzen}}}
+\bibcite{mcnemar1947note}{{12}{1947}{{McNemar}}{{}}}
+\bibcite{nguyen2025localizing}{{13}{2025}{{Nguyen et~al.}}{{Nguyen, Ho, Ta, Nguyen, Chen, Rav, Dang, Ramchandre, Phung, Liao, To, Verjans, Nguyen, and Phan}}}
+\bibcite{peng2026omnibrainbench}{{14}{2026}{{Peng et~al.}}{{Peng, Wang, Liu, Liang, Ye, Ju, Woo, and Yuan}}}
+\bibcite{poliak2018hypothesis}{{15}{2018}{{Poliak et~al.}}{{Poliak, Naradowsky, Haldar, Rudinger, and Van~Durme}}}
 \@LN@col{1}
+\@LN{720}{9}
+\@LN{721}{9}
+\@LN{722}{9}
+\@LN{723}{9}
+\@LN{724}{9}
+\@LN{725}{9}
+\@LN{726}{9}
+\@LN{727}{9}
+\@LN{728}{9}
+\@LN{729}{9}
+\@LN{730}{9}
+\@LN{731}{9}
+\@LN{732}{9}
+\@LN{733}{9}
+\@LN{734}{9}
+\@LN{735}{9}
+\@LN{736}{9}
+\@LN{737}{9}
+\@LN{738}{9}
+\@LN{739}{9}
+\@LN{740}{9}
+\@LN{741}{9}
+\@LN{742}{9}
+\@LN{743}{9}
+\@LN{744}{9}
+\@LN{745}{9}
+\@LN{746}{9}
+\@LN{747}{9}
+\@LN{748}{9}
+\@LN{749}{9}
+\@LN{750}{9}
+\@LN{751}{9}
+\@LN{752}{9}
+\@LN{753}{9}
+\@LN{754}{9}
+\@LN{755}{9}
+\@LN{756}{9}
+\@LN{757}{9}
+\@LN{758}{9}
+\@LN{759}{9}
+\@LN{760}{9}
+\@LN{761}{9}
+\@LN{762}{9}
+\@LN{763}{9}
+\@LN{764}{9}
+\@LN{765}{9}
+\@LN{766}{9}
+\@LN{767}{9}
+\@LN{768}{9}
+\@LN{769}{9}
+\@LN{770}{9}
+\@LN{771}{9}
+\@LN{772}{9}
+\@LN{773}{9}
+\@LN@col{2}
+\@LN{774}{9}
+\@LN{775}{9}
+\@LN{776}{9}
+\@LN{777}{9}
+\@LN{778}{9}
+\@LN{779}{9}
+\@LN{780}{9}
+\@LN{781}{9}
+\@LN{782}{9}
+\@LN{783}{9}
+\@LN{784}{9}
+\@LN{785}{9}
+\@LN{786}{9}
+\@LN{787}{9}
+\@LN{788}{9}
+\@LN{789}{9}
+\@LN{790}{9}
+\@LN{791}{9}
+\@LN{792}{9}
+\@LN{793}{9}
+\@LN{794}{9}
+\@LN{795}{9}
+\@LN{796}{9}
+\@LN{797}{9}
+\@LN{798}{9}
+\@LN{799}{9}
+\@LN{800}{9}
+\@LN{801}{9}
+\@LN{802}{9}
+\@LN{803}{9}
+\@LN{804}{9}
+\@LN{805}{9}
+\@LN{806}{9}
+\@LN{807}{9}
+\@LN{808}{9}
 \@LN{809}{9}
 \@LN{810}{9}
 \@LN{811}{9}
@@ -944,110 +942,116 @@
 \@LN{819}{9}
 \@LN{820}{9}
 \@LN{821}{9}
-\@writefile{toc}{\contentsline {paragraph}{TCM.}{10}{section*.35}\protected@file@percent }
 \@LN{822}{9}
 \@LN{823}{9}
 \@LN{824}{9}
 \@LN{825}{9}
-\@writefile{toc}{\contentsline {paragraph}{Reading this case.}{10}{section*.36}\protected@file@percent }
 \@LN{826}{9}
 \@LN{827}{9}
 \@LN{828}{9}
 \@LN{829}{9}
 \@LN{830}{9}
 \@LN{831}{9}
-\@LN{832}{9}
-\@LN{833}{9}
-\@LN{834}{9}
-\@LN{835}{9}
-\@LN{836}{9}
-\@LN{837}{9}
-\@LN{838}{9}
-\@LN{839}{9}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Item-Set Development History}{10}{appendix.B}\protected@file@percent }
-\newlabel{sec:dev-history}{{B}{10}{Item-Set Development History}{appendix.B}{}}
-\@LN{840}{9}
-\@LN{841}{9}
-\@LN{842}{9}
-\@LN{843}{9}
-\@LN{844}{9}
-\@writefile{toc}{\contentsline {paragraph}{Timepoint sampling.}{10}{section*.38}\protected@file@percent }
-\@LN{845}{9}
-\@LN{846}{9}
-\@LN{847}{9}
-\@LN{848}{9}
-\@LN{849}{9}
-\@LN{850}{9}
-\@LN{851}{9}
-\@LN{852}{9}
-\@LN{853}{9}
-\@LN{854}{9}
-\@LN{855}{9}
-\@LN{856}{9}
-\@LN@col{2}
-\@LN{857}{9}
-\@LN{858}{9}
-\@LN{859}{9}
-\@LN{860}{9}
-\@LN{861}{9}
-\@LN{862}{9}
-\@LN{863}{9}
-\@LN{864}{9}
-\@LN{865}{9}
-\@LN{866}{9}
-\@writefile{toc}{\contentsline {paragraph}{Stem-leakage audit and a leak-controlled item set.}{10}{section*.39}\protected@file@percent }
-\@LN{867}{9}
-\@LN{868}{9}
-\@LN{869}{9}
-\@LN{870}{9}
-\@LN{871}{9}
-\@LN{872}{9}
-\@LN{873}{9}
-\@LN{874}{9}
-\@LN{875}{9}
-\@LN{876}{9}
-\@LN{877}{9}
-\@LN{878}{9}
-\@LN{879}{9}
-\@LN{880}{9}
-\@LN{881}{9}
-\@LN{882}{9}
-\@LN{883}{9}
-\@LN{884}{9}
-\@LN{885}{9}
-\@LN{886}{9}
-\@LN{887}{9}
-\@LN{888}{9}
-\@LN{889}{9}
-\@LN{890}{9}
-\@LN{891}{9}
-\@LN{892}{9}
-\@LN{893}{9}
-\@LN{894}{9}
-\@LN{895}{9}
-\@LN{896}{9}
-\@LN{897}{9}
-\@LN{898}{9}
-\@LN{899}{9}
-\@LN{900}{9}
-\@LN{901}{9}
-\@LN{902}{9}
-\@LN{903}{9}
-\@LN{904}{9}
-\@LN{905}{9}
-\@LN{906}{9}
-\@LN{907}{9}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Construction pipeline for the leak-controlled (\texttt  {v3}) LUMIERE item set. Structured per-patient facts are extracted from LUMIERE, an LLM drafts multiple-choice items from those facts, and an automatic auditor flags any item that restates an upstream phase's correct answer, feeding violations back into the drafting prompt for up to eight retries.}}{11}{figure.caption.37}\protected@file@percent }
-\newlabel{fig:lumiere-pipeline}{{3}{11}{Construction pipeline for the leak-controlled (\texttt {v3}) LUMIERE item set. Structured per-patient facts are extracted from LUMIERE, an LLM drafts multiple-choice items from those facts, and an automatic auditor flags any item that restates an upstream phase's correct answer, feeding violations back into the drafting prompt for up to eight retries}{figure.caption.37}{}}
+\bibcite{sellergren2025medgemma}{{16}{2025}{{Sellergren et~al.}}{{Sellergren, Kazemzadeh, Jaroensri et~al.}}}
+\bibcite{suter2022lumiere}{{17}{2022}{{Suter et~al.}}{{Suter, Knecht, Valenzuela, Notter, Hewer, Schucht, Wiest, and Reyes}}}
+\bibcite{turpin2023language}{{18}{2023}{{Turpin et~al.}}{{Turpin, Michael, Perez, and Bowman}}}
+\bibcite{wen2010updated}{{19}{2010}{{Wen et~al.}}{{Wen, Macdonald, Reardon, Cloughesy, Sorensen, Galanis, DeGroot, Wick, Gilbert, Lassman et~al.}}}
+\bibcite{wilson1927probable}{{20}{1927}{{Wilson}}{{}}}
+\bibcite{yan2025worse}{{21}{2025}{{Yan et~al.}}{{Yan, He, Yue, and Wang}}}
+\citation{peng2026omnibrainbench}
+\citation{suter2022lumiere}
 \@LN@col{1}
+\@LN{832}{10}
+\@LN{833}{10}
+\@LN{834}{10}
+\@LN{835}{10}
+\@LN{836}{10}
+\@LN{837}{10}
+\@LN{838}{10}
+\@LN{839}{10}
+\@LN{840}{10}
+\@LN{841}{10}
+\@LN{842}{10}
+\@LN{843}{10}
+\@LN{844}{10}
+\@LN{845}{10}
+\@LN{846}{10}
+\@LN{847}{10}
+\@LN{848}{10}
+\@LN{849}{10}
+\@LN{850}{10}
+\@LN{851}{10}
+\@LN{852}{10}
+\@LN{853}{10}
+\@LN{854}{10}
+\@LN{855}{10}
+\@LN{856}{10}
+\@LN{857}{10}
+\@LN{858}{10}
+\@LN{859}{10}
+\@LN{860}{10}
+\@LN{861}{10}
+\@LN{862}{10}
+\@LN{863}{10}
+\@LN{864}{10}
+\@LN{865}{10}
+\@LN{866}{10}
+\@LN{867}{10}
+\@writefile{toc}{\contentsline {section}{\numberline {A}OmniBrainBench Compatibility Details}{11}{appendix.A}\protected@file@percent }
+\newlabel{sec:app-compat}{{A}{11}{OmniBrainBench Compatibility Details}{appendix.A}{}}
+\@LN{868}{10}
+\@LN{869}{10}
+\@LN{870}{10}
+\@LN{871}{10}
+\@LN{872}{10}
+\@LN{873}{10}
+\@LN{874}{10}
+\@LN{875}{10}
+\@LN{876}{10}
+\@LN{877}{10}
+\@LN{878}{10}
+\@LN{879}{10}
+\@LN{880}{10}
+\@LN{881}{10}
+\@LN{882}{10}
+\@LN{883}{10}
+\@LN{884}{10}
+\@LN@col{2}
+\@LN{885}{10}
+\@LN{886}{10}
+\@LN{887}{10}
+\@LN{888}{10}
+\@LN{889}{10}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Artifacts, Licenses, Compute and Intended Use}{11}{appendix.B}\protected@file@percent }
+\newlabel{sec:app-artifacts}{{B}{11}{Artifacts, Licenses, Compute and Intended Use}{appendix.B}{}}
+\@writefile{toc}{\contentsline {paragraph}{Data.}{11}{section*.28}\protected@file@percent }
+\@LN{890}{10}
+\@LN{891}{10}
+\@LN{892}{10}
+\@LN{893}{10}
+\@LN{894}{10}
+\@LN{895}{10}
+\@LN{896}{10}
+\@LN{897}{10}
+\@LN{898}{10}
+\@LN{899}{10}
+\@LN{900}{10}
+\@LN{901}{10}
+\@writefile{toc}{\contentsline {paragraph}{Reproducibility artifact.}{11}{section*.29}\protected@file@percent }
+\@LN{902}{10}
+\@LN{903}{10}
+\@LN{904}{10}
+\@LN{905}{10}
+\@LN{906}{10}
+\@LN{907}{10}
 \@LN{908}{10}
 \@LN{909}{10}
 \@LN{910}{10}
 \@LN{911}{10}
 \@LN{912}{10}
+\@writefile{toc}{\contentsline {paragraph}{Models and terms.}{11}{section*.30}\protected@file@percent }
 \@LN{913}{10}
 \@LN{914}{10}
-\@writefile{toc}{\contentsline {paragraph}{Stem-leakage rates on \texttt  {v2}.}{11}{section*.40}\protected@file@percent }
 \@LN{915}{10}
 \@LN{916}{10}
 \@LN{917}{10}
@@ -1058,91 +1062,98 @@
 \@LN{922}{10}
 \@LN{923}{10}
 \@LN{924}{10}
+\@writefile{toc}{\contentsline {paragraph}{Software and compute.}{11}{section*.31}\protected@file@percent }
 \@LN{925}{10}
 \@LN{926}{10}
 \@LN{927}{10}
 \@LN{928}{10}
 \@LN{929}{10}
 \@LN{930}{10}
-\@writefile{toc}{\contentsline {paragraph}{Post-operative rebaselining.}{11}{section*.41}\protected@file@percent }
 \@LN{931}{10}
 \@LN{932}{10}
 \@LN{933}{10}
-\@LN{934}{10}
-\@LN{935}{10}
-\@LN{936}{10}
-\@LN{937}{10}
-\@LN{938}{10}
-\@LN{939}{10}
-\@LN{940}{10}
-\@LN{941}{10}
-\@LN{942}{10}
-\@LN{943}{10}
-\@LN@col{2}
-\@LN{944}{10}
-\@LN{945}{10}
-\@LN{946}{10}
-\@LN{947}{10}
-\@LN{948}{10}
-\@LN{949}{10}
-\@LN{950}{10}
-\@LN{951}{10}
-\@LN{952}{10}
-\@LN{953}{10}
-\@LN{954}{10}
-\@writefile{toc}{\contentsline {paragraph}{Difficulty of \texttt  {v3} relative to \texttt  {v2}.}{11}{section*.42}\protected@file@percent }
-\@LN{955}{10}
-\@LN{956}{10}
-\@LN{957}{10}
-\@LN{958}{10}
-\@LN{959}{10}
-\@LN{960}{10}
-\@LN{961}{10}
-\@LN{962}{10}
-\@LN{963}{10}
-\@LN{964}{10}
-\@LN{965}{10}
-\@LN{966}{10}
-\@LN{967}{10}
-\@LN{968}{10}
-\@LN{969}{10}
-\@writefile{toc}{\contentsline {section}{\numberline {C}Metric Definitions}{11}{appendix.C}\protected@file@percent }
-\newlabel{sec:app-metrics}{{C}{11}{Metric Definitions}{appendix.C}{}}
-\@LN{970}{10}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Vocabulary and Consistency Metrics}{11}{subsection.C.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Answer recoverability.}{11}{section*.43}\protected@file@percent }
-\@LN{971}{10}
-\@LN{972}{10}
-\@LN{973}{10}
-\@LN{974}{10}
-\@LN{975}{10}
-\@LN{976}{10}
-\@LN{977}{10}
-\@LN{978}{10}
-\citation{rsna_radlex}
 \@LN@col{1}
+\@LN{934}{11}
+\@LN{935}{11}
+\@LN{936}{11}
+\@LN{937}{11}
+\@LN{938}{11}
+\@LN{939}{11}
+\@LN{940}{11}
+\@LN{941}{11}
+\@LN{942}{11}
+\@writefile{toc}{\contentsline {paragraph}{Intended use.}{12}{section*.32}\protected@file@percent }
+\@LN{943}{11}
+\@LN{944}{11}
+\@LN{945}{11}
+\@LN{946}{11}
+\@LN{947}{11}
+\@LN{948}{11}
+\@writefile{toc}{\contentsline {section}{\numberline {C}A Worked Example}{12}{appendix.C}\protected@file@percent }
+\newlabel{sec:worked-v4}{{C}{12}{A Worked Example}{appendix.C}{}}
+\@LN{949}{11}
+\@LN{950}{11}
+\@LN{951}{11}
+\@LN{952}{11}
+\@LN{953}{11}
+\@LN{954}{11}
+\@LN{955}{11}
+\@writefile{toc}{\contentsline {paragraph}{AIA (positive control).}{12}{section*.33}\protected@file@percent }
+\@LN{956}{11}
+\@LN{957}{11}
+\@LN{958}{11}
+\@writefile{toc}{\contentsline {paragraph}{LIL.}{12}{section*.34}\protected@file@percent }
+\@LN{959}{11}
+\@LN{960}{11}
+\@LN{961}{11}
+\@LN{962}{11}
+\@writefile{toc}{\contentsline {paragraph}{DSCR.}{12}{section*.35}\protected@file@percent }
+\@LN{963}{11}
+\@LN{964}{11}
+\@LN{965}{11}
+\@LN{966}{11}
+\@LN{967}{11}
+\@LN{968}{11}
+\@LN{969}{11}
+\@LN{970}{11}
+\@LN{971}{11}
+\@LN{972}{11}
+\@LN{973}{11}
+\@writefile{toc}{\contentsline {paragraph}{TCM.}{12}{section*.36}\protected@file@percent }
+\@LN{974}{11}
+\@LN{975}{11}
+\@LN{976}{11}
+\@LN{977}{11}
+\@LN{978}{11}
 \@LN{979}{11}
 \@LN{980}{11}
 \@LN{981}{11}
+\@LN@col{2}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Answers for Patient-007 (own/text/swap in each cell), with the key and donor key; Gemini-3.6-Flash is the reference model. Labels: T1c is T1 after contrast; L/R hemisphere, ant/post half; PD, SD, PR, CR are RANO categories.}}{12}{table.caption.39}\protected@file@percent }
+\newlabel{tab:v4example}{{5}{12}{Answers for Patient-007 (own/text/swap in each cell), with the key and donor key; Gemini-3.6-Flash is the reference model. Labels: T1c is T1 after contrast; L/R hemisphere, ant/post half; PD, SD, PR, CR are RANO categories}{table.caption.39}{}}
 \@LN{982}{11}
 \@LN{983}{11}
 \@LN{984}{11}
 \@LN{985}{11}
 \@LN{986}{11}
 \@LN{987}{11}
+\@writefile{toc}{\contentsline {paragraph}{PJRF (secondary).}{12}{section*.37}\protected@file@percent }
 \@LN{988}{11}
 \@LN{989}{11}
 \@LN{990}{11}
 \@LN{991}{11}
+\@writefile{toc}{\contentsline {paragraph}{Donor swap.}{12}{section*.38}\protected@file@percent }
 \@LN{992}{11}
 \@LN{993}{11}
-\@writefile{toc}{\contentsline {paragraph}{Ontology term coverage.}{12}{section*.44}\protected@file@percent }
 \@LN{994}{11}
 \@LN{995}{11}
 \@LN{996}{11}
 \@LN{997}{11}
 \@LN{998}{11}
 \@LN{999}{11}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Item Set Summary and Donor-Dependence Checks}{12}{appendix.D}\protected@file@percent }
+\newlabel{sec:app-summary}{{D}{12}{Item Set Summary and Donor-Dependence Checks}{appendix.D}{}}
+\@writefile{toc}{\contentsline {paragraph}{Item set.}{12}{section*.41}\protected@file@percent }
 \@LN{1000}{11}
 \@LN{1001}{11}
 \@LN{1002}{11}
@@ -1160,243 +1171,121 @@
 \@LN{1014}{11}
 \@LN{1015}{11}
 \@LN{1016}{11}
+\@writefile{toc}{\contentsline {paragraph}{Audit size check.}{12}{section*.42}\protected@file@percent }
 \@LN{1017}{11}
 \@LN{1018}{11}
-\@LN{1019}{11}
-\@LN{1020}{11}
-\newlabel{eq:kb-align}{{1}{12}{Ontology term coverage}{equation.C.1}{}}
-\@LN{1021}{11}
-\@LN{1022}{11}
-\@LN{1023}{11}
-\@LN{1024}{11}
-\@LN{1025}{11}
-\@LN{1026}{11}
-\@LN{1027}{11}
-\@LN@col{2}
-\@LN{1028}{11}
-\@LN{1029}{11}
-\@LN{1030}{11}
-\@writefile{toc}{\contentsline {paragraph}{Answer-term overlap.}{12}{section*.45}\protected@file@percent }
-\@LN{1031}{11}
-\@LN{1032}{11}
-\@LN{1033}{11}
-\@LN{1034}{11}
-\@LN{1035}{11}
-\@LN{1036}{11}
-\@LN{1037}{11}
-\@LN{1038}{11}
-\@LN{1039}{11}
-\newlabel{eq:concept-precision}{{2}{12}{Answer-term overlap}{equation.C.2}{}}
-\@LN{1040}{11}
-\@LN{1041}{11}
-\@LN{1042}{11}
-\@LN{1043}{11}
-\@LN{1044}{11}
-\@LN{1045}{11}
-\@LN{1046}{11}
-\@LN{1047}{11}
-\@writefile{toc}{\contentsline {paragraph}{Upstream-term repetition.}{12}{section*.46}\protected@file@percent }
-\@LN{1048}{11}
-\@LN{1049}{11}
-\@LN{1050}{11}
-\@LN{1051}{11}
-\@LN{1052}{11}
-\@LN{1053}{11}
-\@LN{1054}{11}
-\@LN{1055}{11}
-\@LN{1056}{11}
-\@LN{1057}{11}
-\@LN{1058}{11}
-\@LN{1059}{11}
-\@LN{1060}{11}
-\@LN{1061}{11}
-\@LN{1062}{11}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Feedback-Based Adaptation}{12}{subsection.C.2}\protected@file@percent }
-\@LN{1063}{11}
-\@LN{1064}{11}
-\@LN{1065}{11}
-\@LN{1066}{11}
-\@LN{1067}{11}
-\@LN{1068}{11}
-\@LN{1069}{11}
-\@LN{1070}{11}
-\@LN{1071}{11}
-\@LN{1072}{11}
-\@LN{1073}{11}
-\@LN{1074}{11}
-\@LN{1075}{11}
-\citation{peng2026omnibrainbench}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Images for Patient-007. Top: the AIA slice and its donor, the LIL slice and its donor. Bottom: the three DSCR slices (baseline, nadir, follow-up). Slices are atlas-space, skull-stripped, magnified 4$\times $, with a 20\,mm scale bar.}}{13}{figure.caption.40}\protected@file@percent }
+\newlabel{fig:v4example}{{3}{13}{Images for Patient-007. Top: the AIA slice and its donor, the LIL slice and its donor. Bottom: the three DSCR slices (baseline, nadir, follow-up). Slices are atlas-space, skull-stripped, magnified 4$\times $, with a 20\,mm scale bar}{figure.caption.40}{}}
 \@LN@col{1}
-\@LN{1076}{12}
-\@LN{1077}{12}
-\@LN{1078}{12}
-\@LN{1079}{12}
-\@LN{1080}{12}
-\@LN{1081}{12}
-\@LN{1082}{12}
-\@LN{1083}{12}
-\@LN{1084}{12}
-\@LN{1085}{12}
-\@LN{1086}{12}
-\@LN{1087}{12}
-\@LN{1088}{12}
-\@LN{1089}{12}
-\@LN{1090}{12}
-\@LN{1091}{12}
-\@LN{1092}{12}
-\@LN{1093}{12}
-\@LN{1094}{12}
-\@LN{1095}{12}
-\@LN{1096}{12}
-\@LN{1097}{12}
-\@LN{1098}{12}
-\@LN{1099}{12}
-\@LN{1100}{12}
-\@LN{1101}{12}
-\@writefile{toc}{\contentsline {section}{\numberline {D}OmniBrainBench Compatibility Details}{13}{appendix.D}\protected@file@percent }
-\newlabel{sec:app-compat}{{D}{13}{OmniBrainBench Compatibility Details}{appendix.D}{}}
-\@LN{1102}{12}
-\@LN{1103}{12}
-\@LN{1104}{12}
-\@LN{1105}{12}
-\@LN{1106}{12}
-\@LN{1107}{12}
-\@LN{1108}{12}
-\@LN{1109}{12}
-\@LN{1110}{12}
-\@LN{1111}{12}
-\@LN{1112}{12}
-\@LN{1113}{12}
-\@LN{1114}{12}
-\@LN{1115}{12}
-\@LN{1116}{12}
-\@LN{1117}{12}
-\@LN{1118}{12}
-\@LN{1119}{12}
-\@LN{1120}{12}
-\@LN{1121}{12}
-\@LN{1122}{12}
-\@LN{1123}{12}
-\@LN{1124}{12}
-\@LN{1125}{12}
+\@LN{1019}{12}
+\@LN{1020}{12}
+\@LN{1021}{12}
+\@LN{1022}{12}
+\@LN{1023}{12}
+\@LN{1024}{12}
+\@LN{1025}{12}
+\@writefile{toc}{\contentsline {paragraph}{Donor dependence (post hoc).}{13}{section*.43}\protected@file@percent }
+\@LN{1026}{12}
+\@LN{1027}{12}
+\@LN{1028}{12}
+\@LN{1029}{12}
+\@LN{1030}{12}
+\@LN{1031}{12}
+\@LN{1032}{12}
+\@LN{1033}{12}
+\@LN{1034}{12}
+\@LN{1035}{12}
+\@LN{1036}{12}
+\@LN{1037}{12}
+\@LN{1038}{12}
+\@LN{1039}{12}
+\@LN{1040}{12}
 \@LN@col{2}
-\@LN{1126}{12}
-\@LN{1127}{12}
-\@LN{1128}{12}
-\@LN{1129}{12}
-\@LN{1130}{12}
-\@LN{1131}{12}
-\@LN{1132}{12}
-\@LN{1133}{12}
-\@LN{1134}{12}
-\@LN{1135}{12}
-\@LN{1136}{12}
-\@LN{1137}{12}
-\@LN{1138}{12}
-\@LN{1139}{12}
-\@LN{1140}{12}
-\@LN{1141}{12}
-\@LN{1142}{12}
-\@LN{1143}{12}
-\@LN{1144}{12}
-\@LN{1145}{12}
-\@LN{1146}{12}
-\@LN{1147}{12}
-\@LN{1148}{12}
-\@LN{1149}{12}
-\@LN{1150}{12}
-\@LN{1151}{12}
-\@LN{1152}{12}
-\@LN{1153}{12}
-\@LN{1154}{12}
-\@LN{1155}{12}
-\@LN{1156}{12}
-\@LN{1157}{12}
-\@LN{1158}{12}
-\@LN{1159}{12}
-\@LN{1160}{12}
-\@LN{1161}{12}
-\@LN{1162}{12}
-\@LN{1163}{12}
-\@LN{1164}{12}
-\@LN{1165}{12}
-\@LN{1166}{12}
-\@LN{1167}{12}
-\@LN{1168}{12}
-\@LN{1169}{12}
-\@LN{1170}{12}
-\@LN{1171}{12}
-\@LN{1172}{12}
-\@writefile{toc}{\contentsline {section}{\numberline {E}Evidence-Audit Details and Option-Only Baselines}{13}{appendix.E}\protected@file@percent }
-\newlabel{sec:app-audit}{{E}{13}{Evidence-Audit Details and Option-Only Baselines}{appendix.E}{}}
-\@writefile{toc}{\contentsline {paragraph}{Evidence audit.}{13}{section*.47}\protected@file@percent }
-\@LN{1173}{12}
-\@LN{1174}{12}
-\@LN{1175}{12}
+\@LN{1041}{12}
+\@LN{1042}{12}
+\@writefile{toc}{\contentsline {section}{\numberline {E}Donor-Swap and Reference-Model Tables}{13}{appendix.E}\protected@file@percent }
+\newlabel{sec:app-tables}{{E}{13}{Donor-Swap and Reference-Model Tables}{appendix.E}{}}
+\@LN{1043}{12}
+\@LN{1044}{12}
+\@LN{1045}{12}
+\@LN{1046}{12}
+\@writefile{toc}{\contentsline {section}{\numberline {F}Output Handling, Input Check and Fact-Flip Transitions}{13}{appendix.F}\protected@file@percent }
+\newlabel{sec:app-handling}{{F}{13}{Output Handling, Input Check and Fact-Flip Transitions}{appendix.F}{}}
+\@LN{1047}{12}
+\@LN{1048}{12}
+\@LN{1049}{12}
+\@LN{1050}{12}
+\@LN{1051}{12}
+\@LN{1052}{12}
+\@LN{1053}{12}
+\@LN{1054}{12}
+\@LN{1055}{12}
+\@LN{1056}{12}
+\@LN{1057}{12}
+\@LN{1058}{12}
+\@LN{1059}{12}
+\@LN{1060}{12}
+\@LN{1061}{12}
+\@LN{1062}{12}
+\@LN{1063}{12}
+\@LN{1064}{12}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces E2: share of answers (\%) that equal the donor's key when the image is swapped, and when there is no image; the gain is the difference in percentage points, with its bootstrap interval, an add-half sparse-data interval (Add-half CI) and the exact McNemar $p$ (unadjusted); the last column is the share of items whose answer differs from the own-image answer after the swap.}}{14}{table.caption.44}\protected@file@percent }
+\newlabel{tab:e2}{{6}{14}{E2: share of answers (\%) that equal the donor's key when the image is swapped, and when there is no image; the gain is the difference in percentage points, with its bootstrap interval, an add-half sparse-data interval (Add-half CI) and the exact McNemar $p$ (unadjusted); the last column is the share of items whose answer differs from the own-image answer after the swap}{table.caption.44}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Reference model (Gemini-3.6-Flash): accuracy (\%) with the image and with text only, the paired difference, the share of swapped-image answers equal to the donor's key, and the donor-tracking gain (percentage points).}}{14}{table.caption.45}\protected@file@percent }
+\newlabel{tab:ctrl}{{7}{14}{Reference model (Gemini-3.6-Flash): accuracy (\%) with the image and with text only, the paired difference, the share of swapped-image answers equal to the donor's key, and the donor-tracking gain (percentage points)}{table.caption.45}{}}
 \@LN@col{1}
-\@LN{1176}{13}
-\@LN{1177}{13}
-\@LN{1178}{13}
-\@LN{1179}{13}
-\@LN{1180}{13}
-\@LN{1181}{13}
-\@LN{1182}{13}
-\@LN{1183}{13}
-\@LN{1184}{13}
-\@LN{1185}{13}
-\@LN{1186}{13}
-\@LN{1187}{13}
-\@LN{1188}{13}
-\@LN{1189}{13}
-\@LN{1190}{13}
-\@LN{1191}{13}
-\@LN{1192}{13}
-\@LN{1193}{13}
-\@LN{1194}{13}
-\@LN{1195}{13}
-\@LN{1196}{13}
-\@LN{1197}{13}
-\@LN{1198}{13}
-\@LN{1199}{13}
-\@LN{1200}{13}
-\@LN{1201}{13}
-\@LN{1202}{13}
-\@LN{1203}{13}
-\@LN{1204}{13}
-\@LN{1205}{13}
-\@LN{1206}{13}
-\@LN{1207}{13}
-\@LN{1208}{13}
-\@LN{1209}{13}
-\@LN{1210}{13}
-\@LN{1211}{13}
-\@LN{1212}{13}
-\@LN{1213}{13}
-\@LN{1214}{13}
-\@LN{1215}{13}
-\@LN{1216}{13}
-\@LN{1217}{13}
-\@LN{1218}{13}
-\@writefile{toc}{\contentsline {paragraph}{Option-only baselines.}{14}{section*.48}\protected@file@percent }
-\@LN{1219}{13}
-\@LN{1220}{13}
-\@LN{1221}{13}
-\@LN{1222}{13}
-\@LN{1223}{13}
-\@LN{1224}{13}
-\@LN{1225}{13}
-\@LN{1226}{13}
+\@LN{1065}{13}
+\@LN{1066}{13}
+\@LN{1067}{13}
+\@LN{1068}{13}
+\@LN{1069}{13}
+\@writefile{toc}{\contentsline {paragraph}{Input check.}{14}{section*.46}\protected@file@percent }
+\@LN{1070}{13}
+\@LN{1071}{13}
+\@LN{1072}{13}
+\@LN{1073}{13}
+\@LN{1074}{13}
+\@LN{1075}{13}
+\@LN{1076}{13}
+\@LN{1077}{13}
+\@LN{1078}{13}
+\@LN{1079}{13}
+\@LN{1080}{13}
+\@LN{1081}{13}
+\@LN{1082}{13}
+\@LN{1083}{13}
+\@LN{1084}{13}
+\@LN{1085}{13}
+\@LN{1086}{13}
+\@LN{1087}{13}
+\@LN{1088}{13}
+\@LN{1089}{13}
+\@LN{1090}{13}
+\@LN{1091}{13}
+\@LN{1092}{13}
 \@LN@col{2}
-\@LN{1227}{13}
-\@LN{1228}{13}
-\@LN{1229}{13}
-\@LN{1230}{13}
-\@LN{1231}{13}
-\@LN{1232}{13}
-\@LN{1233}{13}
-\@LN{1234}{13}
-\@LN{1235}{13}
-\@LN{1236}{13}
-\@LN{1237}{13}
-\@LN{1238}{13}
-\gdef \@abspage@last{14}
+\@writefile{toc}{\contentsline {paragraph}{PJRF (E5, secondary).}{14}{section*.49}\protected@file@percent }
+\@LN{1093}{13}
+\@LN{1094}{13}
+\@LN{1095}{13}
+\@LN{1096}{13}
+\@LN{1097}{13}
+\@LN{1098}{13}
+\@LN{1099}{13}
+\@LN{1100}{13}
+\@LN{1101}{13}
+\@LN{1102}{13}
+\@LN{1103}{13}
+\@LN{1104}{13}
+\@LN{1105}{13}
+\@LN{1106}{13}
+\@LN{1107}{13}
+\@LN{1108}{13}
+\@LN{1109}{13}
+\@LN{1110}{13}
+\@LN{1111}{13}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Input check per pipeline: model tag, digest and quantization as reported by the server, the range of prompt-token increments per added image, and known-answer probes passed out of eight.}}{15}{table.caption.47}\protected@file@percent }
+\newlabel{tab:inputcheck}{{8}{15}{Input check per pipeline: model tag, digest and quantization as reported by the server, the range of prompt-token increments per added image, and known-answer probes passed out of eight}{table.caption.47}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces TCM fact flips: transitions relative to the true-context answer for the same item. The label flip covers all 46{} items; the timing flip covers the 27{} progressive-disease items.}}{15}{table.caption.48}\protected@file@percent }
+\newlabel{tab:e3trans}{{9}{15}{TCM fact flips: transitions relative to the true-context answer for the same item. The label flip covers all \vfourNTCM {} items; the timing flip covers the \vfourTcmPdItems {} progressive-disease items}{table.caption.48}{}}
+\gdef \@abspage@last{15}

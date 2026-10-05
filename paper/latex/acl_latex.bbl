@@ -1,33 +1,43 @@
-\begin{thebibliography}{15}
+\begin{thebibliography}{21}
 \providecommand{\natexlab}[1]{#1}
 
-\bibitem[{Abbasi et~al.(2026)}]{abbasi2026neuroqa}
-Mohammad~H. Abbasi et~al. 2026.
-\newblock \href {https://arxiv.org/abs/2605.20525} {{NeuroQA}: A large-scale
-  image-grounded benchmark for {3D} brain {MRI} understanding}.
-\newblock \emph{arXiv preprint arXiv:2605.20525}.
+\bibitem[{Agresti and Min(2005)}]{agresti2005simple}
+Alan Agresti and Yongyi Min. 2005.
+\newblock \href {https://doi.org/10.1002/sim.1781} {Simple improved confidence
+  intervals for comparing matched proportions}.
+\newblock \emph{Statistics in Medicine}, 24(5):729--740.
 
-\bibitem[{Arcuschin et~al.(2025)Arcuschin, Janiak, Krzyzanowski, Rajamanoharan,
-  Nanda, and Conmy}]{arcuschin2025chainofthought}
-Iv{\'a}n Arcuschin, Jett Janiak, Robert Krzyzanowski, Senthooran Rajamanoharan,
-  Neel Nanda, and Arthur Conmy. 2025.
-\newblock \href {https://arxiv.org/abs/2503.08679} {Chain-of-thought reasoning
-  in the wild is not always faithful}.
-\newblock \emph{arXiv preprint arXiv:2503.08679}.
+\bibitem[{Chen et~al.(2024)Chen, Li, Dong, Zhang, Zang, Chen, Duan, Wang, Qiao,
+  Lin, and Zhao}]{chen2024right}
+Lin Chen, Jinsong Li, Xiaoyi Dong, Pan Zhang, Yuhang Zang, Zehui Chen, Haodong
+  Duan, Jiaqi Wang, Yu~Qiao, Dahua Lin, and Feng Zhao. 2024.
+\newblock Are we on the right way for evaluating large vision-language models?
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~37.
 
-\bibitem[{Croskerry(2009)}]{croskerry2009clinical}
-Pat Croskerry. 2009.
-\newblock \href {https://doi.org/10.1007/s10459-009-9182-2} {Clinical cognition
-  and diagnostic error: applications of a dual process model of reasoning}.
-\newblock \emph{Advances in Health Sciences Education}, 14(Suppl 1):27--35.
+\bibitem[{{Gemma Team}(2025)}]{gemmateam2025gemma3}
+{Gemma Team}. 2025.
+\newblock \href {https://arxiv.org/abs/2503.19786} {Gemma 3 technical report}.
+\newblock \emph{Preprint}, arXiv:2503.19786.
+\newblock Cited for model identification only.
 
-\bibitem[{Ghosh et~al.(2026)Ghosh, Lateef, Liu, Yu, Rauschecker, and
-  Sushil}]{ghosh2026ucsfpdgmvqa}
-Shiv Ghosh, Junayd Lateef, Chih-Hua Liu, Yannan Yu, Andreas~M. Rauschecker, and
-  Madhumita Sushil. 2026.
-\newblock \href {https://arxiv.org/abs/2605.17140} {{UCSF-PDGM-VQA}: Visual
-  question answering dataset for brain tumor {MRI} interpretation}.
-\newblock \emph{arXiv preprint arXiv:2605.17140}.
+\bibitem[{Goyal et~al.(2017)Goyal, Khot, Summers-Stay, Batra, and
+  Parikh}]{goyal2017making}
+Yash Goyal, Tejas Khot, Douglas Summers-Stay, Dhruv Batra, and Devi Parikh.
+  2017.
+\newblock Making the {V} in {VQA} matter: Elevating the role of image
+  understanding in visual question answering.
+\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 6325--6334.
+
+\bibitem[{Gu et~al.(2026)Gu, Lin, Zhou, Chen, and Wang}]{gu2026unimod}
+Zijian Gu, Weikai Lin, Shuang Zhou, Zihan Chen, and Song Wang. 2026.
+\newblock \href {https://doi.org/10.1145/3767308.3836116} {{UniMod}: Enhancing
+  multi-modal medical diagnosis through cross-modality and within-modality
+  alignment}.
+\newblock In \emph{Proceedings of the 34th ACM International Conference on
+  Multimedia (MM '26)}, Rio de Janeiro, Brazil.
+\newblock To appear; accepted, proceedings entry not yet verified.
 
 \bibitem[{Gururangan et~al.(2018)Gururangan, Swayamdipta, Levy, Schwartz,
   Bowman, and Smith}]{gururangan2018annotation}
@@ -40,32 +50,53 @@ Suchin Gururangan, Swabha Swayamdipta, Omer Levy, Roy Schwartz, Samuel~R.
   Technologies, Volume 2 (Short Papers)}, pages 107--112, New Orleans,
   Louisiana. Association for Computational Linguistics.
 
-\bibitem[{Jung et~al.(2026)Jung, Jeong, Lim, Jung, Yun, Roh, Sung, and
-  Kang}]{jung2026breaking}
-Junha Jung, Minbyul Jeong, Suhyeon Lim, Sungwook Jung, Jaehoon Yun, Taeyun Roh,
-  Mujeen Sung, and Jaewoo Kang. 2026.
-\newblock \href {https://arxiv.org/abs/2606.31825} {Breaking failure cascades:
-  Step-aware reinforcement learning for medical multimodal reasoning}.
-\newblock \emph{arXiv preprint arXiv:2606.31825}.
+\bibitem[{Isensee et~al.(2019)Isensee, Schell, Pflueger, Brugnara, Bonekamp,
+  Neuberger, Wick, Schlemmer, Heiland, Wick, Bendszus, Maier-Hein, and
+  Kickingereder}]{isensee2019automated}
+Fabian Isensee, Marianne Schell, Irada Pflueger, Gianluca Brugnara, David
+  Bonekamp, Ulf Neuberger, Antje Wick, Heinz-Peter Schlemmer, Sabine Heiland,
+  Wolfgang Wick, Martin Bendszus, Klaus~H. Maier-Hein, and Philipp
+  Kickingereder. 2019.
+\newblock \href {https://doi.org/10.1002/hbm.24750} {Automated brain extraction
+  of multisequence {MRI} using artificial neural networks}.
+\newblock \emph{Human Brain Mapping}, 40(17):4952--4964.
 
-\bibitem[{Langlotz(2006)}]{rsna_radlex}
-Curtis~P. Langlotz. 2006.
-\newblock \href {https://doi.org/10.1148/rg.266065168} {{RadLex}: a new method
-  for indexing online educational materials}.
-\newblock \emph{RadioGraphics}, 26(6):1595--1597.
+\bibitem[{Jin et~al.(2024)Jin, Chen, Zhou, Xu, Cheung, Chen, Summers, Rousseau,
+  Ni, Landsman, Baxter, Al'Aref, Li, Chen, Brejt, Chiang, Peng, and
+  Lu}]{jin2024hidden}
+Qiao Jin, Fangyuan Chen, Yiliang Zhou, Ziyang Xu, Justin~M. Cheung, Robert
+  Chen, Ronald~M. Summers, Justin~F. Rousseau, Peiyun Ni, Marc~J. Landsman,
+  Sally~L. Baxter, Subhi~J. Al'Aref, Yijia Li, Alex Chen, Josef~A. Brejt,
+  Michael~F. Chiang, Yifan Peng, and Zhiyong Lu. 2024.
+\newblock \href {https://doi.org/10.1038/s41746-024-01185-7} {Hidden flaws
+  behind expert-level accuracy of multimodal {GPT-4} vision in medicine}.
+\newblock \emph{npj Digital Medicine}, 7:190.
 
-\bibitem[{Lanham et~al.(2023)Lanham, Chen, Radhakrishnan, Steiner, Denison,
-  Hernandez, Li, Durmus, Hubinger, Kernion, Luko{\v{s}}i{\= u}t{\.e}, Nguyen,
-  Cheng, Joseph, Schiefer, Rausch, Larson, McCandlish, Kundu, Kadavath, Yang,
-  and Henighan}]{lanham2023measuring}
-Tamera Lanham, Anna Chen, Ansh Radhakrishnan, Benoit Steiner, Carson Denison,
-  Danny Hernandez, Dustin Li, Esin Durmus, Evan Hubinger, Jackson Kernion,
-  Kamil{\.e} Luko{\v{s}}i{\= u}t{\.e}, Karina Nguyen, Newton Cheng, Nicholas
-  Joseph, Nicholas Schiefer, Oliver Rausch, Robin Larson, Sam McCandlish,
-  Sandipan Kundu, and 3 others. 2023.
-\newblock \href {https://arxiv.org/abs/2307.13702} {Measuring faithfulness in
-  chain-of-thought reasoning}.
-\newblock \emph{arXiv preprint arXiv:2307.13702}.
+\bibitem[{Kickingereder et~al.(2019)Kickingereder, Isensee, Tursunova,
+  Petersen, Neuberger, Bonekamp, Brugnara, Schell, Kessler, Foltyn, Harting,
+  Sahm, Prager, Nowosielski, Wick, Nolden, Radbruch, Debus, Schlemmer, Heiland,
+  Platten, von Deimling, van~den Bent, Gorlia, Wick, Bendszus, and
+  Maier-Hein}]{kickingereder2019automated}
+Philipp Kickingereder, Fabian Isensee, Irada Tursunova, Jens Petersen, Ulf
+  Neuberger, David Bonekamp, Gianluca Brugnara, Marianne Schell, Tobias
+  Kessler, Martha Foltyn, Inga Harting, Felix Sahm, Marcel Prager, Martha
+  Nowosielski, Antje Wick, Marco Nolden, Alexander Radbruch, J{\"u}rgen Debus,
+  Heinz-Peter Schlemmer, and 8 others. 2019.
+\newblock \href {https://doi.org/10.1016/S1470-2045(19)30098-1} {Automated
+  quantitative tumour response assessment of {MRI} in neuro-oncology with
+  artificial neural networks: a multicentre, retrospective study}.
+\newblock \emph{The Lancet Oncology}, 20(5):728--740.
+
+\bibitem[{Mahmoud et~al.(2025)Mahmoud, Gass, Dhemesh, Greaser, Pogorzelski,
+  Isufi, Garrett, Thacker, Tahon, Sinclair, Layfield, Altes, and
+  Nada}]{muglioma2025post}
+E.~Mahmoud, J.~Gass, Y.~Dhemesh, J.~Greaser, K.~Pogorzelski, E.~Isufi,
+  F.~Garrett, J.~Thacker, N.~H. Tahon, J.~Sinclair, L.~Layfield, T.~Altes, and
+  A.~Nada. 2025.
+\newblock \href {https://doi.org/10.1038/s41597-025-06011-7} {{MU-Glioma Post}:
+  A comprehensive dataset of automated {MR} multi-sequence segmentation and
+  clinical features}.
+\newblock \emph{Scientific Data}, 12:1847.
 
 \bibitem[{McCoy et~al.(2019)McCoy, Pavlick, and Linzen}]{mccoy2019right}
 R.~Thomas McCoy, Ellie Pavlick, and Tal Linzen. 2019.
@@ -75,33 +106,51 @@ R.~Thomas McCoy, Ellie Pavlick, and Tal Linzen. 2019.
   for Computational Linguistics}, pages 3428--3448, Florence, Italy.
   Association for Computational Linguistics.
 
+\bibitem[{McNemar(1947)}]{mcnemar1947note}
+Quinn McNemar. 1947.
+\newblock \href {https://doi.org/10.1007/BF02295996} {Note on the sampling
+  error of the difference between correlated proportions or percentages}.
+\newblock \emph{Psychometrika}, 12(2):153--157.
+
 \bibitem[{Nguyen et~al.(2025)Nguyen, Ho, Ta, Nguyen, Chen, Rav, Dang,
   Ramchandre, Phung, Liao, To, Verjans, Nguyen, and
   Phan}]{nguyen2025localizing}
 Dung Nguyen, Minh~Khoi Ho, Huy Ta, Thanh~Tam Nguyen, Qi~Chen, Kumar Rav,
   Quy~Duong Dang, Satwik Ramchandre, Son~Lam Phung, Zhibin Liao, Minh-Son To,
   Johan Verjans, Phi~Le Nguyen, and Vu~Minh~Hieu Phan. 2025.
-\newblock \href {https://arxiv.org/abs/2505.00744} {Localizing before
-  answering: A hallucination evaluation benchmark for grounded medical
-  multimodal {LLM}s}.
-\newblock In \emph{Proceedings of the 34th International Joint Conference on
-  Artificial Intelligence (IJCAI)}.
+\newblock \href {https://doi.org/10.24963/ijcai.2025/853} {Localizing before
+  answering: A benchmark for grounded medical visual question answering}.
+\newblock In \emph{Proceedings of the Thirty-Fourth International Joint
+  Conference on Artificial Intelligence}, pages 7670--7678.
 
-\bibitem[{Peng et~al.(2026)}]{peng2026omnibrainbench}
-Zhihao Peng et~al. 2026.
-\newblock \href {https://arxiv.org/abs/2511.00846} {{OmniBrainBench}: A
-  comprehensive multimodal benchmark for brain imaging analysis across
-  multi-stage clinical tasks}.
-\newblock \emph{arXiv preprint arXiv:2511.00846}.
-\newblock To appear in CVPR 2026.
+\bibitem[{Peng et~al.(2026)Peng, Wang, Liu, Liang, Ye, Ju, Woo, and
+  Yuan}]{peng2026omnibrainbench}
+Zhihao Peng, Cheng Wang, Shengyuan Liu, Zhiying Liang, Zanting Ye, Minjie Ju,
+  Peter Y.~M. Woo, and Yixuan Yuan. 2026.
+\newblock \href
+  {https://openaccess.thecvf.com/content/CVPR2026/papers/Peng_OmniBrainBench_A_Comprehensive_Multimodal_Benchmark_for_Brain_Imaging_Analysis_Across_CVPR_2026_paper.pdf}
+  {{OmniBrainBench}: A comprehensive multimodal benchmark for brain imaging
+  analysis across multi-stage clinical tasks}.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision
+  and Pattern Recognition}, pages 42732--42743.
 
-\bibitem[{Somov et~al.(2026)Somov, Chaichuk, Seleznyov, Panchenko, and
-  Tutubalina}]{somov2026breaking}
-Oleg Somov, Mikhail Chaichuk, Mikhail Seleznyov, Alexander Panchenko, and Elena
-  Tutubalina. 2026.
-\newblock \href {https://arxiv.org/abs/2603.16475} {Breaking the chain: A
-  causal analysis of {LLM} faithfulness to intermediate structures}.
-\newblock \emph{arXiv preprint arXiv:2603.16475}.
+\bibitem[{Poliak et~al.(2018)Poliak, Naradowsky, Haldar, Rudinger, and
+  Van~Durme}]{poliak2018hypothesis}
+Adam Poliak, Jason Naradowsky, Aparajita Haldar, Rachel Rudinger, and Benjamin
+  Van~Durme. 2018.
+\newblock \href {https://doi.org/10.18653/v1/S18-2023} {Hypothesis only
+  baselines in natural language inference}.
+\newblock In \emph{Proceedings of the Seventh Joint Conference on Lexical and
+  Computational Semantics}, pages 180--191, New Orleans, Louisiana. Association
+  for Computational Linguistics.
+
+\bibitem[{Sellergren et~al.(2025)Sellergren, Kazemzadeh, Jaroensri
+  et~al.}]{sellergren2025medgemma}
+Andrew Sellergren, Sahar Kazemzadeh, Tiam Jaroensri, et~al. 2025.
+\newblock \href {https://arxiv.org/abs/2507.05201} {{MedGemma} technical
+  report}.
+\newblock \emph{Preprint}, arXiv:2507.05201.
+\newblock Cited for model identification only.
 
 \bibitem[{Suter et~al.(2022)Suter, Knecht, Valenzuela, Notter, Hewer, Schucht,
   Wiest, and Reyes}]{suter2022lumiere}
@@ -111,21 +160,38 @@ Yannick Suter, Urspeter Knecht, Waldo Valenzuela, Michelle Notter, Ekkehard
   dataset: Longitudinal glioblastoma {MRI} with expert {RANO} evaluation}.
 \newblock \emph{Scientific Data}, 9:768.
 
-\bibitem[{{Washington University School of Medicine}
-  et~al.(2025)}]{muglioma2025post}
-{Washington University School of Medicine} et~al. 2025.
-\newblock \href {https://doi.org/10.1038/s41597-025-06011-7} {{MU-Glioma Post}:
-  A comprehensive dataset of automated {MR} multi-sequence segmentation and
-  clinical features}.
-\newblock \emph{Scientific Data}.
+\bibitem[{Turpin et~al.(2023)Turpin, Michael, Perez, and
+  Bowman}]{turpin2023language}
+Miles Turpin, Julian Michael, Ethan Perez, and Samuel~R. Bowman. 2023.
+\newblock Language models don't always say what they think: Unfaithful
+  explanations in chain-of-thought prompting.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~36.
 
 \bibitem[{Wen et~al.(2010)Wen, Macdonald, Reardon, Cloughesy, Sorensen,
   Galanis, DeGroot, Wick, Gilbert, Lassman et~al.}]{wen2010updated}
 Patrick~Y. Wen, David~R. Macdonald, David~A. Reardon, Timothy~F. Cloughesy,
   A.~Gregory Sorensen, Evanthia Galanis, John DeGroot, Wolfgang Wick, Mark~R.
   Gilbert, Andrew~B. Lassman, et~al. 2010.
-\newblock Updated response assessment criteria for high-grade gliomas:
-  {Response Assessment in Neuro-Oncology Working Group}.
+\newblock \href {https://doi.org/10.1200/jco.2009.26.3541} {Updated response
+  assessment criteria for high-grade gliomas: {Response Assessment in
+  Neuro-Oncology Working Group}}.
 \newblock \emph{Journal of Clinical Oncology}, 28(11):1963--1972.
+
+\bibitem[{Wilson(1927)}]{wilson1927probable}
+Edwin~B. Wilson. 1927.
+\newblock \href {https://doi.org/10.1080/01621459.1927.10502953} {Probable
+  inference, the law of succession, and statistical inference}.
+\newblock \emph{Journal of the American Statistical Association},
+  22(158):209--212.
+
+\bibitem[{Yan et~al.(2025)Yan, He, Yue, and Wang}]{yan2025worse}
+Qianqi Yan, Xuehai He, Xiang Yue, and Xin~Eric Wang. 2025.
+\newblock \href {https://doi.org/10.18653/v1/2025.findings-acl.981} {Worse than
+  random? an embarrassingly simple probing evaluation of large multimodal
+  models in medical {VQA}}.
+\newblock In \emph{Findings of the Association for Computational Linguistics:
+  ACL 2025}, pages 19188--19205, Vienna, Austria. Association for Computational
+  Linguistics.
 
 \end{thebibliography}

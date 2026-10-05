@@ -1,5 +1,22 @@
 #Project Update
 
+## 2026-10-05 — overview figure (Figure 1): added color + icons per professor feedback
+
+Professor approved the results and the two-panel overview design (the `(a)` same-patient benchmark instance / `(b)` controlled image-dependence evaluation layout, which the user had reinstated into `acl_latex.tex`), but asked to make it less plain: "add some colors, with some icons." Styled the existing TikZ figure in place — layout, node text, brackets and column headers unchanged; only fills/borders/titles recolored and icons added.
+
+- Palette (preamble, `\definecolor` HTML): per-phase hues — AIA blue `2563EB`, LIL teal `0D9488`, DSCR violet `7C3AED`, PJRF amber `D97706`, TCM rose `DB2777`; plus accent colors green `15803D` (accuracy benefit), slate `64748B` (neutral/text-only), orange `EA580C` (donor swap), dark slate `334155` (VLM boxes).
+- Panel (a): each phase box now has a colored border (0.8pt), a light tinted fill (`!8`), a colored bold title, and a small white icon badge at its top-left corner — scan (AIA), crosshair (LIL), magnifier (DSCR), clock (PJRF), cycle (TCM).
+- Panel (b): input rows color-coded (own=blue, text-only=slate, donor=orange) with icon badges (image / text-lines / swap-arrows); VLM boxes filled dark slate with white text; reference and measure boxes tinted (accuracy=green, baseline=slate, tracking=violet).
+- Icons are drawn as inline TikZ `pic`s (new `ovicon`/`ovbadge` styles + `\ovbadgeat` helper) — no font package (fontawesome etc.) added, so compilation stays self-contained.
+- Fixed a broken cross-ref caught in passing: the reinstated figure was labeled `fig:evaluation-overview` while the body refs it twice as `fig:overview` (this was rendering as `Figure ??` on p.1). Relabeled to `fig:overview`; both refs now resolve.
+- Verified: scratch `pdflatex`x2 + bibtex, no errors, no undefined references, 15 pp total, figure renders on p.3. Refreshed the repo-root `Imagedependence.pdf` from this build.
+
+## 2026-10-01 (3) — removed an orphaned duplicate overview figure; main body back within 8 pages
+
+User reported the main paper was still over the page limit. Compiled the working tree on a scratch copy: content (Intro--Conclusion) ran onto page 9 (Conclusion/Limitations both on p.9), i.e. ~1 page over the ARR 8-page content limit. Cause: besides the two intended figures from the (2) entry (`fig:overview` tikz overview + `fig:e1effect` results plot), the tex still held a THIRD full-width `figure*` (`fig:evaluation-overview`, a ~130-line tikz near-duplicate of the overview) that was never referenced anywhere in the text and is not mentioned in any update log -- a leftover alternate overview. Deleted that block only; no prose, tables, or evidence touched.
+
+After removal (scratch compile, pdflatex x2 + bibtex): Conclusion ends on **page 8**, Limitations begins page 8, references p.10 -- main body within the 8-page content limit. 15 pp total. Both intended figures still render and are referenced (`fig:overview` x2 refs, `fig:e1effect` x1). Collapsed the leftover blank lines after the removal.
+
 ## 2026-10-01 (2) — trimmed main body to the 8-page ARR content limit (Option A)
 
 Adding the two figures (entry below) pushed the main body (Intro--Conclusion) to ~9.4 pages; it had already drifted over 8 during the review-fix rounds (page-limit deferral per the standing rule). User chose Option A: keep both figures, trim redundant prose. Cuts removed no evidence -- only prose duplicating a table, the figure, or another section:

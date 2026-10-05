@@ -35,6 +35,60 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,decorations.pathreplacing,calc}
 \usepackage{enumitem}
+
+% --- Figure 1 (overview) styling: colour palette + inline TikZ icons ---
+\definecolor{aiacol}{HTML}{2563EB}
+\definecolor{lilcol}{HTML}{0D9488}
+\definecolor{dscrcol}{HTML}{7C3AED}
+\definecolor{pjrfcol}{HTML}{D97706}
+\definecolor{tcmcol}{HTML}{DB2777}
+\definecolor{goodcol}{HTML}{15803D}
+\definecolor{neutralcol}{HTML}{64748B}
+\definecolor{swapcol}{HTML}{EA580C}
+\definecolor{vlmcol}{HTML}{334155}
+\tikzset{
+  ovicon/.style={white, line width=0.3pt, line cap=round, line join=round},
+  ovbadge/.style={circle, inner sep=0pt, minimum size=4.6mm, draw=white, line width=0.5pt},
+  imgic/.pic={
+    \draw[ovicon] (-0.17,-0.12) rectangle (0.17,0.12);
+    \draw[ovicon] (-0.13,-0.05) -- (-0.03,0.05) -- (0.03,-0.01) -- (0.17,0.12);
+    \fill[white] (0.075,0.055) circle (0.028);
+  },
+  targetic/.pic={
+    \draw[ovicon] (0,0) circle (0.115);
+    \draw[ovicon] (-0.17,0) -- (0.17,0);
+    \draw[ovicon] (0,-0.17) -- (0,0.17);
+    \fill[white] (0,0) circle (0.03);
+  },
+  magic/.pic={
+    \draw[ovicon] (-0.03,0.035) circle (0.1);
+    \draw[white, line width=0.45pt, line cap=round] (0.045,-0.04) -- (0.14,-0.13);
+  },
+  clockic/.pic={
+    \draw[ovicon] (0,0) circle (0.15);
+    \draw[ovicon] (0,0) -- (0,0.09);
+    \draw[ovicon] (0,0) -- (0.07,0);
+  },
+  cyclic/.pic={
+    \draw[white, line width=0.32pt, line cap=round, -{Latex[length=0.7mm]}]
+      (0,0) ++(42:0.15) arc (42:318:0.15);
+  },
+  textic/.pic={
+    \draw[ovicon] (-0.15,0.11) -- (0.15,0.11);
+    \draw[ovicon] (-0.15,0.037) -- (0.15,0.037);
+    \draw[ovicon] (-0.15,-0.037) -- (0.15,-0.037);
+    \draw[ovicon] (-0.15,-0.11) -- (0.055,-0.11);
+  },
+  swapic/.pic={
+    \draw[white, line width=0.32pt, line cap=round, -{Latex[length=0.7mm]}] (-0.14,0.06) -- (0.14,0.06);
+    \draw[white, line width=0.32pt, line cap=round, -{Latex[length=0.7mm]}] (0.14,-0.06) -- (-0.14,-0.06);
+  },
+}
+\newcommand{\ovbadgeat}[3]{%
+  \node[ovbadge, fill=#2] at (#1) {};
+  \pic at (#1) {#3};
+}
+
 \input{generated/numbers}
 
 % If the title and author information does not fit in the area allocated, uncomment the following
@@ -68,7 +122,11 @@
 \maketitle
 
 \begin{abstract}
-An accuracy drop when an image is removed or swapped is often read as evidence that a multimodal LLM uses the image, but it can also be response sensitivity alone: the answer changes without moving toward what the image supports. We ask when such an intervention measures image dependence rather than mere response sensitivity, and make the test concrete---reading ablation against the answer prior, adding donor-image swaps scored against the donor's key, and requiring a positive control that only the image can answer---on brain-MRI questions from the LUMIERE glioblastoma cohort whose keys have stated origins. For current open models the result is negative. A reference model extracts sequence and lesion side from the image (\vfourEoneOwnAIAGemini{}\% and \vfourEoneOwnLILGemini{}\%, against \vfourEoneTextAIAGemini{}\% and \vfourEoneTextLILGemini{}\% without it) and tracks swapped images, so the tasks are feasible, whereas four open-weight models answer differently with the image yet gain little from it: one image-effect test survives multiplicity correction, and there accuracy stays below the most common key's share and donor tracking is not separable from a random assignment. On a stated management rule none exceeds the best category lookup, and two bf16 reruns, one from a different model family, stay near chance on the control, so the shortfall is not merely a 4-bit serving artifact. A motivating audit finds a slice-based enhancement rule reproduces the expert RANO rating for \vfourConcordantDetPct{}\% of the \vfourDeterminate{} follow-ups on which it applies, so we do not treat those ratings as validated targets. We characterize observable image-dependent behavior, not internal image use; keys are segmentation- or rule-derived and not clinician-validated.
+Accuracy changes after removing or swapping an image do not by themselves show that a multimodal LLM uses the image correctly; they may reflect response sensitivity alone. We test image dependence by comparing ablation against the answer prior, scoring donor-image swaps against the donor key, and requiring an image-only positive control on brain-MRI questions from the LUMIERE glioblastoma cohort.
+
+A reference model reads sequence and lesion side from the image (\vfourEoneOwnAIAGemini{}\% and \vfourEoneOwnLILGemini{}\%, versus \vfourEoneTextAIAGemini{}\% and \vfourEoneTextLILGemini{}\% without it) and tracks donor swaps, showing the tasks are feasible. Four open-weight models show limited image dependence: only one image-effect test survives multiplicity correction, its accuracy remains below the most common key's share, donor tracking is indistinguishable from random assignment, and none exceeds the best category lookup on the management rule. Two bf16 reruns remain near chance on the control, making 4-bit serving an unlikely sole explanation.
+
+A motivating audit finds that a slice-based enhancement rule matches the expert RANO rating for \vfourConcordantDetPct{}\% of \vfourDeterminate{} determinate follow-ups, so those ratings are not treated as validated targets. We measure observable image-dependent behavior, not internal image use; keys are segmentation- or rule-derived and not clinician-validated.
 \end{abstract}
 
 \section{Introduction}
@@ -88,56 +146,177 @@ The paper makes three contributions:
 \begin{figure*}[t]
 \centering
 \begin{tikzpicture}[
-  font=\footnotesize,
-  phase/.style={draw, rounded corners=2pt, minimum width=20mm, minimum height=10mm, align=center, fill=black!4},
-  vlm/.style={draw, rounded corners=2pt, minimum width=11mm, minimum height=6mm, align=center, fill=black!8, font=\scriptsize},
-  arm/.style={draw, rounded corners=2pt, minimum width=29mm, minimum height=6.5mm, align=center, font=\scriptsize},
-  score/.style={align=left, font=\scriptsize, text=black!80, inner sep=1pt},
-  flow/.style={-{Latex[length=1.8mm]}, semithick},
-  capt/.style={font=\scriptsize\itshape, text=black!60},
-  hdr/.style={font=\scriptsize\bfseries, text=black!75},
-  note/.style={draw, rounded corners=2pt, align=left, fill=black!3, inner sep=4pt, font=\scriptsize, text width=150mm},
+    font=\footnotesize,
+    >={Latex[length=1.6mm,width=1.1mm]},
+    flow/.style={draw=black!85, line width=0.45pt, -{Latex[length=1.6mm,width=1.1mm]}},
+    phase/.style={
+        draw=black!82,
+        rounded corners=1.2pt,
+        minimum width=2.42cm,
+        minimum height=1.03cm,
+        align=center,
+        inner sep=3.5pt,
+        fill=white
+    },
+    imagephase/.style={phase, fill=black!4},
+    sourcelabel/.style={font=\scriptsize\itshape, text=black!60, align=center},
+    smalltag/.style={
+        draw=black!50,
+        rounded corners=1pt,
+        fill=white,
+        inner xsep=3pt,
+        inner ysep=1.2pt,
+        font=\scriptsize,
+        text=black!65
+    },
+    rowbox/.style={
+        draw=black!80,
+        rounded corners=1.2pt,
+        minimum width=3.25cm,
+        minimum height=0.82cm,
+        align=center,
+        inner sep=3pt,
+        fill=white
+    },
+    vlm/.style={
+        draw=vlmcol,
+        rounded corners=1.2pt,
+        minimum width=1.35cm,
+        minimum height=0.82cm,
+        align=center,
+        fill=vlmcol,
+        text=white,
+        font=\footnotesize\bfseries
+    },
+    refbox/.style={
+        draw=black!70,
+        rounded corners=1.2pt,
+        minimum width=2.45cm,
+        minimum height=0.82cm,
+        align=center,
+        inner sep=3pt,
+        fill=white
+    },
+    measure/.style={
+        draw=black!80,
+        rounded corners=1.2pt,
+        minimum width=2.65cm,
+        minimum height=0.82cm,
+        align=center,
+        inner sep=3pt,
+        fill=black!4
+    },
+    colhead/.style={font=\scriptsize\bfseries, text=black!62, align=center},
+    paneltitle/.style={font=\footnotesize\bfseries, anchor=west}
 ]
-% (a) same-patient phase chain
-\node[phase] (aia) {\textbf{AIA}\\[1pt]{\scriptsize sequence ID}};
-\node[phase, right=6mm of aia] (lil) {\textbf{LIL}\\[1pt]{\scriptsize lesion side}};
-\node[phase, right=6mm of lil] (dscr) {\textbf{DSCR}\\[1pt]{\scriptsize RANO category}};
-\node[phase, right=6mm of dscr] (pjrf) {\textbf{PJRF}\\[1pt]{\scriptsize 52-wk survival}};
-\node[phase, right=6mm of pjrf] (tcm) {\textbf{TCM}\\[1pt]{\scriptsize management}};
-\foreach \a/\b in {aia/lil,lil/dscr,dscr/pjrf,pjrf/tcm}{\draw[flow] (\a)--(\b);}
-\node[capt, above=3mm of lil.north, anchor=south] (coh)
-  {One LUMIERE glioblastoma patient $\rightarrow$ one follow-up (stratified, fixed seed): a same-patient five-phase chain};
-\draw[flow, black!55] (coh.south) -- ++(0,-1.5mm);
-\node[capt, below=1mm of aia] {image};
-\node[capt, below=1mm of lil] {seg.\ mask};
-\node[capt, below=1mm of dscr] {seg.\ mask};
-\node[capt, below=1mm of pjrf] {outcome};
-\node[capt, below=1mm of tcm] {stated rule};
-\node[capt, text=black!70, left=1mm of aia.west, anchor=east, align=right] {key\\origin:};
-% (b) three ablation arms (image phases)
-\node[hdr, anchor=west] (bhdr) at ($(aia.west)+(0,-1.95)$)
-  {Each image-phase item (AIA / LIL / DSCR) is run under three arms:};
-\node[arm, fill=black!2, anchor=north west, below=2mm of bhdr.south west] (a1) {own image};
-\node[arm, fill=black!2, below=2.5mm of a1] (a2) {image removed (text only)};
-\node[arm, fill=black!2, below=2.5mm of a2] (a3) {donor's image (swapped)};
-\node[vlm, right=9mm of a1] (m1) {VLM};
-\node[vlm, right=9mm of a2] (m2) {VLM};
-\node[vlm, right=9mm of a3] (m3) {VLM};
-\foreach \a/\m in {a1/m1,a2/m2,a3/m3}{\draw[flow] (\a.east)--(\m.west);}
-\node[score, right=8mm of m1.east, anchor=west] (s1) {score vs.\ item key \ {\itshape(accuracy benefit)}};
-\node[score, right=8mm of m2.east, anchor=west] (s2) {answer prior \ {\itshape(sensitivity baseline)}};
-\node[score, right=8mm of m3.east, anchor=west] (s3) {score vs.\ \emph{donor's} key \ {\itshape(tracking)}};
-\foreach \m/\s in {m1/s1,m2/s2,m3/s3}{\draw[flow] (\m.east)--(\s.west);}
-% (c) reading / control note
-\node[note, anchor=north west] (ctrl) at ($(a3.south west)+(0,-3mm)$)
-  {\textbf{Positive control:} AIA is answerable only from the image---a reference VLM passes (feasibility), open models stay near chance.\quad
-   \textbf{Reading:} crediting image use requires a benefit over the prior \emph{and} donor tracking above a random swap.};
+
+% ------------------------------------------------------------------
+% (a) Benchmark anatomy
+% ------------------------------------------------------------------
+\node[paneltitle] (pa) at (0,0) {(a) Same-patient benchmark instance};
+\node[imagephase, draw=aiacol, line width=0.8pt, fill=aiacol!8, below=10mm of pa.south west, anchor=west] (aia) {
+    {\large\bfseries\textcolor{aiacol}{AIA}}\\[-1pt]
+    sequence ID
+};
+\node[imagephase, draw=lilcol, line width=0.8pt, fill=lilcol!8, right=7mm of aia] (lil) {
+    {\large\bfseries\textcolor{lilcol}{LIL}}\\[-1pt]
+    lesion side
+};
+\node[imagephase, draw=dscrcol, line width=0.8pt, fill=dscrcol!8, right=7mm of lil] (dscr) {
+    {\large\bfseries\textcolor{dscrcol}{DSCR}}\\[-1pt]
+    RANO category
+};
+\node[phase, draw=pjrfcol, line width=0.8pt, fill=pjrfcol!8, right=7mm of dscr] (pjrf) {
+    {\large\bfseries\textcolor{pjrfcol}{PJRF}}\\[-1pt]
+    52-wk survival
+};
+\node[phase, draw=tcmcol, line width=0.8pt, fill=tcmcol!8, right=7mm of pjrf] (tcm) {
+    {\large\bfseries\textcolor{tcmcol}{TCM}}\\[-1pt]
+    management
+};
+
+\draw[flow] (aia) -- (lil);
+\draw[flow] (lil) -- (dscr);
+\draw[flow] (dscr) -- (pjrf);
+\draw[flow] (pjrf) -- (tcm);
+
+\node[sourcelabel, below=1.7mm of aia] {image};
+\node[sourcelabel, below=1.7mm of lil] {seg. mask};
+\node[sourcelabel, below=1.7mm of dscr] {seg. mask};
+\node[sourcelabel, below=1.7mm of pjrf] {outcome};
+\node[sourcelabel, below=1.7mm of tcm] {stated rule};
+
+\node[smalltag, above=1.7mm of aia] {positive control};
+
+% Minimal grouping cue for the image-dependent phases
+\draw[black!42, line width=0.4pt]
+  ([yshift=-7.2mm]aia.south west) -- ([yshift=-7.2mm]dscr.south east);
+\draw[black!42, line width=0.4pt]
+  ([yshift=-7.2mm]aia.south west) -- ++(0,1.7mm);
+\draw[black!42, line width=0.4pt]
+  ([yshift=-7.2mm]dscr.south east) -- ++(0,1.7mm);
+\node[font=\scriptsize\itshape, text=black!55, anchor=north]
+    at ($(aia.south)!0.5!(dscr.south)+(0,-7.2mm)$) {image-dependent phases};
+
+% Colored icon badges (one per phase)
+\ovbadgeat{aia.north west}{aiacol}{imgic}
+\ovbadgeat{lil.north west}{lilcol}{targetic}
+\ovbadgeat{dscr.north west}{dscrcol}{magic}
+\ovbadgeat{pjrf.north west}{pjrfcol}{clockic}
+\ovbadgeat{tcm.north west}{tcmcol}{cyclic}
+
+% ------------------------------------------------------------------
+% (b) Controlled image-dependence evaluation
+% ------------------------------------------------------------------
+\node[paneltitle] (pb)
+    at ([yshift=-25mm]aia.south west)
+    {(b) Controlled image-dependence evaluation};
+
+% Row 1: own image
+\node[rowbox, draw=aiacol, line width=0.7pt, fill=aiacol!7, below=10mm of pb.south west, anchor=west] (own) {own image};
+\node[vlm, right=13mm of own] (vlm1) {VLM};
+\node[refbox, draw=aiacol!70, fill=aiacol!6, right=13mm of vlm1] (ref1) {item key};
+\node[measure, draw=goodcol, fill=goodcol!10, right=13mm of ref1] (m1) {accuracy benefit};
+
+% Column headers aligned to the actual columns
+\node[colhead, above=2.6mm of own] {Input condition};
+\node[colhead, above=2.6mm of vlm1] {Model};
+\node[colhead, above=2.6mm of ref1] {Reference};
+\node[colhead, above=2.6mm of m1] {Measure};
+
+% Row 2: text only
+\node[rowbox, draw=neutralcol, line width=0.7pt, fill=neutralcol!7, below=4.4mm of own] (text) {image removed (text only)};
+\node[vlm, right=13mm of text] (vlm2) {VLM};
+\node[refbox, draw=neutralcol!60, fill=neutralcol!5, right=13mm of vlm2] (ref2) {---};
+\node[measure, draw=neutralcol, fill=neutralcol!8, right=13mm of ref2] (m2) {sensitivity baseline};
+
+% Row 3: donor image
+\node[rowbox, draw=swapcol, line width=0.7pt, fill=swapcol!7, below=4.4mm of text] (swap) {donor image (swapped)};
+\node[vlm, right=13mm of swap] (vlm3) {VLM};
+\node[refbox, draw=swapcol!75, fill=swapcol!6, right=13mm of vlm3] (ref3) {donor key};
+\node[measure, draw=dscrcol, fill=dscrcol!9, right=13mm of ref3] (m3) {tracking};
+
+% Arrows
+\foreach \a/\b in {own/vlm1,vlm1/ref1,ref1/m1,text/vlm2,vlm2/ref2,ref2/m2,swap/vlm3,vlm3/ref3,ref3/m3}{
+    \draw[flow] (\a) -- (\b);
+}
+
+% Colored icon badges (input conditions)
+\ovbadgeat{own.north west}{aiacol}{imgic}
+\ovbadgeat{text.north west}{neutralcol}{textic}
+\ovbadgeat{swap.north west}{swapcol}{swapic}
+
+% Same-item bracket
+\draw[black!42, line width=0.4pt]
+  ([xshift=-3mm]own.north west) -- ([xshift=-5mm]own.north west)
+  -- ([xshift=-5mm]swap.south west) -- ([xshift=-3mm]swap.south west);
+\node[rotate=90, font=\scriptsize\itshape, text=black!55, anchor=south]
+  at ([xshift=-6.3mm]text.west) {same item};
+
 \end{tikzpicture}
-\caption{Overview of the evaluation. The five OmniBrainBench phases are instantiated as a same-patient chain from one LUMIERE follow-up, with the origin of each key shown beneath its phase (image-rendered, segmentation-mask-derived, recorded outcome, or a stated rule). Each image phase (AIA, LIL, DSCR) is run under three arms: the own image (accuracy benefit over the answer prior), the image removed (the text-only answer prior), and a donor's image swapped in (scored against the donor's key, measuring tracking). AIA is the positive control, answerable only from the image.}
+\caption{Evaluation overview. A stratified LUMIERE follow-up instantiates a five-phase same-patient benchmark chain. The image-dependent phases (AIA, LIL, DSCR) are each evaluated under three controlled input conditions: the patient's own image, text only, and a donor-image swap. AIA serves as the positive control.}
 \label{fig:overview}
 \end{figure*}
-
-
 
 
 \section{Related Work}
@@ -301,18 +480,24 @@ PJRF & \vfourNPJRF{} & (Brier) & base rate \vfourPjrfBase{}\% \\
 \section{Conclusion}
 \label{sec:conclusion}
 
-Accuracy on an expert-labeled brain-MRI chain cannot show whether models read the scan when the labels are not validated targets for what is displayed: an automated rule reproduces the expert RANO rating for \vfourConcordantDetPct{}\% of the follow-ups on which it is determinate, and the benchmark we started from did not establish same-patient chains. We build the chain on LUMIERE with a stated origin for each key and fix a control suite in advance (Figure~\ref{fig:overview}). Read this way, a reference model reads the sequence and lesion side from the image, whereas four open-weight models show limited and inconsistent image dependence: only one accuracy gain survives multiplicity correction (and stays below the most common key's share), donor tracking is not separable from a random donor in any case, and none exceeds the best category lookup on the management rule. These results do not identify whether the models use the image internally, or why, and scale, training, serving stack and quantization are not separated from the gap; clinician review of the keys and more than one reference model are the outstanding steps.
+Accuracy on an expert-labeled brain-MRI chain cannot show whether models read the scan when the labels are not validated targets for what is displayed: an automated rule reproduces the expert RANO rating for \vfourConcordantDetPct{}\% of the follow-ups on which it is determinate, and the benchmark we started from did not establish same-patient chains. We build the chain on LUMIERE with a stated origin for each key and fix a control suite in advance. A reference model reads the sequence and lesion side from the image, whereas four open-weight models show limited and inconsistent image dependence: only one accuracy gain survives multiplicity correction (and stays below the most common key's share), donor tracking is not separable from a random donor in any case, and none exceeds the best category lookup on the management rule. These results do not identify whether the models use the image internally, or why, and scale, training, serving stack and quantization are not separated from the gap; clinician review of the keys and more than one reference model are the outstanding steps.
 
 
 
 \section*{Limitations}
 \label{sec:limitations}
 
-\textbf{Clinician review is outstanding.} No clinician has judged whether each question is answerable from the inputs shown or whether each key is right. The LIL and DSCR keys are computed from automated segmentation masks (DeepBraTumIA) that the model does not see, so they are targets that a reader can recover from the slices only if the segmentation is right, and segmentation errors propagate to them. The reference model's results support the feasibility of the AIA and LIL tasks, not the validity of every item. The enhancement rule ignores T2/FLAIR change, clinical status and steroid dose, abstains where no measurable enhancing disease exists (\vfourUndetermined{} of \vfourFollowups{} follow-ups), and reproduces the expert category for \vfourConcordantDetPct{}\% of the determinate ones; disagreement can come from segmentation or measurement error, from a different target lesion or reference scan, from the simplified rule, or from evidence outside the displayed slices, and the audit does not separate these. Consequently our complete response label is weaker than clinical RANO's: it is assigned whenever follow-up enhancement falls below the measurability threshold, which can include residual sub-threshold enhancing disease, not clinical RANO's sustained disappearance of all enhancing and nonmeasurable disease. The rule also tracks a single lesion (the enhancing component nearest the baseline target lesion's location) and has no RANO new-lesion criterion, under which an unequivocal new lesion is itself progressive disease; of the \vfourNewLesionN{} follow-ups where the rule says complete response but the expert rated progressive disease, \vfourNewLesionPlausible{} show a distinct, newly measurable enhancing component elsewhere consistent with a missed new lesion, \vfourNewLesionPreexisting{} show a similarly sized component already present at the nadir, and \vfourNewLesionNone{} show no other measurable enhancing component at all, so this disagreement is not entirely explained by the tracking rule. The expert rating is recorded but is not the key.
+\textbf{Clinician review is outstanding.} No clinician has verified that each question is answerable from the displayed inputs or that each key is correct. LIL and DSCR are derived from DeepBraTumIA segmentation masks unseen by the model, so segmentation errors propagate directly to these targets; the reference model supports task feasibility, not item-level validity. The enhancems  ent rule further omits T2/FLAIR change, clinical status, and steroid dose, abstains when no measurable enhancing disease exists (\vfourUndetermined{} of \vfourFollowups{} follow-ups), and matches the expert category for \vfourConcordantDetPct{}\% of determinate cases. Disagreement may reflect segmentation or measurement error, a different target lesion or reference scan, simplification of the rule, or evidence outside the displayed slices, which this audit cannot distinguish.
 
-\textbf{The management key is a rule, not a documented treatment.} LUMIERE records no treatment after chemoradiotherapy. The TCM key rests on an assumed radiotherapy schedule (ending 10 weeks after surgery) and on a simplified reading of the 12-week RANO window, which also allows progression inside the window when new enhancement lies outside the radiation field. The PJRF outcome assumes that survival time and scan weeks share the surgery-week origin, and censoring is not documented. With \vfourPjrfN{} patients a leave-one-out logistic model on the stated facts did not improve on the base rate (Brier \vfourPjrfBrierLR{} against \vfourPjrfBrierBase{}), which does not show that the facts carry no predictive information; the base rate reflects our stratified selection, and because the outcome construction is unverified PJRF is secondary and supports no claim here.
+Our complete-response label is also weaker than clinical RANO: it is assigned whenever follow-up enhancement falls below the measurability threshold, potentially including residual sub-threshold disease, rather than requiring sustained disappearance of all enhancing and nonmeasurable disease. The rule tracks only the enhancing component nearest the baseline target lesion and does not implement RANO's new-lesion criterion, under which an unequivocal new lesion implies progressive disease. Among the \vfourNewLesionN{} follow-ups labeled complete response by the rule but progressive disease by the expert, \vfourNewLesionPlausible{} contain a distinct newly measurable enhancing component elsewhere, \vfourNewLesionPreexisting{} contain a similarly sized component already present at the nadir, and \vfourNewLesionNone{} contain no other measurable enhancing component. Thus, the tracking rule explains some, but not all, disagreement. The expert rating is recorded for audit purposes but is not used as the benchmark key.
 
-\textbf{Power and scope.} With \vfourNLIL{} to \vfourNAIA{} patients per phase, the pre-specified $\pm10$-point margin is reachable only when few items differ between arms, and several cells will be inconclusive. Only one E1 image-effect test (Llama-4-Scout on DSCR) survives Holm correction, and three of the four open models (MedGemma-4B, Gemma-3-12B, Gemma-3-27B) fail the plan's own AIA positive-control gate, so under the preregistered rule their LIL and DSCR effects support no conclusion at all, not merely a weak one. The positive control tests one skill, sequence identification; passing it does not show that a model can read lesions. The donor images come from different patients, so anatomy differs beyond the tested feature; stems in the text-only arm still refer to images. Patients are from one center and the cohort was stratified by design; the four open-weight models run at 4-bit through Ollama while the control is an API model of unknown size and precision, so the gap between them mixes scale, quantization and training and cannot be attributed to shortcut learning; bf16 reruns of Gemma-3-27B and of a different-family model, Pixtral-12B (both through vLLM, so precision is confounded with the serving stack), stay near chance on AIA, which makes 4-bit Ollama serving an unlikely sole cause but still cannot isolate quantization from the serving stack, scale or training, and only these two were rerun. There is one reference model, run once at temperature 0, and API models change without notice. \textbf{Input handling was checked only in part.} We confirmed post hoc, for each pipeline, that every image of a question raises the prompt token count (including the second and third DSCR images) and that known-answer probes are answered correctly (Appendix~\ref{sec:app-handling}). We did not compare the images each serving stack passes to its encoder with a reference implementation, and a check on one patient cannot show that MRI contrast is preserved by each model's image encoder. Near-chance sequence identification in several open models therefore remains unexplained: the check makes a dropped-image bug unlikely but does not exclude weak encoder features or default-answer behavior. MedGemma-4B returned invalid JSON for \vfourParseInvalidMedGemma{} of \vfourParseNMedGemma{} records, and Llama-4-Scout for \vfourParseInvalidScout{} of \vfourParseNScout{}; the answer letter was recovered by pattern for all but \vfourParseNoLetterMedGemma{} records (Appendix~\ref{sec:app-handling}). The comparison to the reference model mixes scale, training, quantization and serving. Intervals treat patients as exchangeable.
+\textbf{The management key is a rule, not a documented treatment.} LUMIERE records no treatment after chemoradiotherapy. The TCM key therefore assumes a radiotherapy schedule ending 10 weeks after surgery and simplifies the 12-week RANO window, which can still permit progression when new enhancement lies outside the radiation field. PJRF further assumes that survival time and scan weeks share the surgery-week origin, while censoring is undocumented. With only \vfourPjrfN{} patients, a leave-one-out logistic model using the stated facts did not beat the base rate (Brier \vfourPjrfBrierLR{} vs.\ \vfourPjrfBrierBase{}). This does not imply that the facts lack predictive information: the base rate reflects our stratified sample, and the outcome construction itself is unverified. We therefore treat PJRF as secondary and make no substantive claim from it.
+
+\textbf{Power and scope.} With \vfourNLIL{} to \vfourNAIA{} patients per phase, the pre-specified $\pm10$-point margin is attainable only when few items differ between arms, so several comparisons remain inconclusive. Only one E1 image-effect test (Llama-4-Scout on DSCR) survives Holm correction. Moreover, MedGemma-4B, Gemma-3-12B, and Gemma-3-27B fail the preregistered AIA positive-control gate; under the analysis plan, their LIL and DSCR effects therefore support no conclusion. AIA tests only sequence identification, so passing it does not establish lesion reading. Donor images are from different patients and thus differ in anatomy beyond the manipulated feature, while text-only stems still refer to images.
+
+The study uses a single-center, deliberately stratified cohort. The four open-weight models were served at 4-bit through Ollama, whereas the reference model is an API system of unknown size and precision, so between-model differences confound scale, training, quantization, and serving stack and cannot be attributed specifically to shortcut learning. bf16 reruns of Gemma-3-27B and a different-family model, Pixtral-12B, through vLLM also remained near chance on AIA, making 4-bit Ollama serving an unlikely sole explanation but not isolating quantization from serving, scale, or training; only these two models were rerun. The reference model was evaluated once at temperature 0, and API models may change over time.
+
+\textbf{Input handling was checked only in part.} Post hoc checks confirmed that every image increased prompt token count, including the second and third DSCR images, and that each pipeline answered known-answer probes correctly (Appendix~\ref{sec:app-handling}). We did not verify that each serving stack passes the same image representation to its encoder as a reference implementation, and a single-patient check cannot establish preservation of MRI contrast across encoders. Thus, near-chance sequence identification in several open models remains unexplained: dropped images appear unlikely, but weak visual features or default-answer behavior remain possible. MedGemma-4B produced invalid JSON for \vfourParseInvalidMedGemma{} of \vfourParseNMedGemma{} records and Llama-4-Scout for \vfourParseInvalidScout{} of \vfourParseNScout{}; pattern matching recovered the answer letter except for \vfourParseNoLetterMedGemma{} MedGemma records (Appendix~\ref{sec:app-handling}). Intervals treat patients as exchangeable.
 
 \section*{Ethics Statement}
 
