@@ -41,6 +41,16 @@ for M in ${MODELS:-MedGemma-4B}; do
     chain)   echo "=== v4 chain runs: $M ==="
              python run_lumiere.py --model "$M" --item-set v4 --include-unreviewed --no-gating --no-adaptation --n-cases 100
              python run_lumiere.py --model "$M" --item-set v4 --include-unreviewed --no-gating --no-adaptation --n-cases 100 --text-only ;;
+    altpairs) echo "=== v4 swap robustness across alternative donor assignments: $M (phases ${PHASES:-DSCR}) ==="
+             # T-R16: re-run own,text,swap under each alternative valid assignment (tools.lumiere_v4_altpairs).
+             # Results go to results/robustness/ so the main stats glob results/lumiere_v4_<model>_* is untouched.
+             for AP in data/lumiere/v4/alt_pairs/assignment_*.json; do
+               k=$(basename "$AP" .json | sed 's/assignment_//')
+               echo "--- assignment $k: $AP ---"
+               LUMIERE_V4_PAIRS="$AP" python run_lumiere_v4.py --model "$M" --conditions own,text,swap \
+                 --phases "${PHASES:-DSCR}" --tag "alt${k}" --results-dir results/robustness
+             done
+             python -m tools.lumiere_v4_robustness --model "$M" --phases ${PHASES:-DSCR} ;;
     smoke)   echo "=== v4 smoke test: $M ==="
              python run_lumiere_v4.py --model "$M" --n-cases 2 --tag smoke ;;
     *) echo "unknown MODE=$MODE"; exit 1 ;;

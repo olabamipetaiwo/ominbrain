@@ -2,7 +2,6 @@
 
 From a senior applied-research perspective, **repair the measurement argument before adding more models or experiments.** The paper has a defensible contribution, but currently asks the evidence to support too strong a conclusion.
 
-These recommendations address [the second review](paper/review_round2.md). They are proposed work, not completed corrections.
 
 ## 1. Make the central claim narrower and consistent
 

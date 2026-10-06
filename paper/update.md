@@ -1,5 +1,141 @@
 #Project Update
 
+## 2026-10-06 (12) — Steps E-G: prose pass against the frozen numbers (claim narrowing, reporting checklist, 8-page fit)
+
+All edits cite frozen macros; compiles clean (17 pp, 0 undefined refs/macros); canonical PDFs refreshed.
+- **Claim narrowing (T-R18/R19).** Appendix D rewritten: reframed the synthetic predictors as an illustration, added the
+  position/image_count no-tracking confounds (false-positive calibration, <=7% Wilson-bounded), the rho=0.4->0.55
+  effective-accuracy note, and the conditional label-association scope; DELETED "behaves like the generic predictor,"
+  the "absence ... rather than low power" sentence, and the "isolates ... from a generic response" claim (replaced: the
+  gain alone does not separate them, the permutation does). Added the real-model robustness paragraph (reference 5/5
+  significant and stable; Llama 1/5 -> non-detection robust to the assignment) + a one-line main-text pointer. Figure 3:
+  "largest in the study" -> "largest among the open models" (x3), heading "controls overturn it" -> "leave category
+  reading unestablished"; softened the "arises only because text-only is poor" causal overclaim.
+- **Reporting checklist (T-R20).** Fixed: "enhancems ent" typo; "31 to 30" -> per-phase donor counts; "5,000
+  permutations" -> actual accepted counts (AIA/LIL 5000, DSCR ~4056); "accuracy uses all 46" -> per-phase (AIA 46, LIL 38,
+  DSCR 46); reference-table sample sizes; "23.1 matches 19.6" -> "stays below nominal chance"; Table 9 input-check claim
+  narrowed to the probed pipelines (Pixtral/API excluded with reason); Appendix C worked example (base stem does NOT
+  state the TCM rule, per S3.2; Figure 4 shows only AIA/LIL donors); token cap 16,384 (reference) vs 800 (open) restored
+  with reason; precision-control full intervals + donor gains added to the appendix. CAUGHT a consistency bug the T-R12
+  fix introduced: prose "slim majority (25 of 46)" was hand-typed and stale -> now macro-driven "(25 of 43)".
+- **8-page fit (T-R21).** The Conclusion previously started on p9. Trimmed the audit/TCM/chain paragraphs and the
+  Conclusion, tightened Figure 3, and moved the secondary E3 TCM-accuracy table to the appendix (reviewer-endorsed; one
+  \ref, no prose lost). Result: the whole main content through the Conclusion now fits on page 8 (verified by probe
+  label); Limitations/Ethics/refs follow, exempt. Abstract already used the non-detection framing (unchanged).
+- CONSISTENCY GATE PASSED 2026-10-06 (response-to-reviewers letter skipped per user). Scanned all literal numbers in
+  body prose; every one resolves to a frozen macro or is a legitimate constant/cited value (35.5% is jin2024hidden's
+  figure; 25.0 is 4-way chance). No undefined/empty macros, no undefined refs/citations, no em-dashes, compiles clean
+  (17 pp). Second stale hand-typed number caught+fixed: "across 500 re-drawn valid assignments" -> "across re-drawn
+  valid assignments" (only 20 of 500 evaluated). Canonical PDFs (Imagedependence.pdf, paper/latex/acl_latex.pdf)
+  refreshed from the clean build. Main content through the Conclusion fits on page 8.
+
+## 2026-10-06 (11) — T-R16 real-model robustness complete; analysis FROZEN (Steps A-D done; prose E-H next)
+
+Both robustness arms finished (SLURM 44872728 COMPLETED, 6h24; Gemini API arm clean, 0 empty). `paper_numbers`
+re-run with a new `robustness()` reader -> 1120 frozen macros (`\vfourRobust*`). All v4 numbers now trace to one
+frozen output; the Step E-H prose pass can begin.
+- **Reference model (Gemini-3.6-Flash), 5 distinct valid assignments:** AIA gain +65.2..+84.8 (median +71.7, orig
+  +67.4), permutation p<.001 in 5/5; LIL gain +65.8..+86.8 (median +71.1, orig +86.8), p<.001 in 5/5. The test
+  robustly detects genuine donor-specific image reading, stable across assignments (positive control with real power).
+- **Open central example (Llama-4-Scout, DSCR), 5 distinct valid assignments:** gain +19.0..+33.3 (median +26.2, orig
+  +28.6), but permutation significant in only 1/5 (p 0.039..0.706; orig 0.245). The donor gain is real yet donor-specific
+  tracking is NOT reliably detected and is unstable across assignments; the single significant draw is marginal and not
+  reproduced. So "we did not establish donor-specific tracking" is ROBUST to the assignment choice, not an artifact of
+  the original one. This is the real-model complement synthetic predictors cannot provide (solution.md S5).
+- Reproducibility: alt-assignment files + manifest in `data/lumiere/v4/alt_pairs/`; per-model robustness JSONs in
+  `results/lumiere_v4_robustness_*.json`; tools `lumiere_v4_altpairs.py` + `lumiere_v4_robustness.py`; swap driven by
+  `LUMIERE_V4_PAIRS`; robustness runs isolated under `results/robustness/` (main stats glob untouched).
+- NEXT (gated on user go-ahead): Steps E-H prose only -- narrow to non-detection, reconcile sections, clear the
+  reporting checklist, fit 8 pages, response letter. No numbers change from here; every claim cites a frozen macro.
+
+## 2026-10-06 (11) — T-R16 real-model robustness COMPLETE; Step B frozen (A+B+C+D done, ready for prose)
+
+Both robustness arms finished clean (0 empty responses; 5 distinct constraint-valid assignments each; swap reads an
+alternative assignment via LUMIERE_V4_PAIRS). Results re-analysed with the paper's own E2 gain + donor permutation p.
+- **Reference model (Gemini-3.6-Flash, AIA/LIL)** — strong, and STABLE across assignments: AIA gain 65.2/71.7/84.8
+  (min/med/max), LIL 65.8/71.1/86.8; permutation p<.001 in 5/5 assignments on BOTH phases. The accuracy pattern is the
+  expected image-reader signature (own~0.95-1.0, text~0.24-0.37, swap~0.0: it answers for the donor's scan). Positive
+  control: the (label-association) permutation test reliably flags a genuine image-reader, robustly to the assignment.
+- **Open central example (Llama-4-Scout, DSCR)** — NON-detection, robust: gain 19.0/26.2/33.3 (positive, assignment-
+  sensitive), permutation p per assignment .160/.039/.203/.261/.706 -> significant in only 1/5 (the one marginal at .039;
+  median clearly non-significant, matching the registered single-assignment p=.245). So the open-model null is NOT an
+  artifact of the one original assignment (directly answers reviewer concern 1), and the lone marginal hit is consistent
+  with assignment luck under 5 tests at alpha=.05.
+- **Clean dissociation for the paper:** same test, same protocol -> flags the reference model 5/5, the open model 1/5
+  (marginal). Supports the measurement-validity framing with NO absence claim needed.
+- `tools/paper_numbers.py` now has `robustness(mc)` (wired in main, macros `\vfourRobust{Gemini,Scout}...`); regenerated
+  1120 macros from the one frozen output. Jobs: Llama SLURM 44872728 COMPLETED (6h24m, exit 0); Gemini login bg, 252 API
+  calls, 0 empty. **A+B+C+D are now frozen; Step E (prose) may begin.**
+
+## 2026-10-05 (10) — Steps B/C/D: regeneration + real-model robustness infrastructure + synthetic confounds (runs in flight)
+
+Continues (9). Still no `.tex` edited (prose waits for all analysis to freeze, per the dependency rule).
+- **Step D code (T-R17), done.** `tools/lumiere_v4_donor_validation.py`: added two NO-TRACKING confound predictors
+  (`position` = fixed option position when an image is present; `image_count` = class chosen by scan count), which a
+  calibrated test must leave unflagged — they test false-positive rates against structured confounds, not just the
+  deterministic constant/random controls. Added a Wilson CI on every detection rate and an explicit `nominal_alpha`
+  field (reconciles "0% observed" vs the 5% nominal threshold). Documented that rho is the tracking-branch probability
+  and the effective donor-answer accuracy is rho+(1-rho)/|options| (0.55 at rho=0.4). `tools/paper_numbers.py` emits
+  the confound detection macros + detection-CI macros. Smoke (sims=6): position/image_count detected 0%, trackers 100%.
+- **Step C infrastructure (T-R15/R16), done + launched.** The swap condition can now be driven by an ALTERNATIVE valid
+  donor assignment: `src/lumiere_loader.py` reads `LUMIERE_V4_PAIRS` (env) in place of the fixed
+  `counterfactual_pairs.json`; `tools/lumiere_v4_altpairs.py` writes distinct valid assignment files via the real
+  `build_pairs` (5 under `data/lumiere/v4/alt_pairs/`); `run_lumiere_v4.py` gained `--results-dir` so robustness runs
+  land in `results/robustness/` and DO NOT contaminate the main stats glob `results/lumiere_v4_<model>_*`; a new
+  `altpairs` MODE in `shell/lumiere/lumiere_v4.sbatch`; and `tools/lumiere_v4_robustness.py` recomputes the paper's own
+  E2 gain + donor permutation p per assignment on the REAL answers and summarises stability vs the original. Verified
+  end-to-end with `--mock`. Launched: Llama-4-Scout/DSCR (SLURM 44872728) and Gemini-3.6-Flash/AIA,LIL (API, login bg).
+- **Step B (T-R14), first pass done.** Regenerated supplement + stats + donor_validation + `paper_numbers` (1094 macros)
+  from the frozen output. Re-run paper_numbers once the robustness JSONs land. Two reviewer-relevant before/after results:
+  - **Reviewer Q4 (TCM denominator, answered):** the baseline-only eligibility fix DOES change published values, for the
+    label flip only and only where an item started at the target and moved away. Llama-4-Scout: informative 37->34,
+    moved/inf 27%->29% (3 moved-away now excluded); Gemma-3-27B: informative 46->43, 54%->58% (3 excluded). MedGemma and
+    Gemma-3-12B unchanged; the timing-flip (PD) rates unchanged (0 moved-away). Direction is correct (denominator shrinks).
+  - **Reviewer concern 3 (permutation count):** DSCR accepted permutations are 4115/4057/4069/4056, NOT 5000 (collision
+    repair skips some); AIA/LIL are 5000. Prose must cite the accepted count (\vfourDonorPermN...) instead of "5,000".
+  - Donor-validation (frozen, 50 sims): confounds position/image_count detected 0% [CI up to 7%], generic shift 0%,
+    trackers 92-100%; across 500 distinct assignments trackers 85-100%, generic shift 0% -- stable.
+- Known, pre-existing (not introduced here): the stats tool still flags Pixtral-12B-bf16 with 46 empty API responses.
+
+## 2026-10-05 (9) — review.md round 3 (weak reject): Step A = the three confirmed code defects, fixed + verified (no .tex touched yet)
+
+New external review (`paper/review.md`) + applied-scientist recommendations (`paper/solution.md`). Ordered repair plan written to
+`notes/task.md` (T-R11..R23) under a hard dependency rule: fix code -> regenerate one frozen output -> run experiments -> only
+then rewrite prose. This entry is Step A (code only); numbers are NOT yet regenerated into the paper and no `.tex` was edited.
+
+- **T-R12 (TCM "informative" denominator; review major 5).** `tools/lumiere_v4_supplement.py:transitions`. The old code only
+  counted `already_at_new` when baseline AND post-flip both equalled the target, so an item that STARTS at the target and
+  MOVES AWAY stayed in the informative denominator the caption excludes. Fixed: eligibility is now computed from the baseline
+  answer alone; `already_at_new` = every baseline-at-target item; added `stayed_at_target` and `started_at_target_moved_away`
+  (reported separately); `follows_rule_total` now uses `stayed_at_target` so it is unchanged in meaning. `tools/paper_numbers.py`:
+  follows-rule table column now reads the authoritative `follows_rule_total` (not the redefined `already_at_new`), and a new
+  `\vfourTrans*MovedAway` macro surfaces the moved-away count. Unit check (synthetic 4-item case): corrected moved/informative =
+  1/2 where the old code gave 1/3. Actual effect on published TCM cells pending Step B regeneration (answers reviewer Q4 then).
+- **T-R13 (permutation honesty + interpretation; review major 3).** `donor_dependence` already returned the ACCEPTED
+  permutation count as `n_perm` (not the attempted 5,000); added macro `\vfourDonorPermN{ph}{model}` so the prose can cite the
+  real count. Docstring now states the test's scope explicitly: a conditional LABEL-ASSOCIATION test, NOT a design-based
+  assignment test; it does not preserve the matching-scan-count strata or keep a reused donor's label block together, so it
+  licenses only the narrow "answers no more aligned to own donor's key than a random other donor's key" claim. The Appendix-D
+  "isolates tracking from generic response" sentence deletion is PROSE -> moved to T-R19 (Step E).
+- **T-R11 (donor reassignment; review major 1).** `tools/lumiere_v4_donor_validation.py`. Replaced `random_assignment` (a strict
+  one-to-one derangement that was INFEASIBLE for DSCR and SILENTLY returned the original assignment -> "stability" was the same
+  assignment repeated) with `valid_assignments()`, which re-runs the paper's own `build_pairs` (real constraints: distinct key,
+  no self, matching scan count, <=2 recipients per donor) under fresh seeds and keeps the distinct full solutions; added
+  `base_rows()` + `rows_under()` so each draw is evaluated on the recipient set it actually covers. Stability loop now VARIES the
+  prediction seed per assignment and includes the NOISY trackers (rho 1.0/0.7/0.4) plus the generic shift. No silent fallback.
+  - **Correction to an in-session worry:** a first measurement showed DSCR = 0 distinct assignments, but that was an artifact of
+    requiring the exact original 42-recipient set. Measured correctly, distinct valid assignments = 500+ for AIA/LIL/DSCR. The
+    scan-count x RANO imbalance (n_img=3 stratum: 16 PD recipients vs 6 non-PD donors, <=12 donation slots) only forces a varying
+    4-of-46 DSCR recipients to drop; it does NOT collapse the assignment space. So the DSCR stability claim's delete-decision is
+    NOT triggered; the check is legitimate.
+  - **Smoke (DSCR, sims=10, assignments=10):** on the original assignment, constant/random/image_shift -> 0% detection, trackers
+    -> 100%; across 500 distinct re-drawn valid assignments, trackers detected 100/100/90% and the generic image_shift 0%. Genuine
+    assignment variation now, and the generic predictor is still never flagged.
+- Verified: `py_compile` clean on all three edited files; `python -m tests.test_lumiere_v4` all pass.
+- **Supersedes earlier entries:** the (6)/(7) description of the across-assignments stability used the silent-fallback
+  derangement, and (7)'s "absence of donor-specific tracking ... not low power" phrasing is exactly review concern 2; both will
+  be narrowed to the non-detection framing in Step E (T-R18/R19). Do not cite the old stability wording.
+
 ## 2026-10-05 (8) — adversarial re-examination of the rebuttal; fixed four soft spots a tough reviewer could still reject on
 
 Re-read our own fixes as a hostile reviewer would ("would this still get rejected?") and found four real gaps, now fixed:

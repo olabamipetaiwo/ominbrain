@@ -1,4 +1,4 @@
-The patient is Patient-007, the first in id order with all five phases and a three-image DSCR item (a rule fixed before any answer was inspected). Figure~\ref{fig:v4example} shows the images the models see and the donor images used in the swap; each item is four-way multiple choice, with the full stems and options in the reproducibility artifact.
+The patient is Patient-007, the first in id order with all five phases and a three-image DSCR item (a rule fixed before any answer was inspected). Figure~\ref{fig:v4example} shows the images the models see and the AIA and LIL donor images used in the swap (the DSCR donor slices are omitted for space); each item is four-way multiple choice, with the full stems and options in the reproducibility artifact.
 
 \paragraph{AIA (positive control).} Which MRI sequence does this image show? \emph{Key:} D) T1-weighted, after gadolinium contrast.
 
@@ -10,7 +10,7 @@ The key comes from the bidimensional products of the tracked lesion on the three
 
 \paragraph{TCM.} Using your earlier assessment of this patient, what is the most appropriate next step? \emph{Key:} C) Change therapy now: bring re-resection, second-line treatment or a clinical trial to tumor board.
 
-The stem states the patient facts (see the artifact) and the rule: non-PD $\rightarrow$ continue; PD and $\le$ 12 weeks after radiotherapy $\rightarrow$ repeat MRI first; PD and later $\rightarrow$ change therapy (RANO 2010; Stupp schedule assumed). Here the category is progressive disease and chemoradiotherapy ended 53 weeks before the scan, so the class is escalate; changing the stated timing across the 12-week window or the stated category changes the rule's answer (the fact flips of E3).
+The base stem states the patient facts (see the artifact) but not the management rule; the rule is supplied in the prompt only in the post hoc explicit-rule condition (Section~\ref{sec:results}). The key follows that rule: non-PD $\rightarrow$ continue; PD and $\le$ 12 weeks after radiotherapy $\rightarrow$ repeat MRI first; PD and later $\rightarrow$ change therapy (RANO 2010; Stupp schedule assumed). Here the category is progressive disease and chemoradiotherapy ended 53 weeks before the scan, so the class is escalate; changing the stated timing across the 12-week window or the stated category changes the rule's answer (the fact flips of E3).
 
 \paragraph{PJRF (secondary).} Same patient facts as TCM; the model forecasts the probability of death within 52 weeks of the scan (recorded outcome: death), scored by the Brier score.
 

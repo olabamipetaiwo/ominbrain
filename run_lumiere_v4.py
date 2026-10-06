@@ -34,11 +34,15 @@ def parse_args():
     p.add_argument("--n-cases", type=int, default=None)
     p.add_argument("--skip-cases", type=int, default=0, help="skip the first N patients (their records come from an earlier folder; the stats tool merges folders)")
     p.add_argument("--tag", default="", help="label added to the results folder name")
+    p.add_argument("--results-dir", default="results",
+                   help="where result folders are written (use a subdir like results/robustness for alt-assignment "
+                        "runs so the main stats glob results/lumiere_v4_<model>_* does not pick them up)")
     p.add_argument("--mock", action="store_true", help="offline smoke test with a deterministic fake model")
     return p.parse_args()
 
 
-def run_model(model_cfg: dict, conditions: tuple, phases, n_cases, tag: str, mock: bool, skip_cases: int = 0) -> None:
+def run_model(model_cfg: dict, conditions: tuple, phases, n_cases, tag: str, mock: bool, skip_cases: int = 0,
+              results_dir: str = "results") -> None:
     cases = load_lumiere(n_cases=n_cases, min_phases=2, include_unreviewed=True, item_set="v4")
     swap_cases = (load_lumiere(n_cases=n_cases, min_phases=2, include_unreviewed=True, item_set="v4",
                                counterfactual_images=True) if "swap" in conditions else None)
@@ -69,7 +73,7 @@ def run_model(model_cfg: dict, conditions: tuple, phases, n_cases, tag: str, moc
     # an --dependency=afterok chained full run cannot auto-launch on a false pass (see the Pixtral chat-template bug).
     all_empty = bool(records) and len(empty) == len(records)
     name = f"lumiere_v4_{model_cfg['name']}{'_' + tag if tag else ''}_{ts}"
-    out = Path("results") / name
+    out = Path(results_dir) / name
     out.mkdir(parents=True, exist_ok=True)
     (out / "raw_results.json").write_text(json.dumps(records, indent=1))
     summary = summarize(records)
@@ -96,12 +100,12 @@ def main():
         sys.exit(f"unknown condition(s) {set(conditions) - set(CONDITIONS)}")
     phases = tuple(args.phases.split(",")) if args.phases else None
     if args.mock:
-        run_model({"name": "MOCK", "model": "mock", "category": "mock"}, conditions, phases, args.n_cases, args.tag or "mock", True, args.skip_cases)
+        run_model({"name": "MOCK", "model": "mock", "category": "mock"}, conditions, phases, args.n_cases, args.tag or "mock", True, args.skip_cases, args.results_dir)
         return
     if not args.model and not args.all_models:
         sys.exit("Specify --model <name> or --all-models (or --mock).")
     for m in (MODELS if args.all_models else [MODEL_MAP[args.model]]):
-        run_model(m, conditions, phases, args.n_cases, args.tag, False, args.skip_cases)
+        run_model(m, conditions, phases, args.n_cases, args.tag, False, args.skip_cases, args.results_dir)
 
 
 if __name__ == "__main__":

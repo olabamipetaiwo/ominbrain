@@ -175,6 +175,14 @@ def outcomes(recs) -> dict:
 
 
 def transitions(recs, flags) -> dict:
+    """Per condition x subset, how answers move under a context flip.
+
+    Baseline eligibility ("informative") is defined from the BASELINE true-context answer alone, before the
+    flipped answer is examined (matching the table caption): an item is informative iff its baseline answer was
+    NOT already the new target. ``already_at_new`` therefore counts every item whose baseline answer equals the
+    target, whether it then stays or moves away, and those items are excluded from the informative denominator.
+    ``stayed_at_target`` and ``started_at_target_moved_away`` split that excluded set, so items that begin at the
+    target and then leave it are reported separately rather than silently inflating the follows-rule rate."""
     out = {}
     for cond in ("flip_label", "flip_window"):
         cs = sorted(c for (c, p, k) in recs if p == "TCM" and k == cond and (c, "TCM", "ctx_gold") in recs)
@@ -186,18 +194,25 @@ def transitions(recs, flags) -> dict:
                 base, new = recs[(c, "TCM", "ctx_gold")], recs[(c, "TCM", cond)]
                 exp = new["expected_letter"]
                 a0, a1 = base.get("model_answer"), new.get("model_answer")
-                if not a1:
+                if a0 == exp:                       # baseline already at target -> NOT informative (excluded)
+                    cnt["already_at_new"] += 1
+                    cnt["stayed_at_target" if a1 == exp else "started_at_target_moved_away"] += 1
+                    continue
+                if not a1:                          # baseline not at target -> informative from here on
                     cnt["no_answer"] += 1
                 elif a1 == exp:
-                    cnt["already_at_new" if a0 == exp else "moved_to_new"] += 1
+                    cnt["moved_to_new"] += 1
                 elif a1 == a0:
                     cnt["unchanged_elsewhere"] += 1
                 else:
                     cnt["changed_to_other"] += 1
             n = len(keep)
             informative = n - cnt["already_at_new"]
-            out[f"{cond}|{subset}"] = {"n": n, **{k: cnt[k] for k in ("moved_to_new", "already_at_new", "unchanged_elsewhere", "changed_to_other", "no_answer")},
-                                       "follows_rule_total": 100 * (cnt["moved_to_new"] + cnt["already_at_new"]) / n,
+            out[f"{cond}|{subset}"] = {"n": n,
+                                       **{k: cnt[k] for k in ("moved_to_new", "already_at_new", "stayed_at_target",
+                                                              "started_at_target_moved_away", "unchanged_elsewhere",
+                                                              "changed_to_other", "no_answer")},
+                                       "follows_rule_total": 100 * (cnt["moved_to_new"] + cnt["stayed_at_target"]) / n,
                                        "informative_n": informative,
                                        "moved_of_informative": 100 * cnt["moved_to_new"] / informative if informative else float("nan")}
     return out
@@ -227,8 +242,15 @@ def donor_dependence(recs, rng, n_perm: int = 5000) -> dict:
         clusters are resampled or dropped (the estimand stays conditional on the fixed assignment but respects shared donors);
       * assignment permutation: the donor key text is permuted among recipients (never onto the recipient's own key), and
         the gain recomputed with the observed answers; p is the share of permutations with a gain at least as large.
-        This asks whether answers follow their own donor's key more than a random other donor's key, i.e. whether
-        the result depends on this particular assignment."""
+
+    SCOPE OF THE PERMUTATION TEST (interpretation, per reviewer round 3): this is a conditional LABEL-ASSOCIATION test,
+    not a design-based assignment test. It holds the recipients and their observed answers fixed and shuffles the donor-key
+    labels across recipients subject only to never landing on a recipient's own key. It does NOT reconstruct the original
+    constrained assignment mechanism: it does not preserve the matching-scan-count strata and does not keep the label block
+    of a donor used by two recipients together. It therefore answers only the narrow question of whether answers are more
+    aligned to their own donor's key than to a random other donor's key; it does not license a design-based claim about the
+    randomized image assignment. ``n_perm`` in the output is the number of permutations actually ACCEPTED (collision repair
+    can fail and skip a draw), which is <= the attempted count and is what should be reported."""
     out = {}
     for ph in IMG_PHASES:
         cs = [c for c in sorted({k[0] for k in recs if k[1] == ph and k[2] == "swap"})
