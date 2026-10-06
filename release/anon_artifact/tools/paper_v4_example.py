@@ -104,7 +104,7 @@ def main() -> None:
         lines.append(r"\paragraph{%s.} %s \emph{Key:} %s) %s." % (title, ask(it["question"]), c, esc(o[c].rstrip("."))))
 
     lines.append(r"The patient is %s, the first in id order with all five phases and a three-image DSCR item (a rule fixed before any answer was inspected). "
-                 r"Figure~\ref{fig:v4example} shows the images the models see and the donor images used in the swap; each item is four-way multiple choice, with the full stems and options in the reproducibility artifact." % esc(pid))
+                 r"Figure~\ref{fig:v4example} shows the images the models see and the AIA and LIL donor images used in the swap (the DSCR donor slices are omitted for space); each item is four-way multiple choice, with the full stems and options in the reproducibility artifact." % esc(pid))
     block("AIA", "AIA (positive control)")
     block("LIL", "LIL")
     d = items["DSCR"]
@@ -126,7 +126,7 @@ def main() -> None:
                  % (bpr, bpn, bpf, why, esc(fu["rule_label"]), esc(fu["expert_rating"]), esc(fu["expert_rationale"])))
     block("TCM", "TCM")
     tr = items["TCM"]["tcm_rule"]
-    lines.append(r"The stem states the patient facts (see the artifact) and the rule: %s. Here the category is %s and chemoradiotherapy ended %d weeks before the scan, so the class is %s; changing the stated timing across the 12-week window or the stated category changes the rule's answer (the fact flips of E3)."
+    lines.append(r"The base stem states the patient facts (see the artifact) but not the management rule; the rule is supplied in the prompt only in the post hoc explicit-rule condition (Section~\ref{sec:results}). The key follows that rule: %s. Here the category is %s and chemoradiotherapy ended %d weeks before the scan, so the class is %s; changing the stated timing across the 12-week window or the stated category changes the rule's answer (the fact flips of E3)."
                  % (esc(tr["rule"]), esc(tr["rano"]), tr["weeks_since_chemoradiotherapy"], esc(tr["class"])))
     outcome = "death" if items["PJRF"]["forecast"]["outcome"] == 1 else "survival"
     lines.append(r"\paragraph{PJRF (secondary).} Same patient facts as TCM; the model forecasts the probability of death within 52 weeks of the scan (recorded outcome: %s), scored by the Brier score." % outcome)

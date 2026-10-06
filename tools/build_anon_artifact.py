@@ -33,16 +33,22 @@ from tools import lumiere_v4_stats as st
 ROOT = Path(".")
 CODE_DIRS = ["src", "config", "tests"]
 TOOLS = ["lumiere_v4_stats", "lumiere_v4_supplement", "lumiere_v4_baselines", "lumiere_v4_input_check", "paper_numbers",
-         "paper_v4_example", "lumiere_gating_stats", "export_release_prompts", "compute_budget"]
+         "paper_v4_example", "lumiere_gating_stats", "export_release_prompts", "compute_budget",
+         "lumiere_v4_donor_validation", "lumiere_v4_robustness", "lumiere_v4_perm_validation"]
 DATA_DIRS = ["data/lumiere/v4/reviewed", "data/lumiere/v4/facts", "data/lumiere/v4/measurements", "data/lumiere/v4/slices"]
 DATA_FILES = ["data/lumiere/v4/selection_report.json", "data/lumiere/v4/counterfactual_pairs.json",
               "data/lumiere/tabular/LUMIERE-Demographics_Pathology.csv", "data/lumiere/tabular/LUMIERE-datacompleteness.csv",
               "data/lumiere/tabular/LUMIERE-ExpertRating-v202211.csv"]
-RESULT_FILES = ["results/compute_budget.json"]
+RESULT_FILES = ["results/compute_budget.json",
+                # post-hoc analyses shipped as precomputed inputs (paper_numbers loads them to emit the donor-validation,
+                # robustness and permutation-validity macros; robustness required alternative-assignment model runs and
+                # is not regenerated from scratch by reproduce.sh)
+                "results/lumiere_v4_donor_validation.json", "results/lumiere_v4_perm_validation.json",
+                "results/lumiere_v4_robustness_Llama-4-Scout.json", "results/lumiere_v4_robustness_Gemini-3.6-Flash.json"]
 EXPECTED = ["results/lumiere_v4_stats.json", "results/lumiere_v4_stats.md", "results/lumiere_v4_supplement.json",
             "results/lumiere_v4_supplement.md", "results/lumiere_v4_baselines.json", "results/lumiere_v4_baselines.md"]
 GENERATED = ["numbers.json", "numbers.tex", "tab_v4_e1.tex", "tab_v4_e2.tex", "tab_v4_e3.tex", "tab_v4_e3trans.tex",
-             "tab_v4_e5.tex", "tab_v4_ctrl.tex", "tab_v4_handling.tex", "tab_v4_inputcheck.tex"]
+             "tab_v4_e5.tex", "tab_v4_ctrl.tex", "tab_v4_handling.tex", "tab_v4_inputcheck.tex", "tab_v4_donorval.tex"]
 # text that must not appear in shipped files (cluster, account, author and affiliation strings)
 SCRUB = [r"ta117847", r"so589980", r"/blue/", r"/home/", r"\bucf\b", r"UCF", r"hipergator", r"HiPerGator", r"Song Wang",
          r"teeola", r"gmail", r"@\w+\.(edu|com)", r"ANTHROPIC_API_KEY=", r"sk-[A-Za-z0-9]{10,}"]
@@ -245,7 +251,7 @@ Everything needed to check the paper's numbers. No model is run: the saved model
     pip install numpy pandas scipy scikit-learn pillow matplotlib
     bash reproduce.sh
 
-Takes a few minutes on a CPU. Success looks like: every line ends in `identical`, and `847 v4 macros compared, 0 differ`.
+Takes a few minutes on a CPU. Success looks like: every line ends in `identical`, and the v4-macro comparison ends in `0 differ`.
 The regenerated tables are written to `generated/` (`tab_v4_*.tex`); the numbers cited in the paper are `generated/numbers.json`.
 
 ## What is where

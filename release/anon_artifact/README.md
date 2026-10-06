@@ -7,7 +7,7 @@ Everything needed to check the paper's numbers. No model is run: the saved model
     pip install numpy pandas scipy scikit-learn pillow matplotlib
     bash reproduce.sh
 
-Takes a few minutes on a CPU. Success looks like: every line ends in `identical`, and `847 v4 macros compared, 0 differ`.
+Takes a few minutes on a CPU. Success looks like: every line ends in `identical`, and the v4-macro comparison ends in `0 differ`.
 The regenerated tables are written to `generated/` (`tab_v4_*.tex`); the numbers cited in the paper are `generated/numbers.json`.
 
 ## What is where

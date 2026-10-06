@@ -63,15 +63,15 @@ Disagreements (122) by the rule's label: {'progressive disease': 16, 'complete r
 | MedGemma-4B | flip_window|pd | 27 | 1 | 0 | 23 | 3 | 0 | 3.7% of 27 |
 | Gemma-3-12B | flip_label|all | 46 | 18 | 6 | 10 | 12 | 0 | 45.0% of 40 |
 | Gemma-3-12B | flip_label|pd | 27 | 11 | 1 | 10 | 5 | 0 | 42.3% of 26 |
-| Gemma-3-12B | flip_window|all | 46 | 8 | 17 | 16 | 5 | 0 | 27.6% of 29 |
+| Gemma-3-12B | flip_window|all | 46 | 8 | 18 | 16 | 4 | 0 | 28.6% of 28 |
 | Gemma-3-12B | flip_window|pd | 27 | 8 | 6 | 11 | 2 | 0 | 38.1% of 21 |
-| Gemma-3-27B | flip_label|all | 46 | 25 | 0 | 2 | 19 | 0 | 54.3% of 46 |
+| Gemma-3-27B | flip_label|all | 46 | 25 | 3 | 2 | 16 | 0 | 58.1% of 43 |
 | Gemma-3-27B | flip_label|pd | 27 | 15 | 0 | 2 | 10 | 0 | 55.6% of 27 |
-| Gemma-3-27B | flip_window|all | 46 | 4 | 18 | 22 | 2 | 0 | 14.3% of 28 |
+| Gemma-3-27B | flip_window|all | 46 | 4 | 19 | 22 | 1 | 0 | 14.8% of 27 |
 | Gemma-3-27B | flip_window|pd | 27 | 0 | 7 | 20 | 0 | 0 | 0.0% of 20 |
-| Llama-4-Scout | flip_label|all | 46 | 10 | 9 | 15 | 12 | 0 | 27.0% of 37 |
+| Llama-4-Scout | flip_label|all | 46 | 10 | 12 | 15 | 9 | 0 | 29.4% of 34 |
 | Llama-4-Scout | flip_label|pd | 27 | 6 | 0 | 13 | 8 | 0 | 22.2% of 27 |
-| Llama-4-Scout | flip_window|all | 46 | 14 | 10 | 15 | 7 | 0 | 38.9% of 36 |
+| Llama-4-Scout | flip_window|all | 46 | 14 | 11 | 15 | 6 | 0 | 40.0% of 35 |
 | Llama-4-Scout | flip_window|pd | 27 | 11 | 6 | 10 | 0 | 0 | 52.4% of 21 |
 
 ## D2. TCM with the management rule stated in the prompt (explicit_rule) versus the true context without it, paired by patient

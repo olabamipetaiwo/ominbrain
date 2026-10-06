@@ -331,12 +331,13 @@ def v4_supplement(mc: Macros) -> None:
             nm = "Label" if cond == "flip_label" else "Timing"
             mc.add(f"vfourTrans{nm}Moved{t}", v["moved_to_new"])
             mc.add(f"vfourTrans{nm}Already{t}", v["already_at_new"])
+            mc.add(f"vfourTrans{nm}MovedAway{t}", v.get("started_at_target_moved_away", 0))
             mc.add(f"vfourTrans{nm}Inf{t}", v["informative_n"])
             mc.add(f"vfourTrans{nm}N{t}", v["n"])
             mc.add(f"vfourTrans{nm}Pct{t}", f"{v['moved_of_informative']:.0f}")
             rows_t.append(f"{SHORT.get(m, m)} & {'label (all)' if cond == 'flip_label' else 'timing (PD)'} & {v['n']} & {v['moved_to_new']} & {v['already_at_new']} & "
                           f"{v['unchanged_elsewhere']} & {v['changed_to_other']} & {v['moved_to_new']}/{v['informative_n']} & "
-                          f"{f1(100 * (v['moved_to_new'] + v['already_at_new']) / v['n'])} \\\\")
+                          f"{f1(v['follows_rule_total'])} \\\\")
         p = r.get("pjrf")
         if p:
             mc.add(f"vfourEfiveDiff{t}", f"{p['diff_to_base']:+.3f}".replace("-", "$-$"))
@@ -545,6 +546,7 @@ def v4(mc: Macros) -> None:
                 mc.add(f"vfourDonorLooLo{ph}{TAG[m]}", signed(v["loo_donor_min"]))
                 mc.add(f"vfourDonorLooHi{ph}{TAG[m]}", signed(v["loo_donor_max"]))
                 mc.add(f"vfourDonorPerm{ph}{TAG[m]}", pfmt(v["perm_p"]))
+                mc.add(f"vfourDonorPermN{ph}{TAG[m]}", v["n_perm"])       # actual accepted permutations, not the attempted 5000
                 mc.add(f"vfourDonorN{ph}{TAG[m]}", v["distinct_donors"])
                 mc.add(f"vfourDonorMax{ph}{TAG[m]}", v["max_uses"])
         for m, r in st["models"].items():
@@ -601,6 +603,110 @@ def v4(mc: Macros) -> None:
         (OUT / f"tab_v4_{name}.tex").write_text(tabular(cs, hd, rows, zebra=(name != "e1")))
 
 
+def donor_validation(mc: "Macros") -> None:
+    """Macros + table for the donor-protocol validation with known-behaviour predictors (Appendix)."""
+    dv = load("results/lumiere_v4_donor_validation.json")
+    if not dv or "DSCR" not in dv:
+        return
+    LABEL = {"constant": "Constant answer", "random": "Random answer",
+             "image_shift": "Generic image shift", "tracker_rho1": "Tracker ($\\rho=1$)",
+             "tracker_rho0.7": "Tracker ($\\rho=0.7$)", "tracker_rho0.4": "Tracker ($\\rho=0.4$)"}
+    TAGS = {"image_shift": "Shift", "tracker_rho1": "TrackFull", "tracker_rho0.7": "TrackMid",
+            "tracker_rho0.4": "TrackLow", "constant": "Const", "random": "Rand"}
+    d = dv["DSCR"]
+    pr = d.get("predictors", {})
+    mc.add("vfourDonorValN", d.get("n_recipients", ""))
+    mc.add("vfourDonorValSims", pr.get("tracker_rho1", {}).get("sims", ""))
+    for name, tag in TAGS.items():
+        p = pr.get(name, {})
+        if not p:
+            continue
+        mc.add(f"vfourDonorVal{tag}Gain", signed(p["gain_median"]))
+        mc.add(f"vfourDonorVal{tag}Detect", f"{100 * p['detection_rate']:.0f}")
+        if p.get("detection_ci"):
+            mc.add(f"vfourDonorVal{tag}DetectLo", f"{100 * p['detection_ci'][0]:.0f}")
+            mc.add(f"vfourDonorVal{tag}DetectHi", f"{100 * p['detection_ci'][1]:.0f}")
+    # no-tracking confounds (false-positive calibration): must stay near the nominal 5%
+    for name, tag in (("position", "Position"), ("image_count", "ImageCount")):
+        p = pr.get(name, {})
+        if p:
+            mc.add(f"vfourDonorVal{tag}Gain", signed(p["gain_median"]))
+            mc.add(f"vfourDonorVal{tag}Detect", f"{100 * p['detection_rate']:.0f}")
+            if p.get("detection_ci"):
+                mc.add(f"vfourDonorVal{tag}DetectHi", f"{100 * p['detection_ci'][1]:.0f}")
+    # per-phase detection for AIA/LIL (to back the "same separation" claim with numbers)
+    for ph in ("AIA", "LIL"):
+        pp = dv.get(ph, {}).get("predictors", {})
+        for name, tag in (("image_shift", "Shift"), ("tracker_rho0.4", "TrackLow")):
+            p = pp.get(name, {})
+            if p:
+                mc.add(f"vfourDonorVal{tag}Detect{ph}", f"{100 * p['detection_rate']:.0f}")
+    rows = []
+    for name in ("constant", "random", "image_shift", "tracker_rho1", "tracker_rho0.7", "tracker_rho0.4"):
+        p = pr.get(name)
+        if not p:
+            continue
+        rows.append(f"{LABEL[name]} & {signed(p['gain_median'])} & {100 * p['detection_rate']:.0f}\\% \\\\")
+    (OUT / "tab_v4_donorval.tex").write_text(tabular("lrr", ["Synthetic predictor & Donor gain (pp) & Detected ($p<.05$) \\\\"], rows))
+
+
+def robustness(mc: "Macros") -> None:
+    """Real-model donor-swap robustness across alternative valid assignments (T-R16).
+
+    Reference model (Gemini, AIA/LIL) vs the open central example (Llama-4-Scout, DSCR), each re-run under several
+    distinct constraint-valid donor assignments. Macros: gain range, permutation-p range, and how many assignments
+    were significant out of how many tested."""
+    for model, phases in (("Llama-4-Scout", ("DSCR",)), ("Gemini-3.6-Flash", ("AIA", "LIL"))):
+        r = load(f"results/lumiere_v4_robustness_{model}.json")
+        if not r:
+            continue
+        tag = TAG[model]
+        mc.add(f"vfourRobust{tag}NAssign", r.get("n_assignments", ""))
+        for ph in phases:
+            a = r.get("across", {}).get(ph)
+            if not a:
+                continue
+            mc.add(f"vfourRobust{tag}{ph}GainMin", signed(a["gain_min"]))
+            mc.add(f"vfourRobust{tag}{ph}GainMed", signed(a["gain_median"]))
+            mc.add(f"vfourRobust{tag}{ph}GainMax", signed(a["gain_max"]))
+            mc.add(f"vfourRobust{tag}{ph}PermPMin", pfmt(a["perm_p_min"]))
+            mc.add(f"vfourRobust{tag}{ph}PermPMax", pfmt(a["perm_p_max"]))
+            mc.add(f"vfourRobust{tag}{ph}NSig", a["n_significant_05"])
+            mc.add(f"vfourRobust{tag}{ph}OrigGain", signed(a["orig_gain"]))
+            mc.add(f"vfourRobust{tag}{ph}OrigPermP", pfmt(a["orig_perm_p"]))
+
+
+def perm_validation(mc: "Macros") -> None:
+    """Sampling-distribution validation of the collision-repaired donor permutation (reviewer bullet 4).
+
+    From results/lumiere_v4_perm_validation.json: the infeasibility of pure rejection, the null-distribution
+    agreement between the repair sampler and an independent repair-free sampler, and the repair sampler's
+    Type-I error under a proper no-tracking null."""
+    pv = load("results/lumiere_v4_perm_validation.json")
+    if not pv:
+        return
+    DRAWS = 200_000
+    mc.add("vfourPermValWholeDraws", f"{DRAWS:,}")
+    for r in pv.get("step0_2_3_real", []):
+        tag = r["phase"] + TAG[r["model"]]
+        mc.add(f"vfourPermValWholeAcc{tag}", f"{round(r['whole_perm_accept_rate'] * DRAWS):d}")
+        # report the KS statistic (max CDF gap, in points) as the effect size, not the p: at 20k draws
+        # per sampler the KS p is oversensitive to a negligible discrepancy (see update.md / the module docstring)
+        mc.add(f"vfourPermValKSGap{tag}", f"{100 * r['ks_stat']:.1f}")
+        mc.add(f"vfourPermValNullMean{tag}", signed(r["null_mean_repair"]))
+        mc.add(f"vfourPermValNullMeanSeq{tag}", signed(r["null_mean_seq"]))
+        mc.add(f"vfourPermValRepair{tag}", pfmt(r["p_repair"]))
+        mc.add(f"vfourPermValSeq{tag}", pfmt(r["p_sequential"]))
+    sims = max((r["sims"] for r in pv.get("step1_null_calibration", [])), default="")
+    mc.add("vfourPermValSims", f"{sims:,}" if isinstance(sims, int) else sims)
+    for r in pv.get("step1_null_calibration", []):
+        tag = r["phase"] + TAG[r["model"]]
+        mc.add(f"vfourPermValTypeI{tag}", f"{100 * r['typeI_05']:.1f}")
+        mc.add(f"vfourPermValTypeILo{tag}", f"{100 * r['typeI_05_ci'][0]:.1f}")
+        mc.add(f"vfourPermValTypeIHi{tag}", f"{100 * r['typeI_05_ci'][1]:.1f}")
+        mc.add(f"vfourPermValMedP{tag}", pfmt(r["p_median"]))
+
+
 def check_stale() -> list[str]:
     tex = Path("paper/latex/acl_latex.tex").read_text()
     return [pat for pat in STALE if re.search(pat, tex)]
@@ -623,6 +729,9 @@ def main() -> None:
     v4(mc)
     v4_supplement(mc)
     v4_inputcheck(mc)
+    donor_validation(mc)
+    robustness(mc)
+    perm_validation(mc)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numbers.tex").write_text(mc.tex())
     (OUT / "numbers.json").write_text(json.dumps(mc.d, indent=1, sort_keys=True))

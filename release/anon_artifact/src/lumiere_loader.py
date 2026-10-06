@@ -22,6 +22,7 @@ Key schema-mismatch resolutions (see plan):
 from __future__ import annotations
 
 import json
+import os
 import random
 from pathlib import Path
 
@@ -257,12 +258,17 @@ def load_lumiere(n_cases: int | None = None, min_phases: int = 2,
 
     cf_pairs = None
     if counterfactual_images:
-        pairs_path = Path(spec["dir"]) / "counterfactual_pairs.json"
+        # LUMIERE_V4_PAIRS lets a robustness run (T-R16) point the swap condition at an ALTERNATIVE valid donor
+        # assignment file instead of the fixed data/lumiere/v4/counterfactual_pairs.json; same schema.
+        override = os.environ.get("LUMIERE_V4_PAIRS")
+        pairs_path = Path(override) if override else (Path(spec["dir"]) / "counterfactual_pairs.json")
         if not pairs_path.exists():
             raise FileNotFoundError(
                 f"--counterfactual-images requires {pairs_path} — run "
-                "`python -m tools.build_lumiere_counterfactual_pairs` first.")
+                "`python -m tools.build_lumiere_counterfactual_pairs` first"
+                + (" (LUMIERE_V4_PAIRS override set)" if override else "") + ".")
         cf_pairs = json.loads(pairs_path.read_text())
+        print(f"swap condition using donor assignment: {pairs_path}")
 
     return build_lumiere_cases(items, n_cases=n_cases, min_phases=min_phases, image_note=note,
                                counterfactual_pairs=cf_pairs)

@@ -1,5 +1,5 @@
 {
- "source_commit": "68d65cc978fca3b240bfb2aadf032487c44df458",
+ "source_commit": "7ab69137a90d58854fc0fb2aa4242ebf4a2d259e",
  "environment": {
   "python": "3.12.5",
   "numpy": "2.3.5",
@@ -15,13 +15,16 @@
  "min_stamp": "20260928",
  "script_sha256": {
   "lumiere_v4_stats": "890f5728838f8926d640963594b65ca75522c33bbd47809d07396a0f5b1bdf55",
-  "lumiere_v4_supplement": "2080be9e120930058302b78e0788ca3bd253a790fd4d409b093eea4b9a607159",
+  "lumiere_v4_supplement": "f5583945588bc5a2c7b537bd3f2e4e6f41a824b638955a944d398971687e1264",
   "lumiere_v4_baselines": "c750201260bc24f54b33d5c4e68cf3d99df12b87042a330ab39a02d9ffc6673d",
   "lumiere_v4_input_check": "15a7a661812e46c8093e95d72f9276bb878662de3c5946af4d17dbdb57021537",
-  "paper_numbers": "3757eabaa547818df8247c3c695d695dcf3452987e0dbc67c72132c4fc5cd5c8",
-  "paper_v4_example": "09e4142be5d182161c67e2c4423795d975b130d2b62c6cf1eb519969d7d99f0b",
+  "paper_numbers": "27ac5e2ba6d4e23f1e8931c04a88434d2822ed5c92acc0aabeb7d10298abb46e",
+  "paper_v4_example": "8aacaf8deffd50f0ef009c879af086d692de9e518212c760477813e425f2fac1",
   "lumiere_gating_stats": "cbd810b63bd4137dd210dfbe0339c529eba96a1d18571edab5c9986dba149eec",
   "export_release_prompts": "388c711118d9ad8f2cee28f960b4eb8d8d4dbe65f81b167594c05a4227ca8dfe",
-  "compute_budget": "4d50c70b8ac62ba7478eaf2467b8d0522bf12ecef555a26793e4985c30078c60"
+  "compute_budget": "4d50c70b8ac62ba7478eaf2467b8d0522bf12ecef555a26793e4985c30078c60",
+  "lumiere_v4_donor_validation": "1b508f8a650214efe719d64a8e9208f22d998029f662533df46c6a80354b7bc7",
+  "lumiere_v4_robustness": "4f19914740ec64c9479833f333a1e9702cd44a653771c6a56cb9d6a9cc40c2bd",
+  "lumiere_v4_perm_validation": "82f490fcae0e8e7ab96a57757bb138b84eebacfd5ece444c60a3b647663b40ec"
  }
 }
