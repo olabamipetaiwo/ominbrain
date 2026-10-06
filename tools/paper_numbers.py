@@ -676,6 +676,37 @@ def robustness(mc: "Macros") -> None:
             mc.add(f"vfourRobust{tag}{ph}OrigPermP", pfmt(a["orig_perm_p"]))
 
 
+def perm_validation(mc: "Macros") -> None:
+    """Sampling-distribution validation of the collision-repaired donor permutation (reviewer bullet 4).
+
+    From results/lumiere_v4_perm_validation.json: the infeasibility of pure rejection, the null-distribution
+    agreement between the repair sampler and an independent repair-free sampler, and the repair sampler's
+    Type-I error under a proper no-tracking null."""
+    pv = load("results/lumiere_v4_perm_validation.json")
+    if not pv:
+        return
+    DRAWS = 200_000
+    mc.add("vfourPermValWholeDraws", f"{DRAWS:,}")
+    for r in pv.get("step0_2_3_real", []):
+        tag = r["phase"] + TAG[r["model"]]
+        mc.add(f"vfourPermValWholeAcc{tag}", f"{round(r['whole_perm_accept_rate'] * DRAWS):d}")
+        # report the KS statistic (max CDF gap, in points) as the effect size, not the p: at 20k draws
+        # per sampler the KS p is oversensitive to a negligible discrepancy (see update.md / the module docstring)
+        mc.add(f"vfourPermValKSGap{tag}", f"{100 * r['ks_stat']:.1f}")
+        mc.add(f"vfourPermValNullMean{tag}", signed(r["null_mean_repair"]))
+        mc.add(f"vfourPermValNullMeanSeq{tag}", signed(r["null_mean_seq"]))
+        mc.add(f"vfourPermValRepair{tag}", pfmt(r["p_repair"]))
+        mc.add(f"vfourPermValSeq{tag}", pfmt(r["p_sequential"]))
+    sims = max((r["sims"] for r in pv.get("step1_null_calibration", [])), default="")
+    mc.add("vfourPermValSims", f"{sims:,}" if isinstance(sims, int) else sims)
+    for r in pv.get("step1_null_calibration", []):
+        tag = r["phase"] + TAG[r["model"]]
+        mc.add(f"vfourPermValTypeI{tag}", f"{100 * r['typeI_05']:.1f}")
+        mc.add(f"vfourPermValTypeILo{tag}", f"{100 * r['typeI_05_ci'][0]:.1f}")
+        mc.add(f"vfourPermValTypeIHi{tag}", f"{100 * r['typeI_05_ci'][1]:.1f}")
+        mc.add(f"vfourPermValMedP{tag}", pfmt(r["p_median"]))
+
+
 def check_stale() -> list[str]:
     tex = Path("paper/latex/acl_latex.tex").read_text()
     return [pat for pat in STALE if re.search(pat, tex)]
@@ -700,6 +731,7 @@ def main() -> None:
     v4_inputcheck(mc)
     donor_validation(mc)
     robustness(mc)
+    perm_validation(mc)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numbers.tex").write_text(mc.tex())
     (OUT / "numbers.json").write_text(json.dumps(mc.d, indent=1, sort_keys=True))

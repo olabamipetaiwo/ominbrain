@@ -1,5 +1,19 @@
 #Project Update
 
+## 2026-10-06 (13) — Donor-tracking claim tightening (reviewer inconsistency flags)
+
+Reviewer flagged four spots where the donor-tracking null was overstated against the frozen numbers. All fixed in `acl_latex.tex`; recompiles clean (17 pp, 0 undefined refs/macros). No numbers changed, only prose/macro citations.
+- **Abstract (L156).** "donor tracking is indistinguishable from random assignment" -> "we did not detect donor-specific tracking" (reports non-detection, not an equivalence claim).
+- **E2 main text (L482) + appendix robustness (L615).** Dropped the assignment-independent framing: Llama-4-Scout DSCR is significant in only 1 of 5 (`\vfourRobustScoutDSCRNSig`/`\vfourRobustScoutNAssign`) re-drawn assignments, so now reads "donor-specific tracking is not consistently detected ... the one significant assignment is sensitive to the particular donor draw," replacing "the non-detection does not depend on the particular donor assignment." Reference model's genuine 5/5 significance kept ("throughout").
+- **Protocol validation (L604).** "flagged at the nominal rate" contradicted the table's 0% observed detection -> now "neither is flagged in any run (`\vfourDonorValConstDetect`\%; Table)", with the random-answer gain noted (`\vfourDonorValRandGain`) and the generic shift's 0% (`\vfourDonorValShiftDetect`) made explicit. The position/scan-count predictors' <=7% upper Wilson bound no longer claimed to "not [be] above the nominal rate"; now "consistent with the nominal 5% level, though the simulation count leaves the interval too wide to establish a rate below it."
+- **Permutation validity (L604) — now fully addressed, not just caveated.** New module `tools/lumiere_v4_perm_validation.py` (CPU-only, no model called) demonstrates the collision-repaired permutation's sampling distribution three ways, writing `results/lumiere_v4_perm_validation.json`:
+  1. *Why repair exists:* a uniform whole permutation is essentially never collision-free (0 of 200,000 draws for both contested cells), so pure rejection is infeasible — the repair is not optional.
+  2. *Type-I calibration (headline):* drawing a fresh constraint-valid donor assignment for the real answers as a proper no-tracking null, the repaired test rejects at 3.3% [2.6, 4.2] (Llama-4-Scout/DSCR) and 3.4% [2.6, 4.2] (MedGemma-4B/AIA) over 2,000 nulls, median null p 0.55/0.57 — at or just below the nominal 5%, i.e. valid (mildly conservative).
+  3. *No repair-induced bias:* the repair sampler and an independent repair-free sampler (sequential constrained assignment, never collides) give the same null gain distribution (means 23.2 vs 23.0 / 1.9 vs 1.9 pp; CDFs differ by <=1.6 and 0.6 pp) and the same permutation p (0.250 vs 0.240; 0.052 vs 0.050), matching the shipped test (0.242/0.052).
+  - HONESTY NOTE: the two-sample KS *p* on DSCR is 0.02, but only because at 20k draws/sampler KS is hypersensitive to a 1.6pp max-CDF gap (means/SD/q95 are identical). Paper reports the KS *statistic* (max CDF gap, in points) as the effect size, NOT the misleading p. KS p kept in the JSON only.
+  - Paper: new appendix paragraph "Validity of the collision-repaired permutation" in sec:app-summary (macro-driven via new `perm_validation()` in `paper_numbers.py`, 1142 macros total, `--check` clean); the earlier L604 caveat now points to it instead of hedging. Recompiles clean (18 pp, +1 page for the paragraph; 0 undefined). Canonical PDFs refreshed.
+  - Repro: `python -m tools.lumiere_v4_perm_validation` then `python -m tools.paper_numbers`.
+
 ## 2026-10-06 (12) — Steps E-G: prose pass against the frozen numbers (claim narrowing, reporting checklist, 8-page fit)
 
 All edits cite frozen macros; compiles clean (17 pp, 0 undefined refs/macros); canonical PDFs refreshed.

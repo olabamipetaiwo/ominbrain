@@ -24,6 +24,11 @@ Steps E/F/G that follow say "after analysis frozen" meaning after A+B+C+D, not m
 #### OPEN DECISIONS (surfaced from review.md / solution.md)
 - PARKED (user, 2026-10-06) **D1 — Independent statistician review of the permutation component (solution.md §3).**
   Ignore for now; the interpretation is resolved to a conditional label-association test (T-R13). Revisit only if raised.
+  - UPDATE 2026-10-06: a reviewer re-raised the collision-repair sampling distribution (bullet 4). ADDRESSED by
+    `tools/lumiere_v4_perm_validation.py`: pure rejection infeasible (0/200k collision-free) -> repair justified;
+    repaired test Type-I 3.3%/3.4% [~2.6,4.2] over 2,000 proper no-tracking nulls (valid, mildly conservative);
+    repair vs independent repair-free sampler = same null dist (CDF gap <=1.6pp) and same p. New appendix paragraph,
+    macro-driven. See update.md (13). This substantially covers D1 short of a literal outside statistician.
 - PARKED (user, 2026-10-06) **D2 — trimmed synthetic confounds.** Decision: KEEP the trim (position + image_count
   confounds, Wilson CIs, three tracker strengths are enough). class-specific tracking and correlated-errors-for-reused-
   donors stay OUT — neither is load-bearing: non-detection framing concedes un-excluded mechanisms, the cluster
