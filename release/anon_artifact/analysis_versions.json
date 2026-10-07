@@ -1,5 +1,5 @@
 {
- "source_commit": "7ab69137a90d58854fc0fb2aa4242ebf4a2d259e",
+ "source_commit": "408acb0bfd8b6d6098df61353140423c38b76f8c",
  "environment": {
   "python": "3.12.5",
   "numpy": "2.3.5",
@@ -25,6 +25,7 @@
   "compute_budget": "4d50c70b8ac62ba7478eaf2467b8d0522bf12ecef555a26793e4985c30078c60",
   "lumiere_v4_donor_validation": "1b508f8a650214efe719d64a8e9208f22d998029f662533df46c6a80354b7bc7",
   "lumiere_v4_robustness": "4f19914740ec64c9479833f333a1e9702cd44a653771c6a56cb9d6a9cc40c2bd",
-  "lumiere_v4_perm_validation": "82f490fcae0e8e7ab96a57757bb138b84eebacfd5ece444c60a3b647663b40ec"
+  "lumiere_v4_perm_validation": "82f490fcae0e8e7ab96a57757bb138b84eebacfd5ece444c60a3b647663b40ec",
+  "lumiere_v4_altpairs": "e6f6cbc1f9db9babd66f7d995e0ee91dd4cb53b7974a68d78626e9d2515ffaa0"
  }
 }

@@ -26,6 +26,24 @@ The regenerated tables are written to `generated/` (`tab_v4_*.tex`); the numbers
 
 Optional: `python -m tools.export_release_prompts --out prompts.jsonl` rebuilds `prompts.jsonl` from the items.
 
+## Post-hoc analyses and provenance
+`reproduce.sh` regenerates every cited number (`generated/numbers.json`) from the saved responses and the shipped
+analysis inputs, and diffs it against `expected/`. The post-hoc donor-dependence analyses ship as precomputed inputs
+(`results/lumiere_v4_donor_validation.json`, `results/lumiere_v4_robustness_*.json`, `results/lumiere_v4_perm_validation.json`),
+loaded by `paper_numbers` exactly like `results/compute_budget.json`; `robustness` depends on model runs under alternative
+assignments and is not regenerated from scratch, while `lumiere_v4_donor_validation` and `lumiere_v4_perm_validation` are
+CPU re-analyses of the shipped responses and can be rerun directly (seeds in `analysis_versions.json`):
+
+    python -m tools.lumiere_v4_donor_validation      # synthetic-predictor protocol validation
+    python -m tools.lumiere_v4_perm_validation        # collision-repair sampling-distribution checks
+
+- `data/lumiere/v4/alt_pairs/` holds the released alternative donor-assignment identities (5 distinct constraint-valid
+  assignments + `manifest.json`), produced by `tools/lumiere_v4_altpairs.py`; `tools/lumiere_v4_robustness.py` re-runs the
+  gain and permutation on each.
+- `run_manifest.json` records which run folder supplied each response and the inclusion rule (folders older than the
+  first admitted timestamp are ignored); `analysis_versions.json` records seeds, package versions and script hashes. Every
+  reported cell traces to the single `paper_numbers` run that `reproduce.sh` reproduces.
+
 ## License
 Slices and measurements are derived from the LUMIERE dataset (Suter et al., 2022, Scientific Data;
 doi:10.6084/m9.figshare.c.5904905.v1), released for non-commercial use with attribution. They are shared here only for

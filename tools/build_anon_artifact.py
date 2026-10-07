@@ -34,8 +34,9 @@ ROOT = Path(".")
 CODE_DIRS = ["src", "config", "tests"]
 TOOLS = ["lumiere_v4_stats", "lumiere_v4_supplement", "lumiere_v4_baselines", "lumiere_v4_input_check", "paper_numbers",
          "paper_v4_example", "lumiere_gating_stats", "export_release_prompts", "compute_budget",
-         "lumiere_v4_donor_validation", "lumiere_v4_robustness", "lumiere_v4_perm_validation"]
-DATA_DIRS = ["data/lumiere/v4/reviewed", "data/lumiere/v4/facts", "data/lumiere/v4/measurements", "data/lumiere/v4/slices"]
+         "lumiere_v4_donor_validation", "lumiere_v4_robustness", "lumiere_v4_perm_validation", "lumiere_v4_altpairs"]
+DATA_DIRS = ["data/lumiere/v4/reviewed", "data/lumiere/v4/facts", "data/lumiere/v4/measurements", "data/lumiere/v4/slices",
+             "data/lumiere/v4/alt_pairs"]   # the released alternative donor-assignment identities (round-3 reviewer Q1)
 DATA_FILES = ["data/lumiere/v4/selection_report.json", "data/lumiere/v4/counterfactual_pairs.json",
               "data/lumiere/tabular/LUMIERE-Demographics_Pathology.csv", "data/lumiere/tabular/LUMIERE-datacompleteness.csv",
               "data/lumiere/tabular/LUMIERE-ExpertRating-v202211.csv"]
@@ -269,6 +270,24 @@ The regenerated tables are written to `generated/` (`tab_v4_*.tex`); the numbers
 | `src/`, `tools/`, `config/`, `tests/` | Code |
 
 Optional: `python -m tools.export_release_prompts --out prompts.jsonl` rebuilds `prompts.jsonl` from the items.
+
+## Post-hoc analyses and provenance
+`reproduce.sh` regenerates every cited number (`generated/numbers.json`) from the saved responses and the shipped
+analysis inputs, and diffs it against `expected/`. The post-hoc donor-dependence analyses ship as precomputed inputs
+(`results/lumiere_v4_donor_validation.json`, `results/lumiere_v4_robustness_*.json`, `results/lumiere_v4_perm_validation.json`),
+loaded by `paper_numbers` exactly like `results/compute_budget.json`; `robustness` depends on model runs under alternative
+assignments and is not regenerated from scratch, while `lumiere_v4_donor_validation` and `lumiere_v4_perm_validation` are
+CPU re-analyses of the shipped responses and can be rerun directly (seeds in `analysis_versions.json`):
+
+    python -m tools.lumiere_v4_donor_validation      # synthetic-predictor protocol validation
+    python -m tools.lumiere_v4_perm_validation        # collision-repair sampling-distribution checks
+
+- `data/lumiere/v4/alt_pairs/` holds the released alternative donor-assignment identities (5 distinct constraint-valid
+  assignments + `manifest.json`), produced by `tools/lumiere_v4_altpairs.py`; `tools/lumiere_v4_robustness.py` re-runs the
+  gain and permutation on each.
+- `run_manifest.json` records which run folder supplied each response and the inclusion rule (folders older than the
+  first admitted timestamp are ignored); `analysis_versions.json` records seeds, package versions and script hashes. Every
+  reported cell traces to the single `paper_numbers` run that `reproduce.sh` reproduces.
 
 ## License
 Slices and measurements are derived from the LUMIERE dataset (Suter et al., 2022, Scientific Data;
