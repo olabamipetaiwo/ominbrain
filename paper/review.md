@@ -97,3 +97,12 @@ For a stronger Findings recommendation, I would prioritize three changes: justif
 For a main-conference recommendation, I would additionally want a compelling demonstration that this protocol reliably distinguishes behaviors that simpler established diagnostics cannot distinguish.
 
 **The paper’s strongest publishable claim is that large ablation gains can leave correct image-conditioned behavior unestablished.** Organizing the submission around that claim would make its contribution clearer and more defensible.
+
+
+---
+
+**Final decision: Borderline Findings (2.5/5); not recommended for NAACL main conference in its current form.**
+
+Excluding clinical review, the paper offers useful insights and careful controls. However, the donor-permutation assumptions need stronger justification, the methodological novelty needs clearer demonstration, and some conclusions exceed what the statistical evidence establishes.
+
+I recommend revision before submission.
