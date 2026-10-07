@@ -29,3 +29,16 @@ So really there are just two paths from here:
 Paper submission Link - https://2027.naacl.org/calls/main_conference_papers/
 
 https://anonymous.4open.science/r/image-dependence-3D25/README.md
+
+
+---
+
+Answering the actual question: yes, a second reference model is doable right now, no big lift.
+
+- Most feasible choice: Claude-sonnet-4-5. It's already a configured reference slot, and the ANTHROPIC_API_KEY is present in .env. It's a different vendor from Gemini, which is the whole point — it de-confounds "maybe Gemini's success is a one-model quirk."
+- GPT-5 is also slotted but we have no OPENAI_API_KEY, so that one's blocked without a key.
+- Cost/effort: it's an API eval (no GPU) — roughly one run of E1+E2 on AIA/LIL/DSCR (~a few hundred image calls), maybe 30–60 min and a modest amount of API credit. Then regenerate macros/table and change "a reference model" → "two reference models" (and drop the "second reference model remains outstanding" caveat).
+- What it buys: a second independent positive control (replicates task feasibility / items answerable from the slices; strengthens the reference-vs-open gap). What it doesn't buy: key validity — that's still clinician review only.
+- Not required: the reviewer explicitly said they wouldn't demand a bigger model roster.
+
+So: cheap-ish, genuinely strengthens the positive control, optional. If you decide you want it, say the word and I'll run Claude-sonnet-4-5 as the second reference. Not doing anything until then.
