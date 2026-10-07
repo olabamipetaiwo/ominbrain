@@ -136,10 +136,10 @@ Steps E/F/G that follow say "after analysis frozen" meaning after A+B+C+D, not m
 
 ## PENDING, in order of importance
 
-    - [ ] **OUTSTANDING (need new inference / external expert, not reanalysis):** a second reference model, and independent clinician review of the keys. Paper's Conclusion already flags these.
+    - [ ] **OUTSTANDING (optional, needs new inference):** a second reference model. Reviewer did NOT require it ("would not require a larger model leaderboard merely for completeness"); professor's call. Paper's Conclusion flags it.
 
 
-1. **Clinician review, T-3a–e** — OUT OF SCOPE by the professor's standing decision (2026-09-25); listed last because of its long external lead time, though it would matter most for the unvalidated keys. Sub-items:
+1. **Clinician review, T-3a–e — CLOSED / NOT DOING (professor confirmed optional, 2026-10-06).** Decision: do not perform clinician review; list it as a limitation. Already satisfied in the committed paper, no edits needed: abstract states "keys are segmentation- or rule-derived and not clinician-validated"; Limitations has the "Clinician review is outstanding" paragraph; contributions say "we do not treat those ratings as validated targets for the displayed slices." The T-3e narrowing (reduce DSCR prominence / frame concordance as agreement-with-our-rule) was already applied in the C1 fix and shortcut reframe. Sub-items below are retained for record only, NOT to be done:
     - [ ] **T-3a** — Recruit qualified clinician reader(s) to independently assess exactly the images/stems/options shown to models — blinded initially to model outputs and generated keys.
     - [ ] **T-3b** — Have them judge, per item: is it answerable from what's shown, which answer is supported, and why ambiguous if so. Target all 38 LIL + 46 DSCR items; if that is not feasible, a prespecified stratified sample with limitations reported.
     - [ ] **T-3c** — Include representative agreement and disagreement cases from the automated audit in the writeup.
