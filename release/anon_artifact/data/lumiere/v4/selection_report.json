@@ -1,0 +1,117 @@
+{
+  "n_patients_with_first_line_candidates": 59,
+  "n_candidate_followups": 197,
+  "rule_vs_expert_concordance": {
+    "n": 197,
+    "concordant": 75,
+    "by_expert_label": {
+      "progressive disease": {
+        "n": 118,
+        "concordant": 59,
+        "rule_undetermined": 0
+      },
+      "stable disease": {
+        "n": 50,
+        "concordant": 2,
+        "rule_undetermined": 0
+      },
+      "partial response": {
+        "n": 15,
+        "concordant": 1,
+        "rule_undetermined": 0
+      },
+      "complete response": {
+        "n": 14,
+        "concordant": 13,
+        "rule_undetermined": 0
+      }
+    },
+    "confusion_expert_by_rule": {
+      "complete response|complete response": 13,
+      "complete response|progressive disease": 1,
+      "partial response|complete response": 11,
+      "partial response|partial response": 1,
+      "partial response|progressive disease": 2,
+      "partial response|stable disease": 1,
+      "progressive disease|complete response": 46,
+      "progressive disease|partial response": 1,
+      "progressive disease|progressive disease": 59,
+      "progressive disease|stable disease": 12,
+      "stable disease|complete response": 33,
+      "stable disease|partial response": 2,
+      "stable disease|progressive disease": 13,
+      "stable disease|stable disease": 2
+    }
+  },
+  "n_selected": 46,
+  "selected_by_tcm_class": {
+    "C": 19,
+    "F": 7,
+    "E": 20
+  },
+  "selected_by_rule_label": {
+    "complete response": 9,
+    "progressive disease": 27,
+    "partial response": 4,
+    "stable disease": 6
+  },
+  "selected_by_expert_label": {
+    "stable disease": 12,
+    "progressive disease": 30,
+    "complete response": 3,
+    "partial response": 1
+  },
+  "selected_expert_agrees": 26,
+  "n_undetermined_followups": 44,
+  "undetermined_by_expert": {
+    "stable disease": 15,
+    "progressive disease": 28,
+    "complete response": 1
+  },
+  "selected_lil_eligible": 38,
+  "quota": {
+    "F": 20,
+    "E": 20,
+    "C": 28
+  },
+  "seed": 20260925,
+  "phase_counts": {
+    "AIA": 46,
+    "LIL": 38,
+    "DSCR": 46,
+    "PJRF": 45,
+    "TCM": 46
+  },
+  "aia_sequence_counts": {
+    "t1": 12,
+    "ct1": 12,
+    "t2": 11,
+    "flair": 11
+  },
+  "pjrf_outcome_counts": {
+    "1": 28,
+    "0": 17
+  },
+  "lil_key_counts": {
+    "Left hemisphere, posterior half": 11,
+    "Right hemisphere, posterior half": 11,
+    "Right hemisphere, anterior half": 9,
+    "Left hemisphere, anterior half": 7
+  },
+  "dscr_key_counts": {
+    "Complete response": 9,
+    "Progressive disease": 27,
+    "Partial response": 4,
+    "Stable disease": 6
+  },
+  "tcm_key_counts": {
+    "continue": 19,
+    "confirm": 7,
+    "escalate": 20
+  },
+  "pairs_built": {
+    "AIA": 46,
+    "LIL": 38,
+    "DSCR": 42
+  }
+}

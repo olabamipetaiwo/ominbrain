@@ -1,0 +1,74 @@
+{
+  "patient_id": "Patient-007",
+  "selected": {
+    "tp": "week-064",
+    "code": "PD",
+    "expert": "progressive disease",
+    "rule": "progressive disease",
+    "nadir_tp": "week-015",
+    "bp_nadir": 0.0,
+    "d_nadir": [
+      0.0,
+      0.0
+    ],
+    "z_nadir": null,
+    "concordant": true,
+    "x": 53,
+    "weeks_since_surgery": 63,
+    "cls": "E",
+    "bp_ref": 9.7,
+    "bp_fu": 384.6,
+    "d_ref": [
+      4.6,
+      2.1
+    ],
+    "d_fu": [
+      22.5,
+      17.1
+    ],
+    "z_ref": 68,
+    "z_fu": 73,
+    "lil_ok": true,
+    "rationale": "Target L.: 1, 16mm x 19mm",
+    "patient_id": "Patient-007"
+  },
+  "aia_sequence": "ct1",
+  "record": {
+    "patient_id": "Patient-007",
+    "ref": "week-001",
+    "extent": "complete",
+    "survival_weeks": 108,
+    "undetermined": [
+      {
+        "expert": "progressive disease",
+        "x": 4
+      },
+      {
+        "expert": "progressive disease",
+        "x": 17
+      },
+      {
+        "expert": "progressive disease",
+        "x": 30
+      },
+      {
+        "expert": "progressive disease",
+        "x": 78
+      },
+      {
+        "expert": "progressive disease",
+        "x": 94
+      }
+    ],
+    "demo": {
+      "Patient": "Patient-007",
+      "Survival time (weeks)": "108",
+      "Sex": "male",
+      "Age at surgery (years)": 47,
+      "IDH (WT: wild type)": "IDH1 neg, Sequencing required",
+      "IDH method": "Immuno",
+      "MGMT qualitative": "na",
+      "MGMT quantitative": "na"
+    }
+  }
+}

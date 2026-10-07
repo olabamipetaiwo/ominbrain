@@ -1,0 +1,117 @@
+{
+ "LIL": {
+  "ctx_gold": {
+   "n": 38,
+   "acc": 0.184,
+   "acc_ci": [
+    0.092,
+    0.334
+   ],
+   "parse_errors": 0
+  },
+  "ctx_wrong": {
+   "n": 38,
+   "acc": 0.263,
+   "acc_ci": [
+    0.15,
+    0.42
+   ],
+   "parse_errors": 0
+  }
+ },
+ "DSCR": {
+  "ctx_gold": {
+   "n": 46,
+   "acc": 0.565,
+   "acc_ci": [
+    0.422,
+    0.698
+   ],
+   "parse_errors": 0
+  },
+  "ctx_wrong": {
+   "n": 46,
+   "acc": 0.587,
+   "acc_ci": [
+    0.443,
+    0.717
+   ],
+   "parse_errors": 0
+  }
+ },
+ "PJRF": {
+  "ctx_gold": {
+   "n": 45,
+   "scored": 45,
+   "brier": 0.2458
+  },
+  "ctx_wrong": {
+   "n": 45,
+   "scored": 45,
+   "brier": 0.2709
+  },
+  "ctx_absent": {
+   "n": 45,
+   "scored": 45,
+   "brier": 0.2713
+  }
+ },
+ "TCM": {
+  "ctx_gold": {
+   "n": 46,
+   "acc": 0.652,
+   "acc_ci": [
+    0.508,
+    0.773
+   ],
+   "parse_errors": 0
+  },
+  "ctx_wrong": {
+   "n": 46,
+   "acc": 0.326,
+   "acc_ci": [
+    0.209,
+    0.47
+   ],
+   "parse_errors": 0
+  },
+  "ctx_absent": {
+   "n": 46,
+   "acc": 0.391,
+   "acc_ci": [
+    0.264,
+    0.535
+   ],
+   "parse_errors": 0
+  },
+  "flip_label": {
+   "n": 46,
+   "acc": 0.087,
+   "acc_ci": [
+    0.034,
+    0.203
+   ],
+   "parse_errors": 0,
+   "follows_flip": 25
+  },
+  "flip_window": {
+   "n": 46,
+   "acc": 0.435,
+   "acc_ci": [
+    0.302,
+    0.578
+   ],
+   "parse_errors": 0,
+   "follows_flip": 25
+  },
+  "explicit_rule": {
+   "n": 46,
+   "acc": 0.848,
+   "acc_ci": [
+    0.718,
+    0.924
+   ],
+   "parse_errors": 0
+  }
+ }
+}

@@ -1,0 +1,58 @@
+{
+  "patient_id": "Patient-089",
+  "selected": {
+    "tp": "week-056",
+    "code": "PD",
+    "expert": "progressive disease",
+    "rule": "progressive disease",
+    "nadir_tp": "week-046",
+    "bp_nadir": 7.6,
+    "d_nadir": [
+      3.2,
+      2.3
+    ],
+    "z_nadir": 72,
+    "concordant": true,
+    "x": 46,
+    "weeks_since_surgery": 56,
+    "cls": "E",
+    "bp_ref": 48.4,
+    "bp_fu": 348.7,
+    "d_ref": [
+      11.0,
+      4.4
+    ],
+    "d_fu": [
+      21.4,
+      16.3
+    ],
+    "z_ref": 76,
+    "z_fu": 78,
+    "lil_ok": true,
+    "rationale": "New target L.: 14mm x 18mm",
+    "patient_id": "Patient-089"
+  },
+  "aia_sequence": "ct1",
+  "record": {
+    "patient_id": "Patient-089",
+    "ref": "week-000-2",
+    "extent": "complete",
+    "survival_weeks": 82,
+    "undetermined": [
+      {
+        "expert": "progressive disease",
+        "x": 36
+      }
+    ],
+    "demo": {
+      "Patient": "Patient-089",
+      "Survival time (weeks)": "82",
+      "Sex": "female",
+      "Age at surgery (years)": 57,
+      "IDH (WT: wild type)": "WT",
+      "IDH method": "BES",
+      "MGMT qualitative": "methylated",
+      "MGMT quantitative": "na"
+    }
+  }
+}

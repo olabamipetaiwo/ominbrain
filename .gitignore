@@ -34,6 +34,14 @@ results/
 tmp/
 logs/
 
+# ...but DO track the anonymous reproducibility artifact's shipped data/results
+# (so a checkout/push of release/anon_artifact can reproduce). Negations must
+# re-include the directory before its contents.
+!release/anon_artifact/data/
+!release/anon_artifact/data/**
+!release/anon_artifact/results/
+!release/anon_artifact/results/**
+
 
 
 # Claude Code local settings (per-machine)

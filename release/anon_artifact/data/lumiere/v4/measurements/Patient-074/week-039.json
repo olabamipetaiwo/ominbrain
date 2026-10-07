@@ -1,0 +1,52 @@
+{
+ "version": 2,
+ "axcodes": "LAS",
+ "shape": [
+  182,
+  218,
+  182
+ ],
+ "enh_voxels": 8018,
+ "core_voxels": 8790,
+ "enh_components": [
+  {
+   "z": 75,
+   "voxels": 8018,
+   "centroid_xyz": [
+    58.5,
+    71.7,
+    71.8
+   ],
+   "d1_mm": 36.8,
+   "d2_mm": 27.4,
+   "bp_mm2": 1007.2
+  }
+ ],
+ "enh": {
+  "z": 75,
+  "voxels": 8018,
+  "centroid_xyz": [
+   58.5,
+   71.7,
+   71.8
+  ],
+  "d1_mm": 36.8,
+  "d2_mm": 27.4,
+  "bp_mm2": 1007.2
+ },
+ "core": {
+  "z": 75,
+  "component_px": 519,
+  "centroid_xy": [
+   60.1,
+   70.6
+  ],
+  "mid_x": 89.0,
+  "mid_y": 95.5,
+  "dx_mm": 28.9,
+  "dy_mm": 24.9,
+  "side_fraction": 1.0,
+  "hemisphere": "right",
+  "ap_half": "posterior"
+ }
+}

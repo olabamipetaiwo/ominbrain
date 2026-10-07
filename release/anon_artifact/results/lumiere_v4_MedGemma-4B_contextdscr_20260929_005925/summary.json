@@ -1,0 +1,83 @@
+{
+ "DSCR": {
+  "ctx_gold": {
+   "n": 46,
+   "acc": 0.174,
+   "acc_ci": [
+    0.091,
+    0.307
+   ],
+   "parse_errors": 4
+  },
+  "ctx_wrong": {
+   "n": 46,
+   "acc": 0.196,
+   "acc_ci": [
+    0.107,
+    0.332
+   ],
+   "parse_errors": 5
+  }
+ },
+ "PJRF": {
+  "ctx_gold": {
+   "n": 45,
+   "scored": 45,
+   "brier": 0.2324
+  },
+  "ctx_wrong": {
+   "n": 45,
+   "scored": 45,
+   "brier": 0.284
+  }
+ },
+ "TCM": {
+  "ctx_gold": {
+   "n": 46,
+   "acc": 0.543,
+   "acc_ci": [
+    0.402,
+    0.678
+   ],
+   "parse_errors": 16
+  },
+  "ctx_wrong": {
+   "n": 46,
+   "acc": 0.391,
+   "acc_ci": [
+    0.264,
+    0.535
+   ],
+   "parse_errors": 7
+  },
+  "flip_label": {
+   "n": 46,
+   "acc": 0.261,
+   "acc_ci": [
+    0.156,
+    0.403
+   ],
+   "parse_errors": 6,
+   "follows_flip": 31
+  },
+  "flip_window": {
+   "n": 46,
+   "acc": 0.522,
+   "acc_ci": [
+    0.381,
+    0.659
+   ],
+   "parse_errors": 10,
+   "follows_flip": 20
+  },
+  "explicit_rule": {
+   "n": 46,
+   "acc": 0.543,
+   "acc_ci": [
+    0.402,
+    0.678
+   ],
+   "parse_errors": 3
+  }
+ }
+}
