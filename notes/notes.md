@@ -42,3 +42,11 @@ Answering the actual question: yes, a second reference model is doable right now
 - Not required: the reviewer explicitly said they wouldn't demand a bigger model roster.
 
 So: cheap-ish, genuinely strengthens the positive control, optional. If you decide you want it, say the word and I'll run Claude-sonnet-4-5 as the second reference. Not doing anything until then.
+
+
+----
+
+The one hard step left (flagged at the top of the R4 section in task.md):
+- Page budget. My body additions pushed the Conclusion from page 8 to page 9 (body must end by p.8; Limitations/refs/appendix don't count). I moved the diagnostics table back to the appendix to recover space but could not recompile to confirm. Next session: recompile on scratch, check acl_latex.aux for sec:conclusion → page 8; if still 9, trim ~8–12 lines from the body (candidates listed in task.md).
+
+One decision for you (R4-4 tradeoff): the reviewer wanted the validation table in the main text. I kept the prose in the body but left the table in the appendix for page budget. If trimming frees room, it can be promoted — noted in task.md.

@@ -134,6 +134,91 @@ Steps E/F/G that follow say "after analysis frozen" meaning after A+B+C+D, not m
   "re-drawn"). PDFs refreshed. (Response-to-reviewers letter skipped per user.) See update.md (12).
 
 
+### Review-round-4 fixes (paper/review.md; Borderline Findings 2.5/5, revise-before-submit — NOT a reject).
+Soundness 3 / Excitement 3 / Overall 2.5. Reviewer excludes clinical validity. This is a DIFFERENT, newer
+review than the round-3 weak-reject above (that one is fully closed). Reviewer's own priority order for a
+stronger Findings rec (review.md line 95): (1) justify donor-test assumptions in main text, (2) tighten
+majority-baseline + nonsignificant interpretation, (3) bring methodological validation into main text.
+For a MAIN-conference rec they additionally want (R4-1) a demonstration the protocol beats simpler diagnostics.
+
+Same DEPENDENCY RULE as round 3: any item needing new analysis (R4-1, R4-3) lands and its numbers freeze via
+`paper_numbers` macros BEFORE the corresponding prose/table is written. Nothing hand-typed.
+
+ALREADY COVERED by round-3 work (verify only, do not redo):
+- Concern 4 (uncertainty language) — T-R18 non-detection framing already applied across abstract/Fig3/Results/
+  App D/Conclusion. R4-5 below is just a verification + one addition.
+- Concern 2 validity (collision-repair null) — already addressed by `tools/lumiere_v4_perm_validation.py` (D1
+  update, update.md (13)). The NEW part is MOVING the assumptions + a compact table into the main text (R4-4).
+- Concern 5 structure — T-R21 already moved chain/survival to appendix, compacted TCM. R4-6 is a TCM decision only.
+- HEAL-MedVQA already cited in related work (review line 59 credits it) — no new citation needed, only R4-1's
+  contrast-with-prior-diagnostics framing.
+
+OPEN DECISIONS:
+- **D3 — TCM (concern 5 / review line 81).** Reviewer: either compress TCM further OR, if it stays prominent,
+  foreground the explicit-rule condition and report its numbers directly in main text. Pick one. (Default lean:
+  keep compact + foreground explicit-rule numbers, since the condition already exists.) USER DECISION NEEDED.
+- **D4 — class-wise analysis depth (R4-3).** Full per-class confusion matrices for AIA/LIL/DSCR, or just the one
+  DSCR Llama-4-Scout matrix the reviewer named as the key example? (Default lean: DSCR Scout + a compact
+yes  per-class accuracy table; expand only if a referee asks.) USER DECISION NEEDED.
+
+EXECUTION STATUS (2026-10-07): analysis frozen, prose drafted, ONE verification step left.
+- Analysis (R4-1/R4-3) DONE + frozen: `tools/lumiere_v4_classwise.py` (new) + answer-change added to
+  `tools/lumiere_v4_donor_validation.py`; `paper_numbers` re-run added 21 macros, changed 0 existing (frozen
+  numbers intact). New generated tables: `tab_v4_confusion.tex`, extended `tab_v4_donorval.tex`.
+- Prose DONE (R4-2, R4-4 partial, R4-5, R4-6, R4-7, R4-3 sentence): compiles clean, no undefined refs/macros,
+  no stale numbers.
+- !! REMAINING HARD STEP — PAGE BUDGET. After edits the Conclusion moved to p.9 (body must end by p.8; aux:
+  sec:conclusion -> page 9). I moved the diagnostics table BACK to the appendix to recover space, but did NOT
+  recompile to confirm. NEXT: recompile on scratch (`export PATH=$PATH:/apps/texlive/2023/bin/x86_64-linux`),
+  check `acl_latex.aux` for `newlabel{sec:conclusion}{{...}{<page>}` == 8; if still 9, trim ~8-12 lines from the
+  body (candidates: tighten the new estimand paragraph in sec:controls; shorten the expanded E2 bullet; the
+  class-wise sentence in the E1 open-models paragraph). Limitations/refs/appendix do NOT count toward 8.
+- R4-4 TRADEOFF for user: reviewer wanted the validation TABLE in the MAIN text. I put the assumptions/estimand
+  PROSE in main text (sec:controls E2 bullet) but kept `tab:donorval` in the appendix for page budget. If the
+  body has room after trimming, promote the table into sec:controls (edit is staged in git history this session).
+
+NEW WORK:
+- [x] **R4-1 — Diagnostics-comparison table (concern 3; THE main-conference lever).** DONE. tab_v4_donorval now
+  has gain / answer-change / permutation columns on the known-behaviour predictors; image_shift and tracker(rho=0.4)
+  share +19.0 gain and both show high answer-change, only the tracker is flagged (92% vs 0%). Framing added to
+  Related Work + E2 bullet. (was: ) On the same known-behavior
+  predictors already built (synthetic no-tracking confounds + tracker-strengths from T-R17, plus the Gemini
+  known-positive reference), tabulate what each diagnostic concludes: raw ablation gain, answer-change rate,
+  donor gain, and the proposed association test — showing which misleading conclusion each of the first three
+  permits and the association test avoids. Reviewer notes Table 5 already holds much of this: reorganize around
+  the novelty claim, don't invent new runs. CHECK FIRST whether this is fully computable from the frozen
+  outputs (no GPU) — it should be. ANALYSIS BEFORE PROSE.
+- [ ] **R4-2 — Define the estimand explicitly (concern 1).** In Methods, name the target as *correct,
+  task-relevant image dependence under specified interventions*. State plainly that majority-baseline
+  performance is contextual evidence, NOT a necessary test for image use (54.3% < 58.7% shows aggregate accuracy
+  doesn't beat a constant predictor, not that the image is unread). Prose only; extends T-R19's narrower
+  conclusion with a named estimand.
+- [ ] **R4-3 — Class-wise / confusion-matrix evidence (concern 1).** Add class-wise accuracy or a confusion
+  matrix (at minimum DSCR Llama-4-Scout) to show what the aggregate below-majority number conceals. From saved
+  responses, no GPU. ANALYSIS BEFORE PROSE. Scope per D4.
+- [ ] **R4-4 — Donor-test assumptions into MAIN text (concern 2 + presentation, reviewer's #1 priority).** Move
+  from Appendix D into the main method: the conditional null, the exchangeability assumption, and a compact
+  validation table (Type-I calibration from perm_validation). Keep the conditional label-association test vs
+  assignment-based randomization test distinction explicit in the main text. Numbers already exist (macros).
+  Watch page budget (T-R21 left main content at exactly p.8) — trim elsewhere to make room.
+- [ ] **R4-5 — Nonsignificant-language verify + effect estimates (concern 4).** Confirm non-detection wording is
+  consistent everywhere. ADD: report effect estimates across the 5 alternative assignments ALONGSIDE the
+  significance counts (T-R16 has the numbers: Scout DSCR gain +19..+33, 1/5 significant), so it reads as
+  assignment sensitivity, not a settled absence.
+- [ ] **R4-6 — TCM (per D3).** Execute whichever D3 option is chosen.
+- [ ] **R4-7 — Trim the AIA-gate discussion (presentation).** The bootstrap-vs-exact-test disagreement gets
+  disproportionate space and no conclusion depends on it — compress. (Builds on T-R19's AIA-gate reframe; this
+  is a length trim.)
+- [ ] **R4-8 — Clarify the reproduction claim (presentation; fold into T-R9).** In the artifact README,
+  distinguish regenerating the reported tables from recomputing every supporting analysis (some validation/
+  robustness summaries enter the default workflow as precomputed inputs, with separate commands for the rest).
+
+INTENTIONAL NON-ACTIONS (recorded so they're decisions, not oversights):
+- Second dataset for generality — reviewer explicitly does NOT make it mandatory if claims stay scoped (line 65).
+- Second reference model — already an optional/open item under PENDING; reviewer doesn't require it.
+- Equivalence/minimum-effect analysis — still not doing it; non-detection framing (T-R18) is the chosen path.
+
+
 ## PENDING, in order of importance
 
     - [ ] **OUTSTANDING (optional, needs new inference):** a second reference model. Reviewer did NOT require it ("would not require a larger model leaderboard merely for completeness"); professor's call. Paper's Conclusion flags it.

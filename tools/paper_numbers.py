@@ -623,6 +623,8 @@ def donor_validation(mc: "Macros") -> None:
             continue
         mc.add(f"vfourDonorVal{tag}Gain", signed(p["gain_median"]))
         mc.add(f"vfourDonorVal{tag}Detect", f"{100 * p['detection_rate']:.0f}")
+        if p.get("answer_change_median") is not None:
+            mc.add(f"vfourDonorVal{tag}Change", f"{p['answer_change_median']:.0f}")
         if p.get("detection_ci"):
             mc.add(f"vfourDonorVal{tag}DetectLo", f"{100 * p['detection_ci'][0]:.0f}")
             mc.add(f"vfourDonorVal{tag}DetectHi", f"{100 * p['detection_ci'][1]:.0f}")
@@ -641,13 +643,49 @@ def donor_validation(mc: "Macros") -> None:
             p = pp.get(name, {})
             if p:
                 mc.add(f"vfourDonorVal{tag}Detect{ph}", f"{100 * p['detection_rate']:.0f}")
+    # Diagnostics comparison (reviewer concern 3): on each known-behaviour predictor, what does each diagnostic
+    # conclude? The donor gain and the answer-change rate are both raised by a generic image response, so each on
+    # its own would mis-credit the generic shift; only the permutation separates donor-specific tracking.
+    ROWLAB = dict(LABEL, position="Scan-position bias", image_count="Scan-count bias")
     rows = []
-    for name in ("constant", "random", "image_shift", "tracker_rho1", "tracker_rho0.7", "tracker_rho0.4"):
+    for name in ("constant", "random", "image_shift", "position", "image_count",
+                 "tracker_rho1", "tracker_rho0.7", "tracker_rho0.4"):
         p = pr.get(name)
         if not p:
             continue
-        rows.append(f"{LABEL[name]} & {signed(p['gain_median'])} & {100 * p['detection_rate']:.0f}\\% \\\\")
-    (OUT / "tab_v4_donorval.tex").write_text(tabular("lrr", ["Synthetic predictor & Donor gain (pp) & Detected ($p<.05$) \\\\"], rows))
+        chg = f"{p['answer_change_median']:.0f}" if p.get("answer_change_median") is not None else "--"
+        rows.append(f"{ROWLAB[name]} & {signed(p['gain_median'])} & {chg} & {100 * p['detection_rate']:.0f}\\% \\\\")
+    (OUT / "tab_v4_donorval.tex").write_text(tabular(
+        "lrrr", ["Synthetic predictor & Donor gain (pp) & Answer change (\\%) & Detected ($p<.05$) \\\\"], rows))
+
+
+def classwise(mc: "Macros") -> None:
+    """DSCR class-wise confusion for the worked-example model (reviewer concern 1).
+
+    Below-majority aggregate accuracy does not establish non-use of the image: the matrix shows the model recovers
+    some non-majority classes while losing majority-class items, so it is neither a constant nor a correct predictor."""
+    cw = load("results/lumiere_v4_classwise.json")
+    if not cw:
+        return
+    SH = {"Progressive disease": "PD", "Complete response": "CR", "Stable disease": "SD", "Partial response": "PR"}
+    mc.add("vfourConfScoutN", cw["n"])
+    mc.add("vfourConfScoutAcc", f1(cw["accuracy"]))
+    mc.add("vfourConfScoutMajority", f1(cw["majority_share"]))
+    mc.add("vfourConfOnMajority", cw["correct_on_majority"])
+    mc.add("vfourConfOnMajorityN", cw["key_n"]["Progressive disease"])
+    mc.add("vfourConfOffMajority", cw["correct_off_majority"])
+    mc.add("vfourConfOffMajorityN", cw["n"] - cw["key_n"]["Progressive disease"])
+    for cls, sh in SH.items():
+        mc.add(f"vfourConfRecall{sh}", f"{cw['recall'][cls]:.0f}")
+        mc.add(f"vfourConfKeyN{sh}", cw["key_n"][cls])
+    # confusion table: rows = key (true) class, cols = predicted class, last col the per-class recall
+    cols = list(SH)
+    header = ["True key & " + " & ".join(SH[c] for c in cols) + " & Recall (\\%) \\\\"]
+    rows = []
+    for kc in cols:
+        cells = " & ".join(str(cw["matrix"][kc][pc]) for pc in cols)
+        rows.append(f"{SH[kc]} ($n={cw['key_n'][kc]}$) & {cells} & {cw['recall'][kc]:.0f} \\\\")
+    (OUT / "tab_v4_confusion.tex").write_text(tabular("lrrrrr", header, rows))
 
 
 def robustness(mc: "Macros") -> None:
@@ -730,6 +768,7 @@ def main() -> None:
     v4_supplement(mc)
     v4_inputcheck(mc)
     donor_validation(mc)
+    classwise(mc)
     robustness(mc)
     perm_validation(mc)
     OUT.mkdir(parents=True, exist_ok=True)

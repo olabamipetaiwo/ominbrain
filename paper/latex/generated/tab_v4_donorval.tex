@@ -1,12 +1,14 @@
-\begin{tabular}{lrr}
+\begin{tabular}{lrrr}
 \toprule
-\hdrrow Synthetic predictor & Donor gain (pp) & Detected ($p<.05$) \\
+\hdrrow Synthetic predictor & Donor gain (pp) & Answer change (\%) & Detected ($p<.05$) \\
 \midrule
-Constant answer & +0.0 & 0\% \\
-\bandrow Random answer & +2.4 & 0\% \\
-Generic image shift & +19.0 & 0\% \\
-\bandrow Tracker ($\rho=1$) & +66.7 & 100\% \\
-Tracker ($\rho=0.7$) & +45.2 & 100\% \\
-\bandrow Tracker ($\rho=0.4$) & +19.0 & 92\% \\
+Constant answer & +0.0 & 0 & 0\% \\
+\bandrow Random answer & +2.4 & 79 & 0\% \\
+Generic image shift & +19.0 & 100 & 0\% \\
+\bandrow Scan-position bias & $-$2.4 & 64 & 0\% \\
+Scan-count bias & $-$9.5 & 57 & 0\% \\
+\bandrow Tracker ($\rho=1$) & +66.7 & 45 & 100\% \\
+Tracker ($\rho=0.7$) & +45.2 & 55 & 100\% \\
+\bandrow Tracker ($\rho=0.4$) & +19.0 & 63 & 92\% \\
 \bottomrule
 \end{tabular}
