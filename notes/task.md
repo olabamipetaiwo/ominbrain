@@ -12,6 +12,19 @@ When a task is confirmed finished, delete it from this file (history goes in `pa
 ---
 ## NEW TASKS (delete each when done)
 
+### Review-round-4 fixes (5-point follow-up) — ALL DONE 2026-10-07. See paper/update.md (21).
+- [x] **R4-1 donor-test exchangeability (substantive).** New stratified, donor-grouped permutation
+  (`tools/lumiere_v4_strat_perm.py`), now the single engine in `donor_dependence` (supplement/donor_validation/
+  robustness inherit). Type-I 3.9%/3.8% (calibrated). Faithful restatement: MedGemma/AIA raw p=.040 but 0/12 survive
+  Holm; Scout/DSCR .293; no donor-specific tracking survives correction. This also RESOLVES the parked D2
+  correlated-errors-for-reused-donors item below (keys now move as donor blocks).
+- [x] **R4-2 interpretation.** "confounded" removed (intro + E1 caption); Figure 3 fail-crosses → neutral dashes.
+- [x] **R4-3 release mismatch.** classwise (script+results+table) + strat_perm added to the anon build; rebuilt
+  (0 scrub hits), reproduce.sh round-trip identical; stale donorval refreshed.
+- [x] **R4-4 Table 6 overflow.** `\resizebox{\columnwidth}` on tab_v4_donorval; detection column no longer clipped.
+- [x] **R4-5 protocol chronology.** Restored locked "amended twice after an initial run ... first-round runs not
+  reported" (user chose restore over the drifted "amended before the reported runs").
+
 ### Review-round-3 fixes (review.md, 2026-10-05; weak reject). ORDERED — do not skip ahead.
 Dependency rule (HARD — no prose is written until all experiments/analysis are done):
 Step A (code) → Step B (regenerate) and Steps C/D (compute) in parallel → ONLY THEN Steps E–G
@@ -35,6 +48,9 @@ Steps E/F/G that follow say "after analysis frozen" meaning after A+B+C+D, not m
   bootstrap + LOO already respect shared donors, any permutation-p inflation is conservative for the null, and the
   Gemini 5/5 reference control demonstrates real power. If a referee re-raises class-specific/correlated tracking, pick
   up the correlated-errors confound first (~1h, a validity not power check); leave class-specific as a stated limitation.
+  - UPDATE 2026-10-07 (R4-1): the correlated-errors-for-reused-donors half is now RESOLVED, not just parked — the
+    reported permutation is the stratified, donor-GROUPED test (reused donors move as one block within scan-count
+    stratum), Type-I calibrated at 3.9%/3.8%. class-specific tracking remains out (stated limitation).
 - Note: review concern 2's "define a minimum tracking effect + equivalence analysis" is intentionally NOT done — that
   path is only needed to CLAIM absence; we chose the non-detection framing (T-R18) instead.
 
