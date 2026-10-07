@@ -34,7 +34,8 @@ ROOT = Path(".")
 CODE_DIRS = ["src", "config", "tests"]
 TOOLS = ["lumiere_v4_stats", "lumiere_v4_supplement", "lumiere_v4_baselines", "lumiere_v4_input_check", "paper_numbers",
          "paper_v4_example", "lumiere_gating_stats", "export_release_prompts", "compute_budget",
-         "lumiere_v4_donor_validation", "lumiere_v4_robustness", "lumiere_v4_perm_validation", "lumiere_v4_altpairs"]
+         "lumiere_v4_donor_validation", "lumiere_v4_robustness", "lumiere_v4_perm_validation", "lumiere_v4_altpairs",
+         "lumiere_v4_classwise", "lumiere_v4_strat_perm"]
 DATA_DIRS = ["data/lumiere/v4/reviewed", "data/lumiere/v4/facts", "data/lumiere/v4/measurements", "data/lumiere/v4/slices",
              "data/lumiere/v4/alt_pairs"]   # the released alternative donor-assignment identities (round-3 reviewer Q1)
 DATA_FILES = ["data/lumiere/v4/selection_report.json", "data/lumiere/v4/counterfactual_pairs.json",
@@ -45,11 +46,13 @@ RESULT_FILES = ["results/compute_budget.json",
                 # robustness and permutation-validity macros; robustness required alternative-assignment model runs and
                 # is not regenerated from scratch by reproduce.sh)
                 "results/lumiere_v4_donor_validation.json", "results/lumiere_v4_perm_validation.json",
-                "results/lumiere_v4_robustness_Llama-4-Scout.json", "results/lumiere_v4_robustness_Gemini-3.6-Flash.json"]
+                "results/lumiere_v4_robustness_Llama-4-Scout.json", "results/lumiere_v4_robustness_Gemini-3.6-Flash.json",
+                "results/lumiere_v4_classwise.json", "results/lumiere_v4_strat_perm.json"]
 EXPECTED = ["results/lumiere_v4_stats.json", "results/lumiere_v4_stats.md", "results/lumiere_v4_supplement.json",
             "results/lumiere_v4_supplement.md", "results/lumiere_v4_baselines.json", "results/lumiere_v4_baselines.md"]
 GENERATED = ["numbers.json", "numbers.tex", "tab_v4_e1.tex", "tab_v4_e2.tex", "tab_v4_e3.tex", "tab_v4_e3trans.tex",
-             "tab_v4_e5.tex", "tab_v4_ctrl.tex", "tab_v4_handling.tex", "tab_v4_inputcheck.tex", "tab_v4_donorval.tex"]
+             "tab_v4_e5.tex", "tab_v4_ctrl.tex", "tab_v4_handling.tex", "tab_v4_inputcheck.tex", "tab_v4_donorval.tex",
+             "tab_v4_confusion.tex"]
 # text that must not appear in shipped files (cluster, account, author and affiliation strings)
 SCRUB = [r"ta117847", r"so589980", r"/blue/", r"/home/", r"\bucf\b", r"UCF", r"hipergator", r"HiPerGator", r"Song Wang",
          r"teeola", r"gmail", r"@\w+\.(edu|com)", r"ANTHROPIC_API_KEY=", r"sk-[A-Za-z0-9]{10,}"]

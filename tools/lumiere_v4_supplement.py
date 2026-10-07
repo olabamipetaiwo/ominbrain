@@ -261,14 +261,17 @@ def donor_dependence(recs, rng, n_perm: int = 5000) -> dict:
         # rebuild it to translate answer letters back to option texts
         from src.lumiere_loader import _shuffle_options
         opts = {}
+        strat = {}
         for c in cs:
             it = next(x for x in json.loads(Path(f"data/lumiere/v4/reviewed/{c}.json").read_text()) if x["id"].endswith("_" + ph))
             opts[c] = it["options"] if it.get("ordered_options") else _shuffle_options(it["options"], it["correct_answer"], it["id"])[0]
+            strat[c] = len(it["image_files"])      # equal-image-count stratum (DSCR 2 or 3 slices; AIA/LIL 1)
         sw = [recs[(c, ph, "swap")] for c in cs]
         tx = [recs[(c, ph, "text")] for c in cs]
         donor = [r["donor"] for r in sw]
         dkey = [r["donor_key_text"] for r in sw]
         okey = [r["own_key_text"] for r in sw]
+        stratum = [strat[c] for c in cs]
         sw_txt = [opts[c].get(r["model_answer"]) for c, r in zip(cs, sw)]
         tx_txt = [opts[c].get(r["model_answer"]) for c, r in zip(cs, tx)]
         g = np.array([float(s_ == d) - float(t_ == d) for s_, t_, d in zip(sw_txt, tx_txt, dkey)])
@@ -284,31 +287,44 @@ def donor_dependence(recs, rng, n_perm: int = 5000) -> dict:
         boot = sums[pick].sum(axis=1) / sizes[pick].sum(axis=1)
         # leave-one-donor-out: gain after dropping every recipient of one donor
         loo = [float((g.sum() - sums[k]) / (len(g) - sizes[k])) * 100 for k in range(len(groups))]
-        # assignment permutation
+        # assignment permutation: stratified, donor-grouped (permutes donor keys only within the equal-image-count
+        # stratum and keeps each reused donor's recipients as one block). Single engine, so the synthetic-predictor
+        # validation and the robustness re-runs (which also call this function) use the same test.
         obs = float(g.mean())
         n = len(cs)
-        ge = 0
-        done = 0
-        for _ in range(n_perm):
-            perm = list(rng.permutation(n))
-            for _fix in range(20):
-                bad = [i for i in range(n) if dkey[perm[i]] == okey[i]]
-                if not bad:
-                    break
-                for i in bad:
-                    j = int(rng.integers(0, n))
-                    perm[i], perm[j] = perm[j], perm[i]
-            else:
-                continue
-            gp = np.mean([float(s_ == dkey[perm[i]]) - float(t_ == dkey[perm[i]]) for i, (s_, t_) in enumerate(zip(sw_txt, tx_txt))])
-            done += 1
-            ge += gp >= obs - 1e-12
+        from tools.lumiere_v4_strat_perm import perm_p_from_arrays
+        perm_p, done = perm_p_from_arrays(sw_txt, tx_txt, dkey, okey, donor, stratum, rng, n_perm=n_perm)
         uses = Counter(donor)
         out[ph] = {"n": n, "distinct_donors": len(uses), "max_uses": max(uses.values()), "donors_used_twice": sum(v > 1 for v in uses.values()),
+                   "strata": dict(Counter(stratum)),
                    "loo_donor_min": min(loo), "loo_donor_max": max(loo),
                    "gain": obs * 100, "cluster_ci": [float(np.percentile(boot, 2.5)) * 100, float(np.percentile(boot, 97.5)) * 100],
-                   "perm_p": (1 + ge) / (1 + done), "n_perm": done}
+                   "perm_p": perm_p, "n_perm": done}
     return out
+
+
+def _unstratified_perm_p(sw_txt, tx_txt, dkey, okey, rng, n_perm: int = 5000) -> float:
+    """The earlier unstratified, ungrouped donor-key permutation (collision-repaired whole permutation), kept only as
+    a diagnostic comparison for ``tools.lumiere_v4_strat_perm``; not used in the reported results."""
+    n = len(sw_txt)
+    obs = float(np.mean([float(s_ == d) - float(t_ == d) for s_, t_, d in zip(sw_txt, tx_txt, dkey)]))
+    ge = 0
+    done = 0
+    for _ in range(n_perm):
+        perm = list(rng.permutation(n))
+        for _fix in range(20):
+            bad = [i for i in range(n) if dkey[perm[i]] == okey[i]]
+            if not bad:
+                break
+            for i in bad:
+                j = int(rng.integers(0, n))
+                perm[i], perm[j] = perm[j], perm[i]
+        else:
+            continue
+        gp = np.mean([float(s_ == dkey[perm[i]]) - float(t_ == dkey[perm[i]]) for i, (s_, t_) in enumerate(zip(sw_txt, tx_txt))])
+        done += 1
+        ge += gp >= obs - 1e-12
+    return (1 + ge) / (1 + done)
 
 
 def pjrf(recs, rng) -> dict:

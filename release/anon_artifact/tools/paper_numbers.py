@@ -623,6 +623,8 @@ def donor_validation(mc: "Macros") -> None:
             continue
         mc.add(f"vfourDonorVal{tag}Gain", signed(p["gain_median"]))
         mc.add(f"vfourDonorVal{tag}Detect", f"{100 * p['detection_rate']:.0f}")
+        if p.get("answer_change_median") is not None:
+            mc.add(f"vfourDonorVal{tag}Change", f"{p['answer_change_median']:.0f}")
         if p.get("detection_ci"):
             mc.add(f"vfourDonorVal{tag}DetectLo", f"{100 * p['detection_ci'][0]:.0f}")
             mc.add(f"vfourDonorVal{tag}DetectHi", f"{100 * p['detection_ci'][1]:.0f}")
@@ -641,13 +643,49 @@ def donor_validation(mc: "Macros") -> None:
             p = pp.get(name, {})
             if p:
                 mc.add(f"vfourDonorVal{tag}Detect{ph}", f"{100 * p['detection_rate']:.0f}")
+    # Diagnostics comparison (reviewer concern 3): on each known-behaviour predictor, what does each diagnostic
+    # conclude? The donor gain and the answer-change rate are both raised by a generic image response, so each on
+    # its own would mis-credit the generic shift; only the permutation separates donor-specific tracking.
+    ROWLAB = dict(LABEL, position="Scan-position bias", image_count="Scan-count bias")
     rows = []
-    for name in ("constant", "random", "image_shift", "tracker_rho1", "tracker_rho0.7", "tracker_rho0.4"):
+    for name in ("constant", "random", "image_shift", "position", "image_count",
+                 "tracker_rho1", "tracker_rho0.7", "tracker_rho0.4"):
         p = pr.get(name)
         if not p:
             continue
-        rows.append(f"{LABEL[name]} & {signed(p['gain_median'])} & {100 * p['detection_rate']:.0f}\\% \\\\")
-    (OUT / "tab_v4_donorval.tex").write_text(tabular("lrr", ["Synthetic predictor & Donor gain (pp) & Detected ($p<.05$) \\\\"], rows))
+        chg = f"{p['answer_change_median']:.0f}" if p.get("answer_change_median") is not None else "--"
+        rows.append(f"{ROWLAB[name]} & {signed(p['gain_median'])} & {chg} & {100 * p['detection_rate']:.0f}\\% \\\\")
+    (OUT / "tab_v4_donorval.tex").write_text(tabular(
+        "lrrr", ["Synthetic predictor & Donor gain (pp) & Answer change (\\%) & Detected ($p<.05$) \\\\"], rows))
+
+
+def classwise(mc: "Macros") -> None:
+    """DSCR class-wise confusion for the worked-example model (reviewer concern 1).
+
+    Below-majority aggregate accuracy does not establish non-use of the image: the matrix shows the model recovers
+    some non-majority classes while losing majority-class items, so it is neither a constant nor a correct predictor."""
+    cw = load("results/lumiere_v4_classwise.json")
+    if not cw:
+        return
+    SH = {"Progressive disease": "PD", "Complete response": "CR", "Stable disease": "SD", "Partial response": "PR"}
+    mc.add("vfourConfScoutN", cw["n"])
+    mc.add("vfourConfScoutAcc", f1(cw["accuracy"]))
+    mc.add("vfourConfScoutMajority", f1(cw["majority_share"]))
+    mc.add("vfourConfOnMajority", cw["correct_on_majority"])
+    mc.add("vfourConfOnMajorityN", cw["key_n"]["Progressive disease"])
+    mc.add("vfourConfOffMajority", cw["correct_off_majority"])
+    mc.add("vfourConfOffMajorityN", cw["n"] - cw["key_n"]["Progressive disease"])
+    for cls, sh in SH.items():
+        mc.add(f"vfourConfRecall{sh}", f"{cw['recall'][cls]:.0f}")
+        mc.add(f"vfourConfKeyN{sh}", cw["key_n"][cls])
+    # confusion table: rows = key (true) class, cols = predicted class, last col the per-class recall
+    cols = list(SH)
+    header = ["True key & " + " & ".join(SH[c] for c in cols) + " & Recall (\\%) \\\\"]
+    rows = []
+    for kc in cols:
+        cells = " & ".join(str(cw["matrix"][kc][pc]) for pc in cols)
+        rows.append(f"{SH[kc]} ($n={cw['key_n'][kc]}$) & {cells} & {cw['recall'][kc]:.0f} \\\\")
+    (OUT / "tab_v4_confusion.tex").write_text(tabular("lrrrrr", header, rows))
 
 
 def robustness(mc: "Macros") -> None:
@@ -707,6 +745,53 @@ def perm_validation(mc: "Macros") -> None:
         mc.add(f"vfourPermValMedP{tag}", pfmt(r["p_median"]))
 
 
+def strat_perm(mc: "Macros") -> None:
+    """Stratified, donor-grouped permutation (reviewer round 4, point 1). The reported donor-permutation p (emitted by
+    v4_supplement from donor_dependence) now uses this test; here we add its Type-I calibration and the open-model
+    family summary (how many of the twelve cells reach p<.05 raw and after Holm)."""
+    sp = load("results/lumiere_v4_strat_perm.json")
+    if not sp:
+        return
+    cells = sp["cells"]
+    by = {(c["model"], c["phase"]): c for c in cells}
+    d = by.get(("Llama-4-Scout", "DSCR"))
+    if d:
+        strata = {int(k): v for k, v in d["strata"].items()}
+        mc.add("vfourStratDSCRTwo", strata.get(2, 0))
+        mc.add("vfourStratDSCRThree", strata.get(3, 0))
+        mc.add("vfourStratDSCRBlocks", d["n_blocks"])
+        mc.add("vfourStratDSCRTwice", d["donors_used_twice"])
+    sims = None
+    for (m, ph), c in by.items():
+        if "typeI" in c:
+            tag = ph + TAG[m]
+            t = c["typeI"]; sims = t["sims"]
+            mc.add(f"vfourStratTypeI{tag}", f"{100 * t['typeI_05']:.1f}")
+            mc.add(f"vfourStratTypeILo{tag}", f"{100 * t['typeI_05_ci'][0]:.1f}")
+            mc.add(f"vfourStratTypeIHi{tag}", f"{100 * t['typeI_05_ci'][1]:.1f}")
+            mc.add(f"vfourStratMedP{tag}", pfmt(t["p_median"]))
+    if sims:
+        mc.add("vfourStratSims", f"{sims:,}")
+    # Family summary computed from the REPORTED per-cell donor-permutation p's (v4_supplement.donor_dependence), so the
+    # "how many of the twelve cells" counts match the p's printed in the appendix exactly. Holm over the twelve cells.
+    sup = load("results/lumiere_v4_supplement.json")
+    dd = {(m, ph): sup["models"][m]["donor_dependence"][ph]["perm_p"]
+          for m in sup["models"] if "donor_dependence" in sup["models"][m]
+          for ph in sup["models"][m]["donor_dependence"]}
+    ps = sorted(dd.items(), key=lambda kv: kv[1])
+    m_cnt = len(ps)
+    holm = {}
+    run = 0.0
+    for rank, (cell, p) in enumerate(ps):
+        run = max(run, min(1.0, p * (m_cnt - rank)))
+        holm[cell] = run
+    mc.add("vfourStratNCells", m_cnt)
+    mc.add("vfourStratNBelowRaw", sum(p < 0.05 for p in dd.values()))
+    mc.add("vfourStratNBelowHolm", sum(h < 0.05 for h in holm.values()))
+    mc.add("vfourStratRawAIAMedGemma", pfmt(dd[("MedGemma-4B", "AIA")]))
+    mc.add("vfourStratHolmAIAMedGemma", pfmt(holm[("MedGemma-4B", "AIA")]))
+
+
 def check_stale() -> list[str]:
     tex = Path("paper/latex/acl_latex.tex").read_text()
     return [pat for pat in STALE if re.search(pat, tex)]
@@ -730,8 +815,10 @@ def main() -> None:
     v4_supplement(mc)
     v4_inputcheck(mc)
     donor_validation(mc)
+    classwise(mc)
     robustness(mc)
     perm_validation(mc)
+    strat_perm(mc)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numbers.tex").write_text(mc.tex())
     (OUT / "numbers.json").write_text(json.dumps(mc.d, indent=1, sort_keys=True))

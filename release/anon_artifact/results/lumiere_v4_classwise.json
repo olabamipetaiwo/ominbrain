@@ -1,0 +1,65 @@
+{
+ "model": "Llama-4-Scout",
+ "phase": "DSCR",
+ "condition": "own",
+ "n": 46,
+ "accuracy": 54.34782608695652,
+ "majority_share": 58.69565217391305,
+ "classes": [
+  "Progressive disease",
+  "Complete response",
+  "Stable disease",
+  "Partial response"
+ ],
+ "matrix": {
+  "Progressive disease": {
+   "Progressive disease": 19,
+   "Complete response": 4,
+   "Stable disease": 2,
+   "Partial response": 2,
+   "unparseable": 0
+  },
+  "Complete response": {
+   "Progressive disease": 3,
+   "Complete response": 4,
+   "Stable disease": 0,
+   "Partial response": 2,
+   "unparseable": 0
+  },
+  "Stable disease": {
+   "Progressive disease": 4,
+   "Complete response": 0,
+   "Stable disease": 2,
+   "Partial response": 0,
+   "unparseable": 0
+  },
+  "Partial response": {
+   "Progressive disease": 4,
+   "Complete response": 0,
+   "Stable disease": 0,
+   "Partial response": 0,
+   "unparseable": 0
+  }
+ },
+ "key_n": {
+  "Progressive disease": 27,
+  "Complete response": 9,
+  "Stable disease": 6,
+  "Partial response": 4
+ },
+ "pred_n": {
+  "Progressive disease": 30,
+  "Complete response": 8,
+  "Stable disease": 4,
+  "Partial response": 4,
+  "unparseable": 0
+ },
+ "recall": {
+  "Progressive disease": 70.37037037037037,
+  "Complete response": 44.44444444444444,
+  "Stable disease": 33.333333333333336,
+  "Partial response": 0.0
+ },
+ "correct_on_majority": 19,
+ "correct_off_majority": 6
+}

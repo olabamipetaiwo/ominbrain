@@ -1,0 +1,219 @@
+{
+ "nominal_alpha": 0.05,
+ "n_perm": 50000,
+ "seed": 20260925,
+ "cells": [
+  {
+   "model": "MedGemma-4B",
+   "phase": "AIA",
+   "n": 46,
+   "strata": {
+    "1": 46
+   },
+   "n_blocks": 31,
+   "donors_used_twice": 15,
+   "gain_pp": 10.869565217391305,
+   "p_strat_grouped": 0.03869922601547969,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.052682107284291374,
+   "typeI": {
+    "sims": 1000,
+    "typeI_05": 0.038,
+    "typeI_05_ci": [
+     0.027808845539615407,
+     0.05172720875420944
+    ],
+    "rej_10": 0.092,
+    "p_median": 0.6114442778610695
+   },
+   "p_strat_holm": 0.4643907121857563
+  },
+  {
+   "model": "MedGemma-4B",
+   "phase": "LIL",
+   "n": 38,
+   "strata": {
+    "1": 38
+   },
+   "n_blocks": 30,
+   "donors_used_twice": 8,
+   "gain_pp": -7.894736842105263,
+   "p_strat_grouped": 0.8965220695586088,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.9584983399335973,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "MedGemma-4B",
+   "phase": "DSCR",
+   "n": 42,
+   "strata": {
+    "2": 24,
+    "3": 18
+   },
+   "n_blocks": 29,
+   "donors_used_twice": 13,
+   "gain_pp": 4.761904761904762,
+   "p_strat_grouped": 0.2964540709185816,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.26350229514601037,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Gemma-3-12B",
+   "phase": "AIA",
+   "n": 46,
+   "strata": {
+    "1": 46
+   },
+   "n_blocks": 31,
+   "donors_used_twice": 15,
+   "gain_pp": 0.0,
+   "p_strat_grouped": 0.622987540249195,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.6298651946077843,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Gemma-3-12B",
+   "phase": "LIL",
+   "n": 38,
+   "strata": {
+    "1": 38
+   },
+   "n_blocks": 30,
+   "donors_used_twice": 8,
+   "gain_pp": 5.263157894736842,
+   "p_strat_grouped": 0.3138537229255415,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.18648745949837994,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Gemma-3-12B",
+   "phase": "DSCR",
+   "n": 42,
+   "strata": {
+    "2": 24,
+    "3": 18
+   },
+   "n_blocks": 29,
+   "donors_used_twice": 13,
+   "gain_pp": 4.761904761904762,
+   "p_strat_grouped": 0.9452410951780964,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.2038040824299248,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Gemma-3-27B",
+   "phase": "AIA",
+   "n": 46,
+   "strata": {
+    "1": 46
+   },
+   "n_blocks": 31,
+   "donors_used_twice": 15,
+   "gain_pp": 4.3478260869565215,
+   "p_strat_grouped": 0.5171296574068519,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.43213728549141966,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Gemma-3-27B",
+   "phase": "LIL",
+   "n": 38,
+   "strata": {
+    "1": 38
+   },
+   "n_blocks": 30,
+   "donors_used_twice": 8,
+   "gain_pp": 5.263157894736842,
+   "p_strat_grouped": 0.17081658366832664,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.21350854034161365,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Gemma-3-27B",
+   "phase": "DSCR",
+   "n": 42,
+   "strata": {
+    "2": 24,
+    "3": 18
+   },
+   "n_blocks": 29,
+   "donors_used_twice": 13,
+   "gain_pp": 2.380952380952381,
+   "p_strat_grouped": 0.5843283134337314,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.062237523195624575,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Llama-4-Scout",
+   "phase": "AIA",
+   "n": 46,
+   "strata": {
+    "1": 46
+   },
+   "n_blocks": 31,
+   "donors_used_twice": 15,
+   "gain_pp": 2.1739130434782608,
+   "p_strat_grouped": 0.3339733205335893,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.32445297811912477,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Llama-4-Scout",
+   "phase": "LIL",
+   "n": 38,
+   "strata": {
+    "1": 38
+   },
+   "n_blocks": 30,
+   "donors_used_twice": 8,
+   "gain_pp": 7.894736842105263,
+   "p_strat_grouped": 0.15839683206335872,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.35555422216888677,
+   "p_strat_holm": 1.0
+  },
+  {
+   "model": "Llama-4-Scout",
+   "phase": "DSCR",
+   "n": 42,
+   "strata": {
+    "2": 24,
+    "3": 18
+   },
+   "n_blocks": 29,
+   "donors_used_twice": 13,
+   "gain_pp": 28.57142857142857,
+   "p_strat_grouped": 0.29729405411891763,
+   "accepted": 50000,
+   "p_unstratified_shipped": 0.24550737376696943,
+   "typeI": {
+    "sims": 1000,
+    "typeI_05": 0.039,
+    "typeI_05_ci": [
+     0.028658799196088068,
+     0.052869601300564
+    ],
+    "rej_10": 0.067,
+    "p_median": 0.5669665167416292
+   },
+   "p_strat_holm": 1.0
+  }
+ ],
+ "family_summary": {
+  "n_cells": 12,
+  "n_below_05_raw": 1,
+  "n_below_05_holm": 0,
+  "cells_below_05_raw": [
+   "MedGemma-4B/AIA=0.039"
+  ]
+ }
+}

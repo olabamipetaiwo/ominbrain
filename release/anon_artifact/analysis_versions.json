@@ -1,5 +1,5 @@
 {
- "source_commit": "266537fb0cdc4073d7ca6de396c5407593616da7",
+ "source_commit": "5b4f378287357ec3e91628d7e93c0a7d14108515",
  "environment": {
   "python": "3.12.5",
   "numpy": "2.3.5",
@@ -15,17 +15,19 @@
  "min_stamp": "20260928",
  "script_sha256": {
   "lumiere_v4_stats": "890f5728838f8926d640963594b65ca75522c33bbd47809d07396a0f5b1bdf55",
-  "lumiere_v4_supplement": "f5583945588bc5a2c7b537bd3f2e4e6f41a824b638955a944d398971687e1264",
+  "lumiere_v4_supplement": "9bf34c89c54138ea4d22c85d64e2f127c1202fbf7ea0fc3dec88eaf22ca2bc7d",
   "lumiere_v4_baselines": "c750201260bc24f54b33d5c4e68cf3d99df12b87042a330ab39a02d9ffc6673d",
   "lumiere_v4_input_check": "15a7a661812e46c8093e95d72f9276bb878662de3c5946af4d17dbdb57021537",
-  "paper_numbers": "27ac5e2ba6d4e23f1e8931c04a88434d2822ed5c92acc0aabeb7d10298abb46e",
+  "paper_numbers": "83e2bd625d393e9c762a2a2e971baba20f4c30d8c5235e327f044cddc77debc1",
   "paper_v4_example": "8aacaf8deffd50f0ef009c879af086d692de9e518212c760477813e425f2fac1",
   "lumiere_gating_stats": "cbd810b63bd4137dd210dfbe0339c529eba96a1d18571edab5c9986dba149eec",
   "export_release_prompts": "388c711118d9ad8f2cee28f960b4eb8d8d4dbe65f81b167594c05a4227ca8dfe",
   "compute_budget": "4d50c70b8ac62ba7478eaf2467b8d0522bf12ecef555a26793e4985c30078c60",
-  "lumiere_v4_donor_validation": "1b508f8a650214efe719d64a8e9208f22d998029f662533df46c6a80354b7bc7",
+  "lumiere_v4_donor_validation": "95c59f47629312ee1c377ba8927a013b29b10a7683a183d6530a4cafbe4215a8",
   "lumiere_v4_robustness": "4f19914740ec64c9479833f333a1e9702cd44a653771c6a56cb9d6a9cc40c2bd",
   "lumiere_v4_perm_validation": "82f490fcae0e8e7ab96a57757bb138b84eebacfd5ece444c60a3b647663b40ec",
-  "lumiere_v4_altpairs": "e6f6cbc1f9db9babd66f7d995e0ee91dd4cb53b7974a68d78626e9d2515ffaa0"
+  "lumiere_v4_altpairs": "e6f6cbc1f9db9babd66f7d995e0ee91dd4cb53b7974a68d78626e9d2515ffaa0",
+  "lumiere_v4_classwise": "7a348bb73fe91cdc2703545492a15ad31c0c14d2366ac39d8b1fb91eae11f9fe",
+  "lumiere_v4_strat_perm": "7c3e37e0f61c5292a0fb4b8414f4e54414cc70f7b123b3e62e0a3c93e4f8e332"
  }
 }
