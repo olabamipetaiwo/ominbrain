@@ -3,9 +3,13 @@
 Everything needed to check the paper's numbers. No model is run: the saved model responses are re-analysed.
 
 ## Quick start
-    python -m venv .venv && . .venv/bin/activate
-    pip install numpy pandas scipy scikit-learn pillow matplotlib
+Requires **Python 3.12 or newer** (the analysis uses 3.12 syntax; 3.9/3.10/3.11 will not run it) and internet access for `pip`. Only three packages are needed:
+
+    python3.12 -m venv .venv && . .venv/bin/activate
+    pip install numpy==2.3.5 scipy==1.18.1 pandas==3.0.5
     bash reproduce.sh
+
+(These are the versions in `analysis_versions.json`; newer compatible releases also work. No GPU, no model run.)
 
 Takes a few minutes on a CPU. Success looks like: every line ends in `identical`, and the v4-macro comparison ends in `0 differ`.
 The regenerated tables are written to `generated/` (`tab_v4_*.tex`); the numbers cited in the paper are `generated/numbers.json`.

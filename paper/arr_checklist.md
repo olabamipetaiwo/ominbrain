@@ -27,7 +27,7 @@ DeepBraTumIA/HD-GLIO-AUTO (Kickingereder et al. 2019), HD-BET (Isensee et al. 20
 demographics, completeness, imaging — verified via the Figshare API, 2026-09-28), but the readme PDF itself separately states "This dataset is provided for
 non-commercial use." We treat the stated restriction as binding and use the data for non-commercial research only. OmniBrainBench: CC BY-SA 3.0 (dataset card).
 MedGemma: Health AI Developer Foundations terms of use. Gemma-3: Gemma Terms of Use and Prohibited Use Policy. Llama-4-Scout: Llama 4 Community License Agreement
-and Acceptable Use Policy. Gemini: Google's Gemini API terms. We release no LUMIERE images. Not verified: RadLex and NCIt licence names (KAB appendix only), and
+and Acceptable Use Policy. Gemini: Google's Gemini API terms. We release LUMIERE-derived slices and measurements in the anonymous artifact under LUMIERE's non-commercial research terms (with attribution); we do not redistribute the raw LUMIERE imaging archive. Not verified: RadLex and NCIt licence names (KAB appendix only), and
 whether the Llama 4 acceptable-use policy has a geographic clause for multimodal models (we are US-based; check before submission if the authors are elsewhere).
 
 **B3. Use consistent with intended use?** Yes, Appendix B: non-commercial research evaluation, matching LUMIERE's terms; models used for research evaluation only.
@@ -71,6 +71,6 @@ We recruited no annotators or participants. The expert RANO ratings are part of 
 **E1.** Yes, Ethics Statement: Claude Code helped write and run the analysis code and edit the text; the authors are responsible for all content.
 
 ## Open items for the authors
-1. Code/data release plan: deferred, not urgent now — revisit at camera-ready. Current text says we do not release LUMIERE images and that derived items would carry non-commercial terms.
+1. Code/data release: the anonymous reproducibility artifact is released now (code, the item set including LUMIERE-derived slices and measurements, and saved model responses), under LUMIERE's non-commercial research terms with attribution; the raw LUMIERE imaging archive is not redistributed.
 
 Resolved (2026-09-28): IRB determination (D4, not applicable), model technical-report citations (B1, superseded 2026-09-28: MedGemma and Gemma 3 reports cited for model identification only), named LUMIERE license (B2, CC0 metadata vs. stated non-commercial restriction, both now recorded).
