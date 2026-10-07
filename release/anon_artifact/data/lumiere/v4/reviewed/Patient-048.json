@@ -1,0 +1,202 @@
+[
+  {
+    "patient_id": "Patient-048",
+    "leak_check": [],
+    "needs_expert_judgment": true,
+    "review_status": "pending",
+    "image_dir": "data/lumiere/v4/slices/Patient-048",
+    "id": "Patient-048_AIA",
+    "clinical_phase": "Anatomical and Imaging Assessment",
+    "task_label": "Imaging Modality Identification",
+    "timepoint": "week-045",
+    "question": "The image is a single axial slice from a brain MRI examination of a patient with glioblastoma (skull-stripped and registered to a standard template). Which MRI sequence does this image show?",
+    "options": {
+      "A": "T1-weighted, before contrast",
+      "B": "T1-weighted, after gadolinium contrast",
+      "C": "T2-weighted",
+      "D": "FLAIR (fluid-attenuated inversion recovery)"
+    },
+    "correct_answer": "A",
+    "correct_answer_text": "T1-weighted, before contrast",
+    "image_files": [
+      "week-045_t1.png"
+    ],
+    "image_labels": null,
+    "facts_used": {
+      "sequence": "t1",
+      "timepoint": "week-045",
+      "key_rule": "sequence rendered"
+    }
+  },
+  {
+    "patient_id": "Patient-048",
+    "leak_check": [],
+    "needs_expert_judgment": true,
+    "review_status": "pending",
+    "image_dir": "data/lumiere/v4/slices/Patient-048",
+    "id": "Patient-048_LIL",
+    "clinical_phase": "Lesion Identification and Localization",
+    "task_label": "Lesion Localization",
+    "timepoint": "week-045",
+    "question": "The image is an axial slice of a post-contrast T1-weighted brain MRI in radiological convention (the patient's right side is on the left of the image; anterior is at the top). Where is the main tumor region (enhancing tumor, necrosis or resection cavity, not the surrounding edema) on this slice? Divide the brain on this slice into right and left hemispheres at the midline and into anterior and posterior halves at the midpoint of its front-to-back extent.",
+    "options": {
+      "A": "Right hemisphere, anterior half",
+      "B": "Right hemisphere, posterior half",
+      "C": "Left hemisphere, anterior half",
+      "D": "Left hemisphere, posterior half"
+    },
+    "correct_answer": "A",
+    "correct_answer_text": "Right hemisphere, anterior half",
+    "image_files": [
+      "week-045_core.png"
+    ],
+    "image_labels": null,
+    "facts_used": {
+      "core": {
+        "z": 108,
+        "component_px": 750,
+        "centroid_xy": [
+          57.6,
+          151.6
+        ],
+        "mid_x": 92.0,
+        "mid_y": 106.0,
+        "dx_mm": 34.4,
+        "dy_mm": 45.6,
+        "side_fraction": 1.0,
+        "hemisphere": "right",
+        "ap_half": "anterior"
+      },
+      "key_rule": "largest tumour-core component on the displayed slice"
+    }
+  },
+  {
+    "patient_id": "Patient-048",
+    "leak_check": [],
+    "needs_expert_judgment": true,
+    "review_status": "pending",
+    "image_dir": "data/lumiere/v4/slices/Patient-048",
+    "id": "Patient-048_DSCR",
+    "clinical_phase": "Diagnostic Synthesis and Causal Reasoning",
+    "task_label": "Disease Diagnosis Reasoning",
+    "timepoint": "week-045",
+    "question": "Three post-contrast T1-weighted axial slices of the same patient are shown, each at the largest cross-section of the same enhancing lesion (the enhancing lesion nearest the largest enhancing region on the post-operative baseline scan, followed across scans), in time order: the post-operative baseline scan (image 1), the earlier scan with the smallest enhancing lesion (the nadir, image 2) and the follow-up scan (image 3). Pixels are 1 mm in the original scan, and a 20 mm scale bar is drawn on each image. Apply the RANO enhancement criteria to the enhancing lesion. Measurable means at least 10 mm by 10 mm. Progression is a 25% or greater increase in the product of the two largest perpendicular diameters relative to the nadir, or a new measurable enhancing lesion. Response is judged against the post-operative baseline: partial response is a 50% or greater decrease, complete response is no remaining measurable enhancing disease, otherwise stable disease. T2/FLAIR changes, steroid dose and clinical status are not provided. What is the response category at follow-up?",
+    "options": {
+      "A": "Progressive disease",
+      "B": "Stable disease",
+      "C": "Partial response",
+      "D": "Complete response"
+    },
+    "correct_answer": "A",
+    "correct_answer_text": "Progressive disease",
+    "image_files": [
+      "week-000-2_enh.png",
+      "week-013_enh.png",
+      "week-045_enh.png"
+    ],
+    "image_labels": [
+      "post-operative baseline scan",
+      "scan with the smallest enhancing lesion so far (nadir)",
+      "follow-up scan"
+    ],
+    "facts_used": {
+      "expert_rating": "PD",
+      "rule_label": "progressive disease",
+      "concordant": true,
+      "bp_ref_mm2": 27.6,
+      "bp_nadir_mm2": 15.3,
+      "bp_followup_mm2": 759.3,
+      "d_ref_mm": [
+        6.0,
+        4.6
+      ],
+      "d_nadir_mm": [
+        5.5,
+        2.8
+      ],
+      "d_followup_mm": [
+        29.7,
+        25.6
+      ],
+      "reference_tp": "week-000-2",
+      "nadir_tp": "week-013",
+      "followup_tp": "week-045",
+      "expert_rationale": "T2-Progr., new non-measurable L.",
+      "key_rule": "image-derived RANO-style enhancement category (bidimensional products on the displayed slices); the expert rating is recorded, not the key"
+    }
+  },
+  {
+    "patient_id": "Patient-048",
+    "leak_check": [],
+    "needs_expert_judgment": true,
+    "review_status": "pending",
+    "image_dir": "data/lumiere/v4/slices/Patient-048",
+    "id": "Patient-048_PJRF",
+    "clinical_phase": "Prognostic Judgment and Risk Forecasting",
+    "task_label": "Prognostic Factor Analysis",
+    "timepoint": "week-045",
+    "question": "A 52-year-old female with glioblastoma (MGMT promoter not methylated; IDH status not available) had a complete resection of the enhancing tumor and then standard chemoradiotherapy (radiotherapy with concurrent temozolomide), followed by adjuvant temozolomide. No second surgery or second-line treatment has been given. The follow-up MRI is 45 weeks after surgery and the patient is alive at this time. Using only the information above and your earlier assessment of this patient, estimate the probability that the patient will die within 52 weeks after this scan.",
+    "options": {
+      "A": "Below 20%",
+      "B": "20% to 40%",
+      "C": "40% to 60%",
+      "D": "Above 60%"
+    },
+    "correct_answer": null,
+    "correct_answer_text": "",
+    "scoring": "forecast",
+    "ordered_options": true,
+    "forecast": {
+      "horizon_weeks": 52,
+      "outcome": 1,
+      "bin_midpoints": {
+        "A": 0.1,
+        "B": 0.3,
+        "C": 0.5,
+        "D": 0.8
+      }
+    },
+    "image_files": [],
+    "image_labels": null,
+    "facts_used": {
+      "survival_weeks": 58,
+      "prediction_week": 45,
+      "horizon_weeks": 52,
+      "time_origin_assumption": "survival time and scan weeks share the surgery-week origin"
+    }
+  },
+  {
+    "patient_id": "Patient-048",
+    "leak_check": [],
+    "needs_expert_judgment": true,
+    "review_status": "pending",
+    "image_dir": "data/lumiere/v4/slices/Patient-048",
+    "id": "Patient-048_TCM",
+    "clinical_phase": "Therapeutic Cycle Management",
+    "task_label": "Treatment Plan Selection",
+    "timepoint": "week-045",
+    "question": "A 52-year-old female with glioblastoma (MGMT promoter not methylated; IDH status not available) had a complete resection of the enhancing tumor and then standard chemoradiotherapy (radiotherapy with concurrent temozolomide), followed by adjuvant temozolomide. No second surgery or second-line treatment has been given. This MRI is 45 weeks after surgery; chemoradiotherapy ended about 35 weeks before this scan. Using your earlier assessment of this patient, what is the most appropriate next step?",
+    "options": {
+      "A": "Continue adjuvant temozolomide unchanged and plan the next surveillance MRI in 8 to 12 weeks.",
+      "B": "Continue adjuvant temozolomide for now and repeat the MRI in 4 to 8 weeks before changing therapy.",
+      "C": "Change therapy now: bring re-resection, second-line treatment or a clinical trial to tumor board.",
+      "D": "Stop tumor-directed treatment and move to best supportive care with no further imaging plan."
+    },
+    "correct_answer": "C",
+    "correct_answer_text": "Change therapy now: bring re-resection, second-line treatment or a clinical trial to tumor board.",
+    "image_files": [],
+    "image_labels": null,
+    "tcm_rule": {
+      "rano": "progressive disease",
+      "weeks_since_chemoradiotherapy": 35,
+      "class": "escalate",
+      "rule": "non-PD -> continue; PD and <= 12 weeks after radiotherapy -> repeat MRI first; PD and later -> change therapy (RANO 2010; Stupp schedule assumed)"
+    },
+    "facts_used": {
+      "rano": "progressive disease",
+      "x_weeks": 35,
+      "weeks_since_surgery": 45,
+      "assumed_chemoradiotherapy_end_week": 10
+    }
+  }
+]

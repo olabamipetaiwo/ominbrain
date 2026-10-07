@@ -1,0 +1,160 @@
+{
+ "version": 2,
+ "axcodes": "LAS",
+ "shape": [
+  182,
+  218,
+  182
+ ],
+ "enh_voxels": 12886,
+ "core_voxels": 38773,
+ "enh_components": [
+  {
+   "z": 76,
+   "voxels": 8525,
+   "centroid_xyz": [
+    78.2,
+    156.3,
+    86.9
+   ],
+   "d1_mm": 50.0,
+   "d2_mm": 15.9,
+   "bp_mm2": 797.0
+  },
+  {
+   "z": 78,
+   "voxels": 3430,
+   "centroid_xyz": [
+    98.9,
+    153.0,
+    76.8
+   ],
+   "d1_mm": 41.3,
+   "d2_mm": 14.9,
+   "bp_mm2": 614.1
+  },
+  {
+   "z": 78,
+   "voxels": 841,
+   "centroid_xyz": [
+    109.0,
+    71.5,
+    78.6
+   ],
+   "d1_mm": 18.1,
+   "d2_mm": 10.0,
+   "bp_mm2": 181.1
+  },
+  {
+   "z": 90,
+   "voxels": 78,
+   "centroid_xyz": [
+    87.6,
+    130.2,
+    89.9
+   ],
+   "d1_mm": 13.0,
+   "d2_mm": 2.7,
+   "bp_mm2": 34.7
+  },
+  {
+   "z": 81,
+   "voxels": 4,
+   "centroid_xyz": [
+    84.0,
+    128.5,
+    81.5
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 89,
+   "voxels": 3,
+   "centroid_xyz": [
+    87.7,
+    160.0,
+    89.3
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 91,
+   "voxels": 2,
+   "centroid_xyz": [
+    90.0,
+    153.0,
+    91.5
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 91,
+   "voxels": 1,
+   "centroid_xyz": [
+    89.0,
+    150.0,
+    91.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 75,
+   "voxels": 1,
+   "centroid_xyz": [
+    123.0,
+    124.0,
+    75.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 72,
+   "voxels": 1,
+   "centroid_xyz": [
+    123.0,
+    125.0,
+    72.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  }
+ ],
+ "enh": {
+  "z": 76,
+  "voxels": 8525,
+  "centroid_xyz": [
+   78.2,
+   156.3,
+   86.9
+  ],
+  "d1_mm": 50.0,
+  "d2_mm": 15.9,
+  "bp_mm2": 797.0
+ },
+ "core": {
+  "z": 89,
+  "component_px": 1490,
+  "centroid_xy": [
+   88.1,
+   154.1
+  ],
+  "mid_x": 88.5,
+  "mid_y": 108.0,
+  "dx_mm": 0.4,
+  "dy_mm": 46.1,
+  "side_fraction": 0.538,
+  "hemisphere": "right",
+  "ap_half": "anterior"
+ }
+}

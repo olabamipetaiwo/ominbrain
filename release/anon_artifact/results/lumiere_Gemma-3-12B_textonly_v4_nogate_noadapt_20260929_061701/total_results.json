@@ -1,0 +1,122 @@
+{
+  "OmniBrainBench": {
+    "total metrics": {
+      "acc": 0.288,
+      "chain_completion_rate": 0.0
+    },
+    "task type metrics": {
+      "Imaging Modality Identification": {
+        "acc": 0.261,
+        "local_faithfulness": 1.0,
+        "kb_alignment_score": 0.284,
+        "concept_precision_score": 0.015,
+        "n": 46
+      },
+      "Lesion Localization": {
+        "acc": 0.211,
+        "local_faithfulness": 0.974,
+        "kb_alignment_score": 0.326,
+        "concept_precision_score": 0.253,
+        "n": 38
+      },
+      "Disease Diagnosis Reasoning": {
+        "acc": 0.587,
+        "local_faithfulness": 1.0,
+        "kb_alignment_score": 0.999,
+        "concept_precision_score": 0.1,
+        "n": 46
+      },
+      "Prognostic Factor Analysis": {
+        "acc": 0.0,
+        "local_faithfulness": 1.0,
+        "kb_alignment_score": 0.978,
+        "concept_precision_score": 0.0,
+        "n": 45
+      },
+      "Treatment Plan Selection": {
+        "acc": 0.37,
+        "local_faithfulness": 1.0,
+        "kb_alignment_score": 0.974,
+        "concept_precision_score": 0.268,
+        "n": 46
+      }
+    },
+    "clinical phase type metrics": {
+      "Anatomical and Imaging Assessment": {
+        "acc": 0.261,
+        "acc_ci": [
+          0.156,
+          0.403
+        ],
+        "acc_n": 46,
+        "local_faithfulness": 1.0,
+        "kb_alignment": 0.284,
+        "concept_precision": 0.015,
+        "chain_faithfulness": null,
+        "gate_block_rate": 0.0,
+        "adaptation_triggered": 0,
+        "adaptation_rate": null
+      },
+      "Lesion Identification and Localization": {
+        "acc": 0.211,
+        "acc_ci": [
+          0.111,
+          0.363
+        ],
+        "acc_n": 38,
+        "local_faithfulness": 0.974,
+        "kb_alignment": 0.326,
+        "concept_precision": 0.253,
+        "chain_faithfulness": null,
+        "gate_block_rate": 0.0,
+        "adaptation_triggered": 0,
+        "adaptation_rate": null
+      },
+      "Diagnostic Synthesis and Causal Reasoning": {
+        "acc": 0.587,
+        "acc_ci": [
+          0.443,
+          0.717
+        ],
+        "acc_n": 46,
+        "local_faithfulness": 1.0,
+        "kb_alignment": 0.999,
+        "concept_precision": 0.1,
+        "chain_faithfulness": null,
+        "gate_block_rate": 0.0,
+        "adaptation_triggered": 0,
+        "adaptation_rate": null
+      },
+      "Prognostic Judgment and Risk Forecasting": {
+        "acc": 0.0,
+        "acc_ci": [
+          0.0,
+          0.079
+        ],
+        "acc_n": 45,
+        "local_faithfulness": 1.0,
+        "kb_alignment": 0.978,
+        "concept_precision": 0.0,
+        "chain_faithfulness": null,
+        "gate_block_rate": 0.0,
+        "adaptation_triggered": 0,
+        "adaptation_rate": null
+      },
+      "Therapeutic Cycle Management": {
+        "acc": 0.37,
+        "acc_ci": [
+          0.245,
+          0.514
+        ],
+        "acc_n": 46,
+        "local_faithfulness": 1.0,
+        "kb_alignment": 0.974,
+        "concept_precision": 0.268,
+        "chain_faithfulness": null,
+        "gate_block_rate": 0.0,
+        "adaptation_triggered": 0,
+        "adaptation_rate": null
+      }
+    }
+  }
+}

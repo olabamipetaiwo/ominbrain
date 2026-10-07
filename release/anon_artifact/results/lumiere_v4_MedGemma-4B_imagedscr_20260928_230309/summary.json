@@ -1,0 +1,32 @@
+{
+ "DSCR": {
+  "own": {
+   "n": 46,
+   "acc": 0.196,
+   "acc_ci": [
+    0.107,
+    0.332
+   ],
+   "parse_errors": 7
+  },
+  "text": {
+   "n": 46,
+   "acc": 0.109,
+   "acc_ci": [
+    0.047,
+    0.23
+   ],
+   "parse_errors": 9
+  },
+  "swap": {
+   "n": 42,
+   "acc": 0.167,
+   "acc_ci": [
+    0.083,
+    0.306
+   ],
+   "parse_errors": 8,
+   "tracks_donor": 12
+  }
+ }
+}

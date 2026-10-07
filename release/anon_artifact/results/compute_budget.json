@@ -1,0 +1,11 @@
+{
+  "gpu_hours_all": 153.6,
+  "jobs_all": 96,
+  "gpu_hours_v4_family": 55.7,
+  "jobs_v4_family": 27,
+  "gemini_api": {
+    "calls": 525,
+    "prompt_tokens": 757334,
+    "total_tokens": 1115047
+  }
+}

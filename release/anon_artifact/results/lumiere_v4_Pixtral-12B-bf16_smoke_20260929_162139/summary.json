@@ -1,0 +1,92 @@
+{
+ "AIA": {
+  "own": {
+   "n": 2,
+   "acc": 0.5,
+   "acc_ci": [
+    0.095,
+    0.905
+   ],
+   "parse_errors": 0
+  },
+  "text": {
+   "n": 2,
+   "acc": 0.0,
+   "acc_ci": [
+    0.0,
+    0.658
+   ],
+   "parse_errors": 0
+  },
+  "swap": {
+   "n": 2,
+   "acc": 0.0,
+   "acc_ci": [
+    0.0,
+    0.658
+   ],
+   "parse_errors": 0,
+   "tracks_donor": 0
+  }
+ },
+ "LIL": {
+  "own": {
+   "n": 2,
+   "acc": 0.5,
+   "acc_ci": [
+    0.095,
+    0.905
+   ],
+   "parse_errors": 0
+  },
+  "text": {
+   "n": 2,
+   "acc": 0.0,
+   "acc_ci": [
+    0.0,
+    0.658
+   ],
+   "parse_errors": 0
+  },
+  "swap": {
+   "n": 2,
+   "acc": 0.5,
+   "acc_ci": [
+    0.095,
+    0.905
+   ],
+   "parse_errors": 0,
+   "tracks_donor": 0
+  }
+ },
+ "DSCR": {
+  "own": {
+   "n": 2,
+   "acc": 0.0,
+   "acc_ci": [
+    0.0,
+    0.658
+   ],
+   "parse_errors": 0
+  },
+  "text": {
+   "n": 2,
+   "acc": 0.0,
+   "acc_ci": [
+    0.0,
+    0.658
+   ],
+   "parse_errors": 0
+  },
+  "swap": {
+   "n": 2,
+   "acc": 0.0,
+   "acc_ci": [
+    0.0,
+    0.658
+   ],
+   "parse_errors": 0,
+   "tracks_donor": 1
+  }
+ }
+}

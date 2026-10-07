@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-046",
+  "selected": {
+    "tp": "week-016",
+    "code": "SD",
+    "expert": "stable disease",
+    "rule": "stable disease",
+    "nadir_tp": "week-001",
+    "bp_nadir": 293.5,
+    "d_nadir": [
+      19.4,
+      15.1
+    ],
+    "z_nadir": 65,
+    "concordant": true,
+    "x": 5,
+    "weeks_since_surgery": 15,
+    "cls": "C",
+    "bp_ref": 293.5,
+    "bp_fu": 194.4,
+    "d_ref": [
+      19.4,
+      15.1
+    ],
+    "d_fu": [
+      16.8,
+      11.6
+    ],
+    "z_ref": 65,
+    "z_fu": 68,
+    "lil_ok": true,
+    "rationale": "Progression probably within the irradiated area",
+    "patient_id": "Patient-046"
+  },
+  "aia_sequence": "ct1",
+  "record": {
+    "patient_id": "Patient-046",
+    "ref": "week-001",
+    "extent": "partial",
+    "survival_weeks": 72,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-046",
+      "Survival time (weeks)": "72",
+      "Sex": "male",
+      "Age at surgery (years)": 65,
+      "IDH (WT: wild type)": "na",
+      "IDH method": "na",
+      "MGMT qualitative": "not methylated",
+      "MGMT quantitative": "0.00%"
+    }
+  }
+}

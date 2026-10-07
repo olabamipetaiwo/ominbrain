@@ -1,0 +1,34 @@
+======================================================================
+OmniBrainBench — Causal Chain Evaluation
+Model: MedGemma-4B   |   Cases: 46
+======================================================================
+
+Overall accuracy:   23.3%
+Chain completion:   0/46 (0%)
+
+── Phase Results 
+  MajBase = accuracy of always guessing this phase's most common correct answer (flags class imbalance, e.g. DSCR's 'progressive disease' skew — high MajBase means raw Acc alone overstates model skill; low/blank means answers are too varied for the baseline to mean much, e.g. PJRF/TCM's free-text estimates).
+Phase     Acc     95% CI    N  MajBase   LocalF  KBAlign  ConceptP   ChainF  GateBlk
+------------------------------------------------------------------------------------
+AIA       35%  [23%-49%]   46      26%      96%      36%       10%      —         0%
+LIL       32%  [19%-48%]   38      29%     100%      62%       37%      —         0%
+DSCR      17%   [9%-31%]   46      59%      40%      99%        4%      —         0%
+PJRF       0%    [0%-8%]   45      —       100%      95%        0%      —         0%
+TCM       35%  [23%-49%]   46      44%      98%      97%       26%      —         0%
+
+── Adaptation Loop 
+  Questions triggered:    0
+  Adaptation rate:          —  
+
+── Failure Taxonomy ─
+  Perception failures:          56
+  Reasoning failures:           38
+  Decision-making failures:     75
+  Correct-but-unfaithful:       5  ← clinically dangerous
+
+── Per-Task Accuracy 
+  Imaging Modality Identification               acc=35%  n=46
+  Treatment Plan Selection                      acc=35%  n=46
+  Lesion Localization                           acc=32%  n=38
+  Disease Diagnosis Reasoning                   acc=17%  n=46
+  Prognostic Factor Analysis                    acc=0%  n=45

@@ -1,0 +1,34 @@
+======================================================================
+OmniBrainBench — Causal Chain Evaluation
+Model: Llama-4-Scout   |   Cases: 46
+======================================================================
+
+Overall accuracy:   25.0%
+Chain completion:   0/46 (0%)
+
+── Phase Results 
+  MajBase = accuracy of always guessing this phase's most common correct answer (flags class imbalance, e.g. DSCR's 'progressive disease' skew — high MajBase means raw Acc alone overstates model skill; low/blank means answers are too varied for the baseline to mean much, e.g. PJRF/TCM's free-text estimates).
+Phase     Acc     95% CI    N  MajBase   LocalF  KBAlign  ConceptP   ChainF  GateBlk
+------------------------------------------------------------------------------------
+AIA       24%  [14%-38%]   46      26%     100%      36%        7%      —         0%
+LIL       26%  [15%-42%]   38      29%     100%      43%       20%      —         0%
+DSCR      26%  [23%-49%]   46      59%     100%      99%        7%      —         0%
+PJRF       0%    [0%-8%]   45      —       100%      93%        0%      —         0%
+TCM       48%  [34%-62%]   46      44%     100%      96%       28%      —         0%
+
+── Adaptation Loop 
+  Questions triggered:    0
+  Adaptation rate:          —  
+
+── Failure Taxonomy ─
+  Perception failures:          63
+  Reasoning failures:           30
+  Decision-making failures:     69
+  Correct-but-unfaithful:       0  ← clinically dangerous
+
+── Per-Task Accuracy 
+  Treatment Plan Selection                      acc=48%  n=46
+  Disease Diagnosis Reasoning                   acc=35%  n=46
+  Lesion Localization                           acc=26%  n=38
+  Imaging Modality Identification               acc=24%  n=46
+  Prognostic Factor Analysis                    acc=0%  n=45

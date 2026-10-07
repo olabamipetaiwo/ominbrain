@@ -1,0 +1,28 @@
+{
+ "version": 2,
+ "axcodes": "LAS",
+ "shape": [
+  182,
+  218,
+  182
+ ],
+ "enh_voxels": 0,
+ "core_voxels": 663,
+ "enh_components": [],
+ "enh": null,
+ "core": {
+  "z": 99,
+  "component_px": 119,
+  "centroid_xy": [
+   117.5,
+   73.0
+  ],
+  "mid_x": 89.0,
+  "mid_y": 104.0,
+  "dx_mm": 28.5,
+  "dy_mm": 31.0,
+  "side_fraction": 1.0,
+  "hemisphere": "left",
+  "ap_half": "posterior"
+ }
+}

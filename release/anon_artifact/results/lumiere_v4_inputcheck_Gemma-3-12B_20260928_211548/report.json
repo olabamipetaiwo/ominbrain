@@ -1,0 +1,223 @@
+{
+  "serving": {
+    "model_name": "Gemma-3-12B",
+    "model_tag": "gemma3:12b",
+    "backend": "ollama",
+    "base_url": "http://localhost:11595/v1",
+    "ollama_version": "0.33.0",
+    "listing": {
+      "name": "gemma3:12b",
+      "model": "gemma3:12b",
+      "modified_at": "2026-09-21T13:48:49-04:00",
+      "size": 8149190253,
+      "digest": "f4031aab637d1ffa37b42570452ae0e4fad0314754d17ded67322e4b95836f8a",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "gemma3",
+        "families": [
+          "gemma3"
+        ],
+        "parameter_size": "12.2B",
+        "quantization_level": "Q4_K_M"
+      },
+      "capabilities": [
+        "completion"
+      ]
+    },
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "gemma3",
+      "families": [
+        "gemma3"
+      ],
+      "parameter_size": "12.2B",
+      "quantization_level": "Q4_K_M"
+    },
+    "template": "{{- range $i, $_ := .Messages }}\n{{- $last := eq (len (slice $.Messages $i)) 1 }}\n{{- if or (eq .Role \"user\") (eq .Role \"system\") }}<start_of_turn>user\n{{ .Content }}<end_of_turn>\n{{ if $last }}<start_of_turn>model\n{{ end }}\n{{- else if eq .Role \"assistant\" }}<start_of_turn>model\n{{ .Content }}{{ if not $last }}<end_of_turn>\n{{ end }}\n{{- end }}\n{{- end }}",
+    "parameters": "stop                           \"<end_of_turn>\"\ntemperature                    1\ntop_k                          64\ntop_p                          0.95",
+    "capabilities": [
+      "completion",
+      "vision"
+    ],
+    "model_info": {
+      "gemma3.attention.head_count": 16,
+      "gemma3.attention.head_count_kv": 8,
+      "gemma3.attention.key_length": 256,
+      "gemma3.attention.sliding_window": 1024,
+      "gemma3.attention.value_length": 256,
+      "gemma3.block_count": 48,
+      "gemma3.context_length": 131072,
+      "gemma3.embedding_length": 3840,
+      "gemma3.feed_forward_length": 15360,
+      "gemma3.mm.tokens_per_image": 256,
+      "gemma3.vision.attention.head_count": 16,
+      "gemma3.vision.attention.layer_norm_epsilon": 1e-06,
+      "gemma3.vision.block_count": 27,
+      "gemma3.vision.embedding_length": 1152,
+      "gemma3.vision.feed_forward_length": 4304,
+      "gemma3.vision.image_size": 896,
+      "gemma3.vision.num_channels": 3,
+      "gemma3.vision.patch_size": 14,
+      "general.architecture": "gemma3",
+      "general.file_type": 15,
+      "general.parameter_count": 12187079280,
+      "general.quantization_version": 2,
+      "tokenizer.ggml.add_bos_token": true,
+      "tokenizer.ggml.add_eos_token": false,
+      "tokenizer.ggml.add_padding_token": false,
+      "tokenizer.ggml.add_unknown_token": false,
+      "tokenizer.ggml.bos_token_id": 2,
+      "tokenizer.ggml.eos_token_id": 1,
+      "tokenizer.ggml.merges": null,
+      "tokenizer.ggml.model": "llama",
+      "tokenizer.ggml.padding_token_id": 0,
+      "tokenizer.ggml.pre": "default",
+      "tokenizer.ggml.scores": null,
+      "tokenizer.ggml.token_type": null,
+      "tokenizer.ggml.tokens": null,
+      "tokenizer.ggml.unknown_token_id": 3
+    }
+  },
+  "max_tokens_in_runs": 800,
+  "tokens": {
+    "patient": "Patient-007",
+    "phases": {
+      "AIA": {
+        "question_id": "Patient-007_AIA",
+        "n_images": 1,
+        "image_sizes": [
+          [
+            728,
+            872
+          ]
+        ],
+        "prompt_tokens_by_n_images": {
+          "0": 383,
+          "1": 678
+        },
+        "increment_per_added_image": [
+          295
+        ],
+        "text_only_tokens": 383
+      },
+      "LIL": {
+        "question_id": "Patient-007_LIL",
+        "n_images": 1,
+        "image_sizes": [
+          [
+            728,
+            872
+          ]
+        ],
+        "prompt_tokens_by_n_images": {
+          "0": 434,
+          "1": 728
+        },
+        "increment_per_added_image": [
+          294
+        ],
+        "text_only_tokens": 434
+      },
+      "DSCR": {
+        "question_id": "Patient-007_DSCR",
+        "n_images": 3,
+        "image_sizes": [
+          [
+            728,
+            872
+          ],
+          [
+            728,
+            872
+          ],
+          [
+            728,
+            872
+          ]
+        ],
+        "prompt_tokens_by_n_images": {
+          "0": 541,
+          "1": 836,
+          "2": 1120,
+          "3": 1425
+        },
+        "increment_per_added_image": [
+          295,
+          284,
+          305
+        ],
+        "text_only_tokens": 541
+      }
+    }
+  },
+  "probes": [
+    {
+      "probe": "colour_red",
+      "expected": [
+        "red"
+      ],
+      "answer": "Red",
+      "pass": true
+    },
+    {
+      "probe": "colour_green",
+      "expected": [
+        "green"
+      ],
+      "answer": "Green",
+      "pass": true
+    },
+    {
+      "probe": "colour_blue",
+      "expected": [
+        "blue"
+      ],
+      "answer": "Blue",
+      "pass": true
+    },
+    {
+      "probe": "number_742",
+      "expected": [
+        "742"
+      ],
+      "answer": "742",
+      "pass": true
+    },
+    {
+      "probe": "number_1905",
+      "expected": [
+        "1905"
+      ],
+      "answer": "1905",
+      "pass": true
+    },
+    {
+      "probe": "three_images_order",
+      "expected": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "answer": "red, green, blue",
+      "pass": true
+    },
+    {
+      "probe": "two_images_second",
+      "expected": [
+        "blue"
+      ],
+      "answer": "Blue",
+      "pass": true
+    },
+    {
+      "probe": "real_slice_background",
+      "expected": [
+        "black"
+      ],
+      "answer": "Black",
+      "pass": true
+    }
+  ]
+}

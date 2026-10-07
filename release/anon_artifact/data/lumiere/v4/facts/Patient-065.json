@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-065",
+  "selected": {
+    "tp": "week-014",
+    "code": "SD",
+    "expert": "stable disease",
+    "rule": "partial response",
+    "nadir_tp": "week-000-2",
+    "bp_nadir": 543.8,
+    "d_nadir": [
+      29.2,
+      18.6
+    ],
+    "z_nadir": 89,
+    "concordant": false,
+    "x": 4,
+    "weeks_since_surgery": 14,
+    "cls": "C",
+    "bp_ref": 543.8,
+    "bp_fu": 202.9,
+    "d_ref": [
+      29.2,
+      18.6
+    ],
+    "d_fu": [
+      16.8,
+      12.1
+    ],
+    "z_ref": 89,
+    "z_fu": 103,
+    "lil_ok": true,
+    "rationale": "New non-Target L. in the high dose field",
+    "patient_id": "Patient-065"
+  },
+  "aia_sequence": "t1",
+  "record": {
+    "patient_id": "Patient-065",
+    "ref": "week-000-2",
+    "extent": "complete",
+    "survival_weeks": 122,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-065",
+      "Survival time (weeks)": "122",
+      "Sex": "female",
+      "Age at surgery (years)": 62,
+      "IDH (WT: wild type)": "na",
+      "IDH method": "na",
+      "MGMT qualitative": "not methylated",
+      "MGMT quantitative": "na"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-019",
+  "selected": {
+    "tp": "week-090",
+    "code": "PR",
+    "expert": "partial response",
+    "rule": "partial response",
+    "nadir_tp": "week-075",
+    "bp_nadir": 1108.9,
+    "d_nadir": [
+      49.5,
+      22.4
+    ],
+    "z_nadir": 67,
+    "concordant": true,
+    "x": 75,
+    "weeks_since_surgery": 85,
+    "cls": "C",
+    "bp_ref": 1737.1,
+    "bp_fu": 523.7,
+    "d_ref": [
+      53.8,
+      32.3
+    ],
+    "d_fu": [
+      30.6,
+      17.1
+    ],
+    "z_ref": 74,
+    "z_fu": 78,
+    "lil_ok": true,
+    "rationale": "Target L. 23mm x 13mm, T2-Progr. Stable to previous",
+    "patient_id": "Patient-019"
+  },
+  "aia_sequence": "t1",
+  "record": {
+    "patient_id": "Patient-019",
+    "ref": "week-005",
+    "extent": "partial",
+    "survival_weeks": 186,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-019",
+      "Survival time (weeks)": "186",
+      "Sex": "male",
+      "Age at surgery (years)": 53,
+      "IDH (WT: wild type)": "IDH1 neg, Sequencing required",
+      "IDH method": "Immuno",
+      "MGMT qualitative": "methylated",
+      "MGMT quantitative": "na"
+    }
+  }
+}
