@@ -745,6 +745,53 @@ def perm_validation(mc: "Macros") -> None:
         mc.add(f"vfourPermValMedP{tag}", pfmt(r["p_median"]))
 
 
+def strat_perm(mc: "Macros") -> None:
+    """Stratified, donor-grouped permutation (reviewer round 4, point 1). The reported donor-permutation p (emitted by
+    v4_supplement from donor_dependence) now uses this test; here we add its Type-I calibration and the open-model
+    family summary (how many of the twelve cells reach p<.05 raw and after Holm)."""
+    sp = load("results/lumiere_v4_strat_perm.json")
+    if not sp:
+        return
+    cells = sp["cells"]
+    by = {(c["model"], c["phase"]): c for c in cells}
+    d = by.get(("Llama-4-Scout", "DSCR"))
+    if d:
+        strata = {int(k): v for k, v in d["strata"].items()}
+        mc.add("vfourStratDSCRTwo", strata.get(2, 0))
+        mc.add("vfourStratDSCRThree", strata.get(3, 0))
+        mc.add("vfourStratDSCRBlocks", d["n_blocks"])
+        mc.add("vfourStratDSCRTwice", d["donors_used_twice"])
+    sims = None
+    for (m, ph), c in by.items():
+        if "typeI" in c:
+            tag = ph + TAG[m]
+            t = c["typeI"]; sims = t["sims"]
+            mc.add(f"vfourStratTypeI{tag}", f"{100 * t['typeI_05']:.1f}")
+            mc.add(f"vfourStratTypeILo{tag}", f"{100 * t['typeI_05_ci'][0]:.1f}")
+            mc.add(f"vfourStratTypeIHi{tag}", f"{100 * t['typeI_05_ci'][1]:.1f}")
+            mc.add(f"vfourStratMedP{tag}", pfmt(t["p_median"]))
+    if sims:
+        mc.add("vfourStratSims", f"{sims:,}")
+    # Family summary computed from the REPORTED per-cell donor-permutation p's (v4_supplement.donor_dependence), so the
+    # "how many of the twelve cells" counts match the p's printed in the appendix exactly. Holm over the twelve cells.
+    sup = load("results/lumiere_v4_supplement.json")
+    dd = {(m, ph): sup["models"][m]["donor_dependence"][ph]["perm_p"]
+          for m in sup["models"] if "donor_dependence" in sup["models"][m]
+          for ph in sup["models"][m]["donor_dependence"]}
+    ps = sorted(dd.items(), key=lambda kv: kv[1])
+    m_cnt = len(ps)
+    holm = {}
+    run = 0.0
+    for rank, (cell, p) in enumerate(ps):
+        run = max(run, min(1.0, p * (m_cnt - rank)))
+        holm[cell] = run
+    mc.add("vfourStratNCells", m_cnt)
+    mc.add("vfourStratNBelowRaw", sum(p < 0.05 for p in dd.values()))
+    mc.add("vfourStratNBelowHolm", sum(h < 0.05 for h in holm.values()))
+    mc.add("vfourStratRawAIAMedGemma", pfmt(dd[("MedGemma-4B", "AIA")]))
+    mc.add("vfourStratHolmAIAMedGemma", pfmt(holm[("MedGemma-4B", "AIA")]))
+
+
 def check_stale() -> list[str]:
     tex = Path("paper/latex/acl_latex.tex").read_text()
     return [pat for pat in STALE if re.search(pat, tex)]
@@ -771,6 +818,7 @@ def main() -> None:
     classwise(mc)
     robustness(mc)
     perm_validation(mc)
+    strat_perm(mc)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numbers.tex").write_text(mc.tex())
     (OUT / "numbers.json").write_text(json.dumps(mc.d, indent=1, sort_keys=True))

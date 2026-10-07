@@ -131,11 +131,21 @@ def make_recs(rows: dict, ph: str, kind: str, seed: int, rho: float = 1.0) -> di
 
 
 def evaluate(recs: dict, ph: str) -> dict:
-    """Run the paper's own E2 gain and donor-key permutation on a set of synthetic records."""
+    """Run the paper's own E2 gain and donor-key permutation on a set of synthetic records.
+
+    Also returns the image-vs-text answer-change rate (own answer differs from the text-only answer; the E1-style
+    output-sensitivity diagnostic) so the diagnostics-comparison (reviewer concern 3) can contrast what each
+    diagnostic concludes on the SAME predictor: a generic response to image presence raises both the donor gain
+    and the answer-change rate (each then reads as image use), yet the permutation does not flag it, whereas a
+    genuine donor tracker is flagged by all three."""
     e2 = st.e2(recs, np.random.default_rng(st.SEED)).get(ph, {})
     dd = sup.donor_dependence(recs, np.random.default_rng(st.SEED), n_perm=5000).get(ph, {})
+    # image-vs-text answer change over recipients present in both arms (own = image arm, text = no-image arm)
+    cases = sorted(c for (c, p, k) in recs if p == ph and k == "own" and (c, ph, "text") in recs)
+    chg = (100.0 * np.mean([recs[(c, ph, "own")]["model_answer"] != recs[(c, ph, "text")]["model_answer"]
+                            for c in cases])) if cases else float("nan")
     return {"gain": e2.get("gain"), "gain_ci": e2.get("gain_ci"), "gain_p": e2.get("gain_p"),
-            "perm_p": dd.get("perm_p"), "n": e2.get("n")}
+            "answer_change": float(chg), "perm_p": dd.get("perm_p"), "n": e2.get("n")}
 
 
 def _items_by_patient() -> dict:
@@ -216,14 +226,15 @@ def run_phase(ph: str, sims: int, assignments: int) -> dict:
     out = {"n_recipients": len(rows), "nominal_alpha": 0.05, "predictors": {}}
     for kind, rho in specs:
         name = kind if kind != "tracker" else f"tracker_rho{rho:g}"
-        gains, perms = [], []
+        gains, perms, changes = [], [], []
         for s in range(sims):
             r = evaluate(make_recs(rows, ph, kind, seed=1000 * s + 7, rho=rho), ph)
-            gains.append(r["gain"]); perms.append(r["perm_p"])
+            gains.append(r["gain"]); perms.append(r["perm_p"]); changes.append(r["answer_change"])
         k = int(sum(p < 0.05 for p in perms))
         lo, hi = wilson(k, sims)
         out["predictors"][name] = {
             "gain_median": float(np.median(gains)), "gain_iqr": [float(np.percentile(gains, 25)), float(np.percentile(gains, 75))],
+            "answer_change_median": float(np.median(changes)),
             "perm_p_median": float(np.median(perms)), "detection_rate": float(k / sims),
             "detection_ci": [float(lo), float(hi)], "sims": sims}
     # stability across GENUINELY DISTINCT, constraint-valid re-drawn assignments (no silent fallback)
@@ -264,10 +275,10 @@ def main() -> None:
     Path(args.out).write_text(json.dumps(res, indent=1))
     for ph, r in res.items():
         print(f"\n=== {ph}  ({r['n_recipients']} recipients, {args.sims} sims) ===")
-        print(f"  {'predictor':<16} {'gain(med)':>10} {'perm_p(med)':>12} {'detect<.05':>11} {'95% CI':>14}")
+        print(f"  {'predictor':<16} {'gain(med)':>10} {'chg%(med)':>10} {'perm_p(med)':>12} {'detect<.05':>11} {'95% CI':>14}")
         for name, d in r["predictors"].items():
             ci = d.get("detection_ci", [float('nan'), float('nan')])
-            print(f"  {name:<16} {d['gain_median']:>9.1f} {d['perm_p_median']:>12.3f} {d['detection_rate']:>10.0%}"
+            print(f"  {name:<16} {d['gain_median']:>9.1f} {d.get('answer_change_median', float('nan')):>9.1f} {d['perm_p_median']:>12.3f} {d['detection_rate']:>10.0%}"
                   f"   [{ci[0]:.0%}, {ci[1]:.0%}]")
         a = r["across_assignments"]
         print(f"  across re-drawn assignments ({a['n_distinct_assignments']} distinct valid, "
