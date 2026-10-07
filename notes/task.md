@@ -161,21 +161,22 @@ OPEN DECISIONS:
   DSCR Llama-4-Scout matrix the reviewer named as the key example? (Default lean: DSCR Scout + a compact
 yes  per-class accuracy table; expand only if a referee asks.) USER DECISION NEEDED.
 
-EXECUTION STATUS (2026-10-07): analysis frozen, prose drafted, ONE verification step left.
+EXECUTION STATUS (2026-10-07): analysis frozen, prose drafted, PAGE BUDGET RESOLVED.
 - Analysis (R4-1/R4-3) DONE + frozen: `tools/lumiere_v4_classwise.py` (new) + answer-change added to
   `tools/lumiere_v4_donor_validation.py`; `paper_numbers` re-run added 21 macros, changed 0 existing (frozen
   numbers intact). New generated tables: `tab_v4_confusion.tex`, extended `tab_v4_donorval.tex`.
 - Prose DONE (R4-2, R4-4 partial, R4-5, R4-6, R4-7, R4-3 sentence): compiles clean, no undefined refs/macros,
   no stale numbers.
-- !! REMAINING HARD STEP — PAGE BUDGET. After edits the Conclusion moved to p.9 (body must end by p.8; aux:
-  sec:conclusion -> page 9). I moved the diagnostics table BACK to the appendix to recover space, but did NOT
-  recompile to confirm. NEXT: recompile on scratch (`export PATH=$PATH:/apps/texlive/2023/bin/x86_64-linux`),
-  check `acl_latex.aux` for `newlabel{sec:conclusion}{{...}{<page>}` == 8; if still 9, trim ~8-12 lines from the
-  body (candidates: tighten the new estimand paragraph in sec:controls; shorten the expanded E2 bullet; the
-  class-wise sentence in the E1 open-models paragraph). Limitations/refs/appendix do NOT count toward 8.
-- R4-4 TRADEOFF for user: reviewer wanted the validation TABLE in the MAIN text. I put the assumptions/estimand
-  PROSE in main text (sec:controls E2 bullet) but kept `tab:donorval` in the appendix for page budget. If the
-  body has room after trimming, promote the table into sec:controls (edit is staged in git history this session).
+- PAGE BUDGET — DONE 2026-10-07. Recompiled on scratch: body was ~one FULL COLUMN over, not 8-12 lines (the
+  whole p.9 left column was body before Limitations). Measured via PyMuPDF. Fix per user choice (trim prose,
+  keep all floats): tightened the Results/Related-Work prose and three float captions; condensed the prereg
+  amendment paragraph to a deviation disclosure (rerun history belongs in update.md); no claim or `vfour` macro
+  dropped (218 distinct macros before = after). Result: aux `sec:conclusion` -> page 8, `sec:limitations` -> page 9
+  (p.9 first block is "Limitations"), whole paper 19 -> 18 pages, clean build, same 3 pre-existing overfull hboxes.
+  Repo `paper/latex/acl_latex.pdf` + `.aux` synced to the fixed build.
+- R4-4 (table placement) — SETTLED: `tab:donorval` STAYS in Appendix D; the assumptions/estimand PROSE is in main
+  text (sec:controls E2 bullet). The freed space went to fitting the Conclusion within p.8, not to promoting the
+  table, so it is not in the main text. Revisit only if a referee insists the table itself be in the body.
 
 NEW WORK:
 - [x] **R4-1 — Diagnostics-comparison table (concern 3; THE main-conference lever).** DONE. tab_v4_donorval now
