@@ -1,0 +1,20 @@
+{#- Single-turn Vicuna-v1 style format used by the original LLaVA/LLaVA-Med training
+    code (not Mistral's native [INST]...[/INST] format) — this is what these
+    checkpoints were actually fine-tuned to expect. #}
+{%- set default_system = "A chat between a curious human and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the human's questions." -%}
+{%- if messages[0]['role'] == 'system' -%}
+    {{- messages[0]['content'] -}}
+    {%- set messages = messages[1:] -%}
+{%- else -%}
+    {{- default_system -}}
+{%- endif -%}
+{%- for message in messages -%}
+    {%- if message['role'] == 'user' -%}
+        {{- ' USER: ' + message['content'] -}}
+    {%- elif message['role'] == 'assistant' -%}
+        {{- ' ASSISTANT: ' + message['content'] -}}
+    {%- endif -%}
+{%- endfor -%}
+{%- if add_generation_prompt -%}
+    {{- ' ASSISTANT:' -}}
+{%- endif -%}

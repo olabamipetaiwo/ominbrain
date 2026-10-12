@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-037",
+  "selected": {
+    "tp": "week-015",
+    "code": "SD",
+    "expert": "stable disease",
+    "rule": "progressive disease",
+    "nadir_tp": "week-000-2",
+    "bp_nadir": 420.4,
+    "d_nadir": [
+      26.6,
+      15.8
+    ],
+    "z_nadir": 115,
+    "concordant": false,
+    "x": 5,
+    "weeks_since_surgery": 15,
+    "cls": "F",
+    "bp_ref": 420.4,
+    "bp_fu": 805.2,
+    "d_ref": [
+      26.6,
+      15.8
+    ],
+    "d_fu": [
+      38.1,
+      21.1
+    ],
+    "z_ref": 115,
+    "z_fu": 103,
+    "lil_ok": true,
+    "rationale": "less than 3 months, new target L. 12mm x 12mm, new non-target L., T2-Progr.",
+    "patient_id": "Patient-037"
+  },
+  "aia_sequence": "t1",
+  "record": {
+    "patient_id": "Patient-037",
+    "ref": "week-000-2",
+    "extent": "partial",
+    "survival_weeks": 50,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-037",
+      "Survival time (weeks)": "50",
+      "Sex": "male",
+      "Age at surgery (years)": 49,
+      "IDH (WT: wild type)": "WT",
+      "IDH method": "Sanger Sequencing",
+      "MGMT qualitative": "na",
+      "MGMT quantitative": "na"
+    }
+  }
+}

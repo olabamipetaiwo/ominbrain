@@ -1,0 +1,112 @@
+\relax 
+\citation{gururangan2018annotation}
+\citation{mccoy2019right}
+\citation{turpin2023language}
+\citation{nguyen2025localizing}
+\citation{nguyen2025localizing}
+\citation{peng2026omnibrainbench}
+\citation{suter2022lumiere}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\newlabel{sec:introduction}{{I}{1}{}{}{}}
+\citation{poliak2018hypothesis,gururangan2018annotation}
+\citation{mccoy2019right}
+\citation{turpin2023language}
+\citation{goyal2017making}
+\citation{chen2024right}
+\citation{yan2025worse}
+\citation{jin2024hidden}
+\citation{nguyen2025localizing}
+\citation{goyal2017making}
+\citation{gu2026unimod}
+\citation{peng2026omnibrainbench}
+\citation{suter2022lumiere}
+\citation{muglioma2025post}
+\citation{suter2022lumiere}
+\citation{suter2022lumiere,kickingereder2019automated}
+\citation{wen2010updated}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
+\newlabel{sec:related-work}{{II}{2}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {II-}0a}Shortcuts and faithfulness.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {II-}0b}Answering without the image.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {II-}0c}Brain benchmarks and longitudinal data.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Building Chains from LUMIERE}{2}{}\protected@file@percent }
+\newlabel{sec:lumiere}{{III}{2}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-}0a}Why not OmniBrainBench.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-}0b}LUMIERE.}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Motivating audit: can an automated rule reproduce the expert ratings from the displayed slices?}{2}{}\protected@file@percent }
+\newlabel{sec:audit}{{\mbox  {III-A}}{2}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}The item set}{2}{}\protected@file@percent }
+\newlabel{sec:v4}{{\mbox  {III-B}}{2}{}{}{}}
+\citation{isensee2019automated}
+\citation{wen2010updated}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Evaluation overview. (a) Construction: a LUMIERE glioblastoma case becomes items through automated segmentation, fact extraction from the images, masks and records, stratified sampling of one follow-up, and item assembly; the keys have four origins (AIA sequence, LIL and DSCR segmentation, PJRF outcome, TCM rule). (b) The item instantiates a five-phase same-patient chain; the image-dependent phases (AIA, LIL, DSCR) carry the keys tested here and AIA is the positive control. (c) Each image-dependent phase is run under three controlled input conditions, the patient's own image, text only, and a donor-image swap, giving an accuracy benefit, a response-sensitivity baseline, and a donor-tracking measure; these feed the statistical tests and the image-dependence-versus-response-sensitivity verdict. A reference model is a positive control alongside the four open-weight models.}}{3}{}\protected@file@percent }
+\newlabel{fig:overview}{{1}{3}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0a}Cohort.}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0b}Images.}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0c}AIA, LIL, DSCR.}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0d}PJRF.}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {III-B}0e}TCM.}{3}{}\protected@file@percent }
+\citation{sellergren2025medgemma}
+\citation{gemmateam2025gemma3}
+\citation{mcnemar1947note}
+\citation{wilson1927probable}
+\citation{agresti2005simple}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces The phases. Stems for AIA, LIL and DSCR contain no patient-specific fact and every option set contains every possible answer, so a swapped image never conflicts with the text and the donor's answer is always available. DSCR shows two images, or three when the nadir differs from the baseline.}}{4}{}\protected@file@percent }
+\newlabel{tab:phases}{{I}{4}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Controls and Pre-specified Analysis}{4}{}\protected@file@percent }
+\newlabel{sec:controls}{{IV}{4}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Non-model references on the items: chance, share of the most common key, the ceiling of a category-only TCM lookup, and the PJRF base rate.}}{5}{}\protected@file@percent }
+\newlabel{tab:baselines}{{II}{5}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {IV-}0a}Reference and precision controls.}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results}{5}{}\protected@file@percent }
+\newlabel{sec:results}{{V}{5}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Reference values without a model}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Image controls and stated facts}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {V-B}0a}The reference model reads the image.}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {V-B}0b}Open models: image effect (E1).}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {V-B}0c}Precision control.}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces E1: accuracy (\%) with the image and text only (no upstream context), the paired difference in points with its bootstrap interval, an add-half sparse-data interval (Add-half CI), the exact McNemar $p$ (unadjusted), the share of items whose answer differs between the two arms (answers differ), and the interval reading (unadjusted; only Llama-4-Scout on DSCR survives Holm correction). Answers-differ is over items in all three arms (AIA 46, LIL 38, DSCR 42 of 46); accuracy is over all items per phase (AIA 46, LIL 38, DSCR 46). AIA is the positive control.}}{6}{}\protected@file@percent }
+\newlabel{tab:e1}{{III}{6}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {V-B}0d}Open models: donor tracking (E2).}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {V-B}0e}Worked example.}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {V-B}0f}Stated facts and context (E3, E4; extension).}{6}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Worked example (Llama-4-Scout, DSCR): the ablation drop, largest among the open models and surviving correction, would alone credit image use, but the three prespecified additions (accuracy benefit over the answer prior, the prior itself, and donor tracking, the last a post hoc permutation) do not establish that the category is read from the slice.}}{6}{}\protected@file@percent }
+\newlabel{fig:worked}{{2}{6}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {\mbox  {V-B}0g}Chain (secondary).}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{6}{}\protected@file@percent }
+\newlabel{sec:conclusion}{{VI}{6}{}{}{}}
+\newlabel{sec:limitations}{{VI}{7}{}{}{}}
+\bibstyle{IEEEtranN}
+\bibdata{custom}
+\bibcite{gururangan2018annotation}{{1}{2018}{{Gururangan et~al.}}{{Gururangan, Swayamdipta, Levy, Schwartz, Bowman, and Smith}}}
+\bibcite{mccoy2019right}{{2}{2019}{{McCoy et~al.}}{{McCoy, Pavlick, and Linzen}}}
+\bibcite{turpin2023language}{{3}{2023}{{Turpin et~al.}}{{Turpin, Michael, Perez, and Bowman}}}
+\bibcite{nguyen2025localizing}{{4}{2025}{{Nguyen et~al.}}{{Nguyen, Ho, Ta, Nguyen, Chen, Rav, Dang, Ramchandre, Phung, Liao, To, Verjans, Nguyen, and Phan}}}
+\bibcite{peng2026omnibrainbench}{{5}{2026}{{Peng et~al.}}{{Peng, Wang, Liu, Liang, Ye, Ju, Woo, and Yuan}}}
+\bibcite{suter2022lumiere}{{6}{2022}{{Suter et~al.}}{{Suter, Knecht, Valenzuela, Notter, Hewer, Schucht, Wiest, and Reyes}}}
+\bibcite{poliak2018hypothesis}{{7}{2018}{{Poliak et~al.}}{{Poliak, Naradowsky, Haldar, Rudinger, and Van~Durme}}}
+\bibcite{goyal2017making}{{8}{2017}{{Goyal et~al.}}{{Goyal, Khot, Summers-Stay, Batra, and Parikh}}}
+\bibcite{chen2024right}{{9}{2024}{{Chen et~al.}}{{Chen, Li, Dong, Zhang, Zang, Chen, Duan, Wang, Qiao, Lin, and Zhao}}}
+\bibcite{yan2025worse}{{10}{2025}{{Yan et~al.}}{{Yan, He, Yue, and Wang}}}
+\bibcite{jin2024hidden}{{11}{2024}{{Jin et~al.}}{{Jin, Chen, Zhou, Xu, Cheung, Chen, Summers, Rousseau, Ni, Landsman, Baxter, Al'Aref, Li, Chen, Brejt, Chiang, Peng, and Lu}}}
+\bibcite{gu2026unimod}{{12}{2026}{{Gu et~al.}}{{Gu, Lin, Zhou, Chen, and Wang}}}
+\bibcite{muglioma2025post}{{13}{2025}{{Mahmoud et~al.}}{{Mahmoud, Gass, Dhemesh, Greaser, Pogorzelski, Isufi, Garrett, Thacker, Tahon, Sinclair, Layfield, Altes, and Nada}}}
+\bibcite{kickingereder2019automated}{{14}{2019}{{Kickingereder et~al.}}{{Kickingereder, Isensee, Tursunova, Petersen, Neuberger, Bonekamp, Brugnara, Schell, Kessler, Foltyn, Harting, Sahm, Prager, Nowosielski, Wick, Nolden, Radbruch, Debus, Schlemmer, Heiland, Platten, von Deimling, van~den Bent, Gorlia, Wick, Bendszus, and Maier-Hein}}}
+\bibcite{wen2010updated}{{15}{2010}{{Wen et~al.}}{{Wen, Macdonald, Reardon, Cloughesy, Sorensen, Galanis, DeGroot, Wick, Gilbert, Lassman, et~al.}}}
+\bibcite{isensee2019automated}{{16}{2019}{{Isensee et~al.}}{{Isensee, Schell, Pflueger, Brugnara, Bonekamp, Neuberger, Wick, Schlemmer, Heiland, Wick, Bendszus, Maier-Hein, and Kickingereder}}}
+\bibcite{sellergren2025medgemma}{{17}{2025}{{Sellergren et~al.}}{{Sellergren, Kazemzadeh, Jaroensri, et~al.}}}
+\bibcite{gemmateam2025gemma3}{{18}{2025}{{Gemma Team}}{{}}}
+\bibcite{mcnemar1947note}{{19}{1947}{{McNemar}}{{}}}
+\bibcite{wilson1927probable}{{20}{1927}{{Wilson}}{{}}}
+\bibcite{agresti2005simple}{{21}{2005}{{Agresti and Min}}{{}}}
+\@writefile{toc}{\contentsline {section}{Appendix}{9}{}\protected@file@percent }
+\newlabel{sec:app-tables}{{A}{9}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Reference model (Gemini-3.6-Flash): accuracy (\%) with the image and with text only, the paired difference, the share of swapped-image answers equal to the donor's key, and the donor-tracking gain (percentage points). Accuracy is over all items (AIA 46, LIL 38, DSCR 46); the swap and donor-key columns use the donor-paired items (AIA 46, LIL 38, DSCR 42).}}{10}{}\protected@file@percent }
+\newlabel{tab:ctrl}{{IV}{10}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces E2: share of answers (\%) that equal the donor's key when the image is swapped, and when there is no image; the gain is the difference in percentage points, with its bootstrap interval, an add-half sparse-data interval (Add-half CI) and the exact McNemar $p$ (unadjusted); the last column is the share of items whose answer differs from the own-image answer after the swap. Sample sizes are the donor-paired items (AIA 46, LIL 38, DSCR 42); the own-image accuracy in Table~\ref {tab:e1} is over all items (DSCR 46).}}{10}{}\protected@file@percent }
+\newlabel{tab:e2}{{V}{10}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces DSCR class-wise confusion for Llama-4-Scout with its own image (rows: the item's RANO key class; columns: the model's predicted class; recall on the diagonal). Overall accuracy 54.3{}\% is below the majority share (58.7{}\%), but the model is not a constant predictor: it recovers 6{} of 19{} non-majority items while missing some progressive-disease items, so below-majority accuracy is not evidence that the slice is unread.}}{10}{}\protected@file@percent }
+\newlabel{tab:confusion}{{VI}{10}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Diagnostics on the DSCR donor swap (42{} recipients), run on synthetic predictors with known behaviour over 50{} simulations: the donor-tracking gain, the image-vs-text answer-change rate, and the share of simulations in which the permutation flags tracking ($p<.05$). A generic image shift that ignores which donor is shown reaches a positive gain and a high answer-change rate yet is never flagged, and at $\rho =0.4$ a genuine tracker and the generic shift share the same gain (+19.0{} vs +19.0{}~pp): neither the gain nor the answer-change rate separates them, the permutation does.}}{10}{}\protected@file@percent }
+\newlabel{tab:donorval}{{VII}{10}{}{}{}}
+\gdef \@abspage@last{10}

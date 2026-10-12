@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-021",
+  "selected": {
+    "tp": "week-022",
+    "code": "PD",
+    "expert": "progressive disease",
+    "rule": "complete response",
+    "nadir_tp": "week-000-2",
+    "bp_nadir": 496.7,
+    "d_nadir": [
+      27.9,
+      17.8
+    ],
+    "z_nadir": 81,
+    "concordant": false,
+    "x": 12,
+    "weeks_since_surgery": 22,
+    "cls": "C",
+    "bp_ref": 496.7,
+    "bp_fu": 1.0,
+    "d_ref": [
+      27.9,
+      17.8
+    ],
+    "d_fu": [
+      1.0,
+      1.0
+    ],
+    "z_ref": 81,
+    "z_fu": 80,
+    "lil_ok": true,
+    "rationale": "dural recurrence despite within 3 months of radiochemotherapy",
+    "patient_id": "Patient-021"
+  },
+  "aia_sequence": "flair",
+  "record": {
+    "patient_id": "Patient-021",
+    "ref": "week-000-2",
+    "extent": "complete",
+    "survival_weeks": 54,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-021",
+      "Survival time (weeks)": "54",
+      "Sex": "female",
+      "Age at surgery (years)": 76,
+      "IDH (WT: wild type)": "na",
+      "IDH method": "na",
+      "MGMT qualitative": "not methylated",
+      "MGMT quantitative": "0.00%"
+    }
+  }
+}

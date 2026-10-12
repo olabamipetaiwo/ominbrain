@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-018",
+  "selected": {
+    "tp": "week-063",
+    "code": "CR",
+    "expert": "complete response",
+    "rule": "complete response",
+    "nadir_tp": "week-017",
+    "bp_nadir": 119.0,
+    "d_nadir": [
+      12.4,
+      9.6
+    ],
+    "z_nadir": 42,
+    "concordant": true,
+    "x": 50,
+    "weeks_since_surgery": 60,
+    "cls": "C",
+    "bp_ref": 673.6,
+    "bp_fu": 0.0,
+    "d_ref": [
+      33.4,
+      20.1
+    ],
+    "d_fu": [
+      0.0,
+      0.0
+    ],
+    "z_ref": 55,
+    "z_fu": null,
+    "lil_ok": true,
+    "rationale": null,
+    "patient_id": "Patient-018"
+  },
+  "aia_sequence": "ct1",
+  "record": {
+    "patient_id": "Patient-018",
+    "ref": "week-003",
+    "extent": "complete",
+    "survival_weeks": 167,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-018",
+      "Survival time (weeks)": "167",
+      "Sex": "male",
+      "Age at surgery (years)": 71,
+      "IDH (WT: wild type)": "WT",
+      "IDH method": "Immuno",
+      "MGMT qualitative": "methylated",
+      "MGMT quantitative": "80.00%"
+    }
+  }
+}

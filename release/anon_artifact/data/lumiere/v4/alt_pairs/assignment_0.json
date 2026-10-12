@@ -1,0 +1,1034 @@
+{
+ "Patient-002": {
+  "partner_by_phase": {
+   "AIA": "Patient-089",
+   "LIL": "Patient-045",
+   "DSCR": "Patient-012"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-089",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-045",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-012",
+    "own_key": "Complete response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-003": {
+  "partner_by_phase": {
+   "AIA": "Patient-008",
+   "LIL": "Patient-019",
+   "DSCR": "Patient-065"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-008",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-019",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-065",
+    "own_key": "Complete response",
+    "donor_key": "Partial response"
+   }
+  }
+ },
+ "Patient-006": {
+  "partner_by_phase": {
+   "AIA": "Patient-011",
+   "LIL": "Patient-089",
+   "DSCR": "Patient-071"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-011",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-089",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-071",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-007": {
+  "partner_by_phase": {
+   "AIA": "Patient-058",
+   "LIL": "Patient-033",
+   "DSCR": "Patient-019"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-058",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-033",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-019",
+    "own_key": "Progressive disease",
+    "donor_key": "Partial response"
+   }
+  }
+ },
+ "Patient-008": {
+  "partner_by_phase": {
+   "AIA": "Patient-054",
+   "DSCR": "Patient-029"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-054",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "DSCR": {
+    "partner": "Patient-029",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-011": {
+  "partner_by_phase": {
+   "AIA": "Patient-080",
+   "LIL": "Patient-003",
+   "DSCR": "Patient-058"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-080",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T2-weighted"
+   },
+   "LIL": {
+    "partner": "Patient-003",
+    "own_key": "Left hemisphere, anterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-058",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-012": {
+  "partner_by_phase": {
+   "AIA": "Patient-037",
+   "LIL": "Patient-046",
+   "DSCR": "Patient-074"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-037",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-046",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-074",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-018": {
+  "partner_by_phase": {
+   "AIA": "Patient-021",
+   "LIL": "Patient-062",
+   "DSCR": "Patient-024"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-021",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-062",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-024",
+    "own_key": "Complete response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-019": {
+  "partner_by_phase": {
+   "AIA": "Patient-063",
+   "LIL": "Patient-058",
+   "DSCR": "Patient-077"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-063",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-058",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-077",
+    "own_key": "Partial response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-021": {
+  "partner_by_phase": {
+   "AIA": "Patient-002",
+   "LIL": "Patient-023",
+   "DSCR": "Patient-011"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-002",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T2-weighted"
+   },
+   "LIL": {
+    "partner": "Patient-023",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-011",
+    "own_key": "Complete response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-022": {
+  "partner_by_phase": {
+   "AIA": "Patient-065",
+   "DSCR": "Patient-071"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-065",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "DSCR": {
+    "partner": "Patient-071",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-023": {
+  "partner_by_phase": {
+   "AIA": "Patient-061",
+   "LIL": "Patient-051",
+   "DSCR": "Patient-018"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-061",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-051",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-018",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-024": {
+  "partner_by_phase": {
+   "AIA": "Patient-038",
+   "LIL": "Patient-028",
+   "DSCR": "Patient-045"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-038",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-028",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-045",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-028": {
+  "partner_by_phase": {
+   "AIA": "Patient-018",
+   "LIL": "Patient-065"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-018",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-065",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   }
+  }
+ },
+ "Patient-029": {
+  "partner_by_phase": {
+   "AIA": "Patient-059",
+   "LIL": "Patient-035",
+   "DSCR": "Patient-055"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-059",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-035",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-055",
+    "own_key": "Complete response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-031": {
+  "partner_by_phase": {
+   "AIA": "Patient-048",
+   "LIL": "Patient-073",
+   "DSCR": "Patient-037"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-048",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-073",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-037",
+    "own_key": "Partial response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-032": {
+  "partner_by_phase": {
+   "AIA": "Patient-074",
+   "LIL": "Patient-080",
+   "DSCR": "Patient-023"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-074",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "T2-weighted"
+   },
+   "LIL": {
+    "partner": "Patient-080",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-023",
+    "own_key": "Complete response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-033": {
+  "partner_by_phase": {
+   "AIA": "Patient-072",
+   "LIL": "Patient-074"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-072",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "T2-weighted"
+   },
+   "LIL": {
+    "partner": "Patient-074",
+    "own_key": "Left hemisphere, anterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   }
+  }
+ },
+ "Patient-035": {
+  "partner_by_phase": {
+   "AIA": "Patient-029",
+   "LIL": "Patient-075",
+   "DSCR": "Patient-078"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-029",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-075",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-078",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-037": {
+  "partner_by_phase": {
+   "AIA": "Patient-038",
+   "LIL": "Patient-028",
+   "DSCR": "Patient-062"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-038",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-028",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-062",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-038": {
+  "partner_by_phase": {
+   "AIA": "Patient-019",
+   "DSCR": "Patient-040"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-019",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "DSCR": {
+    "partner": "Patient-040",
+    "own_key": "Stable disease",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-039": {
+  "partner_by_phase": {
+   "AIA": "Patient-032",
+   "DSCR": "Patient-019"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-032",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "DSCR": {
+    "partner": "Patient-019",
+    "own_key": "Progressive disease",
+    "donor_key": "Partial response"
+   }
+  }
+ },
+ "Patient-040": {
+  "partner_by_phase": {
+   "AIA": "Patient-028",
+   "LIL": "Patient-019",
+   "DSCR": "Patient-038"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-028",
+    "own_key": "T2-weighted",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-019",
+    "own_key": "Left hemisphere, anterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-038",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-045": {
+  "partner_by_phase": {
+   "AIA": "Patient-008",
+   "LIL": "Patient-051",
+   "DSCR": "Patient-075"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-008",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-051",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-075",
+    "own_key": "Complete response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-046": {
+  "partner_by_phase": {
+   "AIA": "Patient-058",
+   "LIL": "Patient-073",
+   "DSCR": "Patient-003"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-058",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-073",
+    "own_key": "Left hemisphere, anterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-003",
+    "own_key": "Stable disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-048": {
+  "partner_by_phase": {
+   "AIA": "Patient-039",
+   "LIL": "Patient-023",
+   "DSCR": "Patient-045"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-039",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "T2-weighted"
+   },
+   "LIL": {
+    "partner": "Patient-023",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-045",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-050": {
+  "partner_by_phase": {
+   "AIA": "Patient-002",
+   "LIL": "Patient-065",
+   "DSCR": "Patient-058"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-002",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T2-weighted"
+   },
+   "LIL": {
+    "partner": "Patient-065",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-058",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-051": {
+  "partner_by_phase": {
+   "AIA": "Patient-012",
+   "LIL": "Patient-007",
+   "DSCR": "Patient-031"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-012",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-007",
+    "own_key": "Left hemisphere, anterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-031",
+    "own_key": "Progressive disease",
+    "donor_key": "Partial response"
+   }
+  }
+ },
+ "Patient-052": {
+  "partner_by_phase": {
+   "AIA": "Patient-033",
+   "DSCR": "Patient-022"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-033",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "DSCR": {
+    "partner": "Patient-022",
+    "own_key": "Partial response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-054": {
+  "partner_by_phase": {
+   "AIA": "Patient-046",
+   "LIL": "Patient-050",
+   "DSCR": "Patient-021"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-046",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-050",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-021",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-055": {
+  "partner_by_phase": {
+   "AIA": "Patient-062"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-062",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   }
+  }
+ },
+ "Patient-058": {
+  "partner_by_phase": {
+   "AIA": "Patient-037",
+   "LIL": "Patient-002",
+   "DSCR": "Patient-002"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-037",
+    "own_key": "FLAIR (fluid-attenuated inversion recovery)",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-002",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-002",
+    "own_key": "Stable disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-059": {
+  "partner_by_phase": {
+   "AIA": "Patient-078",
+   "DSCR": "Patient-046"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-078",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "DSCR": {
+    "partner": "Patient-046",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-061": {
+  "partner_by_phase": {
+   "AIA": "Patient-021",
+   "LIL": "Patient-080",
+   "DSCR": "Patient-029"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-021",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-080",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-029",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-062": {
+  "partner_by_phase": {
+   "AIA": "Patient-052",
+   "LIL": "Patient-063",
+   "DSCR": "Patient-012"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-052",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "T2-weighted"
+   },
+   "LIL": {
+    "partner": "Patient-063",
+    "own_key": "Left hemisphere, anterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-012",
+    "own_key": "Complete response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-063": {
+  "partner_by_phase": {
+   "AIA": "Patient-073",
+   "LIL": "Patient-037",
+   "DSCR": "Patient-018"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-073",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-037",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-018",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-065": {
+  "partner_by_phase": {
+   "AIA": "Patient-054",
+   "LIL": "Patient-074",
+   "DSCR": "Patient-022"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-054",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-074",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-022",
+    "own_key": "Partial response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-071": {
+  "partner_by_phase": {
+   "AIA": "Patient-006",
+   "LIL": "Patient-031",
+   "DSCR": "Patient-074"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-006",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-031",
+    "own_key": "Right hemisphere, posterior half",
+    "donor_key": "Left hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-074",
+    "own_key": "Stable disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-072": {
+  "partner_by_phase": {
+   "AIA": "Patient-077",
+   "LIL": "Patient-050",
+   "DSCR": "Patient-052"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-077",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-050",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-052",
+    "own_key": "Stable disease",
+    "donor_key": "Partial response"
+   }
+  }
+ },
+ "Patient-073": {
+  "partner_by_phase": {
+   "AIA": "Patient-040",
+   "LIL": "Patient-035",
+   "DSCR": "Patient-032"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-040",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "T2-weighted"
+   },
+   "LIL": {
+    "partner": "Patient-035",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-032",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-074": {
+  "partner_by_phase": {
+   "AIA": "Patient-024",
+   "LIL": "Patient-061",
+   "DSCR": "Patient-050"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-024",
+    "own_key": "T2-weighted",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-061",
+    "own_key": "Right hemisphere, anterior half",
+    "donor_key": "Right hemisphere, posterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-050",
+    "own_key": "Complete response",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-075": {
+  "partner_by_phase": {
+   "AIA": "Patient-051",
+   "LIL": "Patient-062",
+   "DSCR": "Patient-032"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-051",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "T1-weighted, before contrast"
+   },
+   "LIL": {
+    "partner": "Patient-062",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-032",
+    "own_key": "Progressive disease",
+    "donor_key": "Complete response"
+   }
+  }
+ },
+ "Patient-077": {
+  "partner_by_phase": {
+   "AIA": "Patient-075",
+   "LIL": "Patient-089",
+   "DSCR": "Patient-078"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-075",
+    "own_key": "T1-weighted, before contrast",
+    "donor_key": "T1-weighted, after gadolinium contrast"
+   },
+   "LIL": {
+    "partner": "Patient-089",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-078",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-078": {
+  "partner_by_phase": {
+   "AIA": "Patient-055",
+   "DSCR": "Patient-089"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-055",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "T2-weighted"
+   },
+   "DSCR": {
+    "partner": "Patient-089",
+    "own_key": "Stable disease",
+    "donor_key": "Progressive disease"
+   }
+  }
+ },
+ "Patient-080": {
+  "partner_by_phase": {
+   "AIA": "Patient-050",
+   "LIL": "Patient-011",
+   "DSCR": "Patient-072"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-050",
+    "own_key": "T2-weighted",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-011",
+    "own_key": "Left hemisphere, posterior half",
+    "donor_key": "Left hemisphere, anterior half"
+   },
+   "DSCR": {
+    "partner": "Patient-072",
+    "own_key": "Progressive disease",
+    "donor_key": "Stable disease"
+   }
+  }
+ },
+ "Patient-089": {
+  "partner_by_phase": {
+   "AIA": "Patient-023",
+   "LIL": "Patient-018"
+  },
+  "detail": {
+   "AIA": {
+    "partner": "Patient-023",
+    "own_key": "T1-weighted, after gadolinium contrast",
+    "donor_key": "FLAIR (fluid-attenuated inversion recovery)"
+   },
+   "LIL": {
+    "partner": "Patient-018",
+    "own_key": "Left hemisphere, anterior half",
+    "donor_key": "Right hemisphere, anterior half"
+   }
+  }
+ }
+}

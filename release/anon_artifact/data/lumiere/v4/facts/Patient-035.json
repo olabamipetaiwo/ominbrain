@@ -1,0 +1,70 @@
+{
+  "patient_id": "Patient-035",
+  "selected": {
+    "tp": "week-024",
+    "code": "PD",
+    "expert": "progressive disease",
+    "rule": "progressive disease",
+    "nadir_tp": "week-019",
+    "bp_nadir": 7.6,
+    "d_nadir": [
+      3.2,
+      2.3
+    ],
+    "z_nadir": 83,
+    "concordant": true,
+    "x": 14,
+    "weeks_since_surgery": 24,
+    "cls": "E",
+    "bp_ref": 17.4,
+    "bp_fu": 1712.0,
+    "d_ref": [
+      4.6,
+      3.8
+    ],
+    "d_fu": [
+      44.9,
+      38.2
+    ],
+    "z_ref": 86,
+    "z_fu": 89,
+    "lil_ok": true,
+    "rationale": "New non-Target L.",
+    "patient_id": "Patient-035"
+  },
+  "aia_sequence": "t2",
+  "record": {
+    "patient_id": "Patient-035",
+    "ref": "week-000-2",
+    "extent": "complete",
+    "survival_weeks": 54,
+    "undetermined": [
+      {
+        "expert": "stable disease",
+        "x": -2
+      },
+      {
+        "expert": "stable disease",
+        "x": 9
+      },
+      {
+        "expert": "progressive disease",
+        "x": 26
+      },
+      {
+        "expert": "progressive disease",
+        "x": 40
+      }
+    ],
+    "demo": {
+      "Patient": "Patient-035",
+      "Survival time (weeks)": "54",
+      "Sex": "male",
+      "Age at surgery (years)": 49,
+      "IDH (WT: wild type)": "WT",
+      "IDH method": "BES",
+      "MGMT qualitative": "methylated",
+      "MGMT quantitative": "na"
+    }
+  }
+}

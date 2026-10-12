@@ -1,13 +1,19 @@
 # Reference existence audit
 
-Checked 2026-10-07. Scope: all 23 entries in `paper/latex/custom.bib` only.
+Checked 2026-10-07; **re-verified 2026-10-12 for the IEEE ICHI 2027 submission** (professor: all references must be real Google-Scholar-collected works, severe penalty for a hallucinated reference). Scope: all 23 entries in `paper/latex/custom.bib` (21 are cited by `ichi_latex.tex`; `rsna_radlex` and `sioutos2007nci` are uncited and do not render).
 
-All 23 entries correspond to identifiable real works. No fabricated reference was found. This is a bibliographic identity audit, not an assessment of whether each paper supports the manuscript's claims. The bibliography was not edited.
+All 23 entries correspond to identifiable real works. **No fabricated reference was found.** This is a bibliographic identity audit, not an assessment of whether each paper supports the manuscript's claims.
 
-## Details to review
+2026-10-12 re-verification: the 7 recent/forward-dated entries (`peng2026omnibrainbench`, `gu2026unimod`, `muglioma2025post`, `nguyen2025localizing`, `yan2025worse`, `chen2024right`, `jin2024hidden`) and the 2 arXiv model reports (`sellergren2025medgemma` 2507.05201, `gemmateam2025gemma3` 2503.19786) were each re-confirmed against a live primary record (CVF/OpenReview, ACL Anthology, IJCAI proceedings, Nature/PMC, NeurIPS, arXiv). The 12 classics rest on the Anthology/PubMed/publisher-DOI records below.
 
-- `jin2024hidden`: use `Chen, Alexander` instead of `Chen, Alex` to match the [publisher's author list](https://www.nature.com/articles/s41746-024-01185-7).
-- `peng2026omnibrainbench`: use `Ju, Min Jie` instead of `Ju, Minjie` to match the [CVF proceedings record](https://openaccess.thecvf.com/content/CVPR2026/html/Peng_OmniBrainBench_A_Comprehensive_Multimodal_Benchmark_for_Brain_Imaging_Analysis_Across_CVPR_2026_paper.html). This is a name-spacing discrepancy, not a nonexistent author or paper.
+## Corrections applied (2026-10-12)
+
+The two name discrepancies previously flagged are now FIXED in `custom.bib` (both render only as initials under IEEEtran, but the second changes one initial to two):
+
+- `jin2024hidden`: `Chen, Alex` -> `Chen, Alexander` (matches the [npj author list](https://www.nature.com/articles/s41746-024-01185-7)); renders `A. Chen`.
+- `peng2026omnibrainbench`: `Ju, Minjie` -> `Ju, Min Jie` (matches the [CVF proceedings record](https://openaccess.thecvf.com/content/CVPR2026/html/Peng_OmniBrainBench_A_Comprehensive_Multimodal_Benchmark_for_Brain_Imaging_Analysis_Across_CVPR_2026_paper.html)); renders `M. J. Ju`.
+
+## Details still to review (not fabrication; optional)
 - `gu2026unimod`: the work and authors are confirmed by [arXiv](https://arxiv.org/abs/2608.10316). The [authors' repository](https://github.com/futurespyhi/UniMod) supplies the same ACM DOI and says the proceedings will be published in November 2026. Direct DOI access was unsuccessful in this audit, so final ACM registration/publication metadata was not independently confirmed. Keep `To appear`; adding the arXiv URL would provide an accessible verification link.
 - `goyal2017making`: the [CVF version](https://openaccess.thecvf.com/content_cvpr_2017/html/Goyal_Making_the_v_CVPR_2017_paper.html) uses pages 6904–6913, while the bibliography's 6325–6334 is widely used for the IEEE proceedings version. The [IEEE record](https://ieeexplore.ieee.org/document/8100153/) identifies the same paper, but its page metadata was not readable through this browser. Do not classify this version-dependent discrepancy as fabrication or automatically replace the pages. Adding DOI `10.1109/CVPR.2017.670` would clarify the intended version.
 

@@ -1,0 +1,178 @@
+{
+  "serving": {
+    "model_name": "Gemma-3-27B-bf16",
+    "model_tag": "google/gemma-3-27b-it",
+    "backend": "vllm",
+    "base_url": "http://localhost:8453/v1",
+    "v1_models": {
+      "object": "list",
+      "data": [
+        {
+          "id": "google/gemma-3-27b-it",
+          "object": "model",
+          "created": 1790644423,
+          "owned_by": "vllm",
+          "root": "google/gemma-3-27b-it",
+          "parent": null,
+          "max_model_len": 8192,
+          "permission": [
+            {
+              "id": "modelperm-ae091bf9cc841ac0",
+              "object": "model_permission",
+              "created": 1790644423,
+              "allow_create_engine": false,
+              "allow_sampling": true,
+              "allow_logprobs": true,
+              "allow_search_indices": false,
+              "allow_view": true,
+              "allow_fine_tuning": false,
+              "organization": "*",
+              "group": null,
+              "is_blocking": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "max_tokens_in_runs": 800,
+  "tokens": {
+    "patient": "Patient-007",
+    "phases": {
+      "AIA": {
+        "question_id": "Patient-007_AIA",
+        "n_images": 1,
+        "image_sizes": [
+          [
+            728,
+            872
+          ]
+        ],
+        "prompt_tokens_by_n_images": {
+          "0": 378,
+          "1": 656
+        },
+        "increment_per_added_image": [
+          278
+        ],
+        "text_only_tokens": 378
+      },
+      "LIL": {
+        "question_id": "Patient-007_LIL",
+        "n_images": 1,
+        "image_sizes": [
+          [
+            728,
+            872
+          ]
+        ],
+        "prompt_tokens_by_n_images": {
+          "0": 425,
+          "1": 708
+        },
+        "increment_per_added_image": [
+          283
+        ],
+        "text_only_tokens": 425
+      },
+      "DSCR": {
+        "question_id": "Patient-007_DSCR",
+        "n_images": 3,
+        "image_sizes": [
+          [
+            728,
+            872
+          ],
+          [
+            728,
+            872
+          ],
+          [
+            728,
+            872
+          ]
+        ],
+        "prompt_tokens_by_n_images": {
+          "0": 540,
+          "1": 818,
+          "2": 1089,
+          "3": 1377
+        },
+        "increment_per_added_image": [
+          278,
+          271,
+          288
+        ],
+        "text_only_tokens": 540
+      }
+    }
+  },
+  "probes": [
+    {
+      "probe": "colour_red",
+      "expected": [
+        "red"
+      ],
+      "answer": "Red.",
+      "pass": true
+    },
+    {
+      "probe": "colour_green",
+      "expected": [
+        "green"
+      ],
+      "answer": "Green.",
+      "pass": true
+    },
+    {
+      "probe": "colour_blue",
+      "expected": [
+        "blue"
+      ],
+      "answer": "Blue.",
+      "pass": true
+    },
+    {
+      "probe": "number_742",
+      "expected": [
+        "742"
+      ],
+      "answer": "742",
+      "pass": true
+    },
+    {
+      "probe": "number_1905",
+      "expected": [
+        "1905"
+      ],
+      "answer": "1905",
+      "pass": true
+    },
+    {
+      "probe": "three_images_order",
+      "expected": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "answer": "Red, green, blue",
+      "pass": true
+    },
+    {
+      "probe": "two_images_second",
+      "expected": [
+        "blue"
+      ],
+      "answer": "Blue",
+      "pass": true
+    },
+    {
+      "probe": "real_slice_background",
+      "expected": [
+        "black"
+      ],
+      "answer": "Black",
+      "pass": true
+    }
+  ]
+}

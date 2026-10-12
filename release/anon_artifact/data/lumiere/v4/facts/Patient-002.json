@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-002",
+  "selected": {
+    "tp": "week-021",
+    "code": "SD",
+    "expert": "stable disease",
+    "rule": "complete response",
+    "nadir_tp": "week-003",
+    "bp_nadir": 957.9,
+    "d_nadir": [
+      32.0,
+      29.9
+    ],
+    "z_nadir": 125,
+    "concordant": false,
+    "x": 8,
+    "weeks_since_surgery": 18,
+    "cls": "C",
+    "bp_ref": 957.9,
+    "bp_fu": 0.0,
+    "d_ref": [
+      32.0,
+      29.9
+    ],
+    "d_fu": [
+      0.0,
+      0.0
+    ],
+    "z_ref": 125,
+    "z_fu": null,
+    "lil_ok": true,
+    "rationale": null,
+    "patient_id": "Patient-002"
+  },
+  "aia_sequence": "t2",
+  "record": {
+    "patient_id": "Patient-002",
+    "ref": "week-003",
+    "extent": "complete",
+    "survival_weeks": 48,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-002",
+      "Survival time (weeks)": "48",
+      "Sex": "female",
+      "Age at surgery (years)": 71,
+      "IDH (WT: wild type)": "na",
+      "IDH method": "na",
+      "MGMT qualitative": "not methylated",
+      "MGMT quantitative": "0.00%"
+    }
+  }
+}

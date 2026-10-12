@@ -1,0 +1,172 @@
+{
+ "version": 2,
+ "axcodes": "LAS",
+ "shape": [
+  182,
+  218,
+  182
+ ],
+ "enh_voxels": 1581,
+ "core_voxels": 28012,
+ "enh_components": [
+  {
+   "z": 60,
+   "voxels": 994,
+   "centroid_xyz": [
+    104.0,
+    51.8,
+    64.8
+   ],
+   "d1_mm": 19.8,
+   "d2_mm": 10.5,
+   "bp_mm2": 208.3
+  },
+  {
+   "z": 58,
+   "voxels": 380,
+   "centroid_xyz": [
+    130.2,
+    55.6,
+    57.3
+   ],
+   "d1_mm": 19.0,
+   "d2_mm": 11.7,
+   "bp_mm2": 221.7
+  },
+  {
+   "z": 81,
+   "voxels": 150,
+   "centroid_xyz": [
+    109.4,
+    52.7,
+    80.6
+   ],
+   "d1_mm": 9.0,
+   "d2_mm": 7.0,
+   "bp_mm2": 63.0
+  },
+  {
+   "z": 58,
+   "voxels": 34,
+   "centroid_xyz": [
+    134.5,
+    61.7,
+    58.1
+   ],
+   "d1_mm": 5.5,
+   "d2_mm": 3.2,
+   "bp_mm2": 17.7
+  },
+  {
+   "z": 74,
+   "voxels": 8,
+   "centroid_xyz": [
+    96.4,
+    42.1,
+    74.6
+   ],
+   "d1_mm": 3.8,
+   "d2_mm": 1.7,
+   "bp_mm2": 6.5
+  },
+  {
+   "z": 62,
+   "voxels": 7,
+   "centroid_xyz": [
+    108.3,
+    55.6,
+    62.1
+   ],
+   "d1_mm": 3.2,
+   "d2_mm": 1.9,
+   "bp_mm2": 6.1
+  },
+  {
+   "z": 61,
+   "voxels": 2,
+   "centroid_xyz": [
+    105.5,
+    35.0,
+    61.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 62,
+   "voxels": 2,
+   "centroid_xyz": [
+    109.0,
+    58.5,
+    62.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 77,
+   "voxels": 2,
+   "centroid_xyz": [
+    142.5,
+    65.0,
+    77.5
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 72,
+   "voxels": 1,
+   "centroid_xyz": [
+    95.0,
+    40.0,
+    72.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 56,
+   "voxels": 1,
+   "centroid_xyz": [
+    119.0,
+    57.0,
+    56.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  }
+ ],
+ "enh": {
+  "z": 60,
+  "voxels": 994,
+  "centroid_xyz": [
+   104.0,
+   51.8,
+   64.8
+  ],
+  "d1_mm": 19.8,
+  "d2_mm": 10.5,
+  "bp_mm2": 208.3
+ },
+ "core": {
+  "z": 68,
+  "component_px": 1208,
+  "centroid_xy": [
+   119.4,
+   58.2
+  ],
+  "mid_x": 89.5,
+  "mid_y": 96.5,
+  "dx_mm": 29.9,
+  "dy_mm": 38.3,
+  "side_fraction": 1.0,
+  "hemisphere": "left",
+  "ap_half": "posterior"
+ }
+}

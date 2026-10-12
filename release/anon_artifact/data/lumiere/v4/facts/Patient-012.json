@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-012",
+  "selected": {
+    "tp": "week-016",
+    "code": "SD",
+    "expert": "stable disease",
+    "rule": "progressive disease",
+    "nadir_tp": "week-000-2",
+    "bp_nadir": 17.7,
+    "d_nadir": [
+      5.5,
+      3.2
+    ],
+    "z_nadir": 41,
+    "concordant": false,
+    "x": 6,
+    "weeks_since_surgery": 16,
+    "cls": "F",
+    "bp_ref": 17.7,
+    "bp_fu": 362.6,
+    "d_ref": [
+      5.5,
+      3.2
+    ],
+    "d_fu": [
+      22.6,
+      16.1
+    ],
+    "z_ref": 41,
+    "z_fu": 67,
+    "lil_ok": true,
+    "rationale": "Less than 3 months, new target L. 16mm x 14mm, new non-target L., T2-Progr. In the high-dose field ",
+    "patient_id": "Patient-012"
+  },
+  "aia_sequence": "flair",
+  "record": {
+    "patient_id": "Patient-012",
+    "ref": "week-000-2",
+    "extent": "partial",
+    "survival_weeks": 93,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-012",
+      "Survival time (weeks)": "93",
+      "Sex": "male",
+      "Age at surgery (years)": 68,
+      "IDH (WT: wild type)": "WT",
+      "IDH method": "Immuno",
+      "MGMT qualitative": "na",
+      "MGMT quantitative": "na"
+    }
+  }
+}

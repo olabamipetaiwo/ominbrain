@@ -1,0 +1,72 @@
+[
+ {
+  "index": 0,
+  "seed": 10000,
+  "coverage": {
+   "AIA": 46,
+   "LIL": 38,
+   "DSCR": 42
+  },
+  "differs_from_original": {
+   "AIA": true,
+   "LIL": true,
+   "DSCR": true
+  }
+ },
+ {
+  "index": 1,
+  "seed": 10001,
+  "coverage": {
+   "AIA": 46,
+   "LIL": 38,
+   "DSCR": 42
+  },
+  "differs_from_original": {
+   "AIA": true,
+   "LIL": true,
+   "DSCR": true
+  }
+ },
+ {
+  "index": 2,
+  "seed": 10002,
+  "coverage": {
+   "AIA": 46,
+   "LIL": 38,
+   "DSCR": 42
+  },
+  "differs_from_original": {
+   "AIA": true,
+   "LIL": true,
+   "DSCR": true
+  }
+ },
+ {
+  "index": 3,
+  "seed": 10003,
+  "coverage": {
+   "AIA": 46,
+   "LIL": 38,
+   "DSCR": 42
+  },
+  "differs_from_original": {
+   "AIA": true,
+   "LIL": true,
+   "DSCR": true
+  }
+ },
+ {
+  "index": 4,
+  "seed": 10004,
+  "coverage": {
+   "AIA": 46,
+   "LIL": 38,
+   "DSCR": 42
+  },
+  "differs_from_original": {
+   "AIA": true,
+   "LIL": true,
+   "DSCR": true
+  }
+ }
+]

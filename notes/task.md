@@ -12,6 +12,16 @@ When a task is confirmed finished, delete it from this file (history goes in `pa
 ---
 ## NEW TASKS (delete each when done)
 
+### VENUE SWITCH -> IEEE ICHI 2027 (2026-10-12; professor's call). Early Bird deadline Oct 14 2026.
+Format: IEEE two-column, **max 10pp INCLUDING refs**, double-blind, OpenReview. ARR #1566 already withdrawn.
+IEEE build is `paper/latex/ichi_latex.tex` (acl_latex.tex kept as fallback). See update.md (22).
+- [x] ACL->IEEE reformat (IEEEtran + natbib numeric + IEEEtranN), trim 14pp -> exactly 10pp incl refs, 0 undefined/0 overfull. User chose to leave at 10.
+- [x] Reference re-verification (professor: all real/Scholar, severe penalty for hallucination). All 21 cited refs confirmed real; 2 author-name fixes applied (jin2024 Alexander, peng2026 Min Jie). See reference-audit.md.
+- [ ] Final visual proofread of `ichi_latex.pdf` (title block, two-column floats, tables pp.9-10, captions).
+- [x] Artifact settled 2026-10-12: rebuilt (1045 files, 0 scrub), SHA256SUMS OK, reproduce.sh round-trips (1058 macros, 0 differ, all tables identical) incl. all deferred analyses. Packaged `release/reproducibility_artifact.zip` (59M). Delivery: OpenReview supplementary zip (user's choice); paper wording updated ("supplementary material").
+- [ ] USER ACTION: submit `ichi_latex.pdf` via OpenReview (openreview.net/group?id=IEEE.org/ICHI/2027/Conference) AND attach `release/reproducibility_artifact.zip` as supplementary material.
+
+
 ### Review-round-4 fixes (5-point follow-up) — ALL DONE 2026-10-07. See paper/update.md (21).
 - [x] **R4-1 donor-test exchangeability (substantive).** New stratified, donor-grouped permutation
   (`tools/lumiere_v4_strat_perm.py`), now the single engine in `donor_dependence` (supplement/donor_validation/

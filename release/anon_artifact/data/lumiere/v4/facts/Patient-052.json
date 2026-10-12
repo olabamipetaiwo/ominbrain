@@ -1,0 +1,53 @@
+{
+  "patient_id": "Patient-052",
+  "selected": {
+    "tp": "week-089",
+    "code": "PD",
+    "expert": "progressive disease",
+    "rule": "partial response",
+    "nadir_tp": "week-002",
+    "bp_nadir": 1399.2,
+    "d_nadir": [
+      41.5,
+      33.7
+    ],
+    "z_nadir": 101,
+    "concordant": false,
+    "x": 77,
+    "weeks_since_surgery": 87,
+    "cls": "C",
+    "bp_ref": 1399.2,
+    "bp_fu": 331.0,
+    "d_ref": [
+      41.5,
+      33.7
+    ],
+    "d_fu": [
+      21.8,
+      15.2
+    ],
+    "z_ref": 101,
+    "z_fu": 107,
+    "lil_ok": false,
+    "rationale": "Non-Target L.: 1",
+    "patient_id": "Patient-052"
+  },
+  "aia_sequence": "t2",
+  "record": {
+    "patient_id": "Patient-052",
+    "ref": "week-002",
+    "extent": "partial",
+    "survival_weeks": 201,
+    "undetermined": [],
+    "demo": {
+      "Patient": "Patient-052",
+      "Survival time (weeks)": "201",
+      "Sex": "female",
+      "Age at surgery (years)": 55,
+      "IDH (WT: wild type)": "WT",
+      "IDH method": "Immuno",
+      "MGMT qualitative": "methylated",
+      "MGMT quantitative": "92.00%"
+    }
+  }
+}

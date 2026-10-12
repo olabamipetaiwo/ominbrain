@@ -1,0 +1,148 @@
+{
+ "version": 2,
+ "axcodes": "LAS",
+ "shape": [
+  182,
+  218,
+  182
+ ],
+ "enh_voxels": 17672,
+ "core_voxels": 30477,
+ "enh_components": [
+  {
+   "z": 100,
+   "voxels": 13790,
+   "centroid_xyz": [
+    59.2,
+    97.3,
+    104.4
+   ],
+   "d1_mm": 50.0,
+   "d2_mm": 29.1,
+   "bp_mm2": 1454.1
+  },
+  {
+   "z": 83,
+   "voxels": 3250,
+   "centroid_xyz": [
+    52.4,
+    145.4,
+    80.3
+   ],
+   "d1_mm": 38.6,
+   "d2_mm": 22.4,
+   "bp_mm2": 864.0
+  },
+  {
+   "z": 90,
+   "voxels": 361,
+   "centroid_xyz": [
+    69.4,
+    165.9,
+    90.8
+   ],
+   "d1_mm": 8.6,
+   "d2_mm": 7.7,
+   "bp_mm2": 66.3
+  },
+  {
+   "z": 68,
+   "voxels": 248,
+   "centroid_xyz": [
+    32.6,
+    145.9,
+    72.0
+   ],
+   "d1_mm": 10.5,
+   "d2_mm": 3.8,
+   "bp_mm2": 40.3
+  },
+  {
+   "z": 72,
+   "voxels": 18,
+   "centroid_xyz": [
+    42.9,
+    151.9,
+    71.3
+   ],
+   "d1_mm": 5.2,
+   "d2_mm": 1.7,
+   "bp_mm2": 8.9
+  },
+  {
+   "z": 82,
+   "voxels": 2,
+   "centroid_xyz": [
+    32.0,
+    149.0,
+    82.5
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 78,
+   "voxels": 1,
+   "centroid_xyz": [
+    32.0,
+    151.0,
+    78.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 66,
+   "voxels": 1,
+   "centroid_xyz": [
+    42.0,
+    150.0,
+    66.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  },
+  {
+   "z": 72,
+   "voxels": 1,
+   "centroid_xyz": [
+    44.0,
+    148.0,
+    72.0
+   ],
+   "d1_mm": 1.0,
+   "d2_mm": 1.0,
+   "bp_mm2": 1.0
+  }
+ ],
+ "enh": {
+  "z": 100,
+  "voxels": 13790,
+  "centroid_xyz": [
+   59.2,
+   97.3,
+   104.4
+  ],
+  "d1_mm": 50.0,
+  "d2_mm": 29.1,
+  "bp_mm2": 1454.1
+ },
+ "core": {
+  "z": 106,
+  "component_px": 1006,
+  "centroid_xy": [
+   59.4,
+   93.1
+  ],
+  "mid_x": 92.0,
+  "mid_y": 114.5,
+  "dx_mm": 32.6,
+  "dy_mm": 21.4,
+  "side_fraction": 1.0,
+  "hemisphere": "right",
+  "ap_half": "posterior"
+ }
+}

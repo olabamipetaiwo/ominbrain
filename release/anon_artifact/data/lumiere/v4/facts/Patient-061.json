@@ -1,0 +1,66 @@
+{
+  "patient_id": "Patient-061",
+  "selected": {
+    "tp": "week-054",
+    "code": "PD",
+    "expert": "progressive disease",
+    "rule": "progressive disease",
+    "nadir_tp": "week-022",
+    "bp_nadir": 1.0,
+    "d_nadir": [
+      1.0,
+      1.0
+    ],
+    "z_nadir": 70,
+    "concordant": true,
+    "x": 44,
+    "weeks_since_surgery": 54,
+    "cls": "E",
+    "bp_ref": 134.5,
+    "bp_fu": 738.5,
+    "d_ref": [
+      19.7,
+      6.8
+    ],
+    "d_fu": [
+      29.2,
+      25.3
+    ],
+    "z_ref": 103,
+    "z_fu": 94,
+    "lil_ok": true,
+    "rationale": "T2-Progr., Target L.:  23mm x 24mm, non-measurable L. to measurable target L.",
+    "patient_id": "Patient-061"
+  },
+  "aia_sequence": "t1",
+  "record": {
+    "patient_id": "Patient-061",
+    "ref": "week-000-2",
+    "extent": "complete",
+    "survival_weeks": 104,
+    "undetermined": [
+      {
+        "expert": "progressive disease",
+        "x": 12
+      },
+      {
+        "expert": "progressive disease",
+        "x": 17
+      },
+      {
+        "expert": "progressive disease",
+        "x": 24
+      }
+    ],
+    "demo": {
+      "Patient": "Patient-061",
+      "Survival time (weeks)": "104",
+      "Sex": "female",
+      "Age at surgery (years)": 61,
+      "IDH (WT: wild type)": "WT",
+      "IDH method": "Sanger Sequencing",
+      "MGMT qualitative": "methylated",
+      "MGMT quantitative": "95.00%"
+    }
+  }
+}
