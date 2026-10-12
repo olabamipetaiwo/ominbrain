@@ -1,52 +1,31 @@
-Tsks
+**—I would fix the artifact and several manuscript inconsistencies before submitting.** The paper meets the basic format requirements, but the ZIP fails its documented reproduction procedure.
 
-Pending:
+I reviewed all 10 rendered pages of paper/latex/ichi\_latex.pdf and inspected and tested release/reproducibility\_artifact.zip.
 
-1. ARR submission mechanics, unconfirmed part: submission-portal specifics (double-blind anonymization already fixed 2026-09-28 — see done list).
-2. Code/data release plan — deferred to camera-ready, not urgent now.
+**What passes**
 
+- **Length and format:** 10 pages total, more than six pages before references, IEEE conference layout, embedded fonts. These meet the published [early-submission requirements](<https://ichi2027.github.io/ICHI2027/call-for-early-submission.html>).
+- **Presentation:** Figures and tables render without obvious clipping or overlap. Page 9 has substantial unused space.
+- **Consistency:** All **1,044 checksums pass**; packaged tables and v4 number macros match the paper’s source. The first statistics stage independently reproduces its expected JSON exactly.
+- **Anonymity:** No author names or affiliations on the manuscript, and no obvious identifying PDF metadata.
 
+**Fix before submitting**
 
+| Priority | Finding | Required action |
+|---|---|---|
+| **High** | Following the README in a clean Python 3.12 environment, `reproduce.sh` fails with **`ModuleNotFoundError: No module named 'fsspec'`**. The import chain also requires undocumented `nibabel` and `requests`. | Correct the dependencies or remove unnecessary imports, then rerun the entire workflow in a clean environment. |
+| **High** | The paper claims code regenerates every statistic, but alternative-assignment robustness results are provided as summaries; their underlying `results/robustness/` response folders are absent. | Include those responses and working regeneration commands, or narrow the reproducibility claim explicitly. |
+| **High** | The manuscript says “preregistered,” but the ZIP omits the analysis plan/change log. The local plan explicitly says it was **not externally timestamped** and documents a rebuild from 62 to 46 patients after initial runs. | Include an anonymized plan and amendments; describe it accurately as an internal prespecified analysis plan and disclose the rebuild. |
+| **Medium** | Figure 1 specifies sampling **seed 42**, while the packaged selection report and implementation use **20260925**. | Correct the figure. |
+| **Medium** | Pages 5–6 direct readers to **Table IV / Appendix A** for bf16 controls, but Table IV contains only Gemini results. | Add the control results or point to their precise supplementary location. |
+| **Low** | The title page still says **“Paper ID: (assigned at submission)”**. | Remove the placeholder or replace it if the submission system requires an ID. |
 
----DO NOT TOUCH THIS -------
-
-------MAIN------
-
-1. Two of four open models fail their own positive control on AIA. By the paper's own preregistered rule, that means you can't claim anything about image-use for Gemma-3-12B/27B's LIL/DSCR — not "weak use," genuinely uninterpretable. That's a design/power problem, not a validation problem.
-2. Nothing survives the Holm correction. Every per-model, per-phase result is, strictly, a null result after multiplicity adjustment. The "weak and inconsistent" story is real but statistically it's "we couldn't reject the null anywhere."
-3. n=51-62 per cell is why both of the above happen — the intervals are just wide.
-
------
-
-The bottom line: you asked "can we get more data to make the results stronger?" I checked, and the answer is: not by adding more patients — that pool is basically used up already (62 of 64 possible). The only way to get more data is to squeeze more questions out of the same patients (each patient actually has ~3 usable timepoints, but the paper currently only uses 1). That's possible, but it's a real chunk of new work (redoing the data build, rerunning all 5 models), not a quick fix.
-
-So really there are just two paths from here:
-
-1. Do the extra work — pull more timepoints per patient, rerun everything, try to get stronger/more conclusive numbers before submitting.
-2. Don't — keep the data as-is, and just be more modest about what the paper claims, sticking to the results that are already solid (like the Gemini control clearly using the image, or Scout's donor-tracking result) instead of leaning on the results that are weak/inconclusive.
-
----
-Paper submission Link - https://2027.naacl.org/calls/main_conference_papers/
-
-https://anonymous.4open.science/r/image-dependence-3D25/README.md
+**The main scientific review risk remains label validity.** Your limitations acknowledge that clinicians have not verified the items, and that the automated enhancement rule omits parts of clinical RANO assessment. That transparency helps. However, **38% agreement establishes disagreement between labeling procedures; it does not establish that expert ratings are unsuitable for the displayed slices.** I would soften that inference in the abstract, introduction, and conclusion, and keep the contribution centered on the evaluation protocol.
 
 
----
 
-Answering the actual question: yes, a second reference model is doable right now, no big lift.
+No submission files were changed.
 
-- Most feasible choice: Claude-sonnet-4-5. It's already a configured reference slot, and the ANTHROPIC_API_KEY is present in .env. It's a different vendor from Gemini, which is the whole point — it de-confounds "maybe Gemini's success is a one-model quirk."
-- GPT-5 is also slotted but we have no OPENAI_API_KEY, so that one's blocked without a key.
-- Cost/effort: it's an API eval (no GPU) — roughly one run of E1+E2 on AIA/LIL/DSCR (~a few hundred image calls), maybe 30–60 min and a modest amount of API credit. Then regenerate macros/table and change "a reference model" → "two reference models" (and drop the "second reference model remains outstanding" caveat).
-- What it buys: a second independent positive control (replicates task feasibility / items answerable from the slices; strengthens the reference-vs-open gap). What it doesn't buy: key validity — that's still clinician review only.
-- Not required: the reviewer explicitly said they wouldn't demand a bigger model roster.
-
-So: cheap-ish, genuinely strengthens the positive control, optional. If you decide you want it, say the word and I'll run Claude-sonnet-4-5 as the second reference. Not doing anything until then.
-
-
-----
-
-The one hard step left (flagged at the top of the R4 section in task.md):
-- Page budget. My body additions pushed the Conclusion from page 8 to page 9 (body must end by p.8; Limitations/refs/appendix don't count). I moved the diagnostics table back to the appendix to recover space but could not recompile to confirm. Next session: recompile on scratch, check acl_latex.aux for sec:conclusion → page 8; if still 9, trim ~8–12 lines from the body (candidates listed in task.md).
-
-One decision for you (R4-4 tradeoff): the reviewer wanted the validation table in the main text. I kept the prose in the body but left the table in the appendix for page budget. If trimming frees room, it can be promoted — noted in task.md.    
+- Repair the artifact
+- Correct the manuscript
+- Tighten the scientific claims

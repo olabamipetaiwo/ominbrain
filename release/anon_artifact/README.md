@@ -25,6 +25,7 @@ The regenerated tables are written to `generated/` (`tab_v4_*.tex`); the numbers
 | `run_manifest.json`, `overrides.jsonl` | Which run supplied each response, and which later responses replaced earlier ones (the analysis keeps the last one) |
 | `expected/` | The paper's statistics and tables, which `reproduce.sh` compares against |
 | `analysis_versions.json` | Package versions, random seeds, script hashes |
+| `analysis_plan.md` | The internal prespecified analysis plan and its amendment log (incl. the cohort rebuild from 62 to 46); written before the model runs, not externally timestamped |
 | `SHA256SUMS` | Checksum of every file |
 | `src/`, `tools/`, `config/`, `tests/` | Code |
 

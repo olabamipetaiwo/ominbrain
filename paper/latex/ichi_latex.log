@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  12 OCT 2026 03:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  12 OCT 2026 03:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -662,35 +662,35 @@ File: l3backend-pdftex.def 2023-11-09 L3 backend support: PDF output (pdfTeX)
 (./ichi_latex.aux)
 \openout1 = `ichi_latex.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
 
 -- Lines per column: 56 (exact).
-LaTeX Info: Redefining \microtypecontext on input line 166.
-Package microtype Info: Applying patch `item' on input line 166.
-Package microtype Info: Applying patch `toc' on input line 166.
-Package microtype Info: Applying patch `eqnum' on input line 166.
-Package microtype Info: Applying patch `footnote' on input line 166.
-Package microtype Info: Applying patch `verbatim' on input line 166.
+LaTeX Info: Redefining \microtypecontext on input line 165.
+Package microtype Info: Applying patch `item' on input line 165.
+Package microtype Info: Applying patch `toc' on input line 165.
+Package microtype Info: Applying patch `eqnum' on input line 165.
+Package microtype Info: Applying patch `footnote' on input line 165.
+Package microtype Info: Applying patch `verbatim' on input line 165.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 166.
+LaTeX Info: Redefining \showhyphens on input line 165.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -728,7 +728,7 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (RS)
 )
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 18
-9.
+8.
 
 (/apps/texlive/2023/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
@@ -740,7 +740,7 @@ ive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
 ]
-Underfull \hbox (badness 1824) in paragraph at lines 444--445
+Underfull \hbox (badness 1824) in paragraph at lines 443--444
  \T1/ptm/m/it/10 (+20) b) An-swer-ing with-out the im-age.: [][] \T1/ptm/m/n/10
  (+20) Vi-sual question-
  []
@@ -752,16 +752,16 @@ Underfull \vbox (badness 1057) has occurred while \output is active []
 Underfull \vbox (badness 3568) has occurred while \output is active []
 
  [3]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [4]
-(./generated/tab_v4_e1.tex
+[4] (./generated/tab_v4_e1.tex
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 7
 .
 
 (/apps/texlive/2023/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)) [5] [6] [7]
+)) [5] [6]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7]
 (./ichi_latex.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 69--76
 \T1/ptm/m/n/10 (+20) content / CVPR2026 / papers / Peng _ OmniBrainBench _ A _
@@ -772,18 +772,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 69--76
 \T1/ptm/m/n/10 (+20) Comprehensive _ Multimodal _ Benchmark _ for _ Brain _
  []
 
-
+[8]
 Underfull \hbox (badness 3646) in paragraph at lines 136--141
 []\T1/ptm/m/n/10 (+20) E. Mah-moud, J. Gass, Y. Dhemesh, J. Greaser,
  []
 
-[8]
+
 Underfull \hbox (badness 3724) in paragraph at lines 167--172
 []\T1/ptm/m/n/10 (+20) F. Isensee, M. Schell, I. Pflueger, G. Brug-nara,
  []
 
 )
-** WARNING: Ignoring useless \section in Appendix (line 654).
+** WARNING: Ignoring useless \section in Appendix (line 653).
 (./generated/tab_v4_ctrl.tex) (./generated/tab_v4_e2.tex)
 (./generated/tab_v4_confusion.tex) (./generated/tab_v4_donorval.tex)
 
@@ -797,9 +797,7 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[9
-
-] [10
+[9] [10
 
 ] (./ichi_latex.aux)
  ***********
@@ -808,13 +806,13 @@ L3 programming layer <2023-12-11>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 20355 strings out of 474175
- 408882 string characters out of 5748183
- 1976457 words of memory out of 5000000
+ 20364 strings out of 474175
+ 408963 string characters out of 5748183
+ 1977457 words of memory out of 5000000
  41930 multiletter control sequences out of 15000+600000
- 691726 words of font info for 387 fonts, out of 8000000 for 9000
+ 692208 words of font info for 393 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,12n,93p,2266b,1010s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,12n,93p,2432b,1010s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></ap
 ps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></apps/texl
 ive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></apps/texlive/202
@@ -827,7 +825,7 @@ onts/cm/cmsy8.pfb></apps/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></apps/texlive/2023/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></apps/texl
 ive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></apps/texlive/2023/texmf-
 dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ichi_latex.pdf (10 pages, 216647 bytes).
+Output written on ichi_latex.pdf (10 pages, 218016 bytes).
 PDF statistics:
  106 PDF objects out of 1000 (max. 8388607)
  67 compressed objects within 1 object stream

@@ -30,11 +30,20 @@ import os
 import re
 from pathlib import Path
 
-import fsspec
-import nibabel as nib
 import numpy as np
 import pandas as pd
 import zipfile
+
+# fsspec and nibabel are needed only to build the dataset from the raw LUMIERE
+# archive (remote NIfTI reads). The reproducibility workflow re-analyses the
+# shipped responses and cached measurements, so it imports this module without
+# them; keep them optional so that path runs on numpy/scipy/pandas alone.
+try:
+    import fsspec
+    import nibabel as nib
+except ModuleNotFoundError:  # pragma: no cover - only hit when rebuilding the dataset
+    fsspec = None
+    nib = None
 
 import config.lumiere as lcfg
 from src.lumiere_downloader import resolve_article

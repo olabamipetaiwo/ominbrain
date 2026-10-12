@@ -20,7 +20,13 @@ import shutil
 import zipfile
 from pathlib import Path
 
-import requests
+# requests is only used to fetch the raw LUMIERE archive from Figshare when
+# building the dataset; the reproducibility workflow never calls these
+# functions, so keep it optional (see src/lumiere_facts.py).
+try:
+    import requests
+except ModuleNotFoundError:  # pragma: no cover - only hit when rebuilding the dataset
+    requests = None
 
 import config.lumiere as lcfg
 

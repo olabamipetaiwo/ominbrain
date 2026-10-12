@@ -18,9 +18,17 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import nibabel as nib
 import numpy as np
-from PIL import Image, ImageDraw
+
+# nibabel and Pillow are only needed to render slices from raw NIfTI when
+# building the dataset; the reproducibility workflow uses the shipped slices,
+# so keep them optional (see src/lumiere_facts.py).
+try:
+    import nibabel as nib
+    from PIL import Image, ImageDraw
+except ModuleNotFoundError:  # pragma: no cover - only hit when rebuilding the dataset
+    nib = None
+    Image = ImageDraw = None
 
 import config.lumiere as lcfg
 

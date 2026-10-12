@@ -28,10 +28,17 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import nibabel as nib
 import numpy as np
 from scipy import ndimage
 from scipy.spatial import ConvexHull
+
+# nibabel is only needed to read raw NIfTI when building the dataset; the
+# reproducibility workflow uses the shipped measurement cache, so keep it
+# optional (see src/lumiere_facts.py).
+try:
+    import nibabel as nib
+except ModuleNotFoundError:  # pragma: no cover - only hit when rebuilding the dataset
+    nib = None
 
 import config.lumiere as lcfg
 
