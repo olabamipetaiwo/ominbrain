@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  12 OCT 2026 04:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  12 OCT 2026 04:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -122,10 +122,13 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count268
 )
+(/apps/texlive/2023/texmf-dist/tex/latex/xurl/xurl.sty
+Package: xurl 2022/01/09 v 0.10 modify URL breaks
+
 (/apps/texlive/2023/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip16
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
+))
 (/apps/texlive/2023/texmf-dist/tex/latex/base/latexsym.sty
 Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
 \symlasy=\mathgroup4
@@ -762,17 +765,7 @@ File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
-(./ichi_latex.bbl
-Underfull \hbox (badness 10000) in paragraph at lines 69--76
-\T1/ptm/m/n/10 (+20) content / CVPR2026 / papers / Peng _ OmniBrainBench _ A _
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 69--76
-\T1/ptm/m/n/10 (+20) Comprehensive _ Multimodal _ Benchmark _ for _ Brain _
- []
-
-[8]
+(./ichi_latex.bbl [8]
 Underfull \hbox (badness 3646) in paragraph at lines 136--141
 []\T1/ptm/m/n/10 (+20) E. Mah-moud, J. Gass, Y. Dhemesh, J. Greaser,
  []
@@ -806,11 +799,11 @@ L3 programming layer <2023-12-11>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 20361 strings out of 474175
- 408936 string characters out of 5748183
- 1977457 words of memory out of 5000000
- 41930 multiletter control sequences out of 15000+600000
- 692078 words of font info for 391 fonts, out of 8000000 for 9000
+ 20397 strings out of 474175
+ 409629 string characters out of 5748183
+ 1976457 words of memory out of 5000000
+ 41953 multiletter control sequences out of 15000+600000
+ 694965 words of font info for 397 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,12n,93p,2432b,1010s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></ap
@@ -825,10 +818,10 @@ onts/cm/cmsy8.pfb></apps/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></apps/texlive/2023/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></apps/texl
 ive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></apps/texlive/2023/texmf-
 dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ichi_latex.pdf (10 pages, 217983 bytes).
+Output written on ichi_latex.pdf (10 pages, 218311 bytes).
 PDF statistics:
  106 PDF objects out of 1000 (max. 8388607)
  67 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 70157 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 74253 words of extra memory for PDF output out of 74296 (max. 10000000)
 
