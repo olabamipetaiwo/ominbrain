@@ -29,3 +29,6 @@ No submission files were changed.
 - Repair the artifact
 - Correct the manuscript
 - Tighten the scientific claims
+
+
+--https://anonymous.4open.science/r/ichi2027-image-dependence-artifact-FA31/
