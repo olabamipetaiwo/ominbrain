@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  12 OCT 2026 03:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.12.14)  12 OCT 2026 04:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -806,11 +806,11 @@ L3 programming layer <2023-12-11>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 20364 strings out of 474175
- 408963 string characters out of 5748183
+ 20361 strings out of 474175
+ 408936 string characters out of 5748183
  1977457 words of memory out of 5000000
  41930 multiletter control sequences out of 15000+600000
- 692208 words of font info for 393 fonts, out of 8000000 for 9000
+ 692078 words of font info for 391 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,12n,93p,2432b,1010s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </apps/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></ap
@@ -825,7 +825,7 @@ onts/cm/cmsy8.pfb></apps/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></apps/texlive/2023/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></apps/texl
 ive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></apps/texlive/2023/texmf-
 dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ichi_latex.pdf (10 pages, 218016 bytes).
+Output written on ichi_latex.pdf (10 pages, 217983 bytes).
 PDF statistics:
  106 PDF objects out of 1000 (max. 8388607)
  67 compressed objects within 1 object stream
