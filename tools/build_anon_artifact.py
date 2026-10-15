@@ -266,11 +266,11 @@ PY
 README = """# Artifact: image interventions on brain-MRI questions (LUMIERE)
 
 This artifact regenerates every number, table and macro the paper cites, from the saved model responses.
-**No model is ever called and no GPU is needed** -- the model outputs are already here and are only re-analysed on CPU.
+No model is ever called and no GPU is needed -- the model outputs are already here and are only re-analysed on CPU.
 
 ## 1. Quick start (about 5 minutes on a laptop)
 
-Use a clean Python environment with just three packages. Python **3.12 or newer** is required
+Use a clean Python environment with just three packages. Python 3.12 or newer is required
 (the analysis uses 3.12 syntax; 3.9-3.11 will not run it). You need internet access only for the `pip` step.
 
     python3.12 -m venv .venv
@@ -317,9 +317,9 @@ not `0 differ`, the script exits non-zero and names what changed. The freshly bu
 A sanity-test of the item construction is available with `python -m tests.test_lumiere_v4`.
 
 ## 4. How a response is chosen (provenance)
-A model may have several run folders. The loader (`tools.lumiere_v4_stats.load_records`) merges them **oldest-first,
-sorted by the run timestamp** (the `YYYYMMDD_HHMMSS` at the end of each folder name) and keeps the last record for each
-`(case_id, phase, condition)`, so **the newest run wins**; folders with a date before `min_stamp` ran on an earlier item
+A model may have several run folders. The loader (`tools.lumiere_v4_stats.load_records`) merges them oldest-first,
+sorted by the run timestamp (the `YYYYMMDD_HHMMSS` at the end of each folder name) and keeps the last record for each
+`(case_id, phase, condition)`, so the newest run wins; folders with a date before `min_stamp` ran on an earlier item
 set and are ignored. `run_manifest.json` lists, per model, every folder in timestamp order, how many of its records were
 used, and how many were superseded by a later run; `overrides.jsonl` has one line per superseded record and whether the
 answer letter changed. Every reported cell therefore traces to the single `paper_numbers` run that `reproduce.sh` reproduces.
