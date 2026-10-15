@@ -325,6 +325,10 @@ used, and how many were superseded by a later run; `overrides.jsonl` has one lin
 answer letter changed. Every reported cell therefore traces to the single `paper_numbers` run that `reproduce.sh` reproduces.
 
 ## 5. Post-hoc analyses (shipped as precomputed inputs)
+The donor-permutation p-values quoted in the paper are the `perm_p` fields of `results/lumiere_v4_supplement.json`
+(`donor_dependence`, 5,000 accepted draws); `results/lumiere_v4_strat_perm.json` (50,000 draws) and
+`results/lumiere_v4_perm_validation.json` recompute the same test at higher draw counts and agree within Monte-Carlo
+error. The own-image conditional label-association results (supplement section I2) use the same engine on the own-image arm.
 The donor-dependence analyses are loaded by `paper_numbers` as precomputed inputs, like `results/compute_budget.json`.
 `results/lumiere_v4_robustness_*.json` depends on model runs under alternative donor assignments and is NOT regenerated
 from scratch by `reproduce.sh`. The other two are CPU re-analyses of the shipped responses and can be rerun directly

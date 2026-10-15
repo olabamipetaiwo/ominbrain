@@ -323,6 +323,12 @@ def v4_supplement(mc: Macros) -> None:
         for ph, v in r["outcomes"].items():
             mc.add(f"vfourSensOwnText{ph}{t}", f1(v["own_vs_text_answer_differs"]))
             mc.add(f"vfourSensSwap{ph}{t}", f1(v["swap_vs_own_answer_differs"]))
+        for ph, v in r.get("own_association", {}).items():      # post hoc own-image label-association (M2)
+            mc.add(f"vfourOwnKappa{ph}{t}", f"{v['kappa']:.2f}")
+            mc.add(f"vfourOwnP{ph}{t}", pfmt(v["p"]))
+            mc.add(f"vfourOwnHolm{ph}{t}", pfmt(v["p_holm"]))
+            if v["p_text_control"] is not None:
+                mc.add(f"vfourOwnTextP{ph}{t}", pfmt(v["p_text_control"]))
         rows_h.append(f"{SHORT.get(m, m)} & {h['ALL']['n']} & {h['ALL']['parse_error']} & {h['ALL']['no_answer']} \\\\")
         for k, v in r.get("transitions", {}).items():
             cond, sub = k.split("|")
@@ -369,6 +375,11 @@ def v4_supplement(mc: Macros) -> None:
             vals = [sp["models"][m]["outcomes"][ph][key] for m in MODELS if m in sp["models"] and ph in sp["models"][m]["outcomes"]]
             if vals:
                 rng(mc, f"vfourSensRange{nm}{ph}", vals)
+    pv = load("results/lumiere_v4_perm_validation.json")      # donor-permutation null mean under random assignment (M2)
+    if pv:
+        for rr in pv.get("step0_2_3_real", []):
+            if rr["model"] == "Llama-4-Scout" and rr["phase"] == "DSCR":
+                mc.add("vfourDonorNullMeanDSCRScout", f"{rr['null_mean_repair']:.0f}")
     (OUT / "tab_v4_e3trans.tex").write_text(tabular("llrrrrrrr", ["Model & Flip & Items & Moved & Already there & Unchanged & Other & Moved / informative & Registered share (\\%) \\\\"], rows_t))
     (OUT / "tab_v4_handling.tex").write_text(tabular("lrrr", ["Model & Records & Invalid JSON & No answer letter \\\\"], rows_h))
 
@@ -416,6 +427,23 @@ def v4(mc: Macros) -> None:
     sel = load("data/lumiere/v4/selection_report.json")
     st = load("results/lumiere_v4_stats.json")
     sup = (load("results/lumiere_v4_supplement.json") or {}).get("models", {})   # post-review descriptive supplement
+    # M3: prespecified DSCR sensitivity analysis, items whose rule category also equals the expert rating
+    sub = ((st or {}).get("models", {}).get("Llama-4-Scout", {}).get("E1", {}).get("DSCR", {}) or {}).get("expert_agreeing_subset")
+    if sub:
+        mc.add("vfourSensSubN", sub["n"])
+        mc.add("vfourSensSubDiffScout", signed(sub["diff"]))
+        mc.add("vfourSensSubLoScout", signed(sub["ci"][0]))
+        mc.add("vfourSensSubHiScout", signed(sub["ci"][1]))
+        gsub = ((st or {}).get("controls", {}).get("Gemini-3.6-Flash", {}).get("E1", {}).get("DSCR", {}) or {}).get("expert_agreeing_subset")
+        if gsub:
+            mc.add("vfourSensSubRefAcc", f1(gsub["acc_a"]))
+        cls = Counter()
+        for p in sorted(Path("data/lumiere/v4/reviewed").glob("Patient-*.json")):
+            for it in json.loads(p.read_text()):
+                if it["id"].endswith("_DSCR") and it["facts_used"]["concordant"]:
+                    cls[canonical_answer_text(it["correct_answer_text"])] += 1
+        if cls:
+            mc.add("vfourSensSubMajPct", f1(100 * max(cls.values()) / sum(cls.values())))
     # Pixtral-12B-bf16 (second precision/stack control): its DSCR image conditions returned empty output on the 3-image
     # prompt and are excluded; these counts back the exclusion note in the results and appendix.
     _pix = sorted(glob.glob("results/lumiere_v4_Pixtral-12B-bf16_image_*"))

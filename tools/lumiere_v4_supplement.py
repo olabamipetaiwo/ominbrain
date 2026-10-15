@@ -303,6 +303,70 @@ def donor_dependence(recs, rng, n_perm: int = 5000) -> dict:
     return out
 
 
+def _kappa(pred, key) -> float:
+    """Cohen's kappa between the predicted class and the key class (empty prediction is its own class)."""
+    labels = sorted(set(pred) | set(key))
+    n = len(pred)
+    if n == 0:
+        return 0.0
+    po = float(np.mean([p == k for p, k in zip(pred, key)]))
+    cp, ck = Counter(pred), Counter(key)
+    pe = sum((cp[l] / n) * (ck[l] / n) for l in labels)
+    return (po - pe) / (1 - pe) if pe < 1 else 0.0
+
+
+def own_image_association(recs, rng, n_perm: int = 20000) -> dict:
+    """Own-image conditional label-association test (post hoc; reviewer round 5, M2).
+
+    Because the AIA, LIL and DSCR stems carry no patient-specific fact, the same conditional-association question the
+    donor permutation asks in the swap arm can be asked directly in the OWN-image arm, which has more items and no donor
+    reuse. For each image phase we hold the model's own-image answers fixed and permute the item keys among items WITHIN
+    each equal-image-count stratum (DSCR 2 vs 3 displayed slices; AIA, LIL a single stratum), then ask whether the answers
+    match the true item key more often than a key drawn from a permuted assignment. The statistic is the match rate
+    (own-image accuracy); p is the share of permutations whose match rate is at least the observed. Cohen's kappa between
+    the predicted and key classes is reported alongside. The text-only arm is run as a negative control (it cannot read
+    the slice, so a null there rules out an option-order or stem artifact). This is descriptive and unadjusted; the Holm
+    correction across the twelve open-model cells is applied in main(), and it does not enter the registered analysis."""
+    from src.lumiere_loader import _shuffle_options
+    from src.lumiere_labels import canonical_answer_text as _canon
+
+    def arm(ph, k):
+        cs = [c for c in sorted({x[0] for x in recs if x[1] == ph and x[2] == k}) if (c, ph, "own") in recs]
+        pred, key, strat = [], [], []
+        for c in cs:
+            it = next(x for x in json.loads(Path(f"data/lumiere/v4/reviewed/{c}.json").read_text()) if x["id"].endswith("_" + ph))
+            opts = it["options"] if it.get("ordered_options") else _shuffle_options(it["options"], it["correct_answer"], it["id"])[0]
+            r = recs[(c, ph, k)]
+            pred.append(_canon(opts.get(r["model_answer"], "")) if r["model_answer"] else "")
+            key.append(_canon(opts[r["correct_answer"]]))      # record letters are in the runtime-shuffled order
+            strat.append(len(it["image_files"]))
+        return cs, pred, key, strat
+
+    def perm_p(pred, key, strat):
+        pred = np.array(pred, dtype=object); key = np.array(key, dtype=object); strat = np.array(strat)
+        obs = float(np.mean(pred == key)) if len(pred) else 0.0
+        sidx = [np.where(strat == s)[0] for s in sorted(set(strat.tolist()))]
+        ge = 0
+        for _ in range(n_perm):
+            k = key.copy()
+            for si in sidx:
+                k[si] = key[si][rng.permutation(len(si))]
+            ge += float(np.mean(pred == k)) >= obs - 1e-12
+        return (1 + ge) / (1 + n_perm), obs
+
+    out = {}
+    for ph in IMG_PHASES:
+        cs, pred, key, strat = arm(ph, "own")
+        if len(cs) < 5:
+            continue
+        p, obs = perm_p(pred, key, strat)
+        cst, predt, keyt, stratt = arm(ph, "text")
+        pt = perm_p(predt, keyt, stratt)[0] if len(cst) >= 5 else None
+        out[ph] = {"n": len(cs), "acc": obs * 100, "kappa": _kappa(pred, key),
+                   "p": p, "p_text_control": pt, "strata": dict(Counter(strat))}
+    return out
+
+
 def _unstratified_perm_p(sw_txt, tx_txt, dkey, okey, rng, n_perm: int = 5000) -> float:
     """The earlier unstratified, ungrouped donor-key permutation (collision-repaired whole permutation), kept only as
     a diagnostic comparison for ``tools.lumiere_v4_strat_perm``; not used in the reported results."""
@@ -434,7 +498,16 @@ def main() -> None:
             r["pjrf"] = pjrf(recs, rng)
         if m in MODELS:
             r["donor_dependence"] = donor_dependence(recs, rng)
+            r["own_association"] = own_image_association(recs, np.random.default_rng(SEED))
         res["models"][m] = r
+    # Holm across the twelve open-model cells for the own-image association p (same family as E1/E2)
+    cells = [(m, ph) for m in MODELS if m in res["models"] for ph in res["models"][m].get("own_association", {})]
+    ps = sorted((res["models"][m]["own_association"][ph]["p"], i) for i, (m, ph) in enumerate(cells))
+    running = 0.0
+    for rank, (p, i) in enumerate(ps):
+        running = max(running, min(1.0, p * (len(ps) - rank)))
+        m, ph = cells[i]
+        res["models"][m]["own_association"][ph]["p_holm"] = running
     res["aia"] = aia_confusions(all_recs)
     a = res["audit"]
     full = {"CR": "complete response", "PR": "partial response", "SD": "stable disease", "PD": "progressive disease"}
@@ -495,6 +568,13 @@ def main() -> None:
         for ph, v in r.get("donor_dependence", {}).items():
             md.append(f"| {m} | {ph} | {v['n']} | {v['distinct_donors']} | {v['max_uses']} | {v['gain']:+.1f} | "
                       f"[{v['cluster_ci'][0]:+.1f}, {v['cluster_ci'][1]:+.1f}] | [{v['loo_donor_min']:+.1f}, {v['loo_donor_max']:+.1f}] | {v['perm_p']:.3f} |")
+    md += ["", "## I2. Own-image conditional label-association (post hoc; keys permuted within equal-image-count strata, answers fixed)", "",
+           "| Model | Phase | n | own-image acc | kappa | perm p | Holm (12 cells) | text-only control p |", "|---|---|---|---|---|---|---|---|"]
+    for m, r in res["models"].items():
+        for ph, v in r.get("own_association", {}).items():
+            tc = f"{v['p_text_control']:.3f}" if v["p_text_control"] is not None else "-"
+            md.append(f"| {m} | {ph} | {v['n']} | {v['acc']:.1f} | {v['kappa']:+.2f} | {v['p']:.3f} | "
+                      f"{v.get('p_holm', float('nan')):.3f} | {tc} |")
     ac = res["audit_clustered"]
     md += ["", "## A2. Audit with patient-clustered uncertainty", "",
            f"{ac['determinate'] + ac['undetermined']} follow-ups from {ac['patients']} patients ({ac['followups_by_patient_min']} to {ac['followups_by_patient_max']} per patient, "
