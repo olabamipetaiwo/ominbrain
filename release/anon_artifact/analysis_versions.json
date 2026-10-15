@@ -1,5 +1,5 @@
 {
- "source_commit": "81bbcf185ed5cba18439c6d52eb043a613f78b45",
+ "source_commit": "66609ab5d8b783136ff127ba2f5f86fbc9063348",
  "environment": {
   "python": "3.12.5",
   "numpy": "2.3.5",
@@ -14,11 +14,11 @@
  "equivalence_margin_pp": 10.0,
  "min_stamp": "20260928",
  "script_sha256": {
-  "lumiere_v4_stats": "890f5728838f8926d640963594b65ca75522c33bbd47809d07396a0f5b1bdf55",
+  "lumiere_v4_stats": "7e5b27f58c66a67c5c99516b09ca11128a1520abcd534def19a3eafa3c36304a",
   "lumiere_v4_supplement": "9bf34c89c54138ea4d22c85d64e2f127c1202fbf7ea0fc3dec88eaf22ca2bc7d",
   "lumiere_v4_baselines": "c750201260bc24f54b33d5c4e68cf3d99df12b87042a330ab39a02d9ffc6673d",
   "lumiere_v4_input_check": "15a7a661812e46c8093e95d72f9276bb878662de3c5946af4d17dbdb57021537",
-  "paper_numbers": "83e2bd625d393e9c762a2a2e971baba20f4c30d8c5235e327f044cddc77debc1",
+  "paper_numbers": "60bcece1b655ace5b424a5e4ddcb38cfe4c3eb68c12bac86864a4c21507338ae",
   "paper_v4_example": "8aacaf8deffd50f0ef009c879af086d692de9e518212c760477813e425f2fac1",
   "lumiere_gating_stats": "cbd810b63bd4137dd210dfbe0339c529eba96a1d18571edab5c9986dba149eec",
   "export_release_prompts": "388c711118d9ad8f2cee28f960b4eb8d8d4dbe65f81b167594c05a4227ca8dfe",

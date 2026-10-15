@@ -1,9 +1,21 @@
 {
- "loader_rule": "tools.lumiere_v4_stats.load_records: job folders of a model sorted by name (= by timestamp); a later record with the same (case_id, phase, condition) silently replaces the earlier one. Folders with a stamp before min_stamp ran on different items and are ignored.",
+ "loader_rule": "tools.lumiere_v4_stats.load_records: job folders of a model are merged oldest-first, sorted by the run timestamp (the YYYYMMDD_HHMMSS at the end of the folder name); a later record with the same (case_id, phase, condition) replaces the earlier one, so the newest run wins. Folders with a date before min_stamp ran on different items and are ignored.",
  "min_stamp": "20260928",
  "single_question_runs": {
   "MedGemma-4B": {
    "folders_oldest_first": [
+    {
+     "folder": "lumiere_v4_MedGemma-4B_image_20260928_064056",
+     "stamp": "20260928",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 252,
+     "n_replaced_by_later_folder": 134
+    },
     {
      "folder": "lumiere_v4_MedGemma-4B_context_20260928_071552",
      "stamp": "20260928",
@@ -20,6 +32,18 @@
      "n_replaced_by_later_folder": 412
     },
     {
+     "folder": "lumiere_v4_MedGemma-4B_imagedscr_20260928_230309",
+     "stamp": "20260928",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    },
+    {
      "folder": "lumiere_v4_MedGemma-4B_contextdscr_20260929_005925",
      "stamp": "20260929",
      "n_records": 412,
@@ -32,9 +56,15 @@
      },
      "n_used": 412,
      "n_replaced_by_later_folder": 0
-    },
+    }
+   ],
+   "n_keys": 965,
+   "n_replaced": 546
+  },
+  "Gemma-3-12B": {
+   "folders_oldest_first": [
     {
-     "folder": "lumiere_v4_MedGemma-4B_image_20260928_064056",
+     "folder": "lumiere_v4_Gemma-3-12B_image_20260928_082905",
      "stamp": "20260928",
      "n_records": 386,
      "conditions": {
@@ -45,24 +75,6 @@
      "n_used": 252,
      "n_replaced_by_later_folder": 134
     },
-    {
-     "folder": "lumiere_v4_MedGemma-4B_imagedscr_20260928_230309",
-     "stamp": "20260928",
-     "n_records": 134,
-     "conditions": {
-      "own": 46,
-      "swap": 42,
-      "text": 46
-     },
-     "n_used": 134,
-     "n_replaced_by_later_folder": 0
-    }
-   ],
-   "n_keys": 965,
-   "n_replaced": 546
-  },
-  "Gemma-3-12B": {
-   "folders_oldest_first": [
     {
      "folder": "lumiere_v4_Gemma-3-12B_context_20260928_103752",
      "stamp": "20260928",
@@ -93,18 +105,6 @@
      "n_replaced_by_later_folder": 0
     },
     {
-     "folder": "lumiere_v4_Gemma-3-12B_image_20260928_082905",
-     "stamp": "20260928",
-     "n_records": 386,
-     "conditions": {
-      "own": 130,
-      "swap": 126,
-      "text": 130
-     },
-     "n_used": 252,
-     "n_replaced_by_later_folder": 134
-    },
-    {
      "folder": "lumiere_v4_Gemma-3-12B_imagedscr_20260929_093224",
      "stamp": "20260929",
      "n_records": 134,
@@ -123,6 +123,18 @@
   "Gemma-3-27B": {
    "folders_oldest_first": [
     {
+     "folder": "lumiere_v4_Gemma-3-27B_image_20260928_103714",
+     "stamp": "20260928",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 252,
+     "n_replaced_by_later_folder": 134
+    },
+    {
      "folder": "lumiere_v4_Gemma-3-27B_context_20260928_142658",
      "stamp": "20260928",
      "n_records": 579,
@@ -138,6 +150,18 @@
      "n_replaced_by_later_folder": 412
     },
     {
+     "folder": "lumiere_v4_Gemma-3-27B_imagedscr_20260928_231443",
+     "stamp": "20260928",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    },
+    {
      "folder": "lumiere_v4_Gemma-3-27B_contextdscr_20260929_015332",
      "stamp": "20260929",
      "n_records": 412,
@@ -150,9 +174,15 @@
      },
      "n_used": 412,
      "n_replaced_by_later_folder": 0
-    },
+    }
+   ],
+   "n_keys": 965,
+   "n_replaced": 546
+  },
+  "Llama-4-Scout": {
+   "folders_oldest_first": [
     {
-     "folder": "lumiere_v4_Gemma-3-27B_image_20260928_103714",
+     "folder": "lumiere_v4_Llama-4-Scout_image_20260928_134837",
      "stamp": "20260928",
      "n_records": 386,
      "conditions": {
@@ -163,24 +193,6 @@
      "n_used": 252,
      "n_replaced_by_later_folder": 134
     },
-    {
-     "folder": "lumiere_v4_Gemma-3-27B_imagedscr_20260928_231443",
-     "stamp": "20260928",
-     "n_records": 134,
-     "conditions": {
-      "own": 46,
-      "swap": 42,
-      "text": 46
-     },
-     "n_used": 134,
-     "n_replaced_by_later_folder": 0
-    }
-   ],
-   "n_keys": 965,
-   "n_replaced": 546
-  },
-  "Llama-4-Scout": {
-   "folders_oldest_first": [
     {
      "folder": "lumiere_v4_Llama-4-Scout_context_20260928_175146",
      "stamp": "20260928",
@@ -197,6 +209,18 @@
      "n_replaced_by_later_folder": 412
     },
     {
+     "folder": "lumiere_v4_Llama-4-Scout_imagedscr_20260928_232730",
+     "stamp": "20260928",
+     "n_records": 134,
+     "conditions": {
+      "own": 46,
+      "swap": 42,
+      "text": 46
+     },
+     "n_used": 134,
+     "n_replaced_by_later_folder": 0
+    },
+    {
      "folder": "lumiere_v4_Llama-4-Scout_contextdscr_20260929_014528",
      "stamp": "20260929",
      "n_records": 412,
@@ -208,30 +232,6 @@
       "flip_window": 46
      },
      "n_used": 412,
-     "n_replaced_by_later_folder": 0
-    },
-    {
-     "folder": "lumiere_v4_Llama-4-Scout_image_20260928_134837",
-     "stamp": "20260928",
-     "n_records": 386,
-     "conditions": {
-      "own": 130,
-      "swap": 126,
-      "text": 130
-     },
-     "n_used": 252,
-     "n_replaced_by_later_folder": 134
-    },
-    {
-     "folder": "lumiere_v4_Llama-4-Scout_imagedscr_20260928_232730",
-     "stamp": "20260928",
-     "n_records": 134,
-     "conditions": {
-      "own": 46,
-      "swap": 42,
-      "text": 46
-     },
-     "n_used": 134,
      "n_replaced_by_later_folder": 0
     }
    ],
@@ -301,18 +301,6 @@
   "Pixtral-12B-bf16": {
    "folders_oldest_first": [
     {
-     "folder": "lumiere_v4_Pixtral-12B-bf16_image_20260929_181720",
-     "stamp": "20260929",
-     "n_records": 386,
-     "conditions": {
-      "own": 130,
-      "swap": 126,
-      "text": 130
-     },
-     "n_used": 368,
-     "n_replaced_by_later_folder": 18
-    },
-    {
      "folder": "lumiere_v4_Pixtral-12B-bf16_smoke_20260929_155252",
      "stamp": "20260929",
      "n_records": 18,
@@ -333,7 +321,19 @@
       "swap": 6,
       "text": 6
      },
-     "n_used": 18,
+     "n_used": 0,
+     "n_replaced_by_later_folder": 18
+    },
+    {
+     "folder": "lumiere_v4_Pixtral-12B-bf16_image_20260929_181720",
+     "stamp": "20260929",
+     "n_records": 386,
+     "conditions": {
+      "own": 130,
+      "swap": 126,
+      "text": 130
+     },
+     "n_used": 386,
      "n_replaced_by_later_folder": 0
     }
    ],

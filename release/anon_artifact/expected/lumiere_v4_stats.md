@@ -152,7 +152,7 @@ Gemini-3.6-Flash: 0 empty API responses among 386 records (must be 0 before thes
 | Gemma-3-27B-bf16 | DSCR | 42 | 54.8 | 33.3 | 33.3 | +0.0 [+0.0, +0.0] | [-4.5, +4.5] | 0/0 | 1.000 | 52.4 | 2.4 |
 
 Gemma-3-27B-bf16: 0 empty API responses among 386 records (must be 0 before these rows are read).
-| Pixtral-12B-bf16 | AIA | 46 | 30.4 | 26.1 | 28.3 | -2.2 [-8.7, +4.3] | [-10.2, +6.1] | 1/2 | 1.000 | 28.3 | 26.1 |
+| Pixtral-12B-bf16 | AIA | 46 | 30.4 | 26.1 | 28.3 | -2.2 [-8.7, +4.3] | [-10.2, +6.1] | 1/2 | 1.000 | 28.3 | 28.3 |
 | Pixtral-12B-bf16 | LIL | 38 | 18.4 | 23.7 | 26.3 | -2.6 [-18.4, +13.2] | [-18.0, +13.0] | 4/5 | 1.000 | 36.8 | 47.4 |
 | Pixtral-12B-bf16 | DSCR | 42 | 26.2 | 21.4 | 26.2 | -4.8 [-19.0, +7.1] | [-17.8, +8.8] | 3/5 | 0.727 | 23.8 | 14.3 |
 

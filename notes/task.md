@@ -20,7 +20,13 @@ Paper rebuilt clean on scratch copy: 10 pages, 0 undefined control sequences, 0 
 
 Changed files: `paper/latex/ichi_latex.tex`, `tools/lumiere_v4_stats.py`, `tools/paper_numbers.py`, `paper/latex/generated/numbers.tex`, `paper/latex/generated/numbers.json`.
 
-REMAINING (optional P2, low-risk polish): Table III caption already states Holm reading; Fig.2 below-majority clause added. Not done: lead conclusion with controlled eval over source-benchmark note; verify artifact URL/model identifiers before submission. Clean uniform-sampler reanalysis (P1-6) remains optional. NONE are blockers.
+## STATUS 2026-10-15 (round 2) — P2 + consistency + artifact DONE.
+- [x] P2 all done: inherited phase-name note (intro); Table III caption descriptive/confirmatory; Conclusion reordered to lead with controlled eval; Fig.2 below-majority clause; Table VII rho/Wilson (from P1-6).
+- [x] Consistency: 2 residual "RANO key" labels -> "enhancement-rule" (Fig.2 box, confusion caption); "limited image dependence" phrasing aligned to "limited evidence of" throughout. Full RANO audit done.
+- [x] Page budget: P2 tipped to 11pp; trimmed compensating wordiness -> back to 10pp, 0 undefined, 0 overfull. PDF rebuilt.
+- [x] Artifact: fixed build_anon_artifact.py provenance sort + loader-rule text; build now ships prompts.jsonl (965); README rewritten for a non-author reviewer (clean-env quick start, success block, timestamp provenance). Rebuilt (1047 files, 0 scrub), sha256sum -c OK. Clean-room reproduce in a fresh 3-package venv: 1059 macros 0 differ, all identical, exit 0. Committed Anonymous + pushed to the live anonymous GitHub repo.
+
+Remaining (optional, non-blocking): full uniform conditional-sampler reanalysis (P1-6 clean path). Main-repo working tree (paper tex+PDF, tools/build_anon_artifact.py, rebuilt release/anon_artifact/*) is uncommitted for the user.
 
 ---
 
