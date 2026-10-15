@@ -109,6 +109,23 @@ Disagreements (122) by the rule's label: {'progressive disease': 16, 'complete r
 | Llama-4-Scout | LIL | 38 | 30 | 2 | +7.9 | [-7.0, +23.7] | [+5.4, +11.1] | 0.173 |
 | Llama-4-Scout | DSCR | 42 | 29 | 2 | +28.6 | [+2.4, +53.7] | [+25.0, +35.0] | 0.293 |
 
+## I2. Own-image conditional label-association (post hoc; keys permuted within equal-image-count strata, answers fixed)
+
+| Model | Phase | n | own-image acc | kappa | perm p | Holm (12 cells) | text-only control p |
+|---|---|---|---|---|---|---|---|
+| MedGemma-4B | AIA | 46 | 34.8 | +0.12 | 0.087 | 0.785 | 0.595 |
+| MedGemma-4B | LIL | 38 | 23.7 | +0.00 | 0.567 | 1.000 | 0.814 |
+| MedGemma-4B | DSCR | 46 | 19.6 | +0.07 | 0.159 | 1.000 | 0.780 |
+| Gemma-3-12B | AIA | 46 | 26.1 | +0.02 | 0.442 | 1.000 | 0.449 |
+| Gemma-3-12B | LIL | 38 | 31.6 | +0.06 | 0.306 | 1.000 | 0.705 |
+| Gemma-3-12B | DSCR | 46 | 58.7 | +0.02 | 0.544 | 1.000 | 0.701 |
+| Gemma-3-27B | AIA | 46 | 32.6 | +0.10 | 0.105 | 0.842 | 1.000 |
+| Gemma-3-27B | LIL | 38 | 23.7 | -0.02 | 0.642 | 1.000 | 0.841 |
+| Gemma-3-27B | DSCR | 46 | 58.7 | +0.00 | 1.000 | 1.000 | 1.000 |
+| Llama-4-Scout | AIA | 46 | 37.0 | +0.15 | 0.018 | 0.193 | 0.892 |
+| Llama-4-Scout | LIL | 38 | 39.5 | +0.16 | 0.058 | 0.583 | 0.229 |
+| Llama-4-Scout | DSCR | 46 | 54.3 | +0.19 | 0.015 | 0.177 | 0.877 |
+
 ## A2. Audit with patient-clustered uncertainty
 
 241 follow-ups from 59 patients (1 to 15 per patient, median 3); reconciles with the selection report: True. Agreement among determinate follow-ups 38.1% (patient-bootstrap 95% [29.4, 47.9]); among all follow-ups 31.1% ([24.0, 38.8]).
