@@ -53,7 +53,13 @@ TCM_CLASSES = ["continue", "confirm", "escalate"]
 def load_records(model: str, results_dir: Path = Path("results")) -> dict[tuple, dict]:
     """(case, phase, condition) -> record, merged over all finished v4 job folders of the model (oldest first)."""
     merged: dict[tuple, dict] = {}
-    for d in sorted(glob.glob(str(results_dir / f"lumiere_v4_{model}_*"))):
+    # Merge oldest-first by the folder's actual run timestamp (date, time), not by folder name:
+    # names end in {mode}_{YYYYMMDD}_{HHMMSS}, so a lexical sort orders by mode and can let an
+    # earlier run (e.g. a smoke folder) overwrite a later full run of the same model.
+    def _stamp(d: str) -> tuple[str, str]:
+        parts = Path(d).name.split("_")
+        return (parts[-2], parts[-1])
+    for d in sorted(glob.glob(str(results_dir / f"lumiere_v4_{model}_*")), key=_stamp):
         p = Path(d) / "raw_results.json"
         if not p.exists() or Path(d).name.split("_")[-2] < MIN_STAMP:
             continue

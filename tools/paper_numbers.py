@@ -437,6 +437,7 @@ def v4(mc: Macros) -> None:
         mc.add("vfourConcordant", conc["concordant"])
         mc.add("vfourConcordantPct", f"{100 * conc['concordant'] / tot:.0f}")
         mc.add("vfourSelectedAgree", sel["selected_expert_agrees"])
+        mc.add("vfourSelectedAgreePct", f"{100 * sel['selected_expert_agrees'] / sel['n_selected']:.0f}")
         for lab, d in conc["by_expert_label"].items():
             short = {"progressive disease": "PD", "stable disease": "SD", "partial response": "PR", "complete response": "CR"}[lab]
             und = sel["undetermined_by_expert"].get(lab, 0)
